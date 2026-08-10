@@ -3,7 +3,7 @@ import setupCheckUrl from "../assets/setup-check.svg";
 import { FixedStepClock } from "../core/clock";
 import { starterCatalog } from "../core/content";
 import { GameSimulation } from "../core/game";
-import type { GamePhase } from "../core/types";
+import type { GameEvent, GamePhase } from "../core/types";
 
 const WIDTH = 720;
 const HEIGHT = 1280;
@@ -26,10 +26,13 @@ export class GameScene extends Phaser.Scene {
   private towerVisuals = new Map<string, Phaser.GameObjects.Rectangle>();
   private paletteButtons = new Map<string, Phaser.GameObjects.Rectangle>();
   private enemyVisuals = new Map<string, Phaser.GameObjects.Arc>();
+  private enemyHealthBars = new Map<string, { track: Phaser.GameObjects.Rectangle; fill: Phaser.GameObjects.Rectangle }>();
+  private slotPositions = new Map<string, { x: number; y: number }>();
   private selectedTowerId = "machine_gun";
   private upgradePanel!: Phaser.GameObjects.Container;
   private upgradeChoiceButtons: Phaser.GameObjects.Rectangle[] = [];
   private upgradeChoiceLabels: Phaser.GameObjects.Text[] = [];
+  private lastRenderedPhase: GamePhase | null = null;
 
   public constructor() {
     super("game");
@@ -67,6 +70,10 @@ export class GameScene extends Phaser.Scene {
     graphics.fillRect(0, 0, WIDTH, HEIGHT);
     graphics.fillStyle(0x172338, 1);
     graphics.fillRect(24, 180, WIDTH - 48, 620);
+    graphics.fillStyle(0x263b57, 1);
+    graphics.fillRect(WIDTH / 2 - 62, 220, 124, 560);
+    graphics.lineStyle(2, 0x475569, 1);
+    graphics.strokeRect(WIDTH / 2 - 62, 220, 124, 560);
     graphics.fillStyle(0x0d1421, 1);
     graphics.fillRect(24, 920, WIDTH - 48, 280);
     graphics.lineStyle(4, 0x7f1d1d, 1);
@@ -160,6 +167,7 @@ export class GameScene extends Phaser.Scene {
         align: "center",
       }).setOrigin(0.5);
       this.slotLabels.push(label);
+      this.slotPositions.set(`slot-${index + 1}`, { x, y: y - 16 });
 
       const towerVisual = this.add.rectangle(x, y - 16, 70, 28, 0xf59e0b, 1);
       towerVisual.setStrokeStyle(2, 0xfef3c7, 1);
@@ -256,10 +264,11 @@ export class GameScene extends Phaser.Scene {
 
   private renderState(): void {
     const state = this.simulation.getState();
+    const previousPhase = this.lastRenderedPhase;
     this.phaseText.setText(`阶段：${this.phaseLabel(state.phase)}`);
     this.waveText.setText(`波次：${state.wave} / ${state.maxWave}    剩余：${state.waveTimeRemainingSeconds.toFixed(1)}s`);
-    this.resourceText.setText(`木材：${state.wood}    金币：${state.gold}`);
-    this.wallText.setText(`城墙：${state.wallHp} / ${state.wallMaxHp}`);
+    this.resourceText.setText(`木材：${this.formatNumber(state.wood)}    金币：${this.formatNumber(state.gold)}`);
+    this.wallText.setText(`城墙：${this.formatNumber(state.wallHp)} / ${this.formatNumber(state.wallMaxHp)}`);
     this.enemyCountText.setText(`战场敌人：${state.enemies.length}    已击杀：${state.defeatedEnemies}    等级：${state.level} (${state.xp}/${state.xpToNextLevel})`);
     this.startButtonText.setText(this.startWaveLabel(state.phase, state.wave));
     this.startButton.setFillStyle(state.phase === "PREPARE" ? 0x2563eb : 0x475569, 1);
@@ -276,15 +285,21 @@ export class GameScene extends Phaser.Scene {
       const tower = building ? starterCatalog.towers.find((candidate) => candidate.id === building.definitionId) : undefined;
       label.setText(building ? `${tower?.displayName ?? "防御塔"}\nLv.${building.level}` : `格子 ${index + 1}`);
       label.setColor(building ? "#fcd34d" : "#cbd5e1");
-      this.towerVisuals.get(`slot-${index + 1}`)?.setVisible(Boolean(building));
+      const towerVisual = this.towerVisuals.get(`slot-${index + 1}`);
+      towerVisual?.setVisible(Boolean(building));
+      if (tower) {
+        towerVisual?.setFillStyle(this.towerColor(tower.id), 1);
+      }
     });
 
+    this.syncCombatEvents();
     this.syncEnemyVisuals(state.enemies);
     this.upgradePanel.setVisible(state.phase === "UPGRADE");
-    state.pendingUpgradeChoices.forEach((upgradeId, index) => {
+    this.upgradeChoiceButtons.forEach((button, index) => {
+      const upgradeId = state.pendingUpgradeChoices[index];
       const upgrade = starterCatalog.upgrades.find((candidate) => candidate.id === upgradeId);
       this.upgradeChoiceLabels[index]?.setText(upgrade ? `${upgrade.title}\n${upgrade.description}` : "");
-      this.upgradeChoiceButtons[index]?.setVisible(true);
+      button.setVisible(Boolean(upgrade));
     });
 
     if (state.phase === "VICTORY") {
@@ -293,7 +308,10 @@ export class GameScene extends Phaser.Scene {
       this.messageText.setText("城墙失守：本局失败");
     } else if (state.phase === "UPGRADE") {
       this.messageText.setText("升级完成，请选择一项强化");
+    } else if (previousPhase === "UPGRADE" && state.wave > 0) {
+      this.messageText.setText("强化已生效，准备下一波");
     }
+    this.lastRenderedPhase = state.phase;
   }
 
   private chooseUpgrade(index: number): void {
@@ -307,26 +325,153 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  private syncEnemyVisuals(enemies: ReadonlyArray<{ id: string; position: number; hp: number; maxHp: number }>): void {
+  private syncCombatEvents(): void {
+    for (const event of this.simulation.drainEvents()) {
+      if (event.type === "tower_attack") {
+        this.showProjectile(event);
+      } else if (event.type === "enemy_hit") {
+        this.showEnemyHit(event);
+      } else {
+        this.showEnemyDefeated(event);
+      }
+    }
+  }
+
+  private showProjectile(event: Extract<GameEvent, { type: "tower_attack" }>): void {
+    const building = this.simulation.getState().buildings.find((candidate) => candidate.id === event.buildingId);
+    const start = building ? this.slotPositions.get(building.slotId) : undefined;
+    if (!start) {
+      return;
+    }
+
+    const end = this.enemyPosition(event.targetPosition);
+    const color = this.towerColor(event.towerDefinitionId);
+    const muzzle = this.add.circle(start.x, start.y, 11, color, 0.8);
+    this.tweens.add({
+      targets: muzzle,
+      scale: 1.7,
+      alpha: 0,
+      duration: 100,
+      onComplete: () => muzzle.destroy(),
+    });
+
+    const projectile = this.add.circle(start.x, start.y, 5, color, 1);
+    this.tweens.add({
+      targets: projectile,
+      x: end.x,
+      y: end.y,
+      duration: 220,
+      ease: "Cubic.easeOut",
+      onComplete: () => projectile.destroy(),
+    });
+  }
+
+  private showEnemyHit(event: Extract<GameEvent, { type: "enemy_hit" }>): void {
+    const point = this.enemyPosition(event.position);
+    const flash = this.add.circle(point.x, point.y, 20, 0xfef08a, 0.18);
+    flash.setStrokeStyle(3, 0xfef08a, 1);
+    this.tweens.add({
+      targets: flash,
+      scale: 1.5,
+      alpha: 0,
+      duration: 180,
+      onComplete: () => flash.destroy(),
+    });
+
+    const damageText = this.add.text(point.x, point.y - 24, `-${this.formatNumber(event.damage)}`, this.textStyle(16, "#fde68a"));
+    damageText.setOrigin(0.5);
+    this.tweens.add({
+      targets: damageText,
+      y: point.y - 52,
+      alpha: 0,
+      duration: 420,
+      onComplete: () => damageText.destroy(),
+    });
+  }
+
+  private showEnemyDefeated(event: Extract<GameEvent, { type: "enemy_defeated" }>): void {
+    const point = this.enemyPosition(event.position);
+    const burst = this.add.circle(point.x, point.y, 24, 0xf97316, 0.22);
+    burst.setStrokeStyle(4, 0xfbbf24, 1);
+    this.tweens.add({
+      targets: burst,
+      scale: 1.8,
+      alpha: 0,
+      duration: 260,
+      onComplete: () => burst.destroy(),
+    });
+  }
+
+  private syncEnemyVisuals(enemies: ReadonlyArray<{ id: string; definitionId: string; position: number; hp: number; maxHp: number }>): void {
     const activeIds = new Set(enemies.map((enemy) => enemy.id));
     for (const [id, visual] of this.enemyVisuals) {
       if (!activeIds.has(id)) {
         visual.destroy();
         this.enemyVisuals.delete(id);
+        const bars = this.enemyHealthBars.get(id);
+        bars?.track.destroy();
+        bars?.fill.destroy();
+        this.enemyHealthBars.delete(id);
       }
     }
 
     for (const enemy of enemies) {
       let visual = this.enemyVisuals.get(enemy.id);
       if (!visual) {
-        visual = this.add.circle(WIDTH / 2, 220, 18, 0x86efac, 1);
-        visual.setStrokeStyle(3, 0xdcfce7, 1);
+        visual = this.add.circle(WIDTH / 2, 220, 18, this.enemyColor(enemy.definitionId), 1);
+        visual.setStrokeStyle(3, 0xf8fafc, 0.9);
         this.enemyVisuals.set(enemy.id, visual);
+        const track = this.add.rectangle(WIDTH / 2, 196, 42, 6, 0x0f172a, 0.95).setOrigin(0.5);
+        const fill = this.add.rectangle(WIDTH / 2 - 21, 196, 42, 6, 0x4ade80, 1).setOrigin(0, 0.5);
+        this.enemyHealthBars.set(enemy.id, { track, fill });
       }
 
-      visual.setPosition(WIDTH / 2, 230 + enemy.position * 540);
-      visual.setScale(Math.max(0.65, Math.min(1.2, 0.7 + enemy.hp / enemy.maxHp * 0.5)));
+      const point = this.enemyPosition(enemy.position);
+      visual.setPosition(point.x, point.y);
+      visual.setScale(Math.max(0.72, Math.min(1.25, 0.72 + enemy.hp / enemy.maxHp * 0.5)));
+      const bars = this.enemyHealthBars.get(enemy.id);
+      bars?.track.setPosition(point.x, point.y - 28);
+      bars?.fill.setPosition(point.x - 21, point.y - 28);
+      bars?.fill.setDisplaySize(Math.max(2, 42 * Math.max(0, enemy.hp / enemy.maxHp)), 6);
     }
+  }
+
+  private enemyPosition(position: number): { x: number; y: number } {
+    return { x: WIDTH / 2, y: 230 + position * 540 };
+  }
+
+  private towerColor(towerId: string): number {
+    switch (towerId) {
+      case "machine_gun":
+        return 0xf59e0b;
+      case "cannon":
+        return 0xef4444;
+      case "frost":
+        return 0x38bdf8;
+      case "electric":
+        return 0xa78bfa;
+      default:
+        return 0xf59e0b;
+    }
+  }
+
+  private enemyColor(enemyId: string): number {
+    const enemy = starterCatalog.enemies.find((candidate) => candidate.id === enemyId);
+    if (enemy?.tier === "boss") {
+      return 0xef4444;
+    }
+    if (enemy?.tier === "elite") {
+      return 0xc084fc;
+    }
+    if (enemy?.behavior === "runner" || enemy?.behavior === "volatile") {
+      return 0xfb923c;
+    }
+    return 0x4ade80;
+  }
+
+  private formatNumber(value: number): string {
+    const rounded = Math.round(value * 10) / 10;
+    return Number.isInteger(rounded) ? `${rounded}` : rounded.toFixed(1);
   }
 
   private handleHidden(): void {

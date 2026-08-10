@@ -8,7 +8,7 @@ import {
   type WaveDefinition,
 } from "./content";
 import { SeededRandom } from "./random";
-import type { CommandResult, EnemyRuntimeState, GameCommand, GameState } from "./types";
+import type { CommandResult, EnemyRuntimeState, GameCommand, GameEvent, GameState } from "./types";
 
 export const MAX_WAVE = 20;
 export const WALL_MAX_HP = 100;
@@ -22,6 +22,7 @@ export class GameSimulation {
   private readonly random: SeededRandom;
   private readonly catalog: ContentCatalog;
   private readonly state: GameState;
+  private events: GameEvent[] = [];
 
   public constructor(catalog: ContentCatalog = starterCatalog, seed = 0x5ec0de) {
     validateCatalog(catalog);
@@ -54,6 +55,12 @@ export class GameSimulation {
 
   public getState(): Readonly<GameState> {
     return this.state;
+  }
+
+  public drainEvents(): GameEvent[] {
+    const events = this.events;
+    this.events = [];
+    return events;
   }
 
   public dispatch(command: GameCommand): CommandResult {
@@ -216,11 +223,7 @@ export class GameSimulation {
     }
 
     this.state.pendingUpgradeChoices = [];
-    this.state.phase = "COMBAT";
-    const wave = this.getWaveDefinition(this.state.wave);
-    if (this.state.nextSpawnEventIndex >= wave.spawnEvents.length && this.state.enemies.length === 0) {
-      this.finishWave();
-    }
+    this.state.phase = "PREPARE";
     return { accepted: true };
   }
 
@@ -282,12 +285,22 @@ export class GameSimulation {
     this.state.pendingUpgradeChoices = [];
     this.state.buildings = [];
     this.state.enemies = [];
+    this.events = [];
     return { accepted: true };
   }
 
   private finishWave(): void {
     if (this.state.wave >= this.state.maxWave) {
       this.state.phase = "VICTORY";
+      return;
+    }
+
+    if (this.state.xp >= this.state.xpToNextLevel) {
+      this.state.xp -= this.state.xpToNextLevel;
+      this.state.level += 1;
+      this.state.xpToNextLevel = Math.ceil(this.state.xpToNextLevel * 1.35);
+      this.state.pendingUpgradeChoices = this.createUpgradeChoices();
+      this.state.phase = "UPGRADE";
       return;
     }
 
@@ -385,23 +398,23 @@ export class GameSimulation {
         continue;
       }
 
-      this.applyTowerAttack(definition, building.level, target);
+      this.applyTowerAttack(building.id, definition, building.level, target);
       building.attackCooldownSeconds = this.getTowerAttackInterval(definition, building.level);
     }
   }
 
-  private applyTowerAttack(definition: TowerDefinition, level: number, target: EnemyRuntimeState): void {
+  private applyTowerAttack(buildingId: string, definition: TowerDefinition, level: number, target: EnemyRuntimeState): void {
     if (definition.attackType === "splash") {
       const radius = this.getTowerSplashRadius(definition, level);
       for (const enemy of this.state.enemies) {
         if (this.isTargetable(enemy) && Math.abs(enemy.position - target.position) <= radius) {
-          this.applyDamage(enemy, this.getTowerDamage(definition, level));
+          this.attackEnemy(buildingId, definition, enemy, this.getTowerDamage(definition, level));
         }
       }
       return;
     }
 
-    this.applyDamage(target, this.getTowerDamage(definition, level));
+    this.attackEnemy(buildingId, definition, target, this.getTowerDamage(definition, level));
 
     if (definition.attackType === "slow") {
       target.slowMultiplier = Math.min(target.slowMultiplier, this.getTowerSlowMultiplier(definition, level));
@@ -414,14 +427,33 @@ export class GameSimulation {
         .sort((left, right) => Math.abs(left.position - target.position) - Math.abs(right.position - target.position))
         .slice(0, Math.max(0, (definition.chainTargets ?? 2) + level - 2));
       for (const enemy of chainTargets) {
-        this.applyDamage(enemy, this.getTowerDamage(definition, level));
+        this.attackEnemy(buildingId, definition, enemy, this.getTowerDamage(definition, level));
       }
     }
   }
 
+  private attackEnemy(buildingId: string, definition: TowerDefinition, enemy: EnemyRuntimeState, damage: number): void {
+    this.events.push({
+      type: "tower_attack",
+      buildingId,
+      towerDefinitionId: definition.id,
+      targetId: enemy.id,
+      targetPosition: enemy.position,
+    });
+    this.applyDamage(enemy, damage);
+  }
+
   private applyDamage(enemy: EnemyRuntimeState, amount: number): void {
     const definition = this.getEnemyDefinition(enemy.definitionId);
-    enemy.hp -= amount * (definition.damageMultiplier ?? 1);
+    const damage = amount * (definition.damageMultiplier ?? 1);
+    enemy.hp -= damage;
+    this.events.push({
+      type: "enemy_hit",
+      enemyId: enemy.id,
+      position: enemy.position,
+      damage,
+      remainingHp: Math.max(0, enemy.hp),
+    });
   }
 
   private resolveWallAttacks(deltaSeconds: number): void {
@@ -455,6 +487,11 @@ export class GameSimulation {
 
       const definition = this.getEnemyDefinition(enemy.definitionId);
       this.state.defeatedEnemies += 1;
+      this.events.push({
+        type: "enemy_defeated",
+        enemyId: enemy.id,
+        position: enemy.position,
+      });
       this.state.gold += Math.max(1, Math.round(definition.goldReward * this.getGoldMultiplier()));
       awardedXp += definition.xpReward;
 
@@ -479,15 +516,6 @@ export class GameSimulation {
 
   private awardExperience(amount: number): void {
     this.state.xp += amount;
-    if (this.state.xp < this.state.xpToNextLevel) {
-      return;
-    }
-
-    this.state.xp -= this.state.xpToNextLevel;
-    this.state.level += 1;
-    this.state.xpToNextLevel = Math.ceil(this.state.xpToNextLevel * 1.35);
-    this.state.pendingUpgradeChoices = this.createUpgradeChoices();
-    this.state.phase = "UPGRADE";
   }
 
   private createUpgradeChoices(): string[] {

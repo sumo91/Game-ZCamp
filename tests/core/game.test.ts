@@ -61,11 +61,29 @@ describe("GameSimulation", () => {
     expect(game.getState().enemies).toHaveLength(0);
   });
 
+  it("emits deterministic attack and hit events for the presentation layer", () => {
+    const singleEnemyCatalog = {
+      ...starterCatalog,
+      waves: [{ wave: 1, durationSeconds: 8, spawnEvents: [{ atSeconds: 0, enemyId: "walker" }] }],
+    };
+    const game = new GameSimulation(singleEnemyCatalog);
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-1" });
+    game.dispatch({ type: "start_wave" });
+
+    game.tick(0.7);
+    const events = game.drainEvents();
+
+    expect(events).toEqual(expect.arrayContaining([
+      expect.objectContaining({ type: "tower_attack", towerDefinitionId: "machine_gun" }),
+      expect.objectContaining({ type: "enemy_hit", damage: 12 }),
+    ]));
+  });
+
   it("damages the wall when an enemy reaches it", () => {
     const game = new GameSimulation();
     game.dispatch({ type: "start_wave" });
 
-    game.tick(3);
+    game.tick(8);
 
     expect(game.getState().wallHp).toBeLessThan(WALL_MAX_HP);
     expect(game.getState().enemies.length).toBeGreaterThan(0);
@@ -99,8 +117,8 @@ describe("GameSimulation", () => {
     const upgradeCatalog: ContentCatalog = {
       ...starterCatalog,
       enemies: [
-        { ...starterCatalog.enemies[0]!, id: "rewarder", maxHp: 1, moveSpeed: 0, wallDamage: 0, xpReward: 3 },
-        { ...starterCatalog.enemies[0]!, id: "target", maxHp: 30, moveSpeed: 0, wallDamage: 0, xpReward: 1 },
+        { ...starterCatalog.enemies[0]!, id: "rewarder", maxHp: 1, moveSpeed: 0.1, wallDamage: 0, xpReward: 3 },
+        { ...starterCatalog.enemies[0]!, id: "target", maxHp: 17, moveSpeed: 0.1, wallDamage: 0, xpReward: 1 },
       ],
       waves: [
         { wave: 1, durationSeconds: 2, spawnEvents: [{ atSeconds: 0, enemyId: "rewarder" }] },
@@ -133,7 +151,7 @@ describe("GameSimulation", () => {
       enemies: starterCatalog.enemies.map((enemy) => ({
         ...enemy,
         maxHp: 1,
-        moveSpeed: 0,
+        moveSpeed: 0.1,
         wallDamage: 0,
       })),
       waves: Array.from({ length: MAX_WAVE }, (_, index) => ({

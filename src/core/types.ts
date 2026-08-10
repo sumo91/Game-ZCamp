@@ -53,6 +53,27 @@ export interface GameState {
   enemies: EnemyRuntimeState[];
 }
 
+export type GameEvent =
+  | {
+      type: "tower_attack";
+      buildingId: string;
+      towerDefinitionId: string;
+      targetId: string;
+      targetPosition: number;
+    }
+  | {
+      type: "enemy_hit";
+      enemyId: string;
+      position: number;
+      damage: number;
+      remainingHp: number;
+    }
+  | {
+      type: "enemy_defeated";
+      enemyId: string;
+      position: number;
+    };
+
 export type GameCommand =
   | { type: "start_wave" }
   | { type: "build_tower"; definitionId: string; slotId: string }
