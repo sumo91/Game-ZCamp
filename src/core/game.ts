@@ -1,11 +1,22 @@
-import { starterCatalog, validateCatalog, type ContentCatalog } from "./content";
+import {
+  starterCatalog,
+  validateCatalog,
+  type ContentCatalog,
+  type EnemyDefinition,
+  type TowerDefinition,
+  type UpgradeEffect,
+  type WaveDefinition,
+} from "./content";
 import { SeededRandom } from "./random";
-import type { CommandResult, GameCommand, GameState } from "./types";
+import type { CommandResult, EnemyRuntimeState, GameCommand, GameState } from "./types";
 
 export const MAX_WAVE = 20;
 export const WALL_MAX_HP = 100;
 export const INITIAL_WOOD = 120;
 export const INITIAL_GOLD = 0;
+export const INITIAL_XP_TO_NEXT_LEVEL = 3;
+export const REPAIR_COST = 20;
+export const REPAIR_AMOUNT = 25;
 
 export class GameSimulation {
   private readonly random: SeededRandom;
@@ -26,9 +37,18 @@ export class GameSimulation {
       wallHp: WALL_MAX_HP,
       wallMaxHp: WALL_MAX_HP,
       waveTimeRemainingSeconds: 0,
+      waveElapsedSeconds: 0,
+      nextSpawnEventIndex: 0,
+      spawnedEnemies: 0,
       defeatedEnemies: 0,
+      xp: 0,
+      level: 1,
+      xpToNextLevel: INITIAL_XP_TO_NEXT_LEVEL,
+      upgradeIds: [],
+      pendingUpgradeChoices: [],
       seed,
       buildings: [],
+      enemies: [],
     };
   }
 
@@ -42,6 +62,12 @@ export class GameSimulation {
         return this.startWave();
       case "build_tower":
         return this.buildTower(command.definitionId, command.slotId);
+      case "upgrade_tower":
+        return this.upgradeTower(command.slotId);
+      case "choose_upgrade":
+        return this.chooseUpgrade(command.upgradeId);
+      case "repair_wall":
+        return this.repairWall();
       case "pause":
         return this.pause();
       case "resume":
@@ -56,12 +82,23 @@ export class GameSimulation {
       return;
     }
 
-    this.state.waveTimeRemainingSeconds = Math.max(
-      0,
-      this.state.waveTimeRemainingSeconds - deltaSeconds,
-    );
+    this.state.waveElapsedSeconds += deltaSeconds;
+    this.state.waveTimeRemainingSeconds = Math.max(0, this.state.waveTimeRemainingSeconds - deltaSeconds);
+    this.state.wood += this.getWoodIncome() * deltaSeconds;
+    this.state.wallHp = Math.min(this.state.wallMaxHp, this.state.wallHp + this.getWallRepair() * deltaSeconds);
 
-    if (this.state.waveTimeRemainingSeconds === 0) {
+    this.spawnDueEnemies();
+    this.updateEnemies(deltaSeconds);
+    this.resolveTowerAttacks(deltaSeconds);
+    this.resolveWallAttacks(deltaSeconds);
+    this.removeDefeatedEnemies();
+
+    if (this.state.phase !== "COMBAT") {
+      return;
+    }
+
+    const wave = this.getWaveDefinition(this.state.wave);
+    if (this.state.nextSpawnEventIndex >= wave.spawnEvents.length && this.state.enemies.length === 0) {
       this.finishWave();
     }
   }
@@ -71,7 +108,8 @@ export class GameSimulation {
       return;
     }
 
-    this.state.wallHp = Math.max(0, this.state.wallHp - amount);
+    const reducedAmount = amount * this.getWallDamageMultiplier();
+    this.state.wallHp = Math.max(0, this.state.wallHp - reducedAmount);
     if (this.state.wallHp === 0) {
       this.state.phase = "DEFEAT";
       this.state.waveTimeRemainingSeconds = 0;
@@ -94,6 +132,10 @@ export class GameSimulation {
     this.state.wave += 1;
     this.state.phase = "COMBAT";
     this.state.waveTimeRemainingSeconds = this.getWaveDuration(this.state.wave);
+    this.state.waveElapsedSeconds = 0;
+    this.state.nextSpawnEventIndex = 0;
+    this.state.spawnedEnemies = 0;
+    this.state.enemies = [];
     return { accepted: true };
   }
 
@@ -122,7 +164,81 @@ export class GameSimulation {
       kind: "tower",
       definitionId,
       level: 1,
+      lanePosition: 0.5,
+      attackCooldownSeconds: 0,
     });
+    return { accepted: true };
+  }
+
+  private upgradeTower(slotId: string): CommandResult {
+    if (this.state.phase !== "PREPARE" && this.state.phase !== "COMBAT") {
+      return { accepted: false, reason: "Towers can only be upgraded during preparation or combat." };
+    }
+
+    const building = this.state.buildings.find((candidate) => candidate.slotId === slotId);
+    if (!building) {
+      return { accepted: false, reason: "There is no tower in that slot." };
+    }
+
+    if (building.level >= 3) {
+      return { accepted: false, reason: "That tower is already at maximum level." };
+    }
+
+    const definition = this.getTowerDefinition(building.definitionId);
+    const cost = Math.round(definition.buildCost * (1 + building.level * 0.5));
+    if (this.state.wood < cost) {
+      return { accepted: false, reason: `需要 ${cost} 木材升级。` };
+    }
+
+    this.state.wood -= cost;
+    building.level += 1;
+    return { accepted: true };
+  }
+
+  private chooseUpgrade(upgradeId: string): CommandResult {
+    if (this.state.phase !== "UPGRADE") {
+      return { accepted: false, reason: "There is no upgrade choice pending." };
+    }
+
+    if (!this.state.pendingUpgradeChoices.includes(upgradeId)) {
+      return { accepted: false, reason: "That upgrade is not one of the current choices." };
+    }
+
+    const upgrade = this.catalog.upgrades.find((candidate) => candidate.id === upgradeId);
+    if (!upgrade) {
+      return { accepted: false, reason: `Unknown upgrade: ${upgradeId}.` };
+    }
+
+    this.state.upgradeIds.push(upgrade.id);
+    if (upgrade.effect.kind === "wall_max_hp") {
+      this.state.wallMaxHp += upgrade.effect.amount;
+      this.state.wallHp += upgrade.effect.amount;
+    }
+
+    this.state.pendingUpgradeChoices = [];
+    this.state.phase = "COMBAT";
+    const wave = this.getWaveDefinition(this.state.wave);
+    if (this.state.nextSpawnEventIndex >= wave.spawnEvents.length && this.state.enemies.length === 0) {
+      this.finishWave();
+    }
+    return { accepted: true };
+  }
+
+  private repairWall(): CommandResult {
+    if (this.state.phase !== "PREPARE" && this.state.phase !== "COMBAT") {
+      return { accepted: false, reason: "The wall can only be repaired during preparation or combat." };
+    }
+
+    if (this.state.wallHp >= this.state.wallMaxHp) {
+      return { accepted: false, reason: "The wall is already fully repaired." };
+    }
+
+    if (this.state.wood < REPAIR_COST) {
+      return { accepted: false, reason: "Not enough wood to repair the wall." };
+    }
+
+    this.state.wood -= REPAIR_COST;
+    this.state.wallHp = Math.min(this.state.wallMaxHp, this.state.wallHp + REPAIR_AMOUNT);
     return { accepted: true };
   }
 
@@ -153,9 +269,19 @@ export class GameSimulation {
     this.state.wood = INITIAL_WOOD;
     this.state.gold = INITIAL_GOLD;
     this.state.wallHp = WALL_MAX_HP;
+    this.state.wallMaxHp = WALL_MAX_HP;
     this.state.waveTimeRemainingSeconds = 0;
+    this.state.waveElapsedSeconds = 0;
+    this.state.nextSpawnEventIndex = 0;
+    this.state.spawnedEnemies = 0;
     this.state.defeatedEnemies = 0;
+    this.state.xp = 0;
+    this.state.level = 1;
+    this.state.xpToNextLevel = INITIAL_XP_TO_NEXT_LEVEL;
+    this.state.upgradeIds = [];
+    this.state.pendingUpgradeChoices = [];
     this.state.buildings = [];
+    this.state.enemies = [];
     return { accepted: true };
   }
 
@@ -169,7 +295,334 @@ export class GameSimulation {
   }
 
   private getWaveDuration(wave: number): number {
-    const configuredWave = this.catalog.waves.find((definition) => definition.wave === wave);
-    return configuredWave?.durationSeconds ?? this.catalog.waves.at(-1)?.durationSeconds ?? 5;
+    return this.getWaveDefinition(wave).durationSeconds;
+  }
+
+  private getWaveDefinition(wave: number): WaveDefinition {
+    return this.catalog.waves.find((definition) => definition.wave === wave) ?? this.catalog.waves.at(-1)!;
+  }
+
+  private spawnDueEnemies(): void {
+    const wave = this.getWaveDefinition(this.state.wave);
+    while (
+      this.state.nextSpawnEventIndex < wave.spawnEvents.length
+      && wave.spawnEvents[this.state.nextSpawnEventIndex]!.atSeconds <= this.state.waveElapsedSeconds
+    ) {
+      const event = wave.spawnEvents[this.state.nextSpawnEventIndex]!;
+      const definition = this.catalog.enemies.find((enemy) => enemy.id === event.enemyId);
+      if (definition) {
+        this.state.spawnedEnemies += 1;
+        this.state.enemies.push(this.createEnemy(definition));
+      }
+      this.state.nextSpawnEventIndex += 1;
+    }
+  }
+
+  private createEnemy(definition: EnemyDefinition, position = 0): EnemyRuntimeState {
+    return {
+      id: `${definition.id}-${this.state.spawnedEnemies}`,
+      definitionId: definition.id,
+      position,
+      hp: definition.maxHp,
+      maxHp: definition.maxHp,
+      atWall: position >= 1,
+      attackCooldownSeconds: 0,
+      slowMultiplier: 1,
+      slowRemainingSeconds: 0,
+      abilityCooldownSeconds: 0,
+    };
+  }
+
+  private updateEnemies(deltaSeconds: number): void {
+    const screamerAlive = this.state.enemies.some((enemy) => this.getEnemyDefinition(enemy.definitionId).behavior === "screamer" && enemy.hp > 0);
+    const overlordAlive = this.state.enemies.some((enemy) => this.getEnemyDefinition(enemy.definitionId).behavior === "overlord" && enemy.hp > 0);
+
+    for (const enemy of this.state.enemies) {
+      const definition = this.getEnemyDefinition(enemy.definitionId);
+      if (enemy.slowRemainingSeconds > 0) {
+        enemy.slowRemainingSeconds = Math.max(0, enemy.slowRemainingSeconds - deltaSeconds);
+      } else {
+        enemy.slowMultiplier = 1;
+      }
+
+      if (definition.behavior === "regenerator") {
+        enemy.hp = Math.min(enemy.maxHp, enemy.hp + (definition.regenPerSecond ?? 0) * deltaSeconds);
+      }
+
+      if (!enemy.atWall) {
+        let speedMultiplier = enemy.slowMultiplier;
+        if (definition.behavior === "charger" && enemy.position > 0.5) {
+          speedMultiplier *= 1.8;
+        }
+        if (screamerAlive && definition.behavior !== "screamer") {
+          speedMultiplier *= 1.1;
+        }
+        if (overlordAlive && definition.behavior !== "overlord") {
+          speedMultiplier *= 1.15;
+        }
+        enemy.position = Math.min(1, enemy.position + definition.moveSpeed * speedMultiplier * deltaSeconds);
+        enemy.atWall = enemy.position >= 1;
+      }
+
+      if (enemy.atWall) {
+        enemy.attackCooldownSeconds = Math.max(0, enemy.attackCooldownSeconds - deltaSeconds);
+      }
+    }
+  }
+
+  private resolveTowerAttacks(deltaSeconds: number): void {
+    for (const building of this.state.buildings) {
+      const definition = this.getTowerDefinition(building.definitionId);
+      building.attackCooldownSeconds = Math.max(0, building.attackCooldownSeconds - deltaSeconds);
+      if (building.attackCooldownSeconds > 0) {
+        continue;
+      }
+
+      const target = this.state.enemies
+        .filter((enemy) => this.isTargetable(enemy) && Math.abs(enemy.position - building.lanePosition) <= this.getTowerRange(definition, building.level))
+        .sort((left, right) => right.position - left.position)[0];
+      if (!target) {
+        continue;
+      }
+
+      this.applyTowerAttack(definition, building.level, target);
+      building.attackCooldownSeconds = this.getTowerAttackInterval(definition, building.level);
+    }
+  }
+
+  private applyTowerAttack(definition: TowerDefinition, level: number, target: EnemyRuntimeState): void {
+    if (definition.attackType === "splash") {
+      const radius = this.getTowerSplashRadius(definition, level);
+      for (const enemy of this.state.enemies) {
+        if (this.isTargetable(enemy) && Math.abs(enemy.position - target.position) <= radius) {
+          this.applyDamage(enemy, this.getTowerDamage(definition, level));
+        }
+      }
+      return;
+    }
+
+    this.applyDamage(target, this.getTowerDamage(definition, level));
+
+    if (definition.attackType === "slow") {
+      target.slowMultiplier = Math.min(target.slowMultiplier, this.getTowerSlowMultiplier(definition, level));
+      target.slowRemainingSeconds = Math.max(target.slowRemainingSeconds, definition.slowDurationSeconds ?? 1);
+    }
+
+    if (definition.attackType === "chain") {
+      const chainTargets = this.state.enemies
+        .filter((enemy) => enemy !== target && this.isTargetable(enemy))
+        .sort((left, right) => Math.abs(left.position - target.position) - Math.abs(right.position - target.position))
+        .slice(0, Math.max(0, (definition.chainTargets ?? 2) + level - 2));
+      for (const enemy of chainTargets) {
+        this.applyDamage(enemy, this.getTowerDamage(definition, level));
+      }
+    }
+  }
+
+  private applyDamage(enemy: EnemyRuntimeState, amount: number): void {
+    const definition = this.getEnemyDefinition(enemy.definitionId);
+    enemy.hp -= amount * (definition.damageMultiplier ?? 1);
+  }
+
+  private resolveWallAttacks(deltaSeconds: number): void {
+    for (const enemy of this.state.enemies) {
+      if (!enemy.atWall || enemy.hp <= 0) {
+        continue;
+      }
+
+      const definition = this.getEnemyDefinition(enemy.definitionId);
+      if (enemy.attackCooldownSeconds <= 0) {
+        this.damageWall(definition.wallDamage);
+        enemy.attackCooldownSeconds = definition.wallAttackIntervalSeconds;
+      }
+
+      if (this.state.phase === "DEFEAT") {
+        return;
+      }
+    }
+  }
+
+  private removeDefeatedEnemies(): void {
+    const remainingEnemies: EnemyRuntimeState[] = [];
+    const children: EnemyRuntimeState[] = [];
+    let awardedXp = 0;
+
+    for (const enemy of this.state.enemies) {
+      if (enemy.hp > 0) {
+        remainingEnemies.push(enemy);
+        continue;
+      }
+
+      const definition = this.getEnemyDefinition(enemy.definitionId);
+      this.state.defeatedEnemies += 1;
+      this.state.gold += Math.max(1, Math.round(definition.goldReward * this.getGoldMultiplier()));
+      awardedXp += definition.xpReward;
+
+      if (definition.onDeathWallDamage) {
+        this.damageWall(definition.onDeathWallDamage);
+      }
+
+      if (definition.splitInto) {
+        const childDefinition = this.getEnemyDefinition(definition.splitInto.enemyId);
+        for (let index = 0; index < definition.splitInto.count; index += 1) {
+          this.state.spawnedEnemies += 1;
+          children.push(this.createEnemy(childDefinition, enemy.position));
+        }
+      }
+    }
+
+    this.state.enemies = remainingEnemies.concat(children);
+    if (awardedXp > 0 && this.state.phase === "COMBAT") {
+      this.awardExperience(awardedXp);
+    }
+  }
+
+  private awardExperience(amount: number): void {
+    this.state.xp += amount;
+    if (this.state.xp < this.state.xpToNextLevel) {
+      return;
+    }
+
+    this.state.xp -= this.state.xpToNextLevel;
+    this.state.level += 1;
+    this.state.xpToNextLevel = Math.ceil(this.state.xpToNextLevel * 1.35);
+    this.state.pendingUpgradeChoices = this.createUpgradeChoices();
+    this.state.phase = "UPGRADE";
+  }
+
+  private createUpgradeChoices(): string[] {
+    const candidates = this.catalog.upgrades.filter((upgrade) => !this.state.upgradeIds.includes(upgrade.id));
+    const choices: string[] = [];
+    while (choices.length < 3 && candidates.length > 0) {
+      const index = this.random.nextInt(0, candidates.length);
+      choices.push(candidates.splice(index, 1)[0]!.id);
+    }
+    return choices;
+  }
+
+  private isTargetable(enemy: EnemyRuntimeState): boolean {
+    if (enemy.hp <= 0) {
+      return false;
+    }
+    const definition = this.getEnemyDefinition(enemy.definitionId);
+    return definition.behavior !== "burrower" || enemy.position >= (definition.untargetableUntil ?? 0.55);
+  }
+
+  private getEnemyDefinition(definitionId: string): EnemyDefinition {
+    const definition = this.catalog.enemies.find((enemy) => enemy.id === definitionId);
+    if (!definition) {
+      throw new Error(`Unknown enemy definition: ${definitionId}.`);
+    }
+    return definition;
+  }
+
+  private getTowerDefinition(definitionId: string): TowerDefinition {
+    const definition = this.catalog.towers.find((tower) => tower.id === definitionId);
+    if (!definition) {
+      throw new Error(`Unknown tower definition: ${definitionId}.`);
+    }
+    return definition;
+  }
+
+  private getSelectedEffects(): UpgradeEffect[] {
+    return this.state.upgradeIds
+      .map((upgradeId) => this.catalog.upgrades.find((upgrade) => upgrade.id === upgradeId)?.effect)
+      .filter((effect): effect is UpgradeEffect => effect !== undefined);
+  }
+
+  private getTowerDamage(definition: TowerDefinition, level: number): number {
+    let damage = definition.damage;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "all_tower_damage") {
+        damage += effect.amount;
+      }
+      if (effect.kind === "tower_damage" && effect.towerId === definition.id) {
+        damage += effect.amount;
+      }
+    }
+    return damage * (1 + 0.3 * (level - 1));
+  }
+
+  private getTowerAttackInterval(definition: TowerDefinition, level: number): number {
+    let multiplier = 1;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "all_tower_attack_speed") {
+        multiplier *= effect.multiplier;
+      }
+      if (effect.kind === "tower_attack_speed" && effect.towerId === definition.id) {
+        multiplier *= effect.multiplier;
+      }
+    }
+    return Math.max(0.15, definition.attackIntervalSeconds * Math.pow(0.9, level - 1) * multiplier);
+  }
+
+  private getTowerRange(definition: TowerDefinition, level = 1): number {
+    let amount = 0;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "tower_range" && effect.towerId === definition.id) {
+        amount += effect.amount;
+      }
+    }
+    return definition.range + amount + 0.05 * (level - 1);
+  }
+
+  private getTowerSplashRadius(definition: TowerDefinition, level = 1): number {
+    let amount = 0;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "tower_splash_radius" && effect.towerId === definition.id) {
+        amount += effect.amount;
+      }
+    }
+    return (definition.splashRadius ?? 0.2) + amount + 0.03 * (level - 1);
+  }
+
+  private getTowerSlowMultiplier(definition: TowerDefinition, level = 1): number {
+    let reduction = 0;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "tower_slow" && effect.towerId === definition.id) {
+        reduction += effect.amount;
+      }
+    }
+    return Math.max(0.2, (definition.slowMultiplier ?? 0.6) - reduction - 0.04 * (level - 1));
+  }
+
+  private getWoodIncome(): number {
+    let amount = 0;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "wood_income") {
+        amount += effect.amount;
+      }
+    }
+    return 2 + amount;
+  }
+
+  private getGoldMultiplier(): number {
+    let amount = 0;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "gold_multiplier") {
+        amount += effect.amount;
+      }
+    }
+    return 1 + amount;
+  }
+
+  private getWallRepair(): number {
+    let amount = 0;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "wall_repair") {
+        amount += effect.amount;
+      }
+    }
+    return amount;
+  }
+
+  private getWallDamageMultiplier(): number {
+    let reduction = 0;
+    for (const effect of this.getSelectedEffects()) {
+      if (effect.kind === "wall_damage_reduction") {
+        reduction += effect.amount;
+      }
+    }
+    return Math.max(0.2, 1 - reduction);
   }
 }
