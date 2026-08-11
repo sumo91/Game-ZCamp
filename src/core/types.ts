@@ -1,6 +1,12 @@
-export type GamePhase = "PREPARE" | "COMBAT" | "UPGRADE" | "PAUSED" | "VICTORY" | "DEFEAT";
+export type GamePhase = "SHOP" | "COUNTDOWN" | "COMBAT" | "PAUSED" | "VICTORY" | "DEFEAT";
 
 export type ActivePhase = Exclude<GamePhase, "PAUSED">;
+
+export const CAMP_ROWS = 3;
+export const CAMP_COLUMNS = 5;
+export const CAMP_SLOT_IDS = Array.from({ length: CAMP_ROWS }, (_, row) =>
+  Array.from({ length: CAMP_COLUMNS }, (_, column) => `slot-r${row + 1}-c${column + 1}`),
+).flat();
 
 export type BuildingKind = "tower";
 
@@ -40,6 +46,7 @@ export interface GameState {
   wallMaxHp: number;
   waveTimeRemainingSeconds: number;
   waveElapsedSeconds: number;
+  countdownRemainingSeconds: number;
   nextSpawnEventIndex: number;
   spawnedEnemies: number;
   defeatedEnemies: number;
@@ -75,7 +82,7 @@ export type GameEvent =
     };
 
 export type GameCommand =
-  | { type: "start_wave" }
+  | { type: "complete_prep" }
   | { type: "build_tower"; definitionId: string; slotId: string }
   | { type: "upgrade_tower"; slotId: string }
   | { type: "choose_upgrade"; upgradeId: string }

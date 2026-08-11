@@ -1,5 +1,7 @@
 import type { EnemyTier } from "./types";
 
+export type TowerIconKey = "machine_gun" | "cannon" | "frost" | "electric";
+
 export type EnemyBehavior =
   | "walker"
   | "runner"
@@ -20,6 +22,8 @@ export interface TowerDefinition {
   id: string;
   displayName: string;
   role: string;
+  iconKey: TowerIconKey;
+  accentColor: string;
   buildCost: number;
   maxLevel: number;
   damage: number;
@@ -95,6 +99,8 @@ const towers: TowerDefinition[] = [
     id: "machine_gun",
     displayName: "机枪塔",
     role: "快速单体输出",
+    iconKey: "machine_gun",
+    accentColor: "#F6C453",
     buildCost: 40,
     maxLevel: 3,
     damage: 12,
@@ -106,6 +112,8 @@ const towers: TowerDefinition[] = [
     id: "cannon",
     displayName: "炮塔",
     role: "范围清怪",
+    iconKey: "cannon",
+    accentColor: "#F07B28",
     buildCost: 65,
     maxLevel: 3,
     damage: 35,
@@ -118,6 +126,8 @@ const towers: TowerDefinition[] = [
     id: "frost",
     displayName: "冰冻塔",
     role: "减速控制",
+    iconKey: "frost",
+    accentColor: "#42D3F3",
     buildCost: 55,
     maxLevel: 3,
     damage: 4,
@@ -131,6 +141,8 @@ const towers: TowerDefinition[] = [
     id: "electric",
     displayName: "电磁塔",
     role: "链式压制",
+    iconKey: "electric",
+    accentColor: "#D06CFF",
     buildCost: 85,
     maxLevel: 3,
     damage: 12,
@@ -253,9 +265,16 @@ export function validateCatalog(catalog: ContentCatalog): void {
   }
 
   assertUniqueIds(catalog.towers.map((item) => item.id), "Towers");
+  assertUniqueIds(catalog.towers.map((item) => item.iconKey), "Tower icons");
   assertUniqueIds(catalog.enemies.map((item) => item.id), "Enemies");
   assertUniqueIds(catalog.waves.map((item) => String(item.wave)), "Waves");
   assertUniqueIds(catalog.upgrades.map((item) => item.id), "Upgrades");
+
+  for (const tower of catalog.towers) {
+    if (tower.buildCost < 0 || tower.maxLevel < 1 || !/^#[0-9A-Fa-f]{6}$/.test(tower.accentColor)) {
+      throw new Error("Tower " + tower.id + " contains invalid card content.");
+    }
+  }
 
   for (const wave of catalog.waves) {
     if (wave.durationSeconds <= 0 || wave.spawnEvents.length === 0) {

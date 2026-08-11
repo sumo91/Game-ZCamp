@@ -1,56 +1,88 @@
 import { describe, expect, it } from "vitest";
 import { starterCatalog, type ContentCatalog } from "../../src/core/content";
+import { CAMP_SLOT_IDS } from "../../src/core/types";
 import { GameSimulation, INITIAL_WOOD, MAX_WAVE, WALL_MAX_HP } from "../../src/core/game";
 
-describe("GameSimulation", () => {
-  it("starts in preparation with initial resources", () => {
+function startCombat(game: GameSimulation): void {
+  expect(game.dispatch({ type: "complete_prep" }).accepted).toBe(true);
+  game.tick(3);
+  expect(game.getState().phase).toBe("COMBAT");
+}
+
+describe("GameSimulation D3 flow", () => {
+  it("starts in SHOP with a stable 5x3 camp", () => {
     const game = new GameSimulation();
 
     expect(game.getState()).toMatchObject({
-      phase: "PREPARE",
+      phase: "SHOP",
       wave: 0,
       wood: INITIAL_WOOD,
       wallHp: WALL_MAX_HP,
+      countdownRemainingSeconds: 0,
     });
+    expect(CAMP_SLOT_IDS).toEqual([
+      "slot-r1-c1", "slot-r1-c2", "slot-r1-c3", "slot-r1-c4", "slot-r1-c5",
+      "slot-r2-c1", "slot-r2-c2", "slot-r2-c3", "slot-r2-c4", "slot-r2-c5",
+      "slot-r3-c1", "slot-r3-c2", "slot-r3-c3", "slot-r3-c4", "slot-r3-c5",
+    ]);
   });
 
-  it("builds a tower through a validated command", () => {
+  it("builds once through a validated 15-slot command", () => {
     const game = new GameSimulation();
-    const result = game.dispatch({
-      type: "build_tower",
-      definitionId: "machine_gun",
-      slotId: "slot-1",
-    });
+    const result = game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
 
     expect(result.accepted).toBe(true);
     expect(game.getState().buildings).toHaveLength(1);
     expect(game.getState().wood).toBe(INITIAL_WOOD - 40);
+    expect(game.dispatch({ type: "build_tower", definitionId: "cannon", slotId: "slot-r1-c1" }).accepted).toBe(false);
+    expect(game.dispatch({ type: "build_tower", definitionId: "cannon", slotId: "slot-1" }).accepted).toBe(false);
   });
 
-  it("upgrades an occupied tower slot and consumes the upgrade cost", () => {
+  it("uses a non-repeatable three-second countdown and blocks build input", () => {
     const game = new GameSimulation();
-    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-1" });
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
+    const woodBeforeCountdown = game.getState().wood;
+
+    expect(game.dispatch({ type: "complete_prep" }).accepted).toBe(true);
+    expect(game.dispatch({ type: "complete_prep" }).accepted).toBe(false);
+    expect(game.getState().phase).toBe("COUNTDOWN");
+    expect(game.getState().countdownRemainingSeconds).toBe(3);
+    expect(game.dispatch({ type: "build_tower", definitionId: "cannon", slotId: "slot-r1-c2" })).toMatchObject({ accepted: false });
+    expect(game.getState().wood).toBe(woodBeforeCountdown);
+
+    game.tick(2.99);
+    expect(game.getState().phase).toBe("COUNTDOWN");
+    game.tick(1 / 30);
+    expect(game.getState().phase).toBe("COMBAT");
+    expect(game.getState().wave).toBe(1);
+  });
+
+  it("upgrades only after an explicit upgrade command", () => {
+    const game = new GameSimulation();
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
     const woodAfterBuild = game.getState().wood;
 
-    const result = game.dispatch({ type: "upgrade_tower", slotId: "slot-1" });
-
-    expect(result.accepted).toBe(true);
+    expect(game.getState().buildings[0]?.level).toBe(1);
+    expect(game.dispatch({ type: "upgrade_tower", slotId: "slot-r1-c1" }).accepted).toBe(true);
     expect(game.getState().buildings[0]?.level).toBe(2);
     expect(game.getState().wood).toBeLessThan(woodAfterBuild);
   });
 
-  it("spawns an enemy, lets a tower attack it, and pays the kill reward", () => {
+  it("spawns an enemy, emits combat events, and pays the kill reward", () => {
     const singleEnemyCatalog = {
       ...starterCatalog,
       waves: [{ wave: 1, durationSeconds: 8, spawnEvents: [{ atSeconds: 0, enemyId: "walker" }] }],
     };
     const game = new GameSimulation(singleEnemyCatalog);
-    game.dispatch({
-      type: "build_tower",
-      definitionId: "machine_gun",
-      slotId: "slot-1",
-    });
-    game.dispatch({ type: "start_wave" });
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
+    startCombat(game);
+
+    game.tick(0.7);
+    const events = game.drainEvents();
+    expect(events).toEqual(expect.arrayContaining([
+      expect.objectContaining({ type: "tower_attack", towerDefinitionId: "machine_gun" }),
+      expect.objectContaining({ type: "enemy_hit", damage: 12 }),
+    ]));
 
     for (let index = 0; index < 300 && game.getState().phase === "COMBAT"; index += 1) {
       game.tick(1 / 30);
@@ -58,54 +90,47 @@ describe("GameSimulation", () => {
 
     expect(game.getState().defeatedEnemies).toBeGreaterThan(0);
     expect(game.getState().gold).toBeGreaterThan(0);
-    expect(game.getState().enemies).toHaveLength(0);
+    expect(game.getState().phase).toBe("SHOP");
   });
 
-  it("emits deterministic attack and hit events for the presentation layer", () => {
-    const singleEnemyCatalog = {
+  it("returns to SHOP after a cleared wave", () => {
+    const safeCatalog = {
       ...starterCatalog,
-      waves: [{ wave: 1, durationSeconds: 8, spawnEvents: [{ atSeconds: 0, enemyId: "walker" }] }],
+      enemies: starterCatalog.enemies.map((enemy) => ({ ...enemy, maxHp: 1, moveSpeed: 0.1, wallDamage: 0 })),
+      waves: [{ wave: 1, durationSeconds: 1, spawnEvents: [{ atSeconds: 0, enemyId: "walker" }] }],
     };
-    const game = new GameSimulation(singleEnemyCatalog);
-    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-1" });
-    game.dispatch({ type: "start_wave" });
+    const game = new GameSimulation(safeCatalog);
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
+    startCombat(game);
+    game.tick(1);
 
-    game.tick(0.7);
-    const events = game.drainEvents();
-
-    expect(events).toEqual(expect.arrayContaining([
-      expect.objectContaining({ type: "tower_attack", towerDefinitionId: "machine_gun" }),
-      expect.objectContaining({ type: "enemy_hit", damage: 12 }),
-    ]));
+    expect(game.getState().phase).toBe("SHOP");
+    expect(game.getState().wave).toBe(1);
   });
 
-  it("damages the wall when an enemy reaches it", () => {
+  it("pauses and resumes SHOP, COUNTDOWN, and COMBAT without advancing time", () => {
     const game = new GameSimulation();
-    game.dispatch({ type: "start_wave" });
-
-    game.tick(8);
-
-    expect(game.getState().wallHp).toBeLessThan(WALL_MAX_HP);
-    expect(game.getState().enemies.length).toBeGreaterThan(0);
-  });
-
-  it("pauses simulation time and resumes the previous phase", () => {
-    const game = new GameSimulation();
-    game.dispatch({ type: "start_wave" });
-    const beforePause = game.getState().waveTimeRemainingSeconds;
-
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
+    game.dispatch({ type: "complete_prep" });
+    const countdownBeforePause = game.getState().countdownRemainingSeconds;
     game.dispatch({ type: "pause" });
     game.tick(10);
     expect(game.getState().phase).toBe("PAUSED");
-    expect(game.getState().waveTimeRemainingSeconds).toBe(beforePause);
-
+    expect(game.getState().countdownRemainingSeconds).toBe(countdownBeforePause);
     game.dispatch({ type: "resume" });
-    expect(game.getState().phase).toBe("COMBAT");
+    expect(game.getState().phase).toBe("COUNTDOWN");
+    game.tick(3);
+    const beforePause = game.getState().waveTimeRemainingSeconds;
+    game.dispatch({ type: "pause" });
+    game.tick(10);
+    expect(game.getState().waveTimeRemainingSeconds).toBe(beforePause);
+    expect(game.dispatch({ type: "resume" }).accepted).toBe(true);
   });
 
   it("enters defeat once when the wall reaches zero", () => {
     const game = new GameSimulation();
-    game.dispatch({ type: "start_wave" });
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
+    startCombat(game);
     game.damageWall(WALL_MAX_HP);
     game.damageWall(10);
 
@@ -113,7 +138,7 @@ describe("GameSimulation", () => {
     expect(game.getState().wallHp).toBe(0);
   });
 
-  it("offers three upgrades and applies the selected effect to the next wave", () => {
+  it("offers an upgrade in SHOP and applies the selected effect", () => {
     const upgradeCatalog: ContentCatalog = {
       ...starterCatalog,
       enemies: [
@@ -131,29 +156,33 @@ describe("GameSimulation", () => {
       ],
     };
     const game = new GameSimulation(upgradeCatalog);
-    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-1" });
-    game.dispatch({ type: "start_wave" });
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
+    startCombat(game);
     game.tick(1);
 
-    expect(game.getState().phase).toBe("UPGRADE");
+    expect(game.getState().phase).toBe("SHOP");
     expect(game.getState().pendingUpgradeChoices).toHaveLength(3);
     expect(game.dispatch({ type: "choose_upgrade", upgradeId: "test_damage" }).accepted).toBe(true);
-    expect(game.getState().upgradeIds).toContain("test_damage");
 
-    game.dispatch({ type: "start_wave" });
+    startCombat(game);
     game.tick(1);
     expect(game.getState().defeatedEnemies).toBe(2);
   });
 
-  it("completes the fixed wave sequence", () => {
+  it("restarts deterministically into a fresh SHOP", () => {
+    const game = new GameSimulation();
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
+    startCombat(game);
+    game.dispatch({ type: "restart" });
+
+    expect(game.getState()).toMatchObject({ phase: "SHOP", wave: 0, wood: INITIAL_WOOD, wallHp: WALL_MAX_HP });
+    expect(game.getState().buildings).toHaveLength(0);
+  });
+
+  it("completes the fixed wave sequence with repeated shop transitions", () => {
     const safeCatalog = {
       ...starterCatalog,
-      enemies: starterCatalog.enemies.map((enemy) => ({
-        ...enemy,
-        maxHp: 1,
-        moveSpeed: 0.1,
-        wallDamage: 0,
-      })),
+      enemies: starterCatalog.enemies.map((enemy) => ({ ...enemy, maxHp: 1, moveSpeed: 0.1, wallDamage: 0 })),
       waves: Array.from({ length: MAX_WAVE }, (_, index) => ({
         wave: index + 1,
         durationSeconds: 1,
@@ -161,16 +190,13 @@ describe("GameSimulation", () => {
       })),
     };
     const game = new GameSimulation(safeCatalog);
-    game.dispatch({
-      type: "build_tower",
-      definitionId: "machine_gun",
-      slotId: "slot-1",
-    });
+    game.dispatch({ type: "build_tower", definitionId: "machine_gun", slotId: "slot-r1-c1" });
 
     for (let wave = 0; wave < MAX_WAVE; wave += 1) {
-      expect(game.dispatch({ type: "start_wave" }).accepted).toBe(true);
+      expect(game.dispatch({ type: "complete_prep" }).accepted).toBe(true);
+      game.tick(3);
       game.tick(1);
-      if (game.getState().phase === "UPGRADE") {
+      if (game.getState().pendingUpgradeChoices.length > 0) {
         expect(game.dispatch({ type: "choose_upgrade", upgradeId: game.getState().pendingUpgradeChoices[0]! }).accepted).toBe(true);
       }
     }

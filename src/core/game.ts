@@ -8,6 +8,7 @@ import {
   type WaveDefinition,
 } from "./content";
 import { SeededRandom } from "./random";
+import { CAMP_SLOT_IDS } from "./types";
 import type { CommandResult, EnemyRuntimeState, GameCommand, GameEvent, GameState } from "./types";
 
 export const MAX_WAVE = 20;
@@ -29,7 +30,7 @@ export class GameSimulation {
     this.catalog = catalog;
     this.random = new SeededRandom(seed);
     this.state = {
-      phase: "PREPARE",
+      phase: "SHOP",
       pausedFromPhase: null,
       wave: 0,
       maxWave: MAX_WAVE,
@@ -39,6 +40,7 @@ export class GameSimulation {
       wallMaxHp: WALL_MAX_HP,
       waveTimeRemainingSeconds: 0,
       waveElapsedSeconds: 0,
+      countdownRemainingSeconds: 0,
       nextSpawnEventIndex: 0,
       spawnedEnemies: 0,
       defeatedEnemies: 0,
@@ -65,8 +67,8 @@ export class GameSimulation {
 
   public dispatch(command: GameCommand): CommandResult {
     switch (command.type) {
-      case "start_wave":
-        return this.startWave();
+      case "complete_prep":
+        return this.completePrep();
       case "build_tower":
         return this.buildTower(command.definitionId, command.slotId);
       case "upgrade_tower":
@@ -85,7 +87,25 @@ export class GameSimulation {
   }
 
   public tick(deltaSeconds: number): void {
-    if (this.state.phase !== "COMBAT" || deltaSeconds <= 0) {
+    if (deltaSeconds <= 0 || this.state.phase === "PAUSED") {
+      return;
+    }
+
+    if (this.state.phase === "COUNTDOWN") {
+      const afterCountdown = this.state.countdownRemainingSeconds - deltaSeconds;
+      this.state.countdownRemainingSeconds = Math.max(0, afterCountdown);
+      if (afterCountdown < 0) {
+        this.beginCombat();
+        deltaSeconds = -afterCountdown;
+      } else if (afterCountdown === 0) {
+        this.beginCombat();
+        return;
+      } else {
+        return;
+      }
+    }
+
+    if (this.state.phase !== "COMBAT") {
       return;
     }
 
@@ -109,7 +129,6 @@ export class GameSimulation {
       this.finishWave();
     }
   }
-
   public damageWall(amount: number): void {
     if (this.state.phase !== "COMBAT" || amount <= 0) {
       return;
@@ -127,28 +146,46 @@ export class GameSimulation {
     return this.random.nextInt(minInclusive, maxExclusive);
   }
 
-  private startWave(): CommandResult {
-    if (this.state.phase !== "PREPARE") {
-      return { accepted: false, reason: "Waves can only start during preparation." };
+  private completePrep(): CommandResult {
+    if (this.state.phase !== "SHOP") {
+      return { accepted: false, reason: "只能在整备商店中完成准备。" };
     }
 
     if (this.state.wave >= this.state.maxWave) {
-      return { accepted: false, reason: "All waves are complete." };
+      return { accepted: false, reason: "所有波次已经完成。" };
     }
 
-    this.state.wave += 1;
-    this.state.phase = "COMBAT";
-    this.state.waveTimeRemainingSeconds = this.getWaveDuration(this.state.wave);
-    this.state.waveElapsedSeconds = 0;
-    this.state.nextSpawnEventIndex = 0;
-    this.state.spawnedEnemies = 0;
-    this.state.enemies = [];
+    if (this.state.pendingUpgradeChoices.length > 0) {
+      return { accepted: false, reason: "请先选择一项强化。" };
+    }
+
+    if (this.state.buildings.length === 0) {
+      return { accepted: false, reason: "请先建造一座防御塔。" };
+    }
+
+    this.state.phase = "COUNTDOWN";
+    this.state.countdownRemainingSeconds = 3;
     return { accepted: true };
   }
 
+  private beginCombat(): void {
+    this.state.wave += 1;
+    this.state.phase = "COMBAT";
+    this.state.countdownRemainingSeconds = 0;
+    this.state.waveTimeRemainingSeconds = this.getWaveDuration(this.state.wave);
+    this.state.waveElapsedSeconds = 0;
+    this.state.countdownRemainingSeconds = 0;
+    this.state.nextSpawnEventIndex = 0;
+    this.state.spawnedEnemies = 0;
+    this.state.enemies = [];
+  }
   private buildTower(definitionId: string, slotId: string): CommandResult {
-    if (this.state.phase !== "PREPARE" && this.state.phase !== "COMBAT") {
-      return { accepted: false, reason: "Towers can only be built during preparation or combat." };
+    if (this.state.phase !== "SHOP" && this.state.phase !== "COMBAT") {
+      return { accepted: false, reason: "整备或战斗中才能建造防御塔。" };
+    }
+
+    if (!CAMP_SLOT_IDS.includes(slotId)) {
+      return { accepted: false, reason: "请选择有效的 5×3 营地格。" };
     }
 
     if (this.state.buildings.some((building) => building.slotId === slotId)) {
@@ -161,12 +198,12 @@ export class GameSimulation {
     }
 
     if (this.state.wood < definition.buildCost) {
-      return { accepted: false, reason: "Not enough wood." };
+      return { accepted: false, reason: "木材不足，无法建造。" };
     }
 
     this.state.wood -= definition.buildCost;
     this.state.buildings.push({
-      id: `${definitionId}-${this.state.buildings.length + 1}`,
+      id: definitionId + "-" + (this.state.buildings.length + 1),
       slotId,
       kind: "tower",
       definitionId,
@@ -178,8 +215,8 @@ export class GameSimulation {
   }
 
   private upgradeTower(slotId: string): CommandResult {
-    if (this.state.phase !== "PREPARE" && this.state.phase !== "COMBAT") {
-      return { accepted: false, reason: "Towers can only be upgraded during preparation or combat." };
+    if (this.state.phase !== "SHOP" && this.state.phase !== "COMBAT") {
+      return { accepted: false, reason: "整备或战斗中才能升级防御塔。" };
     }
 
     const building = this.state.buildings.find((candidate) => candidate.slotId === slotId);
@@ -203,7 +240,7 @@ export class GameSimulation {
   }
 
   private chooseUpgrade(upgradeId: string): CommandResult {
-    if (this.state.phase !== "UPGRADE") {
+    if (this.state.phase !== "SHOP" || this.state.pendingUpgradeChoices.length === 0) {
       return { accepted: false, reason: "There is no upgrade choice pending." };
     }
 
@@ -223,21 +260,21 @@ export class GameSimulation {
     }
 
     this.state.pendingUpgradeChoices = [];
-    this.state.phase = "PREPARE";
+    this.state.phase = "SHOP";
     return { accepted: true };
   }
 
   private repairWall(): CommandResult {
-    if (this.state.phase !== "PREPARE" && this.state.phase !== "COMBAT") {
-      return { accepted: false, reason: "The wall can only be repaired during preparation or combat." };
+    if (this.state.phase !== "SHOP" && this.state.phase !== "COMBAT") {
+      return { accepted: false, reason: "整备或战斗中才能维修城墙。" };
     }
 
     if (this.state.wallHp >= this.state.wallMaxHp) {
-      return { accepted: false, reason: "The wall is already fully repaired." };
+      return { accepted: false, reason: "城墙耐久已经满了。" };
     }
 
     if (this.state.wood < REPAIR_COST) {
-      return { accepted: false, reason: "Not enough wood to repair the wall." };
+      return { accepted: false, reason: "木材不足，无法维修城墙。" };
     }
 
     this.state.wood -= REPAIR_COST;
@@ -246,15 +283,14 @@ export class GameSimulation {
   }
 
   private pause(): CommandResult {
-    if (this.state.phase !== "PREPARE" && this.state.phase !== "COMBAT") {
-      return { accepted: false, reason: "Only an active game can be paused." };
+    if (this.state.phase !== "SHOP" && this.state.phase !== "COUNTDOWN" && this.state.phase !== "COMBAT") {
+      return { accepted: false, reason: "当前阶段不能暂停。" };
     }
 
     this.state.pausedFromPhase = this.state.phase;
     this.state.phase = "PAUSED";
     return { accepted: true };
   }
-
   private resume(): CommandResult {
     if (this.state.phase !== "PAUSED" || this.state.pausedFromPhase === null) {
       return { accepted: false, reason: "The game is not paused." };
@@ -266,7 +302,7 @@ export class GameSimulation {
   }
 
   private restart(): CommandResult {
-    this.state.phase = "PREPARE";
+    this.state.phase = "SHOP";
     this.state.pausedFromPhase = null;
     this.state.wave = 0;
     this.state.wood = INITIAL_WOOD;
@@ -300,11 +336,11 @@ export class GameSimulation {
       this.state.level += 1;
       this.state.xpToNextLevel = Math.ceil(this.state.xpToNextLevel * 1.35);
       this.state.pendingUpgradeChoices = this.createUpgradeChoices();
-      this.state.phase = "UPGRADE";
+      this.state.phase = "SHOP";
       return;
     }
 
-    this.state.phase = "PREPARE";
+    this.state.phase = "SHOP";
   }
 
   private getWaveDuration(wave: number): number {
