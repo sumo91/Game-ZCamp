@@ -250,7 +250,7 @@ describe("GameSimulation third-stage combat and card content", () => {
     expect(game.getState().globalFreezePendingDurationSeconds).toBe(5);
     expect(game.getState().globalFreezeRemainingSeconds).toBe(0);
     expect(game.drainEvents().some((event) => event.type === "global_freeze_armed")).toBe(true);
-    game.tick(1);
+    game.tick(starterCatalog.waves[0]!.spawnEvents[1]!.atSeconds);
     expect(game.getState().globalFreezeNextSpawn).toBe(false);
     expect(game.getState().globalFreezePendingDurationSeconds).toBe(0);
     expect(game.getState().globalFreezeRemainingSeconds).toBeCloseTo(5, 5);
@@ -344,9 +344,9 @@ describe("GameSimulation third-stage combat and card content", () => {
     playPermanent(game, "machine_penetration");
     playPermanent(game, "machine_boss_damage");
     startRunning(game);
-    game.tick(1);
     const primary = game.getState().enemies[0]!;
-    const secondary = game.getState().enemies[1]!;
+    const secondary = { ...primary, id: "penetration-secondary" };
+    game.getState().enemies.push(secondary);
     primary.position = 0.1;
     primary.hp = 1000;
     primary.maxHp = 1000;

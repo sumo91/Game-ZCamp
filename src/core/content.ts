@@ -173,162 +173,54 @@ const towers: TowerDefinition[] = [
 ];
 
 const enemies: EnemyDefinition[] = [
-  { id: "walker", displayName: "行尸", role: "基础推进", tier: "normal", behavior: "walker", maxHp: 36, moveSpeed: 0.14, wallDamage: 5, wallAttackIntervalSeconds: 0.8, goldReward: 1, xpReward: 1 },
-  { id: "runner", displayName: "疾行尸", role: "高速突破", tier: "normal", behavior: "runner", maxHp: 24, moveSpeed: 0.28, wallDamage: 4, wallAttackIntervalSeconds: 0.75, goldReward: 1, xpReward: 1 },
-  { id: "tank", displayName: "重装尸", role: "高生命推进", tier: "normal", behavior: "tank", maxHp: 110, moveSpeed: 0.08, wallDamage: 12, wallAttackIntervalSeconds: 1, goldReward: 2, xpReward: 3 },
-  { id: "armored", displayName: "装甲精英", role: "固定减伤推进", tier: "elite", behavior: "armored", maxHp: 90, moveSpeed: 0.1, wallDamage: 8, wallAttackIntervalSeconds: 0.9, goldReward: 6, xpReward: 3, damageMultiplier: 0.55 },
-  { id: "brute", displayName: "攻城精英", role: "高额攻墙", tier: "elite", behavior: "brute", maxHp: 140, moveSpeed: 0.07, wallDamage: 18, wallAttackIntervalSeconds: 1.1, goldReward: 6, xpReward: 5 },
+  { id: "walker", displayName: "行尸", role: "基础推进", tier: "normal", behavior: "walker", maxHp: 18, moveSpeed: 0.14, wallDamage: 2.5, wallAttackIntervalSeconds: 0.8, goldReward: 0.5, xpReward: 0.5 },
+  { id: "runner", displayName: "疾行尸", role: "高速突破", tier: "normal", behavior: "runner", maxHp: 12, moveSpeed: 0.28, wallDamage: 2, wallAttackIntervalSeconds: 0.75, goldReward: 0.5, xpReward: 0.5 },
+  { id: "tank", displayName: "重装尸", role: "高生命推进", tier: "normal", behavior: "tank", maxHp: 55, moveSpeed: 0.08, wallDamage: 6, wallAttackIntervalSeconds: 1, goldReward: 1, xpReward: 1.5 },
+  { id: "armored", displayName: "装甲精英", role: "固定减伤推进", tier: "elite", behavior: "armored", maxHp: 45, moveSpeed: 0.1, wallDamage: 4, wallAttackIntervalSeconds: 0.9, goldReward: 3, xpReward: 1.5, damageMultiplier: 0.55 },
+  { id: "brute", displayName: "攻城精英", role: "高额攻墙", tier: "elite", behavior: "brute", maxHp: 70, moveSpeed: 0.07, wallDamage: 9, wallAttackIntervalSeconds: 1.1, goldReward: 3, xpReward: 2.5 },
   { id: "charger_boss", displayName: "冲锋领主", role: "预警冲锋", tier: "boss", behavior: "charger", maxHp: 280, moveSpeed: 0.11, wallDamage: 28, wallAttackIntervalSeconds: 0.9, goldReward: 20, xpReward: 12, signature: { kind: "charger", warningSeconds: 2, chargeDistance: 0.55, chargeDurationSeconds: 0.8, initialCooldownSeconds: 5, cooldownSeconds: 8 } },
   { id: "overlord_boss", displayName: "尸潮君王", role: "鼓舞残余尸潮", tier: "boss", behavior: "overlord", maxHp: 720, moveSpeed: 0.07, wallDamage: 48, wallAttackIntervalSeconds: 1.1, goldReward: 0, xpReward: 24, isFinalBoss: true, signature: { kind: "overlord", inspireDurationSeconds: 4, inspireMultiplier: 1.25, initialCooldownSeconds: 3, cooldownSeconds: 8 } },
 ];
 function createWave(
   wave: number,
-  groups: Array<{ enemyId: string; count: number; intervalSeconds: number; startSeconds: number }>,
+  composition: Record<string, number>,
+  finalBossId?: string,
 ): WaveDefinition {
-  const spawnEvents: SpawnEvent[] = [];
-  for (const group of groups) {
-    for (let index = 0; index < group.count; index += 1) {
-      spawnEvents.push({ atSeconds: group.startSeconds + index * group.intervalSeconds, enemyId: group.enemyId });
+  const normalIds = ["walker", "runner", "tank"];
+  const eliteIds = ["armored", "brute"];
+  const spawnIds: string[] = [];
+  const remaining = { ...composition };
+  const appendRoundRobin = (ids: string[]): void => {
+    while (ids.some((id) => (remaining[id] ?? 0) > 0)) {
+      for (const id of ids) {
+        if ((remaining[id] ?? 0) <= 0) continue;
+        spawnIds.push(id);
+        remaining[id]!--;
+      }
     }
+  };
+  appendRoundRobin(normalIds);
+  appendRoundRobin(eliteIds);
+  const lastCrowdSpawnSeconds = finalBossId ? 39 : 39;
+  const interval = spawnIds.length > 1 ? lastCrowdSpawnSeconds / (spawnIds.length - 1) : 0;
+  const spawnEvents = spawnIds.map((enemyId, index) => ({ atSeconds: index * interval, enemyId }));
+  if (finalBossId) {
+    spawnEvents.push({ atSeconds: 39.5, enemyId: finalBossId });
   }
-  spawnEvents.sort((left, right) => left.atSeconds - right.atSeconds);
   return { wave, startSeconds: (wave - 1) * 60, spawnEvents };
 }
 
 const waves: WaveDefinition[] = [
-  createWave(1, [
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 30 },
-  ]),
-  createWave(2, [
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 1, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 1, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 1, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "runner", count: 1, intervalSeconds: 1, startSeconds: 35 },
-  ]),
-  createWave(3, [
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 35 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 39 },
-  ]),
-  createWave(4, [
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 35 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 12 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 38 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 39 },
-  ]),
-  createWave(5, [
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 12 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 22 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 32 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 36 },
-    { enemyId: "armored", count: 1, intervalSeconds: 1, startSeconds: 38 },
-    { enemyId: "charger_boss", count: 1, intervalSeconds: 1, startSeconds: 39.5 },
-  ]),
-  createWave(6, [
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 35 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 12 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 22 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 32 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 37 },
-  ]),
-  createWave(7, [
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 2, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 35 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 12 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 22 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 32 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 36 },
-    { enemyId: "armored", count: 1, intervalSeconds: 1, startSeconds: 38 },
-    { enemyId: "armored", count: 1, intervalSeconds: 1, startSeconds: 39 },
-  ]),
-  createWave(8, [
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 35 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 12 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 22 },
-    { enemyId: "tank", count: 1, intervalSeconds: 1, startSeconds: 32 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 36 },
-    { enemyId: "brute", count: 1, intervalSeconds: 1, startSeconds: 39 },
-  ]),
-  createWave(9, [
-    { enemyId: "walker", count: 4, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 4, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 35 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 12 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 22 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 32 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 36 },
-    { enemyId: "armored", count: 1, intervalSeconds: 1, startSeconds: 38 },
-    { enemyId: "brute", count: 1, intervalSeconds: 1, startSeconds: 39 },
-  ]),
-  createWave(10, [
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 0 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 10 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 20 },
-    { enemyId: "walker", count: 3, intervalSeconds: 1, startSeconds: 30 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 5 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 15 },
-    { enemyId: "runner", count: 2, intervalSeconds: 1, startSeconds: 25 },
-    { enemyId: "runner", count: 3, intervalSeconds: 1, startSeconds: 35 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 12 },
-    { enemyId: "tank", count: 2, intervalSeconds: 1, startSeconds: 22 },
-    { enemyId: "tank", count: 3, intervalSeconds: 1, startSeconds: 32 },
-    { enemyId: "tank", count: 3, intervalSeconds: 1, startSeconds: 36 },
-    { enemyId: "armored", count: 1, intervalSeconds: 1, startSeconds: 37 },
-    { enemyId: "brute", count: 1, intervalSeconds: 1, startSeconds: 39 },
-    { enemyId: "overlord_boss", count: 1, intervalSeconds: 1, startSeconds: 39.5 },
-  ]),
+  createWave(1, { walker: 17 }),
+  createWave(2, { walker: 16, runner: 8 }),
+  createWave(3, { walker: 16, runner: 12, tank: 4 }),
+  createWave(4, { walker: 20, runner: 16, tank: 6 }),
+  createWave(5, { walker: 16, runner: 12, tank: 8, armored: 2 }, "charger_boss"),
+  createWave(6, { walker: 24, runner: 20, tank: 10 }),
+  createWave(7, { walker: 20, runner: 16, tank: 12, armored: 4 }),
+  createWave(8, { walker: 24, runner: 24, tank: 12, brute: 2 }),
+  createWave(9, { walker: 28, runner: 24, tank: 16, armored: 2, brute: 2 }),
+  createWave(10, { walker: 24, runner: 20, tank: 20, armored: 2, brute: 2 }, "overlord_boss"),
 ];
 const cards: CardDefinition[] = [
   { id: "machine_gun", displayName: "机枪塔", role: "基地 · 快速单体输出", category: "base", cost: 40, repeatable: true, accentColor: "#F6C453", effect: { kind: "base", targetKind: "tower", definitionId: "machine_gun" } },
@@ -371,16 +263,16 @@ export const SUPPLY_CATEGORY_PATTERN: CardCategory[] = [
 export const starterCatalog: ContentCatalog = { towers, enemies, waves, cards };
 
 export const EXPECTED_WAVE_COUNTS: Array<Record<string, number>> = [
-  { walker: 8 },
-  { walker: 8, runner: 4 },
-  { walker: 8, runner: 6, tank: 2 },
-  { walker: 10, runner: 8, tank: 3 },
-  { walker: 8, runner: 6, tank: 4, armored: 1, charger_boss: 1 },
-  { walker: 12, runner: 10, tank: 5 },
-  { walker: 10, runner: 8, tank: 6, armored: 2 },
-  { walker: 12, runner: 12, tank: 6, brute: 1 },
-  { walker: 14, runner: 12, tank: 8, armored: 1, brute: 1 },
-  { walker: 12, runner: 10, tank: 10, armored: 1, brute: 1, overlord_boss: 1 },
+  { walker: 17 },
+  { walker: 16, runner: 8 },
+  { walker: 16, runner: 12, tank: 4 },
+  { walker: 20, runner: 16, tank: 6 },
+  { walker: 16, runner: 12, tank: 8, armored: 2, charger_boss: 1 },
+  { walker: 24, runner: 20, tank: 10 },
+  { walker: 20, runner: 16, tank: 12, armored: 4 },
+  { walker: 24, runner: 24, tank: 12, brute: 2 },
+  { walker: 28, runner: 24, tank: 16, armored: 2, brute: 2 },
+  { walker: 24, runner: 20, tank: 20, armored: 2, brute: 2, overlord_boss: 1 },
 ];
 
 function assertUniqueIds(ids: string[], label: string): void {
@@ -443,7 +335,7 @@ export function validateCatalog(catalog: ContentCatalog): void {
   if (charger.signature.warningSeconds <= 0 || charger.signature.chargeDistance <= 0 || charger.signature.chargeDurationSeconds <= 0 || charger.signature.initialCooldownSeconds < 0 || charger.signature.cooldownSeconds <= 0 || overlord.signature.inspireDurationSeconds <= 0 || overlord.signature.inspireMultiplier < 1 || overlord.signature.initialCooldownSeconds < 0 || overlord.signature.cooldownSeconds <= 0) {
     throw new Error("Boss signature mechanic values are invalid.");
   }
-  const expectedGoldRewards: Record<string, number> = { walker: 1, runner: 1, tank: 2, armored: 6, brute: 6, charger_boss: 20, overlord_boss: 0 };
+  const expectedGoldRewards: Record<string, number> = { walker: 0.5, runner: 0.5, tank: 1, armored: 3, brute: 3, charger_boss: 20, overlord_boss: 0 };
   for (const enemy of catalog.enemies) {
     if (enemy.goldReward !== expectedGoldRewards[enemy.id]) {
       throw new Error("Enemy " + enemy.id + " has an invalid gold reward.");

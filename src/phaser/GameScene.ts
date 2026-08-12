@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { GameSimulation } from "../core/game";
 import { starterCatalog, type CardDefinition, type EnemyDefinition, type TowerDefinition } from "../core/content";
 import type { BuildingState, CardInstance, EnemyRuntimeState, GameEvent, GamePhase, GameState } from "../core/types";
+import { decideCardClick, getCardUseReadiness } from "./cardInput";
 import { CARD_HAND, CARD_LAYOUTS, CAMP_SLOT_LAYOUTS, ENEMY_ZONE, GRID_ZONE, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
 
 type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number };
@@ -75,6 +76,7 @@ export class GameScene extends Phaser.Scene {
   private resultRestartButton!: Phaser.GameObjects.Rectangle;
   private resultRestartLabel!: Phaser.GameObjects.Text;
   private messageTimer = 0;
+  private messageColor = "#fff0b0";
   private battleNoticeTimer = 0;
   private showcaseMode = false;
   private showcaseCapture: "charge" | "inspire" | null = null;
@@ -279,18 +281,31 @@ export class GameScene extends Phaser.Scene {
 
   private handleCardClick(index: number): void {
     if (!this.canReceiveGameplayInput()) return;
-    const card = this.simulation.getState().hand[index];
+    const state = this.simulation.getState();
+    const card = state.hand[index];
     if (!card) return;
     const definition = this.cardDefinition(card.definitionId);
-    if (this.selectedCardInstanceId === card.instanceId && definition.category !== "base") {
-      const result = this.simulation.dispatch({ type: "play_card", cardInstanceId: card.instanceId });
+    const decision = decideCardClick(
+      state.hand,
+      index,
+      this.selectedCardInstanceId,
+      (definitionId) => starterCatalog.cards.find((candidate) => candidate.id === definitionId),
+    );
+    if (decision.kind === "play") {
+      const result = this.simulation.dispatch(decision.command);
       this.showMessage(result.accepted ? "卡牌效果已生效" : (result.reason ?? "暂不可使用"), result.accepted);
       if (result.accepted) this.selectedCardInstanceId = null;
       this.renderState();
       return;
     }
+    if (decision.kind === "noop") return;
     this.selectedCardInstanceId = card.instanceId;
-    this.showMessage(definition.category === "base" ? "已选基地牌，点击对应空格或城墙" : "再次点击卡牌即可使用战术 / 永久效果", true);
+    if (definition.category === "base") {
+      this.showMessage("已选基地牌，点击对应空格或城墙", true);
+    } else {
+      const readiness = getCardUseReadiness(definition, state.gold, state.permanentApplications);
+      this.showMessage(readiness.hint, readiness.usable);
+    }
     this.renderState();
   }
 
@@ -436,7 +451,7 @@ export class GameScene extends Phaser.Scene {
     this.waveText.setText(state.wave > 0 ? "波次  " + state.wave + " / " + state.maxWave : "首波");
     const terminal = state.phase === "VICTORY" || state.phase === "DEFEAT";
     this.timerText.setText(terminal ? "战斗结束" : state.phase === "OPENING_COUNTDOWN" || state.wave === 0 ? "首波准备中" : "下一波  " + this.formatSeconds(state.nextWaveTimeRemainingSeconds));
-    this.resourceText.setText("金币  " + state.gold);
+    this.resourceText.setText("金币  " + Math.floor(state.gold));
     this.woodText.setText("木材  " + Math.floor(state.wood));
 
     const shownWallMax = this.showcaseMode ? 100 : state.wallMaxHp;
@@ -452,7 +467,10 @@ export class GameScene extends Phaser.Scene {
     const activeEnemyCount = state.enemies.filter((enemy) => enemy.hp > 0).length;
     this.enemyText.setText("威胁  " + activeEnemyCount + " · 击杀  " + state.defeatedEnemies);
 
-    this.statusText.setText(this.selectedCardInstanceId ? this.compactTargetStatus(state) : this.statusLabel(state));
+    const transientMessageVisible = this.messageTimer > 0 && this.messageText.text.length > 0;
+    this.statusText
+      .setText(transientMessageVisible ? this.messageText.text : this.selectedCardInstanceId ? this.compactTargetStatus(state) : this.statusLabel(state))
+      .setColor(transientMessageVisible ? this.messageColor : "#fff0b0");
     // Selection and target feedback live on the card / grid; keep transient copy out of the battle field.
     this.messageText.setVisible(false);
     const canPause = state.phase === "RUNNING" || state.phase === "TACTICAL_PAUSE";
@@ -643,8 +661,10 @@ export class GameScene extends Phaser.Scene {
         const definition = this.cardDefinition(card.definitionId);
         text.title.setText(definition.displayName).setColor(definition.accentColor);
         text.role.setText(definition.role);
-        text.cost.setText((definition.category === "base" ? "木材 " : "金币 ") + definition.cost);
-        text.hint.setText(selected ? (definition.category === "base" ? "已选 · 点目标" : "已选 · 再点使用") : "");
+        text.cost.setText("费用 · " + (definition.category === "base" ? "木材 " : "金币 ") + definition.cost);
+        const readiness = definition.category === "base" ? null : getCardUseReadiness(definition, state.gold, state.permanentApplications);
+        text.hint.setText(selected ? (definition.category === "base" ? "已选 · 点目标" : readiness!.hint) : "");
+        text.hint.setColor(selected && readiness && !readiness.usable ? "#ffd37a" : "#ffffff");
         text.category.setText(definition.category === "base" ? "基地" : definition.category === "permanent" ? "永久" : "战术");
         text.category.setColor(definition.category === "base" ? "#c5d2bd" : definition.category === "permanent" ? "#f6c453" : "#8ce8ff");
       }
@@ -678,7 +698,9 @@ export class GameScene extends Phaser.Scene {
     const card = this.cardFromSelected();
     if (!card) return "";
     const definition = this.cardDefinition(card.definitionId);
-    if (definition.category !== "base" || definition.effect.kind !== "base") return " · 已选 " + definition.displayName + "，再次点击使用";
+    if (definition.category !== "base" || definition.effect.kind !== "base") {
+      return " · 已选 " + definition.displayName + " · " + getCardUseReadiness(definition, state.gold, state.permanentApplications).hint;
+    }
     return " · 目标提示：绿可用 / 红不可用";
   }
 
@@ -848,7 +870,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   private showMessage(message: string, positive: boolean): void {
-    this.messageText.setColor(positive ? "#62d79b" : "#f6c453");
+    this.messageColor = positive ? "#62d79b" : "#f6c453";
+    this.messageText.setColor(this.messageColor);
     this.messageText.setText(message);
     this.messageTimer = 2.2;
   }
