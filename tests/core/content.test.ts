@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   EXPECTED_WAVE_COUNTS,
   FIRST_BATCH_CARD_IDS,
+  CROWD_PULSE_COUNT,
+  CROWD_PULSE_INTERVAL_SECONDS,
+  CROWD_PULSE_WINDOW_SECONDS,
   SUPPLY_CATEGORY_PATTERN,
   starterCatalog,
   validateCatalog,
@@ -32,9 +35,28 @@ describe("third-stage content catalog", () => {
       expect(Math.max(...times)).toBeLessThanOrEqual(40);
       expect(times.every((time, eventIndex) => time >= 0 && time <= 40 && (eventIndex === 0 || time >= times[eventIndex - 1]!))).toBe(true);
       const gaps = times.slice(1).map((time, eventIndex) => time - times[eventIndex]!);
-      expect(Math.max(...gaps)).toBeLessThanOrEqual(index < 3 ? 2.5 : 2);
+      expect(Math.max(...gaps)).toBeLessThanOrEqual(CROWD_PULSE_INTERVAL_SECONDS);
       const nonBossEvents = wave.spawnEvents.filter((event) => !event.enemyId.endsWith("_boss"));
-      expect(nonBossEvents.at(-1)!.atSeconds).toBeGreaterThanOrEqual(38);
+      expect(nonBossEvents.at(-1)!.atSeconds).toBeGreaterThanOrEqual(39);
+      expect(nonBossEvents.at(-1)!.atSeconds).toBeLessThan(39.5);
+      const pulses = new Map<number, number[]>();
+      for (const event of nonBossEvents) {
+        const pulseIndex = Math.round(event.atSeconds / CROWD_PULSE_INTERVAL_SECONDS);
+        const pulse = pulses.get(pulseIndex) ?? [];
+        pulse.push(event.atSeconds);
+        pulses.set(pulseIndex, pulse);
+      }
+      expect([...pulses.keys()]).toEqual(Array.from({ length: CROWD_PULSE_COUNT }, (_, pulseIndex) => pulseIndex));
+      for (const [pulseIndex, pulseTimes] of pulses) {
+        expect(Math.max(...pulseTimes) - Math.min(...pulseTimes)).toBeLessThanOrEqual(CROWD_PULSE_WINDOW_SECONDS + 0.000001);
+        expect(Math.min(...pulseTimes)).toBeGreaterThanOrEqual(pulseIndex * CROWD_PULSE_INTERVAL_SECONDS);
+      }
+      for (const intervalStart of [0, 10, 20, 30]) {
+        expect(nonBossEvents.some((event) => event.atSeconds >= intervalStart && event.atSeconds < intervalStart + 10)).toBe(true);
+      }
+      if (index === 0) {
+        expect([...pulses.values()].map((pulseTimes) => pulseTimes.length)).toEqual([3, 3, ...Array.from({ length: 14 }, () => 2)]);
+      }
     }
     expect(starterCatalog.waves[4]?.spawnEvents.at(-1)).toMatchObject({ enemyId: "charger_boss", atSeconds: 39.5 });
     expect(starterCatalog.waves[9]?.spawnEvents.at(-1)).toMatchObject({ enemyId: "overlord_boss", atSeconds: 39.5 });
@@ -47,35 +69,38 @@ describe("third-stage content catalog", () => {
     for (const card of starterCatalog.cards.filter((card) => card.category === "permanent" && "towerId" in card.effect)) expect(card.cost).toBe(18);
     for (const card of starterCatalog.cards.filter((card) => card.category === "tactical")) expect(card.cost).toBeGreaterThanOrEqual(8);
     for (const card of starterCatalog.cards.filter((card) => card.category === "tactical")) expect(card.cost).toBeLessThanOrEqual(12);
-    expect(starterCatalog.enemies.map((enemy) => [enemy.id, enemy.goldReward])).toEqual([["walker", 0.5], ["runner", 0.5], ["tank", 1], ["armored", 3], ["brute", 3], ["charger_boss", 20], ["overlord_boss", 0]]);
+    expect(starterCatalog.enemies.map((enemy) => [enemy.id, enemy.goldReward])).toEqual([["walker", 0.25], ["runner", 0.25], ["tank", 0.5], ["armored", 3], ["brute", 3], ["charger_boss", 20], ["overlord_boss", 0]]);
     expect(cards.get("machine_boss_damage")!.effect).toMatchObject({ kind: "tower_boss_damage", amount: 0.35 });
     expect(cards.get("focus_fire")!.effect).toMatchObject({ kind: "focus_fire", damageMultiplier: 0.5 });
   });
 
-  it("doubles crowd density without doubling wave durability, wall pressure, or economy", () => {
-    const oldCounts: Array<Record<string, number>> = [
-      { walker: 8 }, { walker: 8, runner: 4 }, { walker: 8, runner: 6, tank: 2 },
-      { walker: 10, runner: 8, tank: 3 }, { walker: 8, runner: 6, tank: 4, armored: 1, charger_boss: 1 },
-      { walker: 12, runner: 10, tank: 5 }, { walker: 10, runner: 8, tank: 6, armored: 2 },
-      { walker: 12, runner: 12, tank: 6, brute: 1 }, { walker: 14, runner: 12, tank: 8, armored: 1, brute: 1 },
-      { walker: 12, runner: 10, tank: 10, armored: 1, brute: 1, overlord_boss: 1 },
+  it("runs the second crowd-density experiment without changing wave budgets", () => {
+    const baselineCounts: Array<Record<string, number>> = [
+      { walker: 17 }, { walker: 16, runner: 8 }, { walker: 16, runner: 12, tank: 4 },
+      { walker: 20, runner: 16, tank: 6 }, { walker: 16, runner: 12, tank: 8, armored: 2, charger_boss: 1 },
+      { walker: 24, runner: 20, tank: 10 }, { walker: 20, runner: 16, tank: 12, armored: 4 },
+      { walker: 24, runner: 24, tank: 12, brute: 2 }, { walker: 28, runner: 24, tank: 16, armored: 2, brute: 2 },
+      { walker: 24, runner: 20, tank: 20, armored: 2, brute: 2, overlord_boss: 1 },
     ];
-    const oldStats: Record<string, { hp: number; wall: number; gold: number }> = {
-      walker: { hp: 36, wall: 5, gold: 1 }, runner: { hp: 24, wall: 4, gold: 1 }, tank: { hp: 110, wall: 12, gold: 2 },
-      armored: { hp: 90, wall: 8, gold: 6 }, brute: { hp: 140, wall: 18, gold: 6 },
-      charger_boss: { hp: 280, wall: 28, gold: 20 }, overlord_boss: { hp: 720, wall: 48, gold: 0 },
+    const baselineStats: Record<string, { hp: number; wall: number; gold: number; xp: number }> = {
+      walker: { hp: 18, wall: 2.5, gold: 0.5, xp: 0.5 }, runner: { hp: 12, wall: 2, gold: 0.5, xp: 0.5 }, tank: { hp: 55, wall: 6, gold: 1, xp: 1.5 },
+      armored: { hp: 45, wall: 4, gold: 3, xp: 1.5 }, brute: { hp: 70, wall: 9, gold: 3, xp: 2.5 },
+      charger_boss: { hp: 280, wall: 28, gold: 20, xp: 12 }, overlord_boss: { hp: 720, wall: 48, gold: 0, xp: 24 },
     };
-    const newStats = Object.fromEntries(starterCatalog.enemies.map((enemy) => [enemy.id, { hp: enemy.maxHp, wall: enemy.wallDamage, gold: enemy.goldReward }]));
-    const total = (counts: Record<string, number>, stats: Record<string, { hp: number; wall: number; gold: number }>, key: "hp" | "wall" | "gold") =>
+    const experimentStats = Object.fromEntries(starterCatalog.enemies.map((enemy) => [enemy.id, { hp: enemy.maxHp, wall: enemy.wallDamage, gold: enemy.goldReward, xp: enemy.xpReward }]));
+    const total = (counts: Record<string, number>, stats: Record<string, { hp: number; wall: number; gold: number; xp: number }>, key: "hp" | "wall" | "gold" | "xp") =>
       Object.entries(counts).reduce((sum, [id, count]) => sum + stats[id]![key] * count, 0);
-    for (const [index, newCounts] of EXPECTED_WAVE_COUNTS.entries()) {
-      expect(Object.values(newCounts).reduce((sum, count) => sum + count, 0)).toBeGreaterThanOrEqual(Object.values(oldCounts[index]!).reduce((sum, count) => sum + count, 0) * 1.9);
-      for (const key of ["hp", "wall", "gold"] as const) {
-        const ratio = total(newCounts, newStats, key) / total(oldCounts[index]!, oldStats, key);
-        expect(ratio).toBeGreaterThanOrEqual(0.9);
-        expect(ratio).toBeLessThanOrEqual(key === "gold" ? 1.1 : 1.15);
+    for (const [index, experimentCounts] of EXPECTED_WAVE_COUNTS.entries()) {
+      expect(Object.values(experimentCounts).reduce((sum, count) => sum + count, 0)).toBeGreaterThanOrEqual(Object.values(baselineCounts[index]!).reduce((sum, count) => sum + count, 0) * 1.9);
+      for (const key of ["hp", "wall", "gold", "xp"] as const) {
+        const ratio = total(experimentCounts, experimentStats, key) / total(baselineCounts[index]!, baselineStats, key);
+        expect(ratio).toBeGreaterThanOrEqual(0.95);
+        expect(ratio).toBeLessThanOrEqual(1.05);
       }
     }
+    expect(Object.fromEntries(starterCatalog.enemies.filter((enemy) => enemy.tier !== "normal").map((enemy) => [enemy.id, [enemy.maxHp, enemy.wallDamage, enemy.goldReward, enemy.xpReward]]))).toEqual({
+      armored: [45, 4, 3, 1.5], brute: [70, 9, 3, 2.5], charger_boss: [280, 28, 20, 12], overlord_boss: [720, 48, 0, 24],
+    });
   });
 
   it("rejects unknown enemy references before composition checks", () => {
