@@ -1,5 +1,6 @@
 import { FIRST_BATCH_CARD_IDS, SUPPLY_CATEGORY_PATTERN, starterCatalog, validateCatalog } from "./content";
 import type { CardDefinition, CardEffect, ContentCatalog, EnemyDefinition, TowerDefinition } from "./content";
+import { getUpgradeCost } from "./costs";
 import { CAMP_SLOT_IDS } from "./types";
 import type {
   BuildingState,
@@ -391,7 +392,7 @@ export class GameSimulation {
     if (existing?.kind === "main_city") return { accepted: false, reason: "主城固定，不可替换或升级" };
     const targetMatches = existing && this.baseTargetMatches(existing, card.effect);
     if (existing && !targetMatches) return { accepted: false, reason: "只能对同类建筑使用这张牌" };
-    const cost = existing ? this.getUpgradeCost(card.cost, existing.level) : card.cost;
+    const cost = existing ? getUpgradeCost(card.cost, existing.level) : card.cost;
     if (existing && existing.level >= 3) return { accepted: false, reason: "建筑已达到 Lv.3" };
     if (this.state.wood < cost) return { accepted: false, reason: "木材不足" };
     this.state.wood -= cost;
@@ -507,10 +508,6 @@ export class GameSimulation {
 
   private baseTargetMatches(building: BuildingState, effect: Extract<CardDefinition["effect"], { kind: "base" }>): boolean {
     return building.kind === effect.targetKind && building.definitionId === effect.definitionId;
-  }
-
-  private getUpgradeCost(baseCost: number, currentLevel: number): number {
-    return Math.round(baseCost * (currentLevel === 1 ? 1.5 : 2.25));
   }
 
   private grantShield(amount: number, durationSeconds: number): void {

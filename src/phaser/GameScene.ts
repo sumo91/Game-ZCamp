@@ -2,7 +2,8 @@ import Phaser from "phaser";
 import { GameSimulation } from "../core/game";
 import { starterCatalog, type CardDefinition, type EnemyDefinition, type TowerDefinition } from "../core/content";
 import type { BuildingState, CardInstance, EnemyRuntimeState, GameEvent, GamePhase, GameState } from "../core/types";
-import { decideCardClick, getCardUseReadiness } from "./cardInput";
+import { buildingMatchesBaseAction, findBaseAction, getCardUseReadiness, getWoodProgress, isGameplayInputPhase } from "../core/cardAvailability";
+import { decideCardClick } from "./cardInput";
 import { CARD_HAND, CARD_LAYOUTS, CAMP_SLOT_LAYOUTS, ENEMY_ZONE, GRID_ZONE, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
 
 type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number };
@@ -35,6 +36,7 @@ export class GameScene extends Phaser.Scene {
   private feedbacks: Feedback[] = [];
   private selectedCardInstanceId: string | null = null;
   private selectedSlotId: string | null = null;
+  private discardMode = false;
   private cardButtons: Phaser.GameObjects.Rectangle[] = [];
   private cardGlyphs: Phaser.GameObjects.Graphics[] = [];
   private cardTextBlocks: CardTextBlock[] = [];
@@ -52,6 +54,8 @@ export class GameScene extends Phaser.Scene {
   private timerText!: Phaser.GameObjects.Text;
   private resourceText!: Phaser.GameObjects.Text;
   private woodText!: Phaser.GameObjects.Text;
+  private woodIcon!: Phaser.GameObjects.Graphics;
+  private woodProgressText!: Phaser.GameObjects.Text;
   private wallText!: Phaser.GameObjects.Text;
   private enemyText!: Phaser.GameObjects.Text;
   private statusText!: Phaser.GameObjects.Text;
@@ -162,7 +166,7 @@ export class GameScene extends Phaser.Scene {
 
     this.add.text(34, 154, "战场", this.textStyle(14, "#fff0b0")).setDepth(6);
     this.add.text(34, 716, "城墙", this.textStyle(14, "#ffe1a2")).setDepth(6);
-    this.add.text(34, 1092, "补给", this.textStyle(13, "#ffe1a2")).setDepth(6);
+    this.add.text(34, 1092, "资源", this.textStyle(13, "#ffe1a2")).setDepth(6);
   }
   private createHud(): void {
     // Compact battle HUD: no title card, only wave, timer, threat, resources and pause.
@@ -175,8 +179,10 @@ export class GameScene extends Phaser.Scene {
     this.wallText = this.add.text(360, 733, "", { ...this.textStyle(16, "#fff3d2"), align: "center", stroke: "#21170f", strokeThickness: 4 }).setOrigin(0.5).setDepth(10);
     this.statusText = this.add.text(34, 750, "", this.textStyle(13, "#fff0b0")).setDepth(10);
     this.messageText = this.add.text(34, 1055, "", this.textStyle(14, "#9ff0b2")).setDepth(10);
-    this.woodText = this.add.text(38, 1108, "", this.textStyle(16, "#fff3d2")).setDepth(10);
-    this.supplyText = this.add.text(174, 1108, "", this.textStyle(12, "#fff0c2")).setDepth(10);
+    this.woodIcon = this.add.graphics().setDepth(10);
+    this.woodText = this.add.text(66, 1098, "", { ...this.textStyle(19, "#fff3d2"), fontStyle: "bold" }).setDepth(10);
+    this.woodProgressText = this.add.text(176, 1095, "", this.textStyle(12, "#fff0c2")).setDepth(10);
+    this.supplyText = this.add.text(176, 1121, "", this.textStyle(12, "#fff0c2")).setDepth(10);
 
     this.battleNoticeText = this.add.text(360, 174, "", { ...this.textStyle(17, "#fff3d2"), align: "center", stroke: "#315c28", strokeThickness: 4 }).setOrigin(0.5).setDepth(12);
 
@@ -186,7 +192,7 @@ export class GameScene extends Phaser.Scene {
 
     this.discardButton = this.add.rectangle(548, 1108, 82, 56, COLORS.line, 1).setDepth(16).setInteractive({ useHandCursor: true });
     this.discardButtonLabel = this.add.text(548, 1108, "弃牌", this.textStyle(13, "#ffffff")).setOrigin(0.5).setDepth(17);
-    this.discardButton.on("pointerdown", () => this.discardSelectedCard());
+    this.discardButton.on("pointerdown", () => this.toggleDiscardMode());
 
     this.destroyButton = this.add.rectangle(644, 1108, 82, 56, COLORS.line, 1).setDepth(16).setInteractive({ useHandCursor: true });
     this.destroyButtonLabel = this.add.text(644, 1108, "拆除", this.textStyle(13, "#ffffff")).setOrigin(0.5).setDepth(17);
@@ -244,7 +250,7 @@ export class GameScene extends Phaser.Scene {
     this.tacticalResumeButton.on("pointerdown", () => this.simulation.dispatch({ type: "resume" }));
     this.tacticalRestartButton = this.add.rectangle(480, 502, 150, 38, COLORS.line, 1).setDepth(41).setInteractive({ useHandCursor: true });
     this.tacticalRestartLabel = this.add.text(480, 502, "重新开始", this.textStyle(14, "#ffffff")).setOrigin(0.5).setDepth(42);
-    this.tacticalRestartButton.on("pointerdown", () => this.simulation.dispatch({ type: "restart" }));
+    this.tacticalRestartButton.on("pointerdown", () => this.restartSimulation());
 
     this.systemOverlay = this.add.rectangle(360, 640, 720, 1280, 0x07101d, 0.9).setDepth(80).setInteractive();
     this.systemTitle = this.add.text(360, 560, "系统暂停", this.textStyle(34, "#ffffff")).setOrigin(0.5).setDepth(81);
@@ -256,7 +262,7 @@ export class GameScene extends Phaser.Scene {
     this.resultHint = this.add.text(360, 548, "", { ...this.textStyle(18, "#dbe6f4"), align: "center", wordWrap: { width: 500 } }).setOrigin(0.5).setDepth(91);
     this.resultRestartButton = this.add.rectangle(360, 636, 180, 46, COLORS.blue, 1).setDepth(91).setInteractive({ useHandCursor: true });
     this.resultRestartLabel = this.add.text(360, 636, "重新部署", this.textStyle(17, "#ffffff")).setOrigin(0.5).setDepth(92);
-    this.resultRestartButton.on("pointerdown", () => this.simulation.dispatch({ type: "restart" }));
+    this.resultRestartButton.on("pointerdown", () => this.restartSimulation());
   }
 
   private bindLifecycle(): void {
@@ -279,31 +285,60 @@ export class GameScene extends Phaser.Scene {
     this.renderState();
   }
 
+  private restartSimulation(): void {
+    this.simulation.dispatch({ type: "restart" });
+    this.selectedCardInstanceId = null;
+    this.selectedSlotId = null;
+    this.discardMode = false;
+    this.renderState();
+  }
+
   private handleCardClick(index: number): void {
     if (!this.canReceiveGameplayInput()) return;
     const state = this.simulation.getState();
     const card = state.hand[index];
     if (!card) return;
+    if (this.discardMode) {
+      this.discardCardAtIndex(index);
+      return;
+    }
     const definition = this.cardDefinition(card.definitionId);
     const decision = decideCardClick(
       state.hand,
       index,
       this.selectedCardInstanceId,
       (definitionId) => starterCatalog.cards.find((candidate) => candidate.id === definitionId),
+      (candidate) => getCardUseReadiness(candidate, state),
     );
+    if (decision.kind === "blocked") {
+      this.selectedCardInstanceId = null;
+      this.selectedSlotId = null;
+      this.showMessage(decision.hint, false);
+      this.renderState();
+      return;
+    }
+    if (decision.kind === "cancel") {
+      this.selectedCardInstanceId = null;
+      this.selectedSlotId = null;
+      this.showMessage("已取消选择", true);
+      this.renderState();
+      return;
+    }
     if (decision.kind === "play") {
       const result = this.simulation.dispatch(decision.command);
       this.showMessage(result.accepted ? "卡牌效果已生效" : (result.reason ?? "暂不可使用"), result.accepted);
-      if (result.accepted) this.selectedCardInstanceId = null;
+      this.selectedCardInstanceId = null;
+      this.selectedSlotId = null;
       this.renderState();
       return;
     }
     if (decision.kind === "noop") return;
     this.selectedCardInstanceId = card.instanceId;
+    this.selectedSlotId = null;
     if (definition.category === "base") {
       this.showMessage("已选基地牌，点击对应空格或城墙", true);
     } else {
-      const readiness = getCardUseReadiness(definition, state.gold, state.permanentApplications);
+      const readiness = getCardUseReadiness(definition, state);
       this.showMessage(readiness.hint, readiness.usable);
     }
     this.renderState();
@@ -312,6 +347,11 @@ export class GameScene extends Phaser.Scene {
   private handleSlotClick(slotId: string): void {
     if (!this.canReceiveGameplayInput()) return;
     const state = this.simulation.getState();
+    if (this.discardMode) {
+      this.showMessage("弃牌模式 · 点击一张手牌", false);
+      this.renderState();
+      return;
+    }
     if (!this.selectedCardInstanceId) {
       const building = state.buildings.find((item) => item.slotId === slotId);
       if (building && building.kind !== "main_city") {
@@ -343,6 +383,11 @@ export class GameScene extends Phaser.Scene {
 
   private handleWallClick(): void {
     if (!this.canReceiveGameplayInput()) return;
+    if (this.discardMode) {
+      this.showMessage("弃牌模式 · 点击一张手牌", false);
+      this.renderState();
+      return;
+    }
     const card = this.cardFromSelected();
     if (!card) {
       this.showMessage("选择工程 / 修理牌后点击城墙", false);
@@ -359,14 +404,33 @@ export class GameScene extends Phaser.Scene {
     this.renderState();
   }
 
-  private discardSelectedCard(): void {
-    if (!this.canReceiveGameplayInput() || !this.selectedCardInstanceId) {
-      this.showMessage("先选择一张手牌", false);
+  private toggleDiscardMode(): void {
+    if (!this.canReceiveGameplayInput()) return;
+    if (this.selectedCardInstanceId) {
+      const result = this.simulation.dispatch({ type: "discard_card", cardInstanceId: this.selectedCardInstanceId });
+      this.showMessage(result.accepted ? "手牌已弃置，无资源返还" : (result.reason ?? "暂不可弃牌"), result.accepted);
+      this.selectedCardInstanceId = null;
+      this.selectedSlotId = null;
+      this.discardMode = false;
+      this.renderState();
       return;
     }
-    const result = this.simulation.dispatch({ type: "discard_card", cardInstanceId: this.selectedCardInstanceId });
+    this.discardMode = !this.discardMode;
+    this.selectedSlotId = null;
+    this.showMessage(this.discardMode ? "弃牌模式 · 点击一张手牌" : "已取消弃牌模式", true);
+    this.renderState();
+  }
+
+  private discardCardAtIndex(index: number): void {
+    const card = this.simulation.getState().hand[index];
+    if (!card) return;
+    const result = this.simulation.dispatch({ type: "discard_card", cardInstanceId: card.instanceId });
     this.showMessage(result.accepted ? "手牌已弃置，无资源返还" : (result.reason ?? "暂不可弃牌"), result.accepted);
-    if (result.accepted) this.selectedCardInstanceId = null;
+    if (result.accepted) {
+      this.selectedCardInstanceId = null;
+      this.selectedSlotId = null;
+      this.discardMode = false;
+    }
     this.renderState();
   }
 
@@ -384,6 +448,22 @@ export class GameScene extends Phaser.Scene {
   private cardFromSelected(): CardInstance | null {
     if (!this.selectedCardInstanceId) return null;
     return this.simulation.getState().hand.find((card) => card.instanceId === this.selectedCardInstanceId) ?? null;
+  }
+
+  private syncSelectionWithState(state: GameState): void {
+    if (!this.selectedCardInstanceId) return;
+    const card = state.hand.find((candidate) => candidate.instanceId === this.selectedCardInstanceId);
+    if (!card) {
+      this.selectedCardInstanceId = null;
+      this.selectedSlotId = null;
+      return;
+    }
+    const readiness = getCardUseReadiness(this.cardDefinition(card.definitionId), state);
+    if (!readiness.usable) {
+      this.selectedCardInstanceId = null;
+      this.selectedSlotId = null;
+      this.showMessage(readiness.hint, false);
+    }
   }
 
   private processEvents(events: GameEvent[]): void {
@@ -424,6 +504,8 @@ export class GameScene extends Phaser.Scene {
 
   private renderState(): void {
     const state = this.simulation.getState();
+    if (!isGameplayInputPhase(state.phase)) this.discardMode = false;
+    this.syncSelectionWithState(state);
     if (import.meta.env.DEV) {
       const debugState = {
         phase: state.phase,
@@ -453,6 +535,13 @@ export class GameScene extends Phaser.Scene {
     this.timerText.setText(terminal ? "战斗结束" : state.phase === "OPENING_COUNTDOWN" || state.wave === 0 ? "首波准备中" : "下一波  " + this.formatSeconds(state.nextWaveTimeRemainingSeconds));
     this.resourceText.setText("金币  " + Math.floor(state.gold));
     this.woodText.setText("木材  " + Math.floor(state.wood));
+    const woodProgress = getWoodProgress(state.hand, state);
+    this.woodProgressText.setText(woodProgress.label).setColor(woodProgress.kind === "target" ? "#ffd37a" : woodProgress.kind === "ready" ? "#9ff0b2" : "#d6d39c");
+    this.woodIcon.clear();
+    this.woodIcon.fillStyle(0xc9853d, 1).fillRect(36, 1105, 24, 14);
+    this.woodIcon.fillStyle(0xe2ad64, 1).fillCircle(36, 1112, 7);
+    this.woodIcon.lineStyle(2, 0x6f401f, 1).strokeCircle(36, 1112, 5);
+    this.woodIcon.lineStyle(2, 0x6f401f, 0.9).lineBetween(44, 1108, 58, 1108).lineBetween(44, 1116, 58, 1116);
 
     const shownWallMax = this.showcaseMode ? 100 : state.wallMaxHp;
     const shownWallHp = this.showcaseMode ? 100 : Math.ceil(state.wallHp);
@@ -469,7 +558,7 @@ export class GameScene extends Phaser.Scene {
 
     const transientMessageVisible = this.messageTimer > 0 && this.messageText.text.length > 0;
     this.statusText
-      .setText(transientMessageVisible ? this.messageText.text : this.selectedCardInstanceId ? this.compactTargetStatus(state) : this.statusLabel(state))
+      .setText(transientMessageVisible ? this.messageText.text : this.discardMode ? "弃牌模式 · 点击一张手牌" : this.selectedCardInstanceId ? this.compactTargetStatus(state) : this.statusLabel(state))
       .setColor(transientMessageVisible ? this.messageColor : "#fff0b0");
     // Selection and target feedback live on the card / grid; keep transient copy out of the battle field.
     this.messageText.setVisible(false);
@@ -492,9 +581,11 @@ export class GameScene extends Phaser.Scene {
     if (state.globalFreezeRemainingSeconds > 0 && this.battleNoticeTimer <= 0) this.showBattleNotice("全场短冻 · 敌停塔不停", "#8ce8ff", 0.2);
     this.battleNoticeText.setVisible(this.battleNoticeTimer > 0);
 
-    const canDiscard = Boolean(this.selectedCardInstanceId) && state.phase !== "SYSTEM_PAUSE" && state.phase !== "VICTORY" && state.phase !== "DEFEAT";
+    const canDiscard = isGameplayInputPhase(state.phase);
     const canDestroy = Boolean(this.selectedSlotId) && !this.selectedCardInstanceId && state.phase !== "SYSTEM_PAUSE" && state.phase !== "VICTORY" && state.phase !== "DEFEAT";
     this.discardButton.input!.enabled = canDiscard;
+    this.discardButton.setFillStyle(this.discardMode ? COLORS.blue : COLORS.line, 1);
+    this.discardButtonLabel.setText(this.discardMode ? "取消" : "弃牌");
     this.destroyButton.input!.enabled = canDestroy;
     this.discardButton.setVisible(canDiscard);
     this.discardButtonLabel.setVisible(canDiscard);
@@ -531,6 +622,15 @@ export class GameScene extends Phaser.Scene {
   private renderDynamic(state: GameState): void {
     this.dynamic.clear();
 
+    const woodProgress = getWoodProgress(state.hand, state);
+    const railX = 176;
+    const railY = 1110;
+    const railWidth = 318;
+    this.dynamic.fillStyle(0x2d281d, 0.9).fillRect(railX, railY, railWidth, 10);
+    this.dynamic.lineStyle(1, 0xd3a345, 0.9).strokeRect(railX, railY, railWidth, 10);
+    const railColor = woodProgress.kind === "target" ? COLORS.gold : woodProgress.kind === "ready" ? COLORS.success : 0x82775b;
+    this.dynamic.fillStyle(railColor, woodProgress.kind === "neutral" ? 0.55 : 0.95).fillRect(railX + 2, railY + 2, (railWidth - 4) * woodProgress.ratio, 6);
+
     const wallRatio = Math.max(0, Math.min(1, state.wallHp / state.wallMaxHp));
     const wallColor = wallRatio > 0.35 ? 0x6d5235 : 0x71342d;
     this.dynamic.fillStyle(wallColor, 1).fillRect(WALL_ZONE.x, WALL_ZONE.y, WALL_ZONE.width, WALL_ZONE.height);
@@ -553,7 +653,7 @@ export class GameScene extends Phaser.Scene {
     for (const layout of CAMP_SLOT_LAYOUTS) {
       const building = state.buildings.find((item) => item.slotId === layout.id);
       const selected = this.selectedSlotId === layout.id;
-      const target = selectedCardDefinition?.category === "base" ? this.slotTargetStatus(building, selectedCardDefinition, state) : null;
+      const target = selectedCardDefinition?.category === "base" ? this.slotTargetStatus(layout.id, building, selectedCardDefinition, state) : null;
       const borderColor = target ? (target.legal ? COLORS.success : COLORS.danger) : selected ? COLORS.gold : COLORS.line;
       const fillColor = target?.legal ? 0x29483b : target ? 0x493039 : building ? 0x263d32 : 0x263a2c;
       this.dynamic.fillStyle(fillColor, 1).fillRect(layout.x, layout.y, layout.width, layout.height);
@@ -643,13 +743,18 @@ export class GameScene extends Phaser.Scene {
     for (const [index, button] of this.cardButtons.entries()) {
       const card = state.hand[index];
       const selected = card?.instanceId === this.selectedCardInstanceId;
+      const definition = card ? this.cardDefinition(card.definitionId) : null;
+      const readiness = definition ? getCardUseReadiness(definition, state) : null;
+      const usable = readiness?.usable ?? false;
       button.setVisible(Boolean(card));
-      button.setFillStyle(selected ? 0x34583e : card ? COLORS.panel : COLORS.panelDeep, 1);
-      button.setStrokeStyle(selected ? 3 : 2, selected ? COLORS.gold : card ? COLORS.line : COLORS.line, 1);
+      button.setFillStyle(selected ? 0x34583e : !card ? COLORS.panelDeep : usable ? COLORS.panel : readiness?.kind === "insufficient" ? 0x4b4030 : 0x394238, 1);
+      button.setAlpha(card && !usable ? 0.62 : 1);
+      button.setStrokeStyle(selected ? 3 : 2, selected ? COLORS.gold : card && !usable ? 0x7f7560 : COLORS.line, 1);
 
       const glyph = this.cardGlyphs[index]!;
       glyph.clear().setVisible(Boolean(card));
-      if (card) this.drawCardGlyph(glyph, CARD_LAYOUTS[index]!.x + CARD_LAYOUTS[index]!.width - 26, CARD_LAYOUTS[index]!.y + 35, this.cardDefinition(card.definitionId));
+      glyph.setAlpha(card && !usable ? 0.42 : 1);
+      if (card && definition) this.drawCardGlyph(glyph, CARD_LAYOUTS[index]!.x + CARD_LAYOUTS[index]!.width - 26, CARD_LAYOUTS[index]!.y + 35, definition);
 
       const text = this.cardTextBlocks[index]!;
       text.title.setVisible(Boolean(card));
@@ -657,16 +762,20 @@ export class GameScene extends Phaser.Scene {
       text.cost.setVisible(Boolean(card));
       text.hint.setVisible(Boolean(card));
       text.category.setVisible(Boolean(card));
-      if (card) {
-        const definition = this.cardDefinition(card.definitionId);
-        text.title.setText(definition.displayName).setColor(definition.accentColor);
+      if (card && definition && readiness) {
+        const warningColor = readiness.kind === "insufficient" ? "#ffd37a" : "#c1c6b5";
+        const cardColor = readiness.usable ? definition.accentColor : warningColor;
+        text.title.setText(definition.displayName).setColor(cardColor).setAlpha(usable ? 1 : 0.72);
         text.role.setText(definition.role);
         text.cost.setText("费用 · " + (definition.category === "base" ? "木材 " : "金币 ") + definition.cost);
-        const readiness = definition.category === "base" ? null : getCardUseReadiness(definition, state.gold, state.permanentApplications);
-        text.hint.setText(selected ? (definition.category === "base" ? "已选 · 点目标" : readiness!.hint) : "");
-        text.hint.setColor(selected && readiness && !readiness.usable ? "#ffd37a" : "#ffffff");
+        text.hint.setText(selected && definition.category === "base" ? "已选 · 点目标" : readiness.hint);
+        text.hint.setColor(readiness.usable ? "#9ff0b2" : warningColor);
         text.category.setText(definition.category === "base" ? "基地" : definition.category === "permanent" ? "永久" : "战术");
         text.category.setColor(definition.category === "base" ? "#c5d2bd" : definition.category === "permanent" ? "#f6c453" : "#8ce8ff");
+        text.role.setAlpha(usable ? 1 : 0.65);
+        text.cost.setColor(readiness.usable ? "#ffe08a" : warningColor).setAlpha(1);
+        text.hint.setAlpha(1);
+        text.category.setAlpha(usable ? 1 : 0.7);
       }
     }
   }
@@ -699,7 +808,7 @@ export class GameScene extends Phaser.Scene {
     if (!card) return "";
     const definition = this.cardDefinition(card.definitionId);
     if (definition.category !== "base" || definition.effect.kind !== "base") {
-      return " · 已选 " + definition.displayName + " · " + getCardUseReadiness(definition, state.gold, state.permanentApplications).hint;
+      return " · 已选 " + definition.displayName + " · " + getCardUseReadiness(definition, state).hint;
     }
     return " · 目标提示：绿可用 / 红不可用";
   }
@@ -709,29 +818,30 @@ export class GameScene extends Phaser.Scene {
     return phase + this.selectedTargetHint(state);
   }
 
-  private slotTargetStatus(building: BuildingState | undefined, card: CardDefinition, state: GameState): { legal: boolean; label: string } {
+  private slotTargetStatus(slotId: string, building: BuildingState | undefined, card: CardDefinition, state: GameState): { legal: boolean; label: string } {
     if (card.effect.kind !== "base") return { legal: false, label: "不可用" };
-    if (!building) {
-      const affordable = state.wood >= card.cost;
-      return { legal: affordable, label: affordable ? "建造 木材 " + card.cost : "缺木材 " + card.cost };
+    const readiness = getCardUseReadiness(card, state);
+    const action = findBaseAction(readiness, { kind: "slot", slotId });
+    if (!building && action) {
+      const affordable = state.wood >= action.cost;
+      return { legal: affordable, label: affordable ? "建造 木材 " + action.cost : "还差 " + Math.ceil(action.cost - state.wood) + " 木材" };
     }
+    if (!building) return { legal: false, label: "暂无合法目标" };
     if (building.kind === "main_city") return { legal: false, label: "主城 · 固定" };
-    if (building.kind !== card.effect.targetKind || building.definitionId !== card.effect.definitionId) {
+    if (!buildingMatchesBaseAction(building, card)) {
       return { legal: false, label: "异类 · 不可用" };
     }
     if (building.level >= 3) return { legal: false, label: "已达 Lv.3" };
-    const cost = this.upgradeCost(card.cost, building.level);
-    const affordable = state.wood >= cost;
-    return { legal: affordable, label: (affordable ? "升级 木材 " : "缺木材 ") + cost };
+    if (!action) return { legal: false, label: "暂无合法目标" };
+    const affordable = state.wood >= action.cost;
+    return { legal: affordable, label: (affordable ? "升级 木材 " : "还差 ") + (affordable ? action.cost : Math.ceil(action.cost - state.wood)) + (affordable ? "" : " 木材") };
   }
   private wallTargetStatus(card: CardDefinition, state: GameState): { legal: boolean; label: string } {
     if (card.effect.kind !== "base" || card.effect.targetKind !== "repair_shop") return { legal: false, label: "城墙\n当前牌不可用" };
-    const affordable = state.wood >= card.cost;
-    return { legal: affordable, label: affordable ? "城墙\n修理 / 护盾 " + card.cost : "城墙\n缺木材 " + card.cost };
-  }
-
-  private upgradeCost(baseCost: number, currentLevel: number): number {
-    return Math.round(baseCost * (currentLevel === 1 ? 1.5 : 2.25));
+    const action = findBaseAction(getCardUseReadiness(card, state), { kind: "wall" });
+    if (!action) return { legal: false, label: "城墙\n暂无合法目标" };
+    const affordable = state.wood >= action.cost;
+    return { legal: affordable, label: affordable ? "城墙\n修理 / 护盾 " + action.cost : "城墙\n还差 " + Math.ceil(action.cost - state.wood) + " 木材" };
   }
 
   private drawEnemy(definition: EnemyDefinition, enemy: EnemyRuntimeState, x: number, y: number, radius: number): void {
@@ -848,8 +958,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private canReceiveGameplayInput(): boolean {
-    const phase = this.simulation.getState().phase;
-    return phase === "OPENING_COUNTDOWN" || phase === "RUNNING" || phase === "TACTICAL_PAUSE";
+    return isGameplayInputPhase(this.simulation.getState().phase);
   }
 
   private statusLabel(state: GameState): string {

@@ -14,11 +14,12 @@ describe("card input adaptation", () => {
     const definitionFor = (definitionId: string) => starterCatalog.cards.find((definition) => definition.id === definitionId);
     let selectedCardInstanceId: string | null = null;
 
-    const first = decideCardClick(game.getState().hand, index, selectedCardInstanceId, definitionFor);
+    const readinessFor = (definition: Parameters<typeof getCardUseReadiness>[0]) => getCardUseReadiness(definition, game.getState());
+    const first = decideCardClick(game.getState().hand, index, selectedCardInstanceId, definitionFor, readinessFor);
     expect(first).toEqual({ kind: "select", instanceId: card.instanceId });
     if (first.kind === "select") selectedCardInstanceId = first.instanceId;
 
-    const second = decideCardClick(game.getState().hand, index, selectedCardInstanceId, definitionFor);
+    const second = decideCardClick(game.getState().hand, index, selectedCardInstanceId, definitionFor, readinessFor);
     expect(second).toEqual({ kind: "play", command: { type: "play_card", cardInstanceId: card.instanceId } });
     if (second.kind === "play") {
       const result = game.dispatch(second.command);
@@ -38,9 +39,10 @@ describe("card input adaptation", () => {
     game.getState().hand = [card];
     game.getState().gold = 10;
     const definitionFor = (definitionId: string) => starterCatalog.cards.find((definition) => definition.id === definitionId);
-    const first = decideCardClick(game.getState().hand, 0, null, definitionFor);
+    const readinessFor = (definition: Parameters<typeof getCardUseReadiness>[0]) => getCardUseReadiness(definition, game.getState());
+    const first = decideCardClick(game.getState().hand, 0, null, definitionFor, readinessFor);
     expect(first).toEqual({ kind: "select", instanceId: card.instanceId });
-    const second = decideCardClick(game.getState().hand, 0, card.instanceId, definitionFor);
+    const second = decideCardClick(game.getState().hand, 0, card.instanceId, definitionFor, readinessFor);
     expect(second.kind).toBe("play");
     if (second.kind !== "play") return;
     expect(game.dispatch(second.command).accepted).toBe(true);
@@ -52,9 +54,43 @@ describe("card input adaptation", () => {
   it("describes affordability and permanent limits without promising a failed use", () => {
     const wall = starterCatalog.cards.find((definition) => definition.id === "wall_reinforcement")!;
     const shield = starterCatalog.cards.find((definition) => definition.id === "wall_shield")!;
-    expect(getCardUseReadiness(wall, 0, {})).toEqual({ usable: false, hint: "金币不足 · 还差 24" });
-    expect(getCardUseReadiness(wall, 24, {})).toEqual({ usable: true, hint: "可使用 · 再点确认" });
-    expect(getCardUseReadiness(wall, 99, { wall_reinforcement: 2 })).toEqual({ usable: false, hint: "已达上限 · 请弃牌" });
-    expect(getCardUseReadiness(shield, 10, {})).toEqual({ usable: true, hint: "可使用 · 再点确认" });
+    const game = new GameSimulation();
+    game.getState().gold = 0;
+    expect(getCardUseReadiness(wall, game.getState())).toMatchObject({ usable: false, hint: "还差 24 金币" });
+    game.getState().gold = 24;
+    expect(getCardUseReadiness(wall, game.getState())).toMatchObject({ usable: true, hint: "可支付" });
+    game.getState().gold = 99;
+    game.getState().permanentApplications.wall_reinforcement = 2;
+    expect(getCardUseReadiness(wall, game.getState())).toMatchObject({ usable: false, hint: "已达上限" });
+    game.getState().permanentApplications.wall_reinforcement = 0;
+    const shieldGame = new GameSimulation();
+    shieldGame.getState().gold = 10;
+    expect(getCardUseReadiness(shield, shieldGame.getState())).toMatchObject({ usable: true, hint: "可支付" });
+  });
+
+  it("cancels base selection, blocks unaffordable clicks, and clears an older selection", () => {
+    const game = new GameSimulation();
+    game.getState().wood = 40;
+    const hand: CardInstance[] = [
+      { instanceId: "machine", definitionId: "machine_gun", batchNumber: 1, batchIndex: 0 },
+      { instanceId: "cannon", definitionId: "cannon", batchNumber: 1, batchIndex: 1 },
+    ];
+    const definitionFor = (definitionId: string) => starterCatalog.cards.find((definition) => definition.id === definitionId);
+    const readinessFor = (definition: Parameters<typeof getCardUseReadiness>[0]) => getCardUseReadiness(definition, game.getState());
+
+    expect(decideCardClick(hand, 0, null, definitionFor, readinessFor)).toEqual({ kind: "select", instanceId: "machine" });
+    expect(decideCardClick(hand, 0, "machine", definitionFor, readinessFor)).toEqual({ kind: "cancel", instanceId: "machine" });
+    expect(decideCardClick(hand, 1, "machine", definitionFor, readinessFor)).toEqual({ kind: "blocked", hint: "还差 25 木材" });
+  });
+
+  it("rechecks permanent and tactical affordability on the confirmation click", () => {
+    const game = new GameSimulation();
+    const hand: CardInstance[] = [{ instanceId: "shield", definitionId: "wall_shield", batchNumber: 1, batchIndex: 0 }];
+    const definitionFor = (definitionId: string) => starterCatalog.cards.find((definition) => definition.id === definitionId);
+    const readinessFor = (definition: Parameters<typeof getCardUseReadiness>[0]) => getCardUseReadiness(definition, game.getState());
+    game.getState().gold = 10;
+    expect(decideCardClick(hand, 0, null, definitionFor, readinessFor)).toEqual({ kind: "select", instanceId: "shield" });
+    game.getState().gold = 0;
+    expect(decideCardClick(hand, 0, "shield", definitionFor, readinessFor)).toEqual({ kind: "blocked", hint: "还差 10 金币" });
   });
 });
