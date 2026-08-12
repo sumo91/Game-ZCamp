@@ -1,6 +1,7 @@
 import { FIRST_BATCH_CARD_IDS, SUPPLY_CATEGORY_PATTERN, starterCatalog, validateCatalog } from "./content";
 import type { CardDefinition, CardEffect, ContentCatalog, EnemyDefinition, TowerDefinition } from "./content";
 import { getUpgradeCost } from "./costs";
+import { getWoodProductionPerSecond } from "./resources";
 import { CAMP_SLOT_IDS } from "./types";
 import type {
   BuildingState,
@@ -28,8 +29,6 @@ export const WALL_SHIELD_MAX_HP = 60;
 export const MAIN_CITY_ID = "main-city";
 
 const EPSILON = 0.000001;
-const MAIN_CITY_WOOD_INCOME = 0.5;
-const LUMBERYARD_INCOME = [0, 1, 1.8, 3];
 const BASE_REPAIR_AMOUNT = 25;
 
 export class GameSimulation {
@@ -188,7 +187,7 @@ export class GameSimulation {
         continue;
       }
       this.state.effectiveBattleTimeSeconds += step;
-      this.state.wood += this.getWoodIncome() * step;
+      this.state.wood += getWoodProductionPerSecond(this.state, this.catalog) * step;
       this.advanceSupply(step);
       this.updateWaveSchedule();
       this.updateEnemies(step);
@@ -513,15 +512,6 @@ export class GameSimulation {
   private grantShield(amount: number, durationSeconds: number): void {
     this.state.wallShieldHp = Math.min(this.state.wallShieldMaxHp, this.state.wallShieldHp + amount);
     this.state.wallShieldRemainingSeconds = Math.max(this.state.wallShieldRemainingSeconds, durationSeconds);
-  }
-
-  private getWoodIncome(): number {
-    const lumberyardIncome = this.state.buildings
-      .filter((building) => building.kind === "lumberyard")
-      .reduce((total, building) => total + (LUMBERYARD_INCOME[building.level] ?? 0), 0);
-    const incomeEffect = this.getPermanentEffect("wood_income");
-    const woodBuffs = incomeEffect?.kind === "wood_income" ? this.getPermanentApplications("wood_income") * incomeEffect.amountPerSecond : 0;
-    return MAIN_CITY_WOOD_INCOME + lumberyardIncome + woodBuffs;
   }
 
   private getRepairAmount(): number {

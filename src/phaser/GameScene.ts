@@ -2,7 +2,9 @@ import Phaser from "phaser";
 import { GameSimulation } from "../core/game";
 import { starterCatalog, type CardDefinition, type EnemyDefinition, type TowerDefinition } from "../core/content";
 import type { BuildingState, CardInstance, EnemyRuntimeState, GameEvent, GamePhase, GameState } from "../core/types";
-import { buildingMatchesBaseAction, findBaseAction, getCardUseReadiness, getWoodProgress, isGameplayInputPhase } from "../core/cardAvailability";
+import { buildingMatchesBaseAction, findBaseAction, getCardUseReadiness, isGameplayInputPhase } from "../core/cardAvailability";
+import { getSupplyProgressPresentation } from "../core/presentation";
+import { getWoodProductionPerSecond } from "../core/resources";
 import { decideCardClick } from "./cardInput";
 import { CARD_HAND, CARD_LAYOUTS, CAMP_SLOT_LAYOUTS, ENEMY_ZONE, GRID_ZONE, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
 
@@ -39,23 +41,24 @@ export class GameScene extends Phaser.Scene {
   private discardMode = false;
   private cardButtons: Phaser.GameObjects.Rectangle[] = [];
   private cardGlyphs: Phaser.GameObjects.Graphics[] = [];
+  private cardPaymentFills: Phaser.GameObjects.Graphics[] = [];
+  private cardCostIcons: Phaser.GameObjects.Graphics[] = [];
   private cardTextBlocks: CardTextBlock[] = [];
   private slotButtons: Phaser.GameObjects.Zone[] = [];
   private wallButton!: Phaser.GameObjects.Zone;
   private pauseButton!: Phaser.GameObjects.Rectangle;
   private pauseButtonLabel!: Phaser.GameObjects.Text;
-  private discardButton!: Phaser.GameObjects.Rectangle;
-  private discardButtonLabel!: Phaser.GameObjects.Text;
-  private destroyButton!: Phaser.GameObjects.Rectangle;
-  private destroyButtonLabel!: Phaser.GameObjects.Text;
+  private contextActionButton!: Phaser.GameObjects.Rectangle;
+  private contextActionLabel!: Phaser.GameObjects.Text;
   private countdownText!: Phaser.GameObjects.Text;
   private phaseText!: Phaser.GameObjects.Text;
   private waveText!: Phaser.GameObjects.Text;
   private timerText!: Phaser.GameObjects.Text;
-  private resourceText!: Phaser.GameObjects.Text;
   private woodText!: Phaser.GameObjects.Text;
   private woodIcon!: Phaser.GameObjects.Graphics;
-  private woodProgressText!: Phaser.GameObjects.Text;
+  private woodRateText!: Phaser.GameObjects.Text;
+  private goldText!: Phaser.GameObjects.Text;
+  private goldIcon!: Phaser.GameObjects.Graphics;
   private wallText!: Phaser.GameObjects.Text;
   private enemyText!: Phaser.GameObjects.Text;
   private statusText!: Phaser.GameObjects.Text;
@@ -174,15 +177,16 @@ export class GameScene extends Phaser.Scene {
     this.waveText = this.add.text(32, 40, "", this.textStyle(22, "#fff3d2")).setDepth(10);
     this.timerText = this.add.text(32, 72, "", this.textStyle(14, "#ffe08a")).setDepth(10);
 
-    this.resourceText = this.add.text(320, 24, "", this.textStyle(18, "#fff0a0")).setDepth(10);
     this.enemyText = this.add.text(320, 56, "", this.textStyle(14, "#fff3d2")).setDepth(10);
     this.wallText = this.add.text(360, 733, "", { ...this.textStyle(16, "#fff3d2"), align: "center", stroke: "#21170f", strokeThickness: 4 }).setOrigin(0.5).setDepth(10);
     this.statusText = this.add.text(34, 750, "", this.textStyle(13, "#fff0b0")).setDepth(10);
     this.messageText = this.add.text(34, 1055, "", this.textStyle(14, "#9ff0b2")).setDepth(10);
     this.woodIcon = this.add.graphics().setDepth(10);
-    this.woodText = this.add.text(66, 1098, "", { ...this.textStyle(19, "#fff3d2"), fontStyle: "bold" }).setDepth(10);
-    this.woodProgressText = this.add.text(176, 1095, "", this.textStyle(12, "#fff0c2")).setDepth(10);
-    this.supplyText = this.add.text(176, 1121, "", this.textStyle(12, "#fff0c2")).setDepth(10);
+    this.woodText = this.add.text(58, 1097, "", { ...this.textStyle(16, "#fff3d2"), fontStyle: "bold" }).setDepth(10);
+    this.woodRateText = this.add.text(58, 1120, "", this.textStyle(12, "#ffe0a0")).setDepth(10);
+    this.goldIcon = this.add.graphics().setDepth(10);
+    this.goldText = this.add.text(154, 1097, "", { ...this.textStyle(16, "#fff3d2"), fontStyle: "bold" }).setDepth(10);
+    this.supplyText = this.add.text(220, 1097, "", this.textStyle(12, "#fff0c2")).setDepth(10);
 
     this.battleNoticeText = this.add.text(360, 174, "", { ...this.textStyle(17, "#fff3d2"), align: "center", stroke: "#315c28", strokeThickness: 4 }).setOrigin(0.5).setDepth(12);
 
@@ -190,13 +194,9 @@ export class GameScene extends Phaser.Scene {
     this.pauseButtonLabel = this.add.text(646, 44, "暂停", this.textStyle(15, "#ffffff")).setOrigin(0.5).setDepth(12);
     this.pauseButton.on("pointerdown", () => this.toggleTacticalPause());
 
-    this.discardButton = this.add.rectangle(548, 1108, 82, 56, COLORS.line, 1).setDepth(16).setInteractive({ useHandCursor: true });
-    this.discardButtonLabel = this.add.text(548, 1108, "弃牌", this.textStyle(13, "#ffffff")).setOrigin(0.5).setDepth(17);
-    this.discardButton.on("pointerdown", () => this.toggleDiscardMode());
-
-    this.destroyButton = this.add.rectangle(644, 1108, 82, 56, COLORS.line, 1).setDepth(16).setInteractive({ useHandCursor: true });
-    this.destroyButtonLabel = this.add.text(644, 1108, "拆除", this.textStyle(13, "#ffffff")).setOrigin(0.5).setDepth(17);
-    this.destroyButton.on("pointerdown", () => this.destroySelectedBuilding());
+    this.contextActionButton = this.add.rectangle(650, 1114, 82, 56, COLORS.line, 1).setDepth(16).setInteractive({ useHandCursor: true });
+    this.contextActionLabel = this.add.text(650, 1114, "弃牌", this.textStyle(13, "#ffffff")).setOrigin(0.5).setDepth(17);
+    this.contextActionButton.on("pointerdown", () => this.handleContextAction());
 
     this.countdownText = this.add.text(360, 410, "", {
       ...this.textStyle(76, "#ffe08a"),
@@ -233,11 +233,13 @@ export class GameScene extends Phaser.Scene {
       this.cardTextBlocks.push({
         title: this.add.text(layout.x + 10, layout.y + 12, "", this.textStyle(16, "#f3f5f9")).setDepth(16),
         role: this.add.text(layout.x + 10, layout.y + 46, "", this.textStyle(11, "#fff0c2")).setDepth(16),
-        cost: this.add.text(layout.x + 10, layout.y + 80, "", this.textStyle(16, "#ffe08a")).setDepth(16),
+        cost: this.add.text(layout.x + 32, layout.y + 80, "", this.textStyle(16, "#ffe08a")).setDepth(16),
         hint: this.add.text(layout.x + 10, layout.y + 108, "", this.textStyle(11, "#ffffff")).setDepth(16),
         category: this.add.text(layout.x + layout.width - 10, layout.y + 13, "", { ...this.textStyle(11, "#dbe6f4"), align: "right" }).setOrigin(1, 0).setDepth(16),
       });
       this.cardGlyphs.push(this.add.graphics().setDepth(15.5));
+      this.cardPaymentFills.push(this.add.graphics().setDepth(15.25));
+      this.cardCostIcons.push(this.add.graphics().setDepth(16));
     }
   }
   private createPausePanels(): void {
@@ -434,6 +436,19 @@ export class GameScene extends Phaser.Scene {
     this.renderState();
   }
 
+  private handleContextAction(): void {
+    if (!this.canReceiveGameplayInput()) return;
+    if (this.discardMode || this.selectedCardInstanceId) {
+      this.toggleDiscardMode();
+      return;
+    }
+    if (this.selectedSlotId) {
+      this.destroySelectedBuilding();
+      return;
+    }
+    this.toggleDiscardMode();
+  }
+
   private destroySelectedBuilding(): void {
     if (!this.canReceiveGameplayInput() || !this.selectedSlotId) {
       this.showMessage("先点击一座非主城建筑", false);
@@ -533,15 +548,18 @@ export class GameScene extends Phaser.Scene {
     this.waveText.setText(state.wave > 0 ? "波次  " + state.wave + " / " + state.maxWave : "首波");
     const terminal = state.phase === "VICTORY" || state.phase === "DEFEAT";
     this.timerText.setText(terminal ? "战斗结束" : state.phase === "OPENING_COUNTDOWN" || state.wave === 0 ? "首波准备中" : "下一波  " + this.formatSeconds(state.nextWaveTimeRemainingSeconds));
-    this.resourceText.setText("金币  " + Math.floor(state.gold));
     this.woodText.setText("木材  " + Math.floor(state.wood));
-    const woodProgress = getWoodProgress(state.hand, state);
-    this.woodProgressText.setText(woodProgress.label).setColor(woodProgress.kind === "target" ? "#ffd37a" : woodProgress.kind === "ready" ? "#9ff0b2" : "#d6d39c");
+    this.woodRateText.setText("+" + this.formatRate(getWoodProductionPerSecond(state)) + "/秒");
+    this.goldText.setText("金币  " + Math.floor(state.gold));
     this.woodIcon.clear();
     this.woodIcon.fillStyle(0xc9853d, 1).fillRect(36, 1105, 24, 14);
     this.woodIcon.fillStyle(0xe2ad64, 1).fillCircle(36, 1112, 7);
     this.woodIcon.lineStyle(2, 0x6f401f, 1).strokeCircle(36, 1112, 5);
     this.woodIcon.lineStyle(2, 0x6f401f, 0.9).lineBetween(44, 1108, 58, 1108).lineBetween(44, 1116, 58, 1116);
+    this.goldIcon.clear();
+    this.goldIcon.fillStyle(COLORS.gold, 1).fillCircle(140, 1106, 9);
+    this.goldIcon.lineStyle(2, 0x714c17, 1).strokeCircle(140, 1106, 7);
+    this.goldIcon.lineStyle(2, 0xfff0a0, 0.8).lineBetween(136, 1106, 144, 1106);
 
     const shownWallMax = this.showcaseMode ? 100 : state.wallMaxHp;
     const shownWallHp = this.showcaseMode ? 100 : Math.ceil(state.wallHp);
@@ -572,25 +590,20 @@ export class GameScene extends Phaser.Scene {
     this.countdownText.setVisible(state.phase === "OPENING_COUNTDOWN");
     if (state.phase === "OPENING_COUNTDOWN") this.countdownText.setText(String(Math.ceil(state.openingCountdownRemainingSeconds)));
 
-    const waitingLabel = state.supplyWaitingCard ? this.cardNameForHud(state.supplyWaitingCard.definitionId) : "";
-    const nextLabel = state.nextSupplyCard ? this.cardNameForHud(state.nextSupplyCard.definitionId) : "等待手牌空间";
-    const supplyState = state.phase === "RUNNING" ? Math.max(0, state.supplyCycleSeconds - state.supplyProgressSeconds) : state.supplyCycleSeconds - state.supplyProgressSeconds;
-    this.supplyText.setText(terminal ? "补给停止 · 重新部署开始新局" : "下张  " + nextLabel + " · " + this.formatSeconds(supplyState) + (waitingLabel ? " · 待 " + waitingLabel : ""));
+    const supplyPresentation = getSupplyProgressPresentation(state);
+    this.supplyText.setText(supplyPresentation.label).setColor(supplyPresentation.state === "waiting" ? "#ffd37a" : supplyPresentation.state === "stopped" ? "#c0b995" : "#fff0c2");
 
     if (state.globalFreezeNextSpawn && this.battleNoticeTimer <= 0) this.showBattleNotice("全场短冻预置 · 下一只敌人启动", "#8ce8ff", 0.2);
     if (state.globalFreezeRemainingSeconds > 0 && this.battleNoticeTimer <= 0) this.showBattleNotice("全场短冻 · 敌停塔不停", "#8ce8ff", 0.2);
     this.battleNoticeText.setVisible(this.battleNoticeTimer > 0);
 
-    const canDiscard = isGameplayInputPhase(state.phase);
-    const canDestroy = Boolean(this.selectedSlotId) && !this.selectedCardInstanceId && state.phase !== "SYSTEM_PAUSE" && state.phase !== "VICTORY" && state.phase !== "DEFEAT";
-    this.discardButton.input!.enabled = canDiscard;
-    this.discardButton.setFillStyle(this.discardMode ? COLORS.blue : COLORS.line, 1);
-    this.discardButtonLabel.setText(this.discardMode ? "取消" : "弃牌");
-    this.destroyButton.input!.enabled = canDestroy;
-    this.discardButton.setVisible(canDiscard);
-    this.discardButtonLabel.setVisible(canDiscard);
-    this.destroyButton.setVisible(canDestroy);
-    this.destroyButtonLabel.setVisible(canDestroy);
+    const canContextAction = isGameplayInputPhase(state.phase);
+    const contextLabel = this.discardMode ? "取消" : this.selectedSlotId && !this.selectedCardInstanceId ? "拆除" : "弃牌";
+    this.contextActionButton.input!.enabled = canContextAction;
+    this.contextActionButton.setFillStyle(this.discardMode ? COLORS.blue : COLORS.line, 1);
+    this.contextActionLabel.setText(contextLabel);
+    this.contextActionButton.setVisible(canContextAction);
+    this.contextActionLabel.setVisible(canContextAction);
 
     // Tactical pause is a planning ribbon, not a modal that hides the battlefield.
     this.tacticalPanel.setVisible(false);
@@ -622,14 +635,14 @@ export class GameScene extends Phaser.Scene {
   private renderDynamic(state: GameState): void {
     this.dynamic.clear();
 
-    const woodProgress = getWoodProgress(state.hand, state);
-    const railX = 176;
-    const railY = 1110;
-    const railWidth = 318;
+    const supplyPresentation = getSupplyProgressPresentation(state);
+    const railX = 220;
+    const railY = 1112;
+    const railWidth = 370;
     this.dynamic.fillStyle(0x2d281d, 0.9).fillRect(railX, railY, railWidth, 10);
     this.dynamic.lineStyle(1, 0xd3a345, 0.9).strokeRect(railX, railY, railWidth, 10);
-    const railColor = woodProgress.kind === "target" ? COLORS.gold : woodProgress.kind === "ready" ? COLORS.success : 0x82775b;
-    this.dynamic.fillStyle(railColor, woodProgress.kind === "neutral" ? 0.55 : 0.95).fillRect(railX + 2, railY + 2, (railWidth - 4) * woodProgress.ratio, 6);
+    const railColor = supplyPresentation.state === "waiting" ? COLORS.gold : supplyPresentation.state === "stopped" ? 0x82775b : COLORS.cyan;
+    this.dynamic.fillStyle(railColor, supplyPresentation.state === "stopped" ? 0.55 : 0.95).fillRect(railX + 2, railY + 2, (railWidth - 4) * supplyPresentation.ratio, 6);
 
     const wallRatio = Math.max(0, Math.min(1, state.wallHp / state.wallMaxHp));
     const wallColor = wallRatio > 0.35 ? 0x6d5235 : 0x71342d;
@@ -748,14 +761,18 @@ export class GameScene extends Phaser.Scene {
       const usable = readiness?.usable ?? false;
       button.setVisible(Boolean(card));
       button.setFillStyle(selected ? 0x34583e : !card ? COLORS.panelDeep : usable ? COLORS.panel : readiness?.kind === "insufficient" ? 0x4b4030 : 0x394238, 1);
-      button.setAlpha(card && !usable ? 0.62 : 1);
+      button.setAlpha(card && readiness?.hardBlocked ? 0.72 : 1);
       button.setStrokeStyle(selected ? 3 : 2, selected ? COLORS.gold : card && !usable ? 0x7f7560 : COLORS.line, 1);
 
+      const paymentFill = this.cardPaymentFills[index]!;
+      paymentFill.clear().setVisible(Boolean(card));
       const glyph = this.cardGlyphs[index]!;
       glyph.clear().setVisible(Boolean(card));
-      glyph.setAlpha(card && !usable ? 0.42 : 1);
+      glyph.setAlpha(card && readiness?.hardBlocked ? 0.42 : 1);
       if (card && definition) this.drawCardGlyph(glyph, CARD_LAYOUTS[index]!.x + CARD_LAYOUTS[index]!.width - 26, CARD_LAYOUTS[index]!.y + 35, definition);
 
+      const costIcon = this.cardCostIcons[index]!;
+      costIcon.clear().setVisible(Boolean(card));
       const text = this.cardTextBlocks[index]!;
       text.title.setVisible(Boolean(card));
       text.role.setVisible(Boolean(card));
@@ -763,21 +780,69 @@ export class GameScene extends Phaser.Scene {
       text.hint.setVisible(Boolean(card));
       text.category.setVisible(Boolean(card));
       if (card && definition && readiness) {
+        this.drawCardPayment(paymentFill, CARD_LAYOUTS[index]!, readiness);
+        this.drawResourceIcon(costIcon, CARD_LAYOUTS[index]!.x + 19, CARD_LAYOUTS[index]!.y + 88, readiness.resource, readiness.hardBlocked);
         const warningColor = readiness.kind === "insufficient" ? "#ffd37a" : "#c1c6b5";
-        const cardColor = readiness.usable ? definition.accentColor : warningColor;
-        text.title.setText(definition.displayName).setColor(cardColor).setAlpha(usable ? 1 : 0.72);
+        const cardColor = readiness.hardBlocked ? warningColor : definition.accentColor;
+        text.title.setText(definition.displayName).setColor(cardColor).setAlpha(readiness.hardBlocked ? 0.72 : 1);
         text.role.setText(definition.role);
-        text.cost.setText("费用 · " + (definition.category === "base" ? "木材 " : "金币 ") + definition.cost);
-        text.hint.setText(selected && definition.category === "base" ? "已选 · 点目标" : readiness.hint);
+        text.cost.setText(readiness.displayCost === null ? "" : String(readiness.displayCost));
+        text.hint.setText(selected && definition.category === "base" ? "已选 · 点目标" : selected ? "已选 · 再点确认" : readiness.hardBlocked ? readiness.hint : readiness.usable ? "可用" : "");
         text.hint.setColor(readiness.usable ? "#9ff0b2" : warningColor);
         text.category.setText(definition.category === "base" ? "基地" : definition.category === "permanent" ? "永久" : "战术");
         text.category.setColor(definition.category === "base" ? "#c5d2bd" : definition.category === "permanent" ? "#f6c453" : "#8ce8ff");
-        text.role.setAlpha(usable ? 1 : 0.65);
-        text.cost.setColor(readiness.usable ? "#ffe08a" : warningColor).setAlpha(1);
+        text.role.setAlpha(readiness.hardBlocked ? 0.65 : 1);
+        text.cost.setColor(readiness.usable ? "#ffe08a" : warningColor).setAlpha(readiness.hardBlocked ? 0.72 : 1);
         text.hint.setAlpha(1);
-        text.category.setAlpha(usable ? 1 : 0.7);
+        text.category.setAlpha(readiness.hardBlocked ? 0.7 : 1);
       }
     }
+  }
+
+  private drawCardPayment(
+    graphics: Phaser.GameObjects.Graphics,
+    layout: (typeof CARD_LAYOUTS)[number],
+    readiness: ReturnType<typeof getCardUseReadiness>,
+  ): void {
+    const x = layout.x + 2;
+    const y = layout.y + 2;
+    const width = layout.width - 4;
+    const height = layout.height - 4;
+    if (readiness.hardBlocked) {
+      graphics.fillStyle(0x18231d, 0.66).fillRect(x, y, width, height);
+      graphics.lineStyle(2, 0xb9bda7, 0.72).strokeRect(layout.x + layout.width / 2 - 8, layout.y + 66, 16, 14);
+      graphics.lineStyle(3, 0xb9bda7, 0.72).arc(layout.x + layout.width / 2, layout.y + 66, 11, Math.PI, Math.PI * 2, false);
+      return;
+    }
+    const progress = readiness.progress ?? 0;
+    const fillHeight = height * progress;
+    const fillColor = readiness.resource === "wood" ? 0xc9853d : COLORS.gold;
+    if (fillHeight > 0) graphics.fillStyle(fillColor, 0.48).fillRect(x, y + height - fillHeight, width, fillHeight);
+    const liquidY = y + height - fillHeight;
+    graphics.lineStyle(2, readiness.resource === "wood" ? 0xe2ad64 : 0xfff0a0, 0.95).lineBetween(x, liquidY, x + width, liquidY);
+    if (readiness.progress !== null && readiness.progress >= 1) {
+      graphics.lineStyle(2, COLORS.success, 0.95).strokeRect(layout.x + 1, layout.y + 1, layout.width - 2, layout.height - 2);
+    }
+  }
+
+  private drawResourceIcon(
+    graphics: Phaser.GameObjects.Graphics,
+    x: number,
+    y: number,
+    resource: "wood" | "gold",
+    muted: boolean,
+  ): void {
+    const alpha = muted ? 0.55 : 1;
+    if (resource === "wood") {
+      graphics.fillStyle(0xc9853d, alpha).fillRect(x - 8, y - 5, 14, 10);
+      graphics.fillStyle(0xe2ad64, alpha).fillCircle(x - 8, y, 5);
+      graphics.lineStyle(1, 0x6f401f, alpha).strokeCircle(x - 8, y, 4);
+      graphics.lineStyle(1, 0x6f401f, alpha).lineBetween(x - 4, y - 3, x + 5, y - 3).lineBetween(x - 4, y + 3, x + 5, y + 3);
+      return;
+    }
+    graphics.fillStyle(COLORS.gold, alpha).fillCircle(x - 1, y, 7);
+    graphics.lineStyle(1, 0x714c17, alpha).strokeCircle(x - 1, y, 5);
+    graphics.lineStyle(1, 0xfff0a0, alpha).lineBetween(x - 4, y, x + 2, y);
   }
   private drawCardGlyph(glyph: Phaser.GameObjects.Graphics, x: number, y: number, definition: CardDefinition): void {
     const color = this.hex(definition.accentColor);
@@ -990,16 +1055,14 @@ export class GameScene extends Phaser.Scene {
     this.battleNoticeTimer = Math.max(this.battleNoticeTimer, durationSeconds);
   }
 
-  private cardNameForHud(definitionId: string): string {
-    const name = this.cardDefinition(definitionId).displayName;
-    if (name === "临时城墙护盾") return "城墙护盾";
-    return name.length > 7 ? name.slice(0, 7) + "…" : name;
-  }
-
   private formatSeconds(seconds: number): string {
     const safe = Math.max(0, Math.ceil(seconds));
     const minutes = Math.floor(safe / 60);
     return String(minutes).padStart(2, "0") + ":" + String(safe % 60).padStart(2, "0");
+  }
+
+  private formatRate(rate: number): string {
+    return Number.isInteger(rate) ? String(rate) : rate.toFixed(1).replace(/\.0$/, "");
   }
 
   private enemyX(id: string): number {
