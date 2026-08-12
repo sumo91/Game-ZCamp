@@ -1,759 +1,920 @@
 import Phaser from "phaser";
-import { FixedStepClock } from "../core/clock";
-import { starterCatalog } from "../core/content";
 import { GameSimulation } from "../core/game";
-import type { GameEvent, GamePhase } from "../core/types";
-import { CAMP_SLOT_LAYOUTS, CARD_LAYOUTS, ENEMY_ZONE, GRID_ZONE, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
+import { starterCatalog, type CardDefinition, type EnemyDefinition, type TowerDefinition } from "../core/content";
+import type { BuildingState, CardInstance, EnemyRuntimeState, GameEvent, GamePhase, GameState } from "../core/types";
+import { CARD_HAND, CARD_LAYOUTS, CAMP_SLOT_LAYOUTS, ENEMY_ZONE, GRID_ZONE, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
 
-const STEP_SECONDS = 1 / 30;
-const PALETTE = {
-  ink: 0x1b241d,
-  night: 0x17251d,
-  enemyZone: 0x263c2f,
-  road: 0xdca321,
-  roadLight: 0xefbd37,
-  vegetation: 0x317a24,
-  vegetationLight: 0x4b9a29,
-  wall: 0x4b2e1b,
-  wallLight: 0xc9853d,
-  board: 0x7d9b2b,
-  slot: 0xe6b84d,
-  text: 0xfff3d2,
-  secondary: 0xd8c59b,
-  danger: 0xef5a43,
-  zombie: 0x69b64a,
-  infected: 0x4f9f3b,
-  gold: 0xf6c453,
-  wood: 0xc9853d,
-} as const;
-
-interface EnemyHealthBars {
-  track: Phaser.GameObjects.Rectangle;
-  fill: Phaser.GameObjects.Rectangle;
-}
-
-interface CardView {
-  card: Phaser.GameObjects.Rectangle;
-  name: Phaser.GameObjects.Text;
+type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number };
+type CardTextBlock = {
+  title: Phaser.GameObjects.Text;
   role: Phaser.GameObjects.Text;
   cost: Phaser.GameObjects.Text;
-  icon: Phaser.GameObjects.Container;
-}
+  hint: Phaser.GameObjects.Text;
+  category: Phaser.GameObjects.Text;
+};
+
+const COLORS = {
+  bg: 0x1d3824,
+  panel: 0x53643b,
+  panelDeep: 0x29442d,
+  line: 0xb89b4c,
+  text: 0xfff3d2,
+  muted: 0xd6d39c,
+  cyan: 0x4dd7e8,
+  gold: 0xf6c453,
+  danger: 0xf06a6a,
+  success: 0x62d79b,
+  blue: 0x4d83ff,
+  orange: 0xf28b37,
+};
 
 export class GameScene extends Phaser.Scene {
-  private readonly clock = new FixedStepClock(STEP_SECONDS);
-  private simulation!: GameSimulation;
-  private coinText!: Phaser.GameObjects.Text;
-  private waveText!: Phaser.GameObjects.Text;
-  private enemyCountText!: Phaser.GameObjects.Text;
-  private wallText!: Phaser.GameObjects.Text;
-  private woodText!: Phaser.GameObjects.Text;
-  private statusText!: Phaser.GameObjects.Text;
-  private shopPanel!: Phaser.GameObjects.Container;
-  private shopTitle!: Phaser.GameObjects.Text;
-  private prepButton!: Phaser.GameObjects.Rectangle;
-  private prepButtonText!: Phaser.GameObjects.Text;
-  private countdownText!: Phaser.GameObjects.Text;
+  private readonly simulation = new GameSimulation();
+  private dynamic!: Phaser.GameObjects.Graphics;
+  private feedbacks: Feedback[] = [];
+  private selectedCardInstanceId: string | null = null;
+  private selectedSlotId: string | null = null;
+  private cardButtons: Phaser.GameObjects.Rectangle[] = [];
+  private cardGlyphs: Phaser.GameObjects.Graphics[] = [];
+  private cardTextBlocks: CardTextBlock[] = [];
+  private slotButtons: Phaser.GameObjects.Zone[] = [];
+  private wallButton!: Phaser.GameObjects.Zone;
   private pauseButton!: Phaser.GameObjects.Rectangle;
-  private pausePanel!: Phaser.GameObjects.Container;
-  private resultPanel!: Phaser.GameObjects.Container;
+  private pauseButtonLabel!: Phaser.GameObjects.Text;
+  private discardButton!: Phaser.GameObjects.Rectangle;
+  private discardButtonLabel!: Phaser.GameObjects.Text;
+  private destroyButton!: Phaser.GameObjects.Rectangle;
+  private destroyButtonLabel!: Phaser.GameObjects.Text;
+  private countdownText!: Phaser.GameObjects.Text;
+  private phaseText!: Phaser.GameObjects.Text;
+  private waveText!: Phaser.GameObjects.Text;
+  private timerText!: Phaser.GameObjects.Text;
+  private resourceText!: Phaser.GameObjects.Text;
+  private woodText!: Phaser.GameObjects.Text;
+  private wallText!: Phaser.GameObjects.Text;
+  private enemyText!: Phaser.GameObjects.Text;
+  private statusText!: Phaser.GameObjects.Text;
+  private messageText!: Phaser.GameObjects.Text;
+  private supplyText!: Phaser.GameObjects.Text;
+  private battleNoticeText!: Phaser.GameObjects.Text;
+  private enemyLabels = new Map<string, Phaser.GameObjects.Text>();
+  private slotLabels: Phaser.GameObjects.Text[] = [];
+  private tacticalPanel!: Phaser.GameObjects.Rectangle;
+  private tacticalTitle!: Phaser.GameObjects.Text;
+  private tacticalHint!: Phaser.GameObjects.Text;
+  private tacticalResumeButton!: Phaser.GameObjects.Rectangle;
+  private tacticalResumeLabel!: Phaser.GameObjects.Text;
+  private tacticalRestartButton!: Phaser.GameObjects.Rectangle;
+  private tacticalRestartLabel!: Phaser.GameObjects.Text;
+  private systemOverlay!: Phaser.GameObjects.Rectangle;
+  private systemTitle!: Phaser.GameObjects.Text;
+  private systemHint!: Phaser.GameObjects.Text;
+  private resultOverlay!: Phaser.GameObjects.Rectangle;
   private resultTitle!: Phaser.GameObjects.Text;
-  private detailPanel!: Phaser.GameObjects.Container;
-  private detailTitle!: Phaser.GameObjects.Text;
-  private detailBody!: Phaser.GameObjects.Text;
-  private detailUpgradeButton!: Phaser.GameObjects.Rectangle;
-  private detailUpgradeText!: Phaser.GameObjects.Text;
-  private upgradePanel!: Phaser.GameObjects.Container;
-  private upgradeChoiceButtons: Phaser.GameObjects.Rectangle[] = [];
-  private upgradeChoiceLabels: Phaser.GameObjects.Text[] = [];
-  private slotPanels = new Map<string, Phaser.GameObjects.Rectangle>();
-  private slotLabels = new Map<string, Phaser.GameObjects.Text>();
-  private towerVisuals = new Map<string, Phaser.GameObjects.Container>();
-  private cardViews = new Map<string, CardView>();
-  private enemyVisuals = new Map<string, Phaser.GameObjects.Container>();
-  private enemyHealthBars = new Map<string, EnemyHealthBars>();
-  private slotPositions = new Map<string, { x: number; y: number }>();
-  private selectedTowerId: string | null = "machine_gun";
-  private selectedBuildingSlotId: string | null = null;
-  private lastRenderedPhase: GamePhase | null = null;
+  private resultHint!: Phaser.GameObjects.Text;
+  private resultRestartButton!: Phaser.GameObjects.Rectangle;
+  private resultRestartLabel!: Phaser.GameObjects.Text;
+  private messageTimer = 0;
+  private battleNoticeTimer = 0;
+  private showcaseMode = false;
+  private showcaseCapture: "charge" | "inspire" | null = null;
+  private showcaseFreeze = false;
 
   public constructor() {
-    super("game");
+    super("GameScene");
+    const showcaseParam = typeof window !== "undefined" ? (new URLSearchParams(window.location.search).get("stage4-demo") ?? new URLSearchParams(window.location.search).get("stage3-demo")) : null;
+    this.showcaseMode = import.meta.env.DEV && (showcaseParam === "1" || showcaseParam === "charge" || showcaseParam === "inspire");
+    this.showcaseCapture = this.showcaseMode && (showcaseParam === "charge" || showcaseParam === "inspire") ? showcaseParam : null;
+    if (this.showcaseMode) {
+      const state = this.simulation.getState();
+      state.wallMaxHp = 1000000;
+      state.wallHp = state.wallMaxHp;
+    }
   }
 
   public create(): void {
-    this.simulation = new GameSimulation(starterCatalog, this.getDebugSeed());
-    this.cameras.main.setBackgroundColor("#17251d");
     this.createBackground();
-    this.createBattlefield();
+    this.dynamic = this.add.graphics().setDepth(5);
     this.createHud();
-    this.createCampGrid();
-    this.createResourceRail();
-    this.createCardHand();
-    this.createShopPanel();
-    this.createDetailPanel();
-    this.createUpgradePanel();
-    this.createPausePanel();
-    this.createResultPanel();
-    this.game.events.on(Phaser.Core.Events.HIDDEN, this.handleHidden, this);
+    this.createInteractionZones();
+    this.createCards();
+    this.createPausePanels();
+    this.bindLifecycle();
     this.renderState();
   }
 
-  public update(_time: number, deltaMilliseconds: number): void {
-    this.clock.advance(deltaMilliseconds / 1000, (stepSeconds) => {
-      this.simulation.tick(stepSeconds);
-    });
+  public update(_time: number, delta: number): void {
+    const step = Math.min(0.25, Math.max(0, delta / 1000));
+    if (step > 0) {
+      if (this.showcaseMode) this.simulation.getState().wallHp = this.simulation.getState().wallMaxHp;
+      if (!this.showcaseFreeze) this.simulation.tick(this.showcaseMode ? step * 30 : step);
+      if (this.showcaseMode && this.simulation.getState().phase === "RUNNING") this.simulation.getState().wallHp = this.simulation.getState().wallMaxHp;
+      this.processEvents(this.simulation.drainEvents());
+      this.feedbacks = this.feedbacks
+        .map((feedback) => ({ ...feedback, ttl: feedback.ttl - step }))
+        .filter((feedback) => feedback.ttl > 0);
+      this.messageTimer = Math.max(0, this.messageTimer - step);
+      this.battleNoticeTimer = Math.max(0, this.battleNoticeTimer - step);
+    }
     this.renderState();
   }
 
   private createBackground(): void {
-    const background = this.add.graphics().setDepth(0);
-    background.fillStyle(PALETTE.night, 1);
-    background.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
-    background.fillStyle(PALETTE.enemyZone, 1);
-    background.fillRect(ENEMY_ZONE.x, ENEMY_ZONE.y, ENEMY_ZONE.width, ENEMY_ZONE.height);
-    background.fillStyle(PALETTE.road, 1);
-    background.fillRect(292, 0, 136, 724);
-    background.fillStyle(PALETTE.roadLight, 1);
-    background.fillRect(310, 0, 100, 724);
-    background.fillStyle(PALETTE.vegetation, 1);
-    background.fillRect(24, 90, 42, 170);
-    background.fillRect(654, 170, 42, 190);
-    background.fillRect(24, 440, 54, 180);
-    background.fillRect(638, 510, 58, 160);
-    background.fillStyle(PALETTE.vegetationLight, 1);
-    background.fillRect(38, 120, 18, 80);
-    background.fillRect(666, 210, 16, 100);
-    background.fillRect(42, 480, 20, 96);
-    background.fillRect(652, 550, 20, 80);
-    background.lineStyle(3, PALETTE.roadLight, 0.45);
-    for (let y = 70; y < 700; y += 92) {
-      background.lineBetween(300, y, 420, y);
-    }
-    background.lineStyle(2, PALETTE.text, 0.18);
-    background.lineBetween(24, 180, 696, 180);
-    background.lineBetween(24, 450, 696, 450);
-    background.fillStyle(PALETTE.board, 1);
-    background.fillRect(GRID_ZONE.x, GRID_ZONE.y, GRID_ZONE.width, GRID_ZONE.height);
-    background.lineStyle(3, PALETTE.ink, 0.6);
-    background.strokeRect(GRID_ZONE.x, GRID_ZONE.y, GRID_ZONE.width, GRID_ZONE.height);
-    background.fillStyle(PALETTE.wall, 1);
-    background.fillRect(WALL_ZONE.x, WALL_ZONE.y + 12, WALL_ZONE.width, 48);
-    background.lineStyle(4, PALETTE.wallLight, 1);
-    background.strokeRect(WALL_ZONE.x, WALL_ZONE.y + 12, WALL_ZONE.width, 48);
-    background.fillStyle(PALETTE.wallLight, 1);
-    for (let x = 40; x < 690; x += 52) {
-      background.fillRect(x, WALL_ZONE.y + 19, 30, 8);
-      background.fillRect(x + 18, WALL_ZONE.y + 45, 30, 8);
-    }
-    background.fillStyle(PALETTE.wall, 1);
-    background.fillRect(RESOURCE_RAIL.x, RESOURCE_RAIL.y, RESOURCE_RAIL.width, RESOURCE_RAIL.height);
-    background.lineStyle(2, PALETTE.wallLight, 1);
-    background.strokeRect(RESOURCE_RAIL.x, RESOURCE_RAIL.y, RESOURCE_RAIL.width, RESOURCE_RAIL.height);
-    background.fillStyle(PALETTE.wall, 1);
-    background.fillRect(24, 1138, 672, 142);
-    background.lineStyle(3, PALETTE.wallLight, 1);
-    background.lineBetween(24, 1138, 696, 1138);
-  }
+    const graphics = this.add.graphics();
+    graphics.fillStyle(COLORS.bg, 1).fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 
-  private createBattlefield(): void {
-    this.add.text(38, 82, "敌潮入口", this.textStyle(20, "#fff3d2")).setDepth(4);
-    this.add.text(38, 654, "推进方向  ↓", this.textStyle(18, "#d8c59b")).setDepth(4);
-    this.countdownText = this.add.text(360, 370, "", {
-      ...this.textStyle(116, "#fff3d2"),
-      fontStyle: "bold",
-      align: "center",
-    }).setOrigin(0.5).setDepth(80);
-  }
+    // D3 keeps the threat zone bright and warm, framed by saturated green edges.
+    graphics.fillStyle(0x317a24, 1).fillRect(24, 0, 672, 708);
+    graphics.fillStyle(0x4b9a29, 1).fillRect(52, 0, 616, 708);
+    graphics.fillStyle(0xe0a51e, 1).fillRect(124, 0, 472, 708);
+    graphics.fillStyle(0xefbd37, 1).fillRect(235, 0, 250, 708);
+    graphics.fillStyle(0xf4d15b, 0.36).fillRect(284, 0, 152, 708);
+    graphics.fillStyle(0x2a6b24, 0.42).fillRect(52, 0, 22, 708);
+    graphics.fillStyle(0x2a6b24, 0.42).fillRect(646, 0, 22, 708);
+    graphics.fillStyle(0xffe28a, 0.16).fillCircle(178, 168, 88);
+    graphics.fillStyle(0xffe28a, 0.13).fillCircle(560, 290, 112);
+    graphics.fillStyle(0xd48b12, 0.16).fillCircle(158, 536, 120);
+    graphics.fillStyle(0xd48b12, 0.12).fillCircle(574, 612, 128);
+    graphics.lineStyle(2, 0xffe28a, 0.42).lineBetween(124, 92, 596, 92);
+    graphics.lineStyle(2, 0x9b6d13, 0.38).lineBetween(124, 604, 596, 604);
+    graphics.lineStyle(2, 0x2b681f, 0.72).strokeRect(24, 0, 672, 708);
 
+    graphics.fillStyle(0x715137, 1).fillRect(WALL_ZONE.x, WALL_ZONE.y, WALL_ZONE.width, WALL_ZONE.height);
+    graphics.lineStyle(2, 0xb9894b, 1).lineBetween(WALL_ZONE.x, 721, WALL_ZONE.x + WALL_ZONE.width, 721);
+    graphics.lineStyle(2, 0x3b281b, 0.9).lineBetween(WALL_ZONE.x, 756, WALL_ZONE.x + WALL_ZONE.width, 756);
+    graphics.lineStyle(2, COLORS.line, 0.9).strokeRect(WALL_ZONE.x, WALL_ZONE.y, WALL_ZONE.width, WALL_ZONE.height);
+
+    graphics.fillStyle(0x69783e, 1).fillRect(GRID_ZONE.x, GRID_ZONE.y, GRID_ZONE.width, GRID_ZONE.height);
+    graphics.lineStyle(2, 0xc6a442, 0.78).lineBetween(GRID_ZONE.x, 784, GRID_ZONE.x + GRID_ZONE.width, 784);
+    graphics.lineStyle(2, COLORS.line, 0.85).strokeRect(GRID_ZONE.x, GRID_ZONE.y, GRID_ZONE.width, GRID_ZONE.height);
+
+    graphics.fillStyle(0x5b4728, 1).fillRect(RESOURCE_RAIL.x, RESOURCE_RAIL.y, RESOURCE_RAIL.width, RESOURCE_RAIL.height);
+    graphics.lineStyle(2, 0xd3a345, 1).lineBetween(RESOURCE_RAIL.x + 8, RESOURCE_RAIL.y + 8, RESOURCE_RAIL.x + RESOURCE_RAIL.width - 8, RESOURCE_RAIL.y + 8);
+    graphics.lineStyle(2, COLORS.line, 0.85).strokeRect(RESOURCE_RAIL.x, RESOURCE_RAIL.y, RESOURCE_RAIL.width, RESOURCE_RAIL.height);
+
+    graphics.fillStyle(0x29442d, 1).fillRect(CARD_HAND.x, CARD_HAND.y, CARD_HAND.width, CARD_HAND.height);
+    graphics.lineStyle(2, COLORS.line, 0.85).strokeRect(CARD_HAND.x, CARD_HAND.y, CARD_HAND.width, CARD_HAND.height);
+
+    graphics.fillStyle(0x2a572e, 0.9).fillRect(24, 10, 672, 116);
+    graphics.lineStyle(1, 0xffdf78, 0.46).lineBetween(32, 132, 688, 132);
+
+    this.add.text(34, 154, "战场", this.textStyle(14, "#fff0b0")).setDepth(6);
+    this.add.text(34, 716, "城墙", this.textStyle(14, "#ffe1a2")).setDepth(6);
+    this.add.text(34, 1092, "补给", this.textStyle(13, "#ffe1a2")).setDepth(6);
+  }
   private createHud(): void {
-    const coinIcon = this.add.graphics().setDepth(50);
-    coinIcon.fillStyle(PALETTE.gold, 1);
-    coinIcon.fillCircle(42, 38, 15);
-    coinIcon.lineStyle(3, PALETTE.ink, 1);
-    coinIcon.strokeCircle(42, 38, 15);
-    this.add.text(37, 26, "¢", this.textStyle(20, "#1b241d")).setDepth(51);
-    this.coinText = this.add.text(66, 26, "", this.textStyle(22, "#fff3d2")).setDepth(50);
-    this.waveText = this.add.text(260, 22, "", { ...this.textStyle(22, "#fff3d2"), align: "center" }).setOrigin(0.5, 0).setDepth(50);
-    this.enemyCountText = this.add.text(260, 52, "", { ...this.textStyle(16, "#d8c59b"), align: "center" }).setOrigin(0.5, 0).setDepth(50);
-    this.pauseButton = this.add.rectangle(666, 38, 56, 56, PALETTE.wall, 0.95).setDepth(60);
-    this.pauseButton.setStrokeStyle(3, PALETTE.text, 1);
-    this.pauseButton.setInteractive({ useHandCursor: true });
-    this.pauseButton.on("pointerdown", () => this.togglePause());
-    this.add.text(666, 38, "Ⅱ", { ...this.textStyle(28, "#fff3d2"), align: "center" }).setOrigin(0.5).setDepth(61);
-  }
+    // Compact battle HUD: no title card, only wave, timer, threat, resources and pause.
+    this.phaseText = this.add.text(32, 18, "", this.textStyle(14, "#fff0b0")).setDepth(10);
+    this.waveText = this.add.text(32, 40, "", this.textStyle(22, "#fff3d2")).setDepth(10);
+    this.timerText = this.add.text(32, 72, "", this.textStyle(14, "#ffe08a")).setDepth(10);
 
-  private createCampGrid(): void {
+    this.resourceText = this.add.text(320, 24, "", this.textStyle(18, "#fff0a0")).setDepth(10);
+    this.enemyText = this.add.text(320, 56, "", this.textStyle(14, "#fff3d2")).setDepth(10);
+    this.wallText = this.add.text(360, 733, "", { ...this.textStyle(16, "#fff3d2"), align: "center", stroke: "#21170f", strokeThickness: 4 }).setOrigin(0.5).setDepth(10);
+    this.statusText = this.add.text(34, 750, "", this.textStyle(13, "#fff0b0")).setDepth(10);
+    this.messageText = this.add.text(34, 1055, "", this.textStyle(14, "#9ff0b2")).setDepth(10);
+    this.woodText = this.add.text(38, 1108, "", this.textStyle(16, "#fff3d2")).setDepth(10);
+    this.supplyText = this.add.text(174, 1108, "", this.textStyle(12, "#fff0c2")).setDepth(10);
+
+    this.battleNoticeText = this.add.text(360, 174, "", { ...this.textStyle(17, "#fff3d2"), align: "center", stroke: "#315c28", strokeThickness: 4 }).setOrigin(0.5).setDepth(12);
+
+    this.pauseButton = this.add.rectangle(646, 44, 104, 56, COLORS.blue, 1).setDepth(11).setInteractive({ useHandCursor: true });
+    this.pauseButtonLabel = this.add.text(646, 44, "暂停", this.textStyle(15, "#ffffff")).setOrigin(0.5).setDepth(12);
+    this.pauseButton.on("pointerdown", () => this.toggleTacticalPause());
+
+    this.discardButton = this.add.rectangle(548, 1108, 82, 56, COLORS.line, 1).setDepth(16).setInteractive({ useHandCursor: true });
+    this.discardButtonLabel = this.add.text(548, 1108, "弃牌", this.textStyle(13, "#ffffff")).setOrigin(0.5).setDepth(17);
+    this.discardButton.on("pointerdown", () => this.discardSelectedCard());
+
+    this.destroyButton = this.add.rectangle(644, 1108, 82, 56, COLORS.line, 1).setDepth(16).setInteractive({ useHandCursor: true });
+    this.destroyButtonLabel = this.add.text(644, 1108, "拆除", this.textStyle(13, "#ffffff")).setOrigin(0.5).setDepth(17);
+    this.destroyButton.on("pointerdown", () => this.destroySelectedBuilding());
+
+    this.countdownText = this.add.text(360, 410, "", {
+      ...this.textStyle(76, "#ffe08a"),
+      stroke: "#315c28",
+      strokeThickness: 8,
+    }).setOrigin(0.5).setDepth(20);
+  }
+  private createInteractionZones(): void {
     for (const layout of CAMP_SLOT_LAYOUTS) {
-      const centerX = layout.x + layout.width / 2;
-      const centerY = layout.y + layout.height / 2;
-      const slot = this.add.rectangle(centerX, centerY, layout.width, layout.height, PALETTE.slot, 1).setDepth(20);
-      slot.setStrokeStyle(3, PALETTE.ink, 0.8);
-      slot.setInteractive({ useHandCursor: true });
-      slot.on("pointerdown", () => this.handleSlotClick(layout.id));
-      this.slotPanels.set(layout.id, slot);
-      this.slotLabels.set(layout.id, this.add.text(centerX, centerY + 25, "", { ...this.textStyle(15, "#1b241d"), align: "center" }).setOrigin(0.5).setDepth(24));
-      this.slotPositions.set(layout.id, { x: centerX, y: centerY - 8 });
+      const zone = this.add.zone(layout.x + layout.width / 2, layout.y + layout.height / 2, layout.width, layout.height)
+        .setDepth(15)
+        .setInteractive({ useHandCursor: true });
+      zone.on("pointerdown", () => this.handleSlotClick(layout.id));
+      this.slotButtons.push(zone);
+      const label = this.add.text(layout.x + layout.width / 2, layout.y + layout.height / 2, "", {
+        ...this.textStyle(13, "#dbe6f4"),
+        align: "center",
+        wordWrap: { width: layout.width - 10 },
+      }).setOrigin(0.5).setDepth(16);
+      this.slotLabels.push(label);
+    }
+    this.wallButton = this.add.zone(WALL_ZONE.x + WALL_ZONE.width / 2, WALL_ZONE.y + WALL_ZONE.height / 2, WALL_ZONE.width, WALL_ZONE.height)
+      .setDepth(15)
+      .setInteractive({ useHandCursor: true });
+    this.wallButton.on("pointerdown", () => this.handleWallClick());
+  }
+
+  private createCards(): void {
+    for (const [index, layout] of CARD_LAYOUTS.entries()) {
+      const button = this.add.rectangle(layout.x + layout.width / 2, layout.y + layout.height / 2, layout.width, layout.height, COLORS.panel, 1)
+        .setDepth(15).setInteractive({ useHandCursor: true });
+      button.on("pointerdown", () => this.handleCardClick(index));
+      this.cardButtons.push(button);
+      this.cardTextBlocks.push({
+        title: this.add.text(layout.x + 10, layout.y + 12, "", this.textStyle(16, "#f3f5f9")).setDepth(16),
+        role: this.add.text(layout.x + 10, layout.y + 46, "", this.textStyle(11, "#fff0c2")).setDepth(16),
+        cost: this.add.text(layout.x + 10, layout.y + 80, "", this.textStyle(16, "#ffe08a")).setDepth(16),
+        hint: this.add.text(layout.x + 10, layout.y + 108, "", this.textStyle(11, "#ffffff")).setDepth(16),
+        category: this.add.text(layout.x + layout.width - 10, layout.y + 13, "", { ...this.textStyle(11, "#dbe6f4"), align: "right" }).setOrigin(1, 0).setDepth(16),
+      });
+      this.cardGlyphs.push(this.add.graphics().setDepth(15.5));
     }
   }
+  private createPausePanels(): void {
+    this.tacticalPanel = this.add.rectangle(360, 470, 560, 154, COLORS.panelDeep, 0.96).setDepth(40);
+    this.tacticalPanel.setStrokeStyle(2, COLORS.gold, 1);
+    this.tacticalTitle = this.add.text(360, 420, "战术暂停", this.textStyle(22, "#f6c453")).setOrigin(0.5).setDepth(41);
+    this.tacticalHint = this.add.text(360, 450, "世界冻结 · 可使用手牌规划基地", this.textStyle(15, "#dbe6f4")).setOrigin(0.5).setDepth(41);
+    this.tacticalResumeButton = this.add.rectangle(298, 502, 150, 38, COLORS.blue, 1).setDepth(41).setInteractive({ useHandCursor: true });
+    this.tacticalResumeLabel = this.add.text(298, 502, "继续战斗", this.textStyle(14, "#ffffff")).setOrigin(0.5).setDepth(42);
+    this.tacticalResumeButton.on("pointerdown", () => this.simulation.dispatch({ type: "resume" }));
+    this.tacticalRestartButton = this.add.rectangle(480, 502, 150, 38, COLORS.line, 1).setDepth(41).setInteractive({ useHandCursor: true });
+    this.tacticalRestartLabel = this.add.text(480, 502, "重新开始", this.textStyle(14, "#ffffff")).setOrigin(0.5).setDepth(42);
+    this.tacticalRestartButton.on("pointerdown", () => this.simulation.dispatch({ type: "restart" }));
 
-  private createResourceRail(): void {
-    const woodIcon = this.add.graphics().setDepth(50);
-    woodIcon.fillStyle(PALETTE.wood, 1);
-    woodIcon.fillRect(40, 1104, 24, 18);
-    woodIcon.lineStyle(3, PALETTE.ink, 1);
-    woodIcon.strokeRect(40, 1104, 24, 18);
-    woodIcon.lineBetween(46, 1104, 52, 1122);
-    woodIcon.lineBetween(54, 1104, 60, 1122);
-    this.woodText = this.add.text(76, 1099, "", this.textStyle(22, "#fff3d2")).setDepth(50);
-    this.statusText = this.add.text(360, 1114, "", { ...this.textStyle(15, "#d8c59b"), align: "center" }).setOrigin(0.5).setDepth(50);
-    this.wallText = this.add.text(360, 736, "", { ...this.textStyle(18, "#fff3d2"), align: "center" }).setOrigin(0.5).setDepth(50);
+    this.systemOverlay = this.add.rectangle(360, 640, 720, 1280, 0x07101d, 0.9).setDepth(80).setInteractive();
+    this.systemTitle = this.add.text(360, 560, "系统暂停", this.textStyle(34, "#ffffff")).setOrigin(0.5).setDepth(81);
+    this.systemHint = this.add.text(360, 612, "窗口不可见期间，战斗与输入均已冻结", this.textStyle(17, "#a7b6ca")).setOrigin(0.5).setDepth(81);
+
+    this.resultOverlay = this.add.rectangle(360, 548, 600, 286, 0x142218, 0.96).setDepth(90).setInteractive();
+    this.resultOverlay.setStrokeStyle(3, COLORS.gold, 0.9);
+    this.resultTitle = this.add.text(360, 486, "", this.textStyle(42, "#ffffff")).setOrigin(0.5).setDepth(91);
+    this.resultHint = this.add.text(360, 548, "", { ...this.textStyle(18, "#dbe6f4"), align: "center", wordWrap: { width: 500 } }).setOrigin(0.5).setDepth(91);
+    this.resultRestartButton = this.add.rectangle(360, 636, 180, 46, COLORS.blue, 1).setDepth(91).setInteractive({ useHandCursor: true });
+    this.resultRestartLabel = this.add.text(360, 636, "重新部署", this.textStyle(17, "#ffffff")).setOrigin(0.5).setDepth(92);
+    this.resultRestartButton.on("pointerdown", () => this.simulation.dispatch({ type: "restart" }));
   }
 
-  private createCardHand(): void {
-    starterCatalog.towers.forEach((tower, index) => {
-      const layout = CARD_LAYOUTS[index]!;
-      const card = this.add.rectangle(layout.x + layout.width / 2, layout.y + layout.height / 2, layout.width, layout.height, PALETTE.wall, 1).setDepth(30);
-      card.setStrokeStyle(3, PALETTE.secondary, 1);
-      card.setInteractive({ useHandCursor: true });
-      card.on("pointerdown", () => this.handleCardClick(tower.id));
-      const icon = this.createTowerIcon(layout.x + 42, layout.y + 48, tower.id, 0.72, 34);
-      const name = this.add.text(layout.x + 78, layout.y + 22, tower.displayName, { ...this.textStyle(18, "#fff3d2"), fontStyle: "bold" }).setDepth(35);
-      const role = this.add.text(layout.x + 78, layout.y + 50, tower.role, this.textStyle(13, "#d8c59b")).setDepth(35);
-      const cost = this.add.text(layout.x + 18, layout.y + 101, "木材 " + tower.buildCost, this.textStyle(16, "#f6c453")).setDepth(35);
-      this.cardViews.set(tower.id, { card, name, role, cost, icon });
-    });
+  private bindLifecycle(): void {
+    document.addEventListener("visibilitychange", () => document.hidden ? this.setSystemPause(true) : this.setSystemPause(false));
+    this.game.events.on(Phaser.Core.Events.BLUR, () => this.setSystemPause(true));
+    this.game.events.on(Phaser.Core.Events.FOCUS, () => this.setSystemPause(false));
   }
 
-  private createShopPanel(): void {
-    this.shopPanel = this.add.container(0, 0).setDepth(70);
-    const panel = this.add.rectangle(360, 244, 608, 254, PALETTE.ink, 0.94);
-    panel.setStrokeStyle(4, PALETTE.wallLight, 1);
-    panel.setInteractive();
-    this.shopPanel.add(panel);
-    this.shopTitle = this.add.text(360, 176, "", { ...this.textStyle(28, "#fff3d2"), align: "center", fontStyle: "bold" }).setOrigin(0.5);
-    this.shopPanel.add(this.shopTitle);
-    this.shopPanel.add(this.add.text(360, 218, "建塔、升级，确认后进入战场", { ...this.textStyle(17, "#d8c59b"), align: "center" }).setOrigin(0.5));
-    this.prepButton = this.add.rectangle(360, 315, 240, 62, PALETTE.road, 1);
-    this.prepButton.setStrokeStyle(3, PALETTE.text, 1);
-    this.prepButton.setInteractive({ useHandCursor: true });
-    this.prepButton.on("pointerdown", () => this.handleCompletePrep());
-    this.prepButtonText = this.add.text(360, 315, "完成整备", { ...this.textStyle(21, "#1b241d"), align: "center", fontStyle: "bold" }).setOrigin(0.5);
-    this.shopPanel.add(this.prepButton);
-    this.shopPanel.add(this.prepButtonText);
+  private setSystemPause(paused: boolean): void {
+    const phase = this.simulation.getState().phase;
+    if (paused) this.simulation.dispatch({ type: "system_pause" });
+    else if (phase === "SYSTEM_PAUSE") this.simulation.dispatch({ type: "system_resume" });
+    this.renderState();
   }
 
-  private createDetailPanel(): void {
-    this.detailPanel = this.add.container(0, 0).setDepth(75);
-    const panel = this.add.rectangle(360, 540, 530, 130, PALETTE.ink, 0.96);
-    panel.setStrokeStyle(3, PALETTE.gold, 1);
-    panel.setInteractive();
-    this.detailPanel.add(panel);
-    this.detailTitle = this.add.text(110, 495, "", { ...this.textStyle(21, "#fff3d2"), fontStyle: "bold" });
-    this.detailBody = this.add.text(110, 530, "", this.textStyle(15, "#d8c59b"));
-    this.detailUpgradeButton = this.add.rectangle(570, 550, 130, 54, PALETTE.road, 1);
-    this.detailUpgradeButton.setStrokeStyle(2, PALETTE.text, 1);
-    this.detailUpgradeButton.setInteractive({ useHandCursor: true });
-    this.detailUpgradeButton.on("pointerdown", () => this.handleUpgradeClick());
-    this.detailUpgradeText = this.add.text(570, 550, "升级", { ...this.textStyle(18, "#1b241d"), align: "center" }).setOrigin(0.5);
-    this.detailPanel.add([this.detailTitle, this.detailBody, this.detailUpgradeButton, this.detailUpgradeText]);
+  private toggleTacticalPause(): void {
+    const phase = this.simulation.getState().phase;
+    if (phase === "RUNNING") this.simulation.dispatch({ type: "pause" });
+    else if (phase === "TACTICAL_PAUSE") this.simulation.dispatch({ type: "resume" });
+    this.renderState();
   }
 
-  private createUpgradePanel(): void {
-    this.upgradePanel = this.add.container(0, 0).setDepth(100);
-    const backdrop = this.add.rectangle(360, 640, 720, 1280, PALETTE.ink, 0.78);
-    backdrop.setInteractive();
-    this.upgradePanel.add(backdrop);
-    const panel = this.add.rectangle(360, 370, 610, 440, PALETTE.wall, 1);
-    panel.setStrokeStyle(4, PALETTE.gold, 1);
-    this.upgradePanel.add(panel);
-    this.upgradePanel.add(this.add.text(360, 210, "选择一项强化", { ...this.textStyle(28, "#fff3d2"), align: "center", fontStyle: "bold" }).setOrigin(0.5));
-    this.upgradePanel.add(this.add.text(360, 250, "强化后继续整备下一波", { ...this.textStyle(16, "#d8c59b"), align: "center" }).setOrigin(0.5));
-    [330, 445, 560].forEach((y, index) => {
-      const button = this.add.rectangle(360, y, 520, 88, PALETTE.ink, 1);
-      button.setStrokeStyle(2, PALETTE.secondary, 1);
-      button.setInteractive({ useHandCursor: true });
-      button.on("pointerdown", () => this.chooseUpgrade(index));
-      const label = this.add.text(360, y, "", { ...this.textStyle(16, "#fff3d2"), align: "center", wordWrap: { width: 480 } }).setOrigin(0.5);
-      this.upgradePanel.add(button);
-      this.upgradePanel.add(label);
-      this.upgradeChoiceButtons.push(button);
-      this.upgradeChoiceLabels.push(label);
-    });
-  }
-
-  private createPausePanel(): void {
-    this.pausePanel = this.add.container(0, 0).setDepth(110);
-    const backdrop = this.add.rectangle(360, 640, 720, 1280, PALETTE.ink, 0.72);
-    backdrop.setInteractive();
-    this.pausePanel.add(backdrop);
-    const panel = this.add.rectangle(360, 500, 420, 270, PALETTE.wall, 1);
-    panel.setStrokeStyle(4, PALETTE.secondary, 1);
-    this.pausePanel.add(panel);
-    this.pausePanel.add(this.add.text(360, 420, "已暂停", { ...this.textStyle(30, "#fff3d2"), align: "center", fontStyle: "bold" }).setOrigin(0.5));
-    const resumeButton = this.add.rectangle(360, 500, 280, 58, PALETTE.road, 1);
-    resumeButton.setInteractive({ useHandCursor: true });
-    resumeButton.on("pointerdown", () => this.togglePause());
-    this.pausePanel.add(resumeButton);
-    this.pausePanel.add(this.add.text(360, 500, "继续", { ...this.textStyle(20, "#1b241d"), align: "center" }).setOrigin(0.5));
-    const restartButton = this.add.rectangle(360, 590, 280, 58, PALETTE.danger, 1);
-    restartButton.setInteractive({ useHandCursor: true });
-    restartButton.on("pointerdown", () => this.restartGame());
-    this.pausePanel.add(restartButton);
-    this.pausePanel.add(this.add.text(360, 590, "重新开始", { ...this.textStyle(20, "#fff3d2"), align: "center" }).setOrigin(0.5));
-  }
-
-  private createResultPanel(): void {
-    this.resultPanel = this.add.container(0, 0).setDepth(110);
-    const backdrop = this.add.rectangle(360, 640, 720, 1280, PALETTE.ink, 0.68);
-    backdrop.setInteractive();
-    this.resultPanel.add(backdrop);
-    const panel = this.add.rectangle(360, 500, 460, 250, PALETTE.wall, 1);
-    panel.setStrokeStyle(4, PALETTE.gold, 1);
-    this.resultPanel.add(panel);
-    this.resultTitle = this.add.text(360, 445, "", { ...this.textStyle(30, "#fff3d2"), align: "center", fontStyle: "bold" }).setOrigin(0.5);
-    this.resultPanel.add(this.resultTitle);
-    const restartButton = this.add.rectangle(360, 610, 260, 58, PALETTE.road, 1);
-    restartButton.setInteractive({ useHandCursor: true });
-    restartButton.on("pointerdown", () => this.restartGame());
-    this.resultPanel.add(restartButton);
-    this.resultPanel.add(this.add.text(360, 610, "再来一局", { ...this.textStyle(20, "#1b241d"), align: "center" }).setOrigin(0.5));
-  }
-
-  private handleCardClick(towerId: string): void {
-    const state = this.simulation.getState();
-    if (this.isModalOpen()) {
+  private handleCardClick(index: number): void {
+    if (!this.canReceiveGameplayInput()) return;
+    const card = this.simulation.getState().hand[index];
+    if (!card) return;
+    const definition = this.cardDefinition(card.definitionId);
+    if (this.selectedCardInstanceId === card.instanceId && definition.category !== "base") {
+      const result = this.simulation.dispatch({ type: "play_card", cardInstanceId: card.instanceId });
+      this.showMessage(result.accepted ? "卡牌效果已生效" : (result.reason ?? "暂不可使用"), result.accepted);
+      if (result.accepted) this.selectedCardInstanceId = null;
+      this.renderState();
       return;
     }
-    if (state.phase === "COUNTDOWN") {
-      this.showStatus("倒计时中，暂不能建造或升级");
-      return;
-    }
-    if (state.phase !== "SHOP" && state.phase !== "COMBAT") {
-      this.showStatus("当前阶段不能操作塔卡");
-      return;
-    }
-    const tower = starterCatalog.towers.find((candidate) => candidate.id === towerId);
-    if (!tower) {
-      return;
-    }
-    this.selectedTowerId = towerId;
-    this.selectedBuildingSlotId = null;
-    if (state.wood < tower.buildCost) {
-      this.showStatus("木材不足，还差 " + (tower.buildCost - state.wood).toFixed(0));
-    } else {
-      this.showStatus("已选择" + tower.displayName + "，点击空营地格建造");
-    }
+    this.selectedCardInstanceId = card.instanceId;
+    this.showMessage(definition.category === "base" ? "已选基地牌，点击对应空格或城墙" : "再次点击卡牌即可使用战术 / 永久效果", true);
+    this.renderState();
   }
 
   private handleSlotClick(slotId: string): void {
+    if (!this.canReceiveGameplayInput()) return;
     const state = this.simulation.getState();
-    if (this.isModalOpen()) {
+    if (!this.selectedCardInstanceId) {
+      const building = state.buildings.find((item) => item.slotId === slotId);
+      if (building && building.kind !== "main_city") {
+        this.selectedSlotId = slotId;
+        this.showMessage("已选中建筑，可点击拆除；主城不可拆除", true);
+        this.renderState();
+      } else if (building?.kind === "main_city") {
+        this.showMessage("主城固定在 r3-c3，不可替换、升级或拆除", false);
+      } else {
+        this.showMessage("先从下方手牌选择基地牌", false);
+      }
       return;
     }
-    const existingBuilding = state.buildings.find((building) => building.slotId === slotId);
-    if (existingBuilding) {
-      this.selectedBuildingSlotId = slotId;
-      this.selectedTowerId = null;
-      const tower = starterCatalog.towers.find((candidate) => candidate.id === existingBuilding.definitionId);
-      this.showStatus("已查看" + (tower?.displayName ?? "防御塔") + "，请点击明确的升级按钮");
+    const card = this.cardFromSelected();
+    if (!card) return;
+    const definition = this.cardDefinition(card.definitionId);
+    if (definition.category !== "base") {
+      this.showMessage("永久 / 战术牌请再次点击卡牌使用", false);
       return;
     }
-    if (state.phase === "COUNTDOWN") {
-      this.showStatus("倒计时中，暂不能建造或升级");
-      return;
-    }
-    if (state.phase !== "SHOP" && state.phase !== "COMBAT") {
-      this.showStatus("当前阶段不能建造防御塔");
-      return;
-    }
-    if (!this.selectedTowerId) {
-      this.showStatus("先选择一张塔卡");
-      return;
-    }
-    const result = this.simulation.dispatch({ type: "build_tower", definitionId: this.selectedTowerId, slotId });
-    const tower = starterCatalog.towers.find((candidate) => candidate.id === this.selectedTowerId);
-    this.showStatus(result.accepted ? (tower?.displayName ?? "防御塔") + "已建造" : result.reason ?? "无法建造");
+    const result = this.simulation.dispatch({ type: "play_card", cardInstanceId: card.instanceId, target: { kind: "slot", slotId } });
+    this.showMessage(result.accepted ? "基地卡牌已落地" : (result.reason ?? "目标不合法"), result.accepted);
     if (result.accepted) {
-      this.selectedTowerId = null;
+      this.selectedCardInstanceId = null;
+      this.selectedSlotId = slotId;
     }
+    this.renderState();
   }
 
-  private handleCompletePrep(): void {
-    const result = this.simulation.dispatch({ type: "complete_prep" });
-    this.showStatus(result.accepted ? "整备完成，倒计时开始" : result.reason ?? "无法完成整备");
-    if (result.accepted) {
-      this.selectedTowerId = null;
-      this.selectedBuildingSlotId = null;
-    }
-  }
-
-  private handleUpgradeClick(): void {
-    if (!this.selectedBuildingSlotId) {
+  private handleWallClick(): void {
+    if (!this.canReceiveGameplayInput()) return;
+    const card = this.cardFromSelected();
+    if (!card) {
+      this.showMessage("选择工程 / 修理牌后点击城墙", false);
       return;
     }
-    const result = this.simulation.dispatch({ type: "upgrade_tower", slotId: this.selectedBuildingSlotId });
-    this.showStatus(result.accepted ? "防御塔升级完成" : result.reason ?? "无法升级");
-  }
-
-  private chooseUpgrade(index: number): void {
-    const upgradeId = this.simulation.getState().pendingUpgradeChoices[index];
-    if (!upgradeId) {
+    const definition = this.cardDefinition(card.definitionId);
+    if (definition.category !== "base" || definition.id !== "repair_shop") {
+      this.showMessage("只有工程 / 修理牌可以作用于城墙", false);
       return;
     }
-    const result = this.simulation.dispatch({ type: "choose_upgrade", upgradeId });
-    this.showStatus(result.accepted ? "强化已生效" : result.reason ?? "无法选择强化");
+    const result = this.simulation.dispatch({ type: "play_card", cardInstanceId: card.instanceId, target: { kind: "wall" } });
+    this.showMessage(result.accepted ? "城墙工程效果已生效" : (result.reason ?? "暂不可修理"), result.accepted);
+    if (result.accepted) this.selectedCardInstanceId = null;
+    this.renderState();
   }
 
-  private togglePause(): void {
-    const state = this.simulation.getState();
-    const result = this.simulation.dispatch({ type: state.phase === "PAUSED" ? "resume" : "pause" });
-    if (!result.accepted) {
-      this.showStatus(result.reason ?? "当前不能暂停");
+  private discardSelectedCard(): void {
+    if (!this.canReceiveGameplayInput() || !this.selectedCardInstanceId) {
+      this.showMessage("先选择一张手牌", false);
+      return;
     }
+    const result = this.simulation.dispatch({ type: "discard_card", cardInstanceId: this.selectedCardInstanceId });
+    this.showMessage(result.accepted ? "手牌已弃置，无资源返还" : (result.reason ?? "暂不可弃牌"), result.accepted);
+    if (result.accepted) this.selectedCardInstanceId = null;
+    this.renderState();
   }
 
-  private restartGame(): void {
-    this.simulation.dispatch({ type: "restart" });
-    this.clock.reset();
-    this.selectedTowerId = "machine_gun";
-    this.selectedBuildingSlotId = null;
-    this.showStatus("新的营地已准备");
+  private destroySelectedBuilding(): void {
+    if (!this.canReceiveGameplayInput() || !this.selectedSlotId) {
+      this.showMessage("先点击一座非主城建筑", false);
+      return;
+    }
+    const result = this.simulation.dispatch({ type: "destroy_building", slotId: this.selectedSlotId });
+    this.showMessage(result.accepted ? "建筑已拆除，木材不返还" : (result.reason ?? "暂不可拆除"), result.accepted);
+    if (result.accepted) this.selectedSlotId = null;
+    this.renderState();
+  }
+
+  private cardFromSelected(): CardInstance | null {
+    if (!this.selectedCardInstanceId) return null;
+    return this.simulation.getState().hand.find((card) => card.instanceId === this.selectedCardInstanceId) ?? null;
+  }
+
+  private processEvents(events: GameEvent[]): void {
+    for (const event of events) {
+      if (event.type === "tower_attack") {
+        const building = this.simulation.getState().buildings.find((item) => item.id === event.buildingId);
+        if (building) this.feedbacks.push({ kind: "shot", x: this.towerX(building), y: this.towerY(building), targetX: this.enemyX(event.targetId), targetY: this.enemyY(event.targetPosition), ttl: 0.16 });
+      } else if (event.type === "enemy_hit") {
+        this.feedbacks.push({ kind: "hit", x: this.enemyX(event.enemyId), y: this.enemyY(event.position), ttl: 0.16 });
+      } else if (event.type === "enemy_defeated") {
+        this.feedbacks.push({ kind: "defeat", x: this.enemyX(event.enemyId), y: this.enemyY(event.position), ttl: 0.34 });
+      } else if (event.type === "enemy_charge_warning") {
+        this.showBattleNotice("⚠ 冲锋预警 · " + event.durationSeconds.toFixed(1) + " 秒", "#f06a6a", this.showcaseCapture === "charge" ? 60 : event.durationSeconds + 0.3);
+      } else if (event.type === "enemy_charge_started") {
+        this.showBattleNotice("冲锋开始 · 直线突进", "#f28b37", 1.2);
+      } else if (event.type === "enemy_charge_impact") {
+        this.showBattleNotice("冲锋撞墙 · 城墙承受冲击", "#f06a6a", 1.5);
+      } else if (event.type === "overlord_inspire") {
+        this.showBattleNotice("尸潮君王鼓舞 · 残余尸潮 +" + Math.round((event.multiplier - 1) * 100) + "%", "#f6c453", this.showcaseCapture === "inspire" ? 60 : event.durationSeconds);
+      } else if (event.type === "enemy_burned") {
+        this.showBattleNotice("燃烧区域 · " + event.damagePerSecond + "/秒 · " + event.durationSeconds + "秒", "#f28b37", 1.4);
+      } else if (event.type === "tower_special") {
+        this.showBattleNotice(event.effect + "命中", event.effect === "过载" ? "#d06cff" : "#f6c453", 0.8);
+      } else if (event.type === "global_freeze_armed") {
+        this.showBattleNotice("全场短冻已预置 · 等待下一只敌人", "#8ce8ff", 2.2);
+      } else if (event.type === "global_freeze_started") {
+        this.showBattleNotice("全场短冻启动 · 敌停塔不停", "#8ce8ff", event.durationSeconds);
+      } else if (event.type === "focus_fire_marked") {
+        this.showBattleNotice(event.nextSpawn ? "集中火力已预置 · 锁定下一只" : "集中火力锁定目标", "#ffb45c", 1.6);
+      } else if (event.type === "wave_started") {
+        this.showMessage("第 " + event.wave + " 波尸潮已接近", false);
+      }
+      const shouldCaptureCharge = this.showcaseCapture === "charge" && (event.type === "enemy_charge_warning" || event.type === "enemy_charge_started" || event.type === "enemy_charge_impact");
+      const shouldCaptureInspire = this.showcaseCapture === "inspire" && event.type === "overlord_inspire";
+      if ((shouldCaptureCharge || shouldCaptureInspire) && this.simulation.getState().phase === "RUNNING") this.showcaseFreeze = true;
+    }
   }
 
   private renderState(): void {
     const state = this.simulation.getState();
-    const previousPhase = this.lastRenderedPhase;
-    this.coinText.setText("金币 " + this.formatNumber(state.gold));
-    this.waveText.setText((state.wave === 0 ? "下一波" : "第 " + state.wave + " 波") + " / " + state.maxWave);
-    this.enemyCountText.setText("尸潮 " + state.enemies.length + " · 已歼 " + state.defeatedEnemies);
-    this.woodText.setText("木材 " + this.formatNumber(state.wood));
-    this.wallText.setText("城墙  " + this.formatNumber(state.wallHp) + " / " + this.formatNumber(state.wallMaxHp));
-    this.countdownText.setVisible(state.phase === "COUNTDOWN");
-    this.countdownText.setText(state.phase === "COUNTDOWN" ? String(Math.max(1, Math.ceil(state.countdownRemainingSeconds))) : "");
-    this.shopPanel.setVisible(state.phase === "SHOP" && state.pendingUpgradeChoices.length === 0);
-    this.upgradePanel.setVisible(state.phase === "SHOP" && state.pendingUpgradeChoices.length > 0);
-    this.pausePanel.setVisible(state.phase === "PAUSED");
-    this.resultPanel.setVisible(state.phase === "VICTORY" || state.phase === "DEFEAT");
-    this.detailPanel.setVisible(Boolean(this.selectedBuildingSlotId) && !this.isModalOpen());
-    this.prepButton.setVisible(state.phase === "SHOP" && state.pendingUpgradeChoices.length === 0);
-    this.prepButtonText.setVisible(state.phase === "SHOP" && state.pendingUpgradeChoices.length === 0);
-    this.shopTitle.setText(state.wave === 0 ? "营地整备" : "波间整备");
-    this.renderShopButton(state);
-    this.renderSlots(state);
-    this.renderCards(state);
-    this.renderDetail(state);
-    this.renderUpgradeChoices(state);
-    this.renderResult(state);
-    this.syncCombatEvents();
-    this.syncEnemyVisuals(state.enemies);
-    if (previousPhase !== state.phase && state.phase === "SHOP" && state.wave > 0 && state.pendingUpgradeChoices.length === 0) {
-      this.showStatus("尸潮已清除，开始下一轮整备");
+    if (import.meta.env.DEV) {
+      const debugState = {
+        phase: state.phase,
+        wave: state.wave,
+        effectiveBattleTimeSeconds: state.effectiveBattleTimeSeconds,
+        enemyCount: state.enemies.filter((enemy) => enemy.hp > 0).length,
+        notice: this.battleNoticeTimer > 0 ? this.battleNoticeText.text : "",
+        hand: state.hand.map((card) => card.definitionId),
+        nextSupplyCard: state.nextSupplyCard?.definitionId ?? null,
+        waitingCard: state.supplyWaitingCard?.definitionId ?? null,
+        wallHp: state.wallHp,
+        gold: state.gold,
+        wood: Math.floor(state.wood),
+      };
+      (window as Window & { __zcampDebug?: Record<string, unknown> }).__zcampDebug = debugState;
+      document.body.dataset.zcampPhase = state.phase;
+      document.body.dataset.zcampWave = String(state.wave);
+      document.body.dataset.zcampEnemyCount = String(debugState.enemyCount);
+      document.body.dataset.zcampNotice = debugState.notice;
+      document.body.dataset.zcampHand = debugState.hand.join(",");
+      document.body.dataset.zcampNextSupply = debugState.nextSupplyCard ?? "";
     }
-    this.lastRenderedPhase = state.phase;
-  }
 
-  private renderShopButton(state: Readonly<ReturnType<GameSimulation["getState"]>>): void {
-    const enabled = state.phase === "SHOP" && state.pendingUpgradeChoices.length === 0 && state.buildings.length > 0;
-    this.prepButton.setFillStyle(enabled ? PALETTE.road : 0x6b5b3d, 1);
-    this.prepButtonText.setColor(enabled ? "#1b241d" : "#d8c59b");
-  }
+    this.phaseText.setText(this.phaseLabel(state.phase));
+    this.waveText.setText(state.wave > 0 ? "波次  " + state.wave + " / " + state.maxWave : "首波");
+    const terminal = state.phase === "VICTORY" || state.phase === "DEFEAT";
+    this.timerText.setText(terminal ? "战斗结束" : state.phase === "OPENING_COUNTDOWN" || state.wave === 0 ? "首波准备中" : "下一波  " + this.formatSeconds(state.nextWaveTimeRemainingSeconds));
+    this.resourceText.setText("金币  " + state.gold);
+    this.woodText.setText("木材  " + Math.floor(state.wood));
 
-  private renderSlots(state: Readonly<ReturnType<GameSimulation["getState"]>>): void {
-    const buildingBySlot = new Map(state.buildings.map((building) => [building.slotId, building]));
-    const selectedTower = this.selectedTowerId ? starterCatalog.towers.find((tower) => tower.id === this.selectedTowerId) : undefined;
+    const shownWallMax = this.showcaseMode ? 100 : state.wallMaxHp;
+    const shownWallHp = this.showcaseMode ? 100 : Math.ceil(state.wallHp);
+    const wallRatio = state.wallMaxHp > 0 ? state.wallHp / state.wallMaxHp : 0;
+    const selectedWallCard = this.cardFromSelected();
+    const selectedWallDefinition = selectedWallCard ? this.cardDefinition(selectedWallCard.definitionId) : null;
+    const wallHint = selectedWallDefinition?.category === "base" ? " · " + this.wallTargetStatus(selectedWallDefinition, state).label.replace(String.fromCharCode(10), " ") : "";
+    this.wallText
+      .setText("城墙  " + shownWallHp + " / " + shownWallMax + (state.wallShieldHp > 0 ? "   护盾 " + Math.ceil(state.wallShieldHp) : "") + wallHint)
+      .setColor(wallRatio > 0.35 ? "#fff3d2" : "#f06a6a");
+
+    const activeEnemyCount = state.enemies.filter((enemy) => enemy.hp > 0).length;
+    this.enemyText.setText("威胁  " + activeEnemyCount + " · 击杀  " + state.defeatedEnemies);
+
+    this.statusText.setText(this.selectedCardInstanceId ? this.compactTargetStatus(state) : this.statusLabel(state));
+    // Selection and target feedback live on the card / grid; keep transient copy out of the battle field.
+    this.messageText.setVisible(false);
+    const canPause = state.phase === "RUNNING" || state.phase === "TACTICAL_PAUSE";
+    this.pauseButtonLabel.setText(state.phase === "TACTICAL_PAUSE" ? "继续" : "暂停");
+    this.pauseButton.setFillStyle(state.phase === "OPENING_COUNTDOWN" ? COLORS.line : COLORS.blue, 1);
+    this.pauseButton.input!.enabled = canPause;
+    this.pauseButton.setVisible(canPause);
+    this.pauseButtonLabel.setVisible(canPause);
+
+    this.countdownText.setVisible(state.phase === "OPENING_COUNTDOWN");
+    if (state.phase === "OPENING_COUNTDOWN") this.countdownText.setText(String(Math.ceil(state.openingCountdownRemainingSeconds)));
+
+    const waitingLabel = state.supplyWaitingCard ? this.cardNameForHud(state.supplyWaitingCard.definitionId) : "";
+    const nextLabel = state.nextSupplyCard ? this.cardNameForHud(state.nextSupplyCard.definitionId) : "等待手牌空间";
+    const supplyState = state.phase === "RUNNING" ? Math.max(0, state.supplyCycleSeconds - state.supplyProgressSeconds) : state.supplyCycleSeconds - state.supplyProgressSeconds;
+    this.supplyText.setText(terminal ? "补给停止 · 重新部署开始新局" : "下张  " + nextLabel + " · " + this.formatSeconds(supplyState) + (waitingLabel ? " · 待 " + waitingLabel : ""));
+
+    if (state.globalFreezeNextSpawn && this.battleNoticeTimer <= 0) this.showBattleNotice("全场短冻预置 · 下一只敌人启动", "#8ce8ff", 0.2);
+    if (state.globalFreezeRemainingSeconds > 0 && this.battleNoticeTimer <= 0) this.showBattleNotice("全场短冻 · 敌停塔不停", "#8ce8ff", 0.2);
+    this.battleNoticeText.setVisible(this.battleNoticeTimer > 0);
+
+    const canDiscard = Boolean(this.selectedCardInstanceId) && state.phase !== "SYSTEM_PAUSE" && state.phase !== "VICTORY" && state.phase !== "DEFEAT";
+    const canDestroy = Boolean(this.selectedSlotId) && !this.selectedCardInstanceId && state.phase !== "SYSTEM_PAUSE" && state.phase !== "VICTORY" && state.phase !== "DEFEAT";
+    this.discardButton.input!.enabled = canDiscard;
+    this.destroyButton.input!.enabled = canDestroy;
+    this.discardButton.setVisible(canDiscard);
+    this.discardButtonLabel.setVisible(canDiscard);
+    this.destroyButton.setVisible(canDestroy);
+    this.destroyButtonLabel.setVisible(canDestroy);
+
+    // Tactical pause is a planning ribbon, not a modal that hides the battlefield.
+    this.tacticalPanel.setVisible(false);
+    this.tacticalTitle.setVisible(false);
+    this.tacticalHint.setVisible(false);
+    this.tacticalResumeButton.setVisible(false);
+    this.tacticalResumeLabel.setVisible(false);
+    this.tacticalRestartButton.setVisible(false);
+    this.tacticalRestartLabel.setVisible(false);
+
+    this.systemOverlay.setVisible(state.phase === "SYSTEM_PAUSE");
+    this.systemTitle.setVisible(state.phase === "SYSTEM_PAUSE");
+    this.systemHint.setVisible(state.phase === "SYSTEM_PAUSE");
+
+    const resultVisible = state.phase === "VICTORY" || state.phase === "DEFEAT";
+    this.resultOverlay.setVisible(resultVisible);
+    this.resultTitle.setVisible(resultVisible);
+    this.resultHint.setVisible(resultVisible);
+    this.resultRestartButton.setVisible(resultVisible);
+    this.resultRestartLabel.setVisible(resultVisible);
+    if (resultVisible) {
+      const victory = state.phase === "VICTORY";
+      this.resultTitle.setText(victory ? "守住了" : "城墙失守").setColor(victory ? "#62d79b" : "#f06a6a");
+      this.resultHint.setText(victory ? "最终首领已击破 · 波次 " + state.wave + " · 击杀 " + state.defeatedEnemies : "防线在第 " + state.wave + " 波失守 · 重新部署");
+    }
+
+    this.renderDynamic(state);
+  }
+  private renderDynamic(state: GameState): void {
+    this.dynamic.clear();
+
+    const wallRatio = Math.max(0, Math.min(1, state.wallHp / state.wallMaxHp));
+    const wallColor = wallRatio > 0.35 ? 0x6d5235 : 0x71342d;
+    this.dynamic.fillStyle(wallColor, 1).fillRect(WALL_ZONE.x, WALL_ZONE.y, WALL_ZONE.width, WALL_ZONE.height);
+    this.dynamic.lineStyle(2, 0x9a7046, 1).lineBetween(WALL_ZONE.x, 721, WALL_ZONE.x + WALL_ZONE.width, 721);
+    this.dynamic.lineStyle(2, 0x2a1c14, 0.9).lineBetween(WALL_ZONE.x, 756, WALL_ZONE.x + WALL_ZONE.width, 756);
+    this.dynamic.fillStyle(0x271d15, 0.7).fillRect(44, 712, 632, 7);
+    this.dynamic.fillStyle(wallRatio > 0.35 ? COLORS.success : COLORS.danger, 1).fillRect(44, 712, 632 * wallRatio, 7);
+    if (state.wallShieldHp > 0) {
+      this.dynamic.lineStyle(3, COLORS.cyan, 0.95).strokeRect(30, 711, 660, 56);
+    }
+    if (wallRatio < 0.5) {
+      this.dynamic.lineStyle(3, COLORS.danger, 0.8).lineBetween(178, 731, 205, 752);
+      this.dynamic.lineBetween(205, 752, 226, 735);
+      this.dynamic.lineBetween(514, 730, 492, 752);
+      this.dynamic.lineBetween(492, 752, 470, 739);
+    }
+
+    const selectedDefinition = this.selectedCardInstanceId ? this.cardFromSelected() : null;
+    const selectedCardDefinition = selectedDefinition ? this.cardDefinition(selectedDefinition.definitionId) : null;
     for (const layout of CAMP_SLOT_LAYOUTS) {
-      const slot = this.slotPanels.get(layout.id);
-      const label = this.slotLabels.get(layout.id);
-      if (!slot || !label) {
-        continue;
+      const building = state.buildings.find((item) => item.slotId === layout.id);
+      const selected = this.selectedSlotId === layout.id;
+      const target = selectedCardDefinition?.category === "base" ? this.slotTargetStatus(building, selectedCardDefinition, state) : null;
+      const borderColor = target ? (target.legal ? COLORS.success : COLORS.danger) : selected ? COLORS.gold : COLORS.line;
+      const fillColor = target?.legal ? 0x29483b : target ? 0x493039 : building ? 0x263d32 : 0x263a2c;
+      this.dynamic.fillStyle(fillColor, 1).fillRect(layout.x, layout.y, layout.width, layout.height);
+      this.dynamic.lineStyle(target || selected ? 4 : 2, borderColor, 1).strokeRect(layout.x, layout.y, layout.width, layout.height);
+      if (building) this.drawBuilding(building, layout.x + layout.width / 2, layout.y + layout.height / 2 - (target ? 6 : 0));
+      else this.dynamic.fillStyle(target?.legal ? COLORS.success : 0x53644a, target ? 0.9 : 0.7).fillCircle(layout.x + layout.width / 2, layout.y + layout.height / 2, 17);
+
+      const label = this.slotLabels[CAMP_SLOT_LAYOUTS.indexOf(layout)];
+      if (label) {
+        const labelY = target ? layout.y + layout.height - 16 : building ? layout.y + layout.height - 10 : layout.y + layout.height / 2;
+        label.setPosition(layout.x + layout.width / 2, labelY);
+        label.setFontSize(target ? "10px" : building ? "11px" : "13px");
+        label.setText(target ? (building && target.label !== this.buildingLabel(building) ? this.buildingLabel(building) + String.fromCharCode(10) + target.label : target.label) : building ? this.buildingLabel(building) : "空格");
+        label.setColor(target?.legal ? "#fff3b0" : target ? "#ffb0a6" : building?.kind === "main_city" ? "#ffe08a" : building ? "#fff3d2" : "#d6d39c");
       }
-      const building = buildingBySlot.get(layout.id);
-      const legal = !building && Boolean(selectedTower) && (state.phase === "SHOP" || state.phase === "COMBAT") && state.wood >= (selectedTower?.buildCost ?? 0);
-      const target = this.selectedBuildingSlotId === layout.id;
-      slot.setFillStyle(building ? 0x5a7130 : legal ? 0xf6c453 : 0xb9a95f, 1);
-      slot.setStrokeStyle(3, target ? PALETTE.text : legal ? this.towerColor(selectedTower?.id ?? "machine_gun") : PALETTE.ink, 1);
-      if (building) {
-        const tower = starterCatalog.towers.find((candidate) => candidate.id === building.definitionId);
-        label.setText("R" + (layout.row + 1) + " C" + (layout.column + 1) + "\nLv." + building.level);
-        label.setColor("#fff3d2");
-        let visual = this.towerVisuals.get(layout.id);
-        if (!visual && tower) {
-          visual = this.createTowerIcon(layout.x + 64, layout.y + 40, tower.id, 0.72, 25);
-          this.towerVisuals.set(layout.id, visual);
-        }
-        visual?.setVisible(true);
+    }
+
+    const wallTarget = selectedCardDefinition?.category === "base" ? this.wallTargetStatus(selectedCardDefinition, state) : null;
+    this.dynamic.lineStyle(wallTarget ? 4 : 2, wallTarget ? (wallTarget.legal ? COLORS.success : COLORS.danger) : COLORS.line, 1)
+      .strokeRect(WALL_ZONE.x, WALL_ZONE.y, WALL_ZONE.width, WALL_ZONE.height);
+
+    if (state.globalFreezeRemainingSeconds > 0) {
+      this.dynamic.lineStyle(4, COLORS.cyan, 0.85).strokeRect(30, 198, 660, 430);
+    }
+
+    const visibleEnemyIds = new Set<string>();
+    for (const enemy of state.enemies) {
+      if (enemy.hp <= 0) continue;
+      visibleEnemyIds.add(enemy.id);
+      const x = this.enemyX(enemy.id);
+      const y = this.enemyY(enemy.position);
+      const definition = this.enemyDefinition(enemy.definitionId);
+      const color = this.enemyColor(definition);
+      const radius = definition.tier === "boss" ? 21 : definition.tier === "elite" ? 16 : enemy.definitionId === "tank" ? 14 : 11;
+
+      if (state.focusFireTargetId === enemy.id && state.focusFireRemainingSeconds > 0) {
+        this.dynamic.lineStyle(3, COLORS.gold, 1).strokeCircle(x, y, radius + 9);
+      }
+      if (enemy.chargeWarningRemainingSeconds > 0) {
+        this.dynamic.lineStyle(4, COLORS.danger, 0.95).strokeCircle(x, y, radius + 14);
+        this.dynamic.lineStyle(2, COLORS.danger, 0.45).strokeCircle(x, y, radius + 20);
+      }
+      if (state.overlordInspireRemainingSeconds > 0 && definition.tier !== "boss") {
+        this.dynamic.lineStyle(3, COLORS.orange, 0.7).strokeCircle(x, y, radius + 6);
+      }
+      if (enemy.burnRemainingSeconds > 0) {
+        const burnRadius = 22 + Math.min(22, enemy.burnRemainingSeconds * 3);
+        this.dynamic.lineStyle(2, COLORS.orange, 0.8).strokeCircle(x, y, burnRadius);
+      }
+
+      this.drawEnemy(definition, enemy, x, y, radius);
+      this.dynamic.fillStyle(0x263029, 1).fillRect(x - 20, y - 30, 40, 4);
+      this.dynamic.fillStyle(COLORS.success, 1).fillRect(x - 20, y - 30, 40 * Math.max(0, enemy.hp / enemy.maxHp), 4);
+
+      let label = this.enemyLabels.get(enemy.id);
+      if (!label) {
+        const labelSize = definition.tier === "boss" ? 15 : definition.tier === "elite" ? 13 : 11;
+        label = this.add.text(x, y - radius - 14, "", {
+          ...this.textStyle(labelSize, definition.tier === "boss" ? "#f06a6a" : definition.tier === "elite" ? "#f28b37" : "#e4efdc"),
+          align: "center",
+          stroke: "#19231b",
+          strokeThickness: definition.tier === "boss" ? 4 : 3,
+        }).setOrigin(0.5).setDepth(7);
+        this.enemyLabels.set(enemy.id, label);
+      }
+      const warningLabel = enemy.chargeWarningRemainingSeconds > 0 ? " · ⚠冲锋" : enemy.burnRemainingSeconds > 0 ? " · 燃烧" : "";
+      const showLabel = definition.tier !== "normal" || warningLabel.length > 0 || (state.focusFireTargetId === enemy.id && state.focusFireRemainingSeconds > 0);
+      label.setPosition(x, y - radius - 14).setText(definition.displayName + warningLabel).setVisible(showLabel);
+    }
+    for (const [enemyId, label] of this.enemyLabels) {
+      if (!visibleEnemyIds.has(enemyId)) label.setVisible(false);
+    }
+
+    for (const feedback of this.feedbacks) {
+      if (feedback.kind === "shot" && feedback.targetX !== undefined && feedback.targetY !== undefined) {
+        this.dynamic.lineStyle(4, COLORS.gold, Math.min(1, feedback.ttl * 7)).beginPath();
+        this.dynamic.moveTo(feedback.x, feedback.y);
+        this.dynamic.lineTo(feedback.targetX, feedback.targetY);
+        this.dynamic.strokePath();
+      } else if (feedback.kind === "hit") {
+        this.dynamic.lineStyle(3, 0xffffff, Math.min(1, feedback.ttl * 7)).strokeCircle(feedback.x, feedback.y, 22);
       } else {
-        label.setText("R" + (layout.row + 1) + " C" + (layout.column + 1) + "\n" + (legal ? "可建造" : "空位"));
-        label.setColor("#1b241d");
-        this.towerVisuals.get(layout.id)?.setVisible(false);
+        this.dynamic.lineStyle(4, COLORS.orange, Math.min(1, feedback.ttl * 4)).strokeCircle(feedback.x, feedback.y, 26);
+      }
+    }
+
+    for (const [index, button] of this.cardButtons.entries()) {
+      const card = state.hand[index];
+      const selected = card?.instanceId === this.selectedCardInstanceId;
+      button.setVisible(Boolean(card));
+      button.setFillStyle(selected ? 0x34583e : card ? COLORS.panel : COLORS.panelDeep, 1);
+      button.setStrokeStyle(selected ? 3 : 2, selected ? COLORS.gold : card ? COLORS.line : COLORS.line, 1);
+
+      const glyph = this.cardGlyphs[index]!;
+      glyph.clear().setVisible(Boolean(card));
+      if (card) this.drawCardGlyph(glyph, CARD_LAYOUTS[index]!.x + CARD_LAYOUTS[index]!.width - 26, CARD_LAYOUTS[index]!.y + 35, this.cardDefinition(card.definitionId));
+
+      const text = this.cardTextBlocks[index]!;
+      text.title.setVisible(Boolean(card));
+      text.role.setVisible(Boolean(card));
+      text.cost.setVisible(Boolean(card));
+      text.hint.setVisible(Boolean(card));
+      text.category.setVisible(Boolean(card));
+      if (card) {
+        const definition = this.cardDefinition(card.definitionId);
+        text.title.setText(definition.displayName).setColor(definition.accentColor);
+        text.role.setText(definition.role);
+        text.cost.setText((definition.category === "base" ? "木材 " : "金币 ") + definition.cost);
+        text.hint.setText(selected ? (definition.category === "base" ? "已选 · 点目标" : "已选 · 再点使用") : "");
+        text.category.setText(definition.category === "base" ? "基地" : definition.category === "permanent" ? "永久" : "战术");
+        text.category.setColor(definition.category === "base" ? "#c5d2bd" : definition.category === "permanent" ? "#f6c453" : "#8ce8ff");
       }
     }
   }
-
-  private renderCards(state: Readonly<ReturnType<GameSimulation["getState"]>>): void {
-    for (const tower of starterCatalog.towers) {
-      const view = this.cardViews.get(tower.id);
-      if (!view) {
-        continue;
+  private drawCardGlyph(glyph: Phaser.GameObjects.Graphics, x: number, y: number, definition: CardDefinition): void {
+    const color = this.hex(definition.accentColor);
+    glyph.lineStyle(2, 0x182219, 0.95);
+    if (definition.category === "base") {
+      glyph.fillStyle(color, 1).fillCircle(x, y, 12);
+      glyph.lineStyle(2, 0xf1f5df, 0.8).strokeCircle(x, y, 12);
+      if (definition.effect.kind === "base" && definition.effect.targetKind === "tower") {
+        glyph.lineStyle(4, 0xf1f5df, 1).lineBetween(x - 3, y + 2, x + 10, y - 6);
+        glyph.lineBetween(x - 3, y - 2, x + 10, y + 6);
+      } else {
+        glyph.fillTriangle(x, y - 8, x - 9, y + 8, x + 9, y + 8);
       }
-      const selected = this.selectedTowerId === tower.id;
-      const affordable = state.wood >= tower.buildCost;
-      view.card.setFillStyle(selected ? 0x6b4b21 : 0x3c2c20, 1);
-      view.card.setStrokeStyle(selected ? 5 : 3, selected ? this.towerColor(tower.id) : PALETTE.secondary, 1);
-      const cardIndex = starterCatalog.towers.findIndex((candidate) => candidate.id === tower.id);
-      const cardLayout = CARD_LAYOUTS[cardIndex]!;
-      const selectedOffset = selected ? -5 : 0;
-      view.card.setPosition(cardLayout.x + cardLayout.width / 2, cardLayout.y + cardLayout.height / 2 + selectedOffset);
-      view.name.setY(cardLayout.y + 22 + selectedOffset);
-      view.role.setY(cardLayout.y + 50 + selectedOffset);
-      view.cost.setY(cardLayout.y + 101 + selectedOffset);
-      view.icon.setY(cardLayout.y + 48 + selectedOffset);
-      view.name.setColor(affordable ? "#fff3d2" : "#9b8d75");
-      view.role.setColor(affordable ? "#d8c59b" : "#8d806c");
-      view.cost.setColor(affordable ? "#f6c453" : "#ef5a43");
-      view.icon.setAlpha(affordable ? 1 : 0.45);
-    }
-  }
-
-  private renderDetail(state: Readonly<ReturnType<GameSimulation["getState"]>>): void {
-    if (!this.selectedBuildingSlotId) {
       return;
     }
-    const building = state.buildings.find((candidate) => candidate.slotId === this.selectedBuildingSlotId);
+    if (definition.category === "permanent") {
+      glyph.fillStyle(color, 0.28).fillCircle(x, y, 13);
+      glyph.lineStyle(3, color, 1).strokeCircle(x, y, 11);
+      glyph.fillStyle(color, 1).fillCircle(x, y, 4);
+      return;
+    }
+    glyph.fillStyle(color, 0.9).fillTriangle(x, y - 12, x - 11, y + 9, x + 11, y + 9);
+    glyph.lineStyle(2, 0xf1f5df, 0.9).lineBetween(x - 3, y - 5, x + 4, y + 1);
+  }
+
+  private selectedTargetHint(state: GameState): string {
+    const card = this.cardFromSelected();
+    if (!card) return "";
+    const definition = this.cardDefinition(card.definitionId);
+    if (definition.category !== "base" || definition.effect.kind !== "base") return " · 已选 " + definition.displayName + "，再次点击使用";
+    return " · 目标提示：绿可用 / 红不可用";
+  }
+
+  private compactTargetStatus(state: GameState): string {
+    const phase = state.phase === "TACTICAL_PAUSE" ? "战术暂停 · 时间 / 战斗冻结" : state.phase === "RUNNING" ? "连续战斗" : "开局部署";
+    return phase + this.selectedTargetHint(state);
+  }
+
+  private slotTargetStatus(building: BuildingState | undefined, card: CardDefinition, state: GameState): { legal: boolean; label: string } {
+    if (card.effect.kind !== "base") return { legal: false, label: "不可用" };
     if (!building) {
-      this.selectedBuildingSlotId = null;
+      const affordable = state.wood >= card.cost;
+      return { legal: affordable, label: affordable ? "建造 木材 " + card.cost : "缺木材 " + card.cost };
+    }
+    if (building.kind === "main_city") return { legal: false, label: "主城 · 固定" };
+    if (building.kind !== card.effect.targetKind || building.definitionId !== card.effect.definitionId) {
+      return { legal: false, label: "异类 · 不可用" };
+    }
+    if (building.level >= 3) return { legal: false, label: "已达 Lv.3" };
+    const cost = this.upgradeCost(card.cost, building.level);
+    const affordable = state.wood >= cost;
+    return { legal: affordable, label: (affordable ? "升级 木材 " : "缺木材 ") + cost };
+  }
+  private wallTargetStatus(card: CardDefinition, state: GameState): { legal: boolean; label: string } {
+    if (card.effect.kind !== "base" || card.effect.targetKind !== "repair_shop") return { legal: false, label: "城墙\n当前牌不可用" };
+    const affordable = state.wood >= card.cost;
+    return { legal: affordable, label: affordable ? "城墙\n修理 / 护盾 " + card.cost : "城墙\n缺木材 " + card.cost };
+  }
+
+  private upgradeCost(baseCost: number, currentLevel: number): number {
+    return Math.round(baseCost * (currentLevel === 1 ? 1.5 : 2.25));
+  }
+
+  private drawEnemy(definition: EnemyDefinition, enemy: EnemyRuntimeState, x: number, y: number, radius: number): void {
+    const color = this.enemyColor(definition);
+    const dark = 0x263029;
+    const light = 0xffe7aa;
+    const legY = y + radius * 0.92;
+    const headY = y - radius * 0.52;
+
+    // Toy-like silhouettes: head, torso, short limbs and role-specific armor.
+    this.dynamic.fillStyle(0x513c1e, 0.34).fillRect(x - radius, y + radius * 0.82, radius * 2, 5);
+    if (definition.tier === "boss") {
+      this.dynamic.fillStyle(dark, 1).fillRect(x - 18, y - 1, 36, 28);
+      this.dynamic.fillStyle(color, 1).fillCircle(x, headY, 15);
+      this.dynamic.fillStyle(0x482c25, 1).fillTriangle(x, headY - 19, x - 13, headY - 5, x - 5, headY - 22);
+      this.dynamic.fillTriangle(x, headY - 20, x + 13, headY - 5, x + 5, headY - 22);
+      this.dynamic.fillStyle(light, 1).fillCircle(x - 5, headY - 1, 3);
+      this.dynamic.fillCircle(x + 5, headY - 1, 3);
+      this.dynamic.lineStyle(5, color, 1).lineBetween(x - 22, y + 2, x - 31, y + 18);
+      this.dynamic.lineBetween(x + 22, y + 2, x + 31, y + 18);
+      this.dynamic.lineStyle(5, dark, 1).lineBetween(x - 10, y + 26, x - 15, legY + 5);
+      this.dynamic.lineBetween(x + 10, y + 26, x + 15, legY + 5);
       return;
     }
-    const tower = starterCatalog.towers.find((candidate) => candidate.id === building.definitionId);
-    const upgradeCost = tower ? Math.round(tower.buildCost * (1 + building.level * 0.5)) : 0;
-    this.detailTitle.setText((tower?.displayName ?? "防御塔") + " · Lv." + building.level);
-    this.detailBody.setText((tower?.role ?? "防御") + "    下一次升级 " + upgradeCost + " 木材");
-    this.detailUpgradeText.setText(building.level >= 3 ? "已满级" : "升级");
-    this.detailUpgradeButton.setFillStyle(building.level >= 3 ? 0x6b5b3d : PALETTE.road, 1);
-  }
 
-  private renderUpgradeChoices(state: Readonly<ReturnType<GameSimulation["getState"]>>): void {
-    this.upgradeChoiceButtons.forEach((button, index) => {
-      const upgrade = starterCatalog.upgrades.find((candidate) => candidate.id === state.pendingUpgradeChoices[index]);
-      button.setVisible(Boolean(upgrade));
-      this.upgradeChoiceLabels[index]?.setVisible(Boolean(upgrade));
-      this.upgradeChoiceLabels[index]?.setText(upgrade ? upgrade.title + "\n" + upgrade.description : "");
-    });
-  }
+    if (definition.behavior === "tank") {
+      this.dynamic.fillStyle(color, 1).fillRect(x - 15, y - 3, 30, 25);
+      this.dynamic.lineStyle(3, light, 0.9).strokeRect(x - 15, y - 3, 30, 25);
+      this.dynamic.fillStyle(color, 1).fillCircle(x, headY, 11);
+      this.dynamic.fillStyle(0x5b4e82, 1).fillRect(x - 14, headY - 3, 28, 7);
+      this.dynamic.lineStyle(5, dark, 1).lineBetween(x - 15, y + 5, x - 25, y + 17);
+      this.dynamic.lineBetween(x + 15, y + 5, x + 25, y + 17);
+      this.dynamic.lineStyle(5, dark, 1).lineBetween(x - 8, y + 22, x - 12, legY + 3);
+      this.dynamic.lineBetween(x + 8, y + 22, x + 12, legY + 3);
+      return;
+    }
 
-  private renderResult(state: Readonly<ReturnType<GameSimulation["getState"]>>): void {
-    this.resultTitle.setText(state.phase === "VICTORY" ? "营地守住了" : "城墙失守");
+    const runner = definition.behavior === "runner";
+    const elite = definition.tier === "elite";
+    const bodyWidth = elite ? 17 : runner ? 11 : 14;
+    const bodyHeight = elite ? 23 : runner ? 20 : 18;
+    this.dynamic.fillStyle(color, 1).fillRect(x - bodyWidth, y - 1, bodyWidth * 2, bodyHeight);
+    if (elite) {
+      this.dynamic.lineStyle(3, light, 0.9).strokeRect(x - bodyWidth - 3, y - 5, bodyWidth * 2 + 6, bodyHeight + 7);
+      this.dynamic.fillStyle(0xd98b31, 1).fillTriangle(x - 19, y - 5, x - 8, y - 16, x - 5, y + 4);
+      this.dynamic.fillTriangle(x + 19, y - 5, x + 8, y - 16, x + 5, y + 4);
+    }
+    this.dynamic.fillStyle(color, 1).fillCircle(x + (runner ? 4 : 0), headY, runner ? 8 : 9);
+    this.dynamic.fillStyle(light, 1).fillCircle(x - 3 + (runner ? 4 : 0), headY - 1, 2);
+    this.dynamic.fillCircle(x + 3 + (runner ? 4 : 0), headY - 1, 2);
+    this.dynamic.lineStyle(3, dark, 1).lineBetween(x - bodyWidth, y + 3, x - bodyWidth - (runner ? 10 : 6), y + 16);
+    this.dynamic.lineBetween(x + bodyWidth, y + 3, x + bodyWidth + (runner ? 8 : 6), y + 14);
+    this.dynamic.lineStyle(4, dark, 1).lineBetween(x - 6, y + bodyHeight, x - 9, legY + 3);
+    this.dynamic.lineBetween(x + 6, y + bodyHeight, x + 9, legY + 3);
+    if (enemy.burnRemainingSeconds > 0) this.dynamic.lineStyle(2, 0xffd15c, 0.9).strokeCircle(x, y + 2, radius + 3);
   }
+  private drawBuilding(building: BuildingState, x: number, y: number): void {
+    if (building.kind === "main_city") {
+      this.dynamic.fillStyle(0x73552c, 1).fillRect(x - 34, y - 18, 68, 34);
+      this.dynamic.lineStyle(3, COLORS.gold, 1).strokeRect(x - 34, y - 18, 68, 34);
+      this.dynamic.fillStyle(0xf6c453, 1).fillTriangle(x, y - 43, x - 19, y - 17, x + 19, y - 17);
+      this.dynamic.fillStyle(0xffe59a, 1).fillCircle(x, y - 28, 4);
+      return;
+    }
 
-  private syncCombatEvents(): void {
-    for (const event of this.simulation.drainEvents()) {
-      if (event.type === "tower_attack") {
-        this.showTowerAttack(event);
-      } else if (event.type === "enemy_hit") {
-        this.showEnemyHit(event);
+    const color = building.kind === "tower"
+      ? this.hex(this.towerDefinition(building.definitionId).accentColor)
+      : building.kind === "lumberyard" ? 0x6fce8b : 0x8fb5ff;
+    this.dynamic.fillStyle(0x1b241d, 0.55).fillCircle(x, y + 18, 25);
+    this.dynamic.fillStyle(0x55636a, 1).fillCircle(x, y + 8, 23);
+    this.dynamic.lineStyle(3, 0x202a22, 1).strokeCircle(x, y + 8, 23);
+
+    if (building.kind === "tower") {
+      if (building.definitionId === "machine_gun") {
+        this.dynamic.fillStyle(color, 1).fillRect(x - 15, y - 12, 27, 23);
+        this.dynamic.lineStyle(5, color, 1).lineBetween(x + 3, y - 5, x + 27, y - 8);
+        this.dynamic.lineBetween(x + 3, y + 3, x + 27, y);
+        this.dynamic.fillStyle(0xfff3c1, 1).fillCircle(x + 28, y - 8, 3);
+      } else if (building.definitionId === "cannon") {
+        this.dynamic.fillStyle(color, 1).fillCircle(x, y + 7, 17);
+        this.dynamic.lineStyle(10, color, 1).lineBetween(x - 2, y - 5, x + 25, y - 18);
+        this.dynamic.fillStyle(0x202a22, 1).fillCircle(x + 27, y - 19, 7);
+      } else if (building.definitionId === "frost") {
+        this.dynamic.fillStyle(color, 1).fillTriangle(x, y - 31, x - 18, y + 2, x + 18, y + 2);
+        this.dynamic.lineStyle(2, 0xe6fbff, 0.9).lineBetween(x, y - 27, x, y - 3);
+        this.dynamic.lineBetween(x - 14, y - 2, x + 14, y - 2);
       } else {
-        this.showEnemyDefeated(event);
+        this.dynamic.fillStyle(color, 1).fillRect(x - 14, y - 11, 28, 24);
+        this.dynamic.lineStyle(3, 0xf2d8ff, 1).strokeCircle(x, y - 14, 12);
+        this.dynamic.lineStyle(3, color, 1).lineBetween(x - 23, y - 20, x - 10, y - 8);
+        this.dynamic.lineBetween(x + 23, y - 20, x + 10, y - 8);
       }
-    }
-  }
-
-  private showTowerAttack(event: Extract<GameEvent, { type: "tower_attack" }>): void {
-    const building = this.simulation.getState().buildings.find((candidate) => candidate.id === event.buildingId);
-    const start = building ? this.slotPositions.get(building.slotId) : undefined;
-    if (!start) {
-      return;
-    }
-    const end = this.enemyPosition(event.targetPosition, event.targetId);
-    const shotStart = { x: start.x, y: WALL_ZONE.y - 8 };
-    const graphics = this.add.graphics().setDepth(40);
-    const color = this.towerColor(event.towerDefinitionId);
-    graphics.lineStyle(event.towerDefinitionId === "machine_gun" ? 4 : 6, color, 0.95);
-    if (event.towerDefinitionId === "electric") {
-      graphics.beginPath();
-      graphics.moveTo(shotStart.x, shotStart.y);
-      graphics.lineTo(start.x + 40, start.y - 18);
-      graphics.lineTo(end.x - 34, end.y + 20);
-      graphics.lineTo(end.x, end.y);
-      graphics.strokePath();
-    } else if (event.towerDefinitionId === "frost") {
-      graphics.lineBetween(shotStart.x, shotStart.y, end.x, end.y - 12);
-      graphics.lineBetween(shotStart.x, shotStart.y, end.x - 24, end.y + 8);
-      graphics.lineBetween(shotStart.x, shotStart.y, end.x + 24, end.y + 8);
+    } else if (building.kind === "lumberyard") {
+      this.dynamic.fillStyle(color, 1).fillTriangle(x, y - 28, x - 25, y + 8, x + 25, y + 8);
+      this.dynamic.fillStyle(0x2a1d14, 1).fillRect(x - 9, y - 1, 18, 18);
+      this.dynamic.fillStyle(0xc9853d, 1).fillCircle(x - 23, y + 16, 7);
+      this.dynamic.fillStyle(0xdba25a, 1).fillCircle(x - 11, y + 19, 7);
     } else {
-      graphics.lineBetween(shotStart.x, shotStart.y, end.x, end.y);
-      if (event.towerDefinitionId === "cannon") {
-        graphics.strokeCircle(end.x, end.y, 22);
-      }
+      this.dynamic.fillStyle(color, 1).fillTriangle(x, y - 28, x - 25, y + 8, x + 25, y + 8);
+      this.dynamic.fillStyle(0x2a1d14, 1).fillRect(x - 9, y - 1, 18, 18);
+      this.dynamic.lineStyle(4, 0xf1f5df, 1).lineBetween(x + 13, y - 18, x + 13, y + 1);
+      this.dynamic.lineBetween(x + 4, y - 9, x + 22, y - 9);
     }
-    this.tweens.add({ targets: graphics, alpha: 0, duration: event.towerDefinitionId === "machine_gun" ? 360 : 320, onComplete: () => graphics.destroy() });
+    const maxLevel = building.kind === "tower" ? this.towerDefinition(building.definitionId).maxLevel : 3;
+    this.dynamic.fillStyle(0x202a22, 1).fillRect(x - 19, y + 25, 38, 4);
+    this.dynamic.fillStyle(COLORS.gold, 1).fillRect(x - 19, y + 25, 38 * Math.min(1, building.level / maxLevel), 4);
   }
 
-  private showEnemyHit(event: Extract<GameEvent, { type: "enemy_hit" }>): void {
-    const point = this.enemyPosition(event.position, event.enemyId);
-    const flash = this.add.graphics().setDepth(45);
-    flash.lineStyle(4, PALETTE.text, 1);
-    flash.lineBetween(point.x - 16, point.y - 16, point.x + 16, point.y + 16);
-    flash.lineBetween(point.x + 16, point.y - 16, point.x - 16, point.y + 16);
-    const damageText = this.add.text(point.x, point.y - 34, "-" + this.formatNumber(event.damage), this.textStyle(18, "#fff3d2")).setOrigin(0.5).setDepth(46);
-    this.tweens.add({ targets: [flash, damageText], y: "-=24", alpha: 0, duration: 520, onComplete: () => { flash.destroy(); damageText.destroy(); } });
+  private buildingLabel(building: BuildingState): string {
+    if (building.kind === "main_city") return "主城 · 固定";
+    if (building.kind === "lumberyard") return "伐木场 Lv." + building.level;
+    if (building.kind === "repair_shop") return "工程所 Lv." + building.level;
+    return this.towerDefinition(building.definitionId).displayName + " Lv." + building.level;
   }
 
-  private showEnemyDefeated(event: Extract<GameEvent, { type: "enemy_defeated" }>): void {
-    const point = this.enemyPosition(event.position, event.enemyId);
-    const burst = this.add.graphics().setDepth(45);
-    burst.lineStyle(5, PALETTE.danger, 1);
-    burst.strokeRect(point.x - 18, point.y - 18, 36, 36);
-    burst.lineBetween(point.x - 28, point.y, point.x + 28, point.y);
-    burst.lineBetween(point.x, point.y - 28, point.x, point.y + 28);
-    this.tweens.add({ targets: burst, scale: 1.5, alpha: 0, duration: 260, onComplete: () => burst.destroy() });
-  }
-
-  private syncEnemyVisuals(enemies: ReadonlyArray<{ id: string; definitionId: string; position: number; hp: number; maxHp: number }>): void {
-    const activeIds = new Set(enemies.map((enemy) => enemy.id));
-    for (const [id, visual] of this.enemyVisuals) {
-      if (!activeIds.has(id)) {
-        visual.destroy();
-        this.enemyVisuals.delete(id);
-        const bars = this.enemyHealthBars.get(id);
-        bars?.track.destroy();
-        bars?.fill.destroy();
-        this.enemyHealthBars.delete(id);
-      }
-    }
-    for (const enemy of enemies) {
-      let visual = this.enemyVisuals.get(enemy.id);
-      if (!visual) {
-        visual = this.createEnemyVisual(enemy.definitionId);
-        this.enemyVisuals.set(enemy.id, visual);
-        const track = this.add.rectangle(360, 90, 48, 6, PALETTE.ink, 0.95).setOrigin(0.5).setDepth(14);
-        const fill = this.add.rectangle(336, 90, 48, 6, 0x8fd14f, 1).setOrigin(0, 0.5).setDepth(15);
-        this.enemyHealthBars.set(enemy.id, { track, fill });
-      }
-      const point = this.enemyPosition(enemy.position, enemy.id);
-      visual.setPosition(point.x, point.y);
-      const definition = starterCatalog.enemies.find((candidate) => candidate.id === enemy.definitionId);
-      visual.setScale(definition?.tier === "boss" ? 1.35 : definition?.tier === "elite" ? 1.08 : 0.86);
-      const bars = this.enemyHealthBars.get(enemy.id);
-      bars?.track.setPosition(point.x, point.y - 32);
-      bars?.fill.setPosition(point.x - 24, point.y - 32);
-      bars?.fill.setDisplaySize(Math.max(2, 48 * Math.max(0, enemy.hp / enemy.maxHp)), 6);
-    }
-  }
-
-  private createEnemyVisual(enemyId: string): Phaser.GameObjects.Container {
-    const container = this.add.container(360, 120).setDepth(12);
-    const definition = starterCatalog.enemies.find((candidate) => candidate.id === enemyId);
-    const color = definition?.tier === "boss" ? 0x7c3f58 : definition?.tier === "elite" ? PALETTE.infected : PALETTE.zombie;
-    const body = this.add.graphics();
-    body.fillStyle(color, 1);
-    body.fillRect(-18, -4, 36, 34);
-    body.fillCircle(0, -22, 22);
-    body.lineStyle(4, PALETTE.ink, 1);
-    body.strokeRect(-18, -4, 36, 34);
-    body.strokeCircle(0, -22, 22);
-    body.lineStyle(5, color, 1);
-    body.lineBetween(-16, 4, -34, 18);
-    body.lineBetween(16, 4, 34, 18);
-    body.fillStyle(PALETTE.text, 1);
-    body.fillRect(-10, -26, 6, 7);
-    body.fillRect(5, -26, 6, 7);
-    body.fillStyle(PALETTE.ink, 1);
-    body.fillRect(-8, -24, 3, 4);
-    body.fillRect(7, -24, 3, 4);
-    container.add(body);
-    return container;
-  }
-
-  private createTowerIcon(x: number, y: number, towerId: string, scale: number, depth: number): Phaser.GameObjects.Container {
-    const container = this.add.container(x, y).setDepth(depth).setScale(scale);
-    const graphics = this.add.graphics();
-    const color = this.towerColor(towerId);
-    graphics.fillStyle(color, 1);
-    graphics.lineStyle(4, PALETTE.ink, 1);
-    if (towerId === "machine_gun") {
-      graphics.fillRect(-26, -8, 40, 20);
-      graphics.strokeRect(-26, -8, 40, 20);
-      graphics.fillRect(-4, -24, 16, 16);
-      graphics.strokeRect(-4, -24, 16, 16);
-      graphics.fillRect(10, -2, 32, 7);
-    } else if (towerId === "cannon") {
-      graphics.fillRect(-22, -5, 44, 22);
-      graphics.strokeRect(-22, -5, 44, 22);
-      graphics.fillRect(0, -28, 12, 25);
-      graphics.strokeRect(0, -28, 12, 25);
-      graphics.fillCircle(-12, 20, 8);
-      graphics.fillCircle(14, 20, 8);
-      graphics.lineStyle(3, PALETTE.ink, 1);
-      graphics.strokeCircle(-12, 20, 8);
-      graphics.strokeCircle(14, 20, 8);
-    } else if (towerId === "frost") {
-      graphics.fillTriangle(0, -32, -24, 18, 24, 18);
-      graphics.lineStyle(4, PALETTE.ink, 1);
-      graphics.strokeTriangle(0, -32, -24, 18, 24, 18);
-      graphics.lineBetween(0, -22, 0, 10);
-      graphics.lineBetween(-12, 2, 12, 2);
-    } else {
-      graphics.fillRect(-22, -5, 44, 22);
-      graphics.strokeRect(-22, -5, 44, 22);
-      graphics.lineStyle(5, PALETTE.text, 1);
-      graphics.beginPath();
-      graphics.moveTo(-10, -30);
-      graphics.lineTo(4, -12);
-      graphics.lineTo(-4, 2);
-      graphics.lineTo(14, 22);
-      graphics.strokePath();
-    }
-    container.add(graphics);
-    return container;
-  }
-
-  private enemyPosition(position: number, id: string): { x: number; y: number } {
-    const code = id.charCodeAt(id.length - 1) || 0;
-    return { x: 360 + (code % 5 - 2) * 18, y: 120 + position * 550 };
-  }
-
-  private towerColor(towerId: string): number {
-    const tower = starterCatalog.towers.find((candidate) => candidate.id === towerId);
-    if (tower) {
-      return Number.parseInt(tower.accentColor.slice(1), 16);
-    }
-    return PALETTE.gold;
-  }
-
-  private isModalOpen(): boolean {
+  private canReceiveGameplayInput(): boolean {
     const phase = this.simulation.getState().phase;
-    return phase === "PAUSED" || phase === "VICTORY" || phase === "DEFEAT" || this.simulation.getState().pendingUpgradeChoices.length > 0;
+    return phase === "OPENING_COUNTDOWN" || phase === "RUNNING" || phase === "TACTICAL_PAUSE";
   }
 
-  private showStatus(message: string): void {
-    this.statusText.setText(message);
+  private statusLabel(state: GameState): string {
+    if (state.phase === "OPENING_COUNTDOWN") return "5 秒部署 · 战斗尚未开始";
+    if (state.phase === "TACTICAL_PAUSE") return "暂停中 · 可规划基地与手牌";
+    if (state.phase === "SYSTEM_PAUSE") return "系统暂停 · 输入已锁定";
+    if (state.phase === "VICTORY") return "胜利 · 最终首领已击破";
+    if (state.phase === "DEFEAT") return "失守 · 城墙耐久归零";
+    return "尸潮持续推进";
   }
 
-  private formatNumber(value: number): string {
-    const rounded = Math.round(value * 10) / 10;
-    return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+  private phaseLabel(phase: GamePhase): string {
+    if (phase === "OPENING_COUNTDOWN") return "开局部署";
+    if (phase === "RUNNING") return "连续战斗";
+    if (phase === "TACTICAL_PAUSE") return "战术暂停";
+    if (phase === "SYSTEM_PAUSE") return "系统暂停";
+    return phase === "VICTORY" ? "胜利" : "失守";
   }
 
-  private handleHidden(): void {
-    const state = this.simulation.getState();
-    if (state.phase === "SHOP" || state.phase === "COUNTDOWN" || state.phase === "COMBAT") {
-      this.simulation.dispatch({ type: "pause" });
-      this.showStatus("页面隐藏，游戏已暂停");
-    }
+  private showMessage(message: string, positive: boolean): void {
+    this.messageText.setColor(positive ? "#62d79b" : "#f6c453");
+    this.messageText.setText(message);
+    this.messageTimer = 2.2;
   }
 
-  private textStyle(fontSize: number, color: string): Phaser.Types.GameObjects.Text.TextStyle {
-    return {
-      color,
-      fontFamily: "Noto Sans SC, Microsoft YaHei, system-ui, sans-serif",
-      fontSize: fontSize + "px",
-    };
+  private showBattleNotice(message: string, color: string, durationSeconds: number): void {
+    this.battleNoticeText.setText(message).setColor(color);
+    this.battleNoticeTimer = Math.max(this.battleNoticeTimer, durationSeconds);
   }
 
-  private getDebugSeed(): number {
-    const rawSeed = new URLSearchParams(window.location.search).get("seed");
-    const parsedSeed = rawSeed === null ? Number.NaN : Number(rawSeed);
-    return Number.isFinite(parsedSeed) ? parsedSeed : 0x5ec0de;
+  private cardNameForHud(definitionId: string): string {
+    const name = this.cardDefinition(definitionId).displayName;
+    if (name === "临时城墙护盾") return "城墙护盾";
+    return name.length > 7 ? name.slice(0, 7) + "…" : name;
+  }
+
+  private formatSeconds(seconds: number): string {
+    const safe = Math.max(0, Math.ceil(seconds));
+    const minutes = Math.floor(safe / 60);
+    return String(minutes).padStart(2, "0") + ":" + String(safe % 60).padStart(2, "0");
+  }
+
+  private enemyX(id: string): number {
+    let hash = 0;
+    for (const char of id) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+    const lane = hash % 7;
+    return ENEMY_ZONE.x + 64 + (lane / 6) * (ENEMY_ZONE.width - 128);
+  }
+
+  private enemyY(position: number): number {
+    const progress = Math.max(0, Math.min(1, position));
+    return ENEMY_ZONE.y + 184 + progress * (ENEMY_ZONE.height - 230);
+  }
+  private towerX(building: BuildingState): number {
+    return ENEMY_ZONE.x + 32 + building.lanePosition * (ENEMY_ZONE.width - 64);
+  }
+
+  private towerY(building: BuildingState): number {
+    const layout = CAMP_SLOT_LAYOUTS.find((item) => item.id === building.slotId);
+    return layout ? layout.y - 82 : 560;
+  }
+
+  private cardDefinition(id: string): CardDefinition {
+    return starterCatalog.cards.find((card) => card.id === id) ?? starterCatalog.cards[0]!;
+  }
+
+  private towerDefinition(id: string): TowerDefinition {
+    return starterCatalog.towers.find((tower) => tower.id === id) ?? starterCatalog.towers[0]!;
+  }
+
+  private enemyDefinition(id: string): EnemyDefinition {
+    return starterCatalog.enemies.find((enemy) => enemy.id === id) ?? starterCatalog.enemies[0]!;
+  }
+
+  private enemyColor(definition: EnemyDefinition): number {
+    if (definition.tier === "boss") return 0xc94d58;
+    if (definition.tier === "elite") return 0xe67f27;
+    if (definition.behavior === "runner") return 0x4eaa61;
+    if (definition.behavior === "tank") return 0x6959a8;
+    return 0x54758b;
+  }
+
+  private hex(value: string): number {
+    return Number.parseInt(value.replace("#", ""), 16);
+  }
+
+  private textStyle(size: number, color: string): Phaser.Types.GameObjects.Text.TextStyle {
+    return { fontFamily: "Noto Sans SC, Microsoft YaHei, system-ui, sans-serif", fontSize: String(size) + "px", color };
   }
 }

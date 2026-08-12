@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+  <title>ZCamp 方案 G：5×3 微缩营地</title>
+  <desc>将单通道战场、城墙和五列三行建筑区包装为一块完整的末日营地沙盘。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#06101a"/><stop offset="0.58" stop-color="#162b30"/><stop offset="1" stop-color="#24372f"/></linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#344a45"/><stop offset="1" stop-color="#253931"/></linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#2d3e42"/><stop offset="0.5" stop-color="#526164"/><stop offset="1" stop-color="#2d3e42"/></linearGradient>
+    <linearGradient id="dock" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1a2a36" stop-opacity="0.94"/><stop offset="1" stop-color="#09141e" stop-opacity="0.98"/></linearGradient>
+    <radialGradient id="warm"><stop stop-color="#ffd37c" stop-opacity="0.7"/><stop offset="1" stop-color="#ffb547" stop-opacity="0"/></radialGradient>
+    <filter id="shadow" x="-35%" y="-35%" width="170%" height="170%"><feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000" flood-opacity="0.5"/></filter>
+    <filter id="soft" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="17"/></filter>
+  </defs>
+  <rect width="720" height="1280" rx="34" fill="url(#sky)"/>
+
+  <!-- 极简 HUD -->
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif">
+    <g transform="translate(24 22)"><rect width="138" height="52" rx="18" fill="#0b1822"/><path d="M20 9l13 7-3 25-20 2-5-23z" fill="#c98a4a"/><text x="48" y="35" fill="#f3e9d7" font-size="22" font-weight="700">120</text></g>
+    <g transform="translate(172 22)"><rect width="116" height="52" rx="18" fill="#0b1822"/><circle cx="24" cy="26" r="14" fill="#ffd166"/><text x="48" y="35" fill="#f3e9d7" font-size="22" font-weight="700">35</text></g>
+    <text x="360" y="43" text-anchor="middle" fill="#a9b6b5" font-size="13">下一波尸潮</text><text x="360" y="70" text-anchor="middle" fill="#f3e9d7" font-size="22" font-weight="700">第 8 波</text>
+    <circle cx="670" cy="48" r="25" fill="#0b1822"/><path d="M662 36v24m15-24v24" stroke="#f3e9d7" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- 一体化沙盘外形 -->
+  <ellipse cx="360" cy="560" rx="320" ry="480" fill="#000" opacity="0.42" filter="url(#soft)"/>
+  <g filter="url(#shadow)">
+    <path d="M74 120L360 82 646 120 678 1030 360 1110 42 1030Z" fill="#101d19" stroke="#536962" stroke-width="4"/>
+    <path d="M96 132L360 98 624 132 646 1006 360 1070 74 1006Z" fill="url(#ground)"/>
+    <path d="M74 1006l286 64 286-64 32 24-318 80-318-80z" fill="#0b1512"/>
+  </g>
+
+  <!-- 上方单通道战区 -->
+  <path d="M286 110C273 210 294 290 278 375C266 438 278 500 272 550H448C442 500 454 438 442 375C426 290 447 210 434 110L360 100Z" fill="url(#road)"/>
+  <ellipse cx="360" cy="130" rx="108" ry="40" fill="#06101a" opacity="0.9"/>
+  <text x="360" y="136" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" fill="#9eaaa7" font-size="13">黑雾边界</text>
+  <g stroke="#d8dfc5" stroke-width="2">
+    <g transform="translate(335 190) scale(.75)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(387 224) scale(.7)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(350 284) scale(1.12)"><circle cy="-12" r="12" fill="#71864a"/><path d="M-20 31l6-36h29l8 36z" fill="#58663e"/><rect x="-16" y="-1" width="32" height="12" fill="#59676c"/></g>
+    <g transform="translate(396 350) scale(.74)"><circle cy="-12" r="11" fill="#a8d94c"/><path d="M-15 29l5-33h20l7 33z" fill="#71864a"/></g>
+    <g transform="translate(331 420) scale(.8)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+  </g>
+
+  <!-- 沙盘城墙 -->
+  <ellipse cx="360" cy="575" rx="255" ry="100" fill="url(#warm)"/>
+  <g filter="url(#shadow)">
+    <path d="M92 522H628V610H92Z" fill="#555249" stroke="#a98458" stroke-width="4"/>
+    <path d="M106 522v-28h52v28m24 0v-28h52v28m24 0v-28h52v28m100 0v-28h52v28m24 0v-28h52v28m24 0v-28h52v28" fill="#6a665c" stroke="#a98458" stroke-width="4"/>
+    <path d="M306 610v-58q54-52 108 0v58" fill="#3b403b" stroke="#bd9462" stroke-width="4"/>
+  </g>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif"><rect x="274" y="500" width="172" height="38" rx="15" fill="#0c1822" fill-opacity="0.9"/><path d="M292 519h94" stroke="#35444a" stroke-width="9" stroke-linecap="round"/><path d="M292 519h72" stroke="#e9564a" stroke-width="9" stroke-linecap="round"/><text x="424" y="524" text-anchor="end" fill="#f3e9d7" font-size="12">78%</text></g>
+
+  <!-- 5×3 微缩庭院 -->
+  <path d="M92 610H628V1005L360 1061 92 1005Z" fill="#644a31" stroke="#9e7952" stroke-width="4"/>
+  <text x="112" y="640" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" fill="#ffe0a3" font-size="13">营地建筑区 · 15 格</text>
+  <g stroke="#94704c" stroke-width="2">
+    <rect x="108" y="656" width="94" height="102" rx="13" fill="#40543f"/><rect x="210" y="656" width="94" height="102" rx="13" fill="#40543f"/><rect x="312" y="656" width="94" height="102" rx="13" fill="#513d2d"/><rect x="414" y="656" width="94" height="102" rx="13" fill="#40543f"/><rect x="516" y="656" width="94" height="102" rx="13" fill="#513d2d"/>
+    <rect x="108" y="768" width="94" height="102" rx="13" fill="#513d2d"/><rect x="210" y="768" width="94" height="102" rx="13" fill="#40543f"/><rect x="312" y="768" width="94" height="102" rx="13" fill="#513d2d"/><rect x="414" y="768" width="94" height="102" rx="13" fill="#513d2d"/><rect x="516" y="768" width="94" height="102" rx="13" fill="#40543f"/>
+    <rect x="108" y="880" width="94" height="102" rx="13" fill="#40543f"/><rect x="210" y="880" width="94" height="102" rx="13" fill="#513d2d"/><rect x="312" y="880" width="94" height="102" rx="13" fill="#40543f"/><rect x="414" y="880" width="94" height="102" rx="13" fill="#513d2d"/><rect x="516" y="880" width="94" height="102" rx="13" fill="#513d2d"/>
+  </g>
+  <g filter="url(#shadow)" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" text-anchor="middle">
+    <g transform="translate(155 708)"><rect x="-21" y="-12" width="42" height="28" rx="7" fill="#444d4b"/><path d="M-8-12l4-37h7l2 37m6 0 4-37h7l3 37" stroke="#f6c453" stroke-width="6"/><text y="37" fill="#f3e9d7" font-size="10">机枪</text></g>
+    <g transform="translate(257 708)"><rect x="-23" y="-14" width="46" height="30" rx="7" fill="#454a48"/><path d="M-9-12l5-40H8l6 40" fill="#ff7043"/><text y="37" fill="#f3e9d7" font-size="10">火炮</text></g>
+    <g transform="translate(461 708)"><rect x="-22" y="-13" width="44" height="29" rx="7" fill="#42464e"/><path d="M-15-38l11 20m19-20L4-18" stroke="#b28dff" stroke-width="6"/><text y="37" fill="#f3e9d7" font-size="10">电磁</text></g>
+    <g transform="translate(257 820)"><rect x="-22" y="-14" width="44" height="30" rx="7" fill="#3d4b46"/><path d="M0-51l18 28L0-6l-18-17z" fill="#55c7e8"/><text y="37" fill="#f3e9d7" font-size="10">冰冻</text></g>
+    <g transform="translate(563 820)"><path d="M-28 17v-35l28-23 28 23v35z" fill="#4d5c55" stroke="#ffb547" stroke-width="2"/><rect x="-8" y="-3" width="16" height="18" fill="#ffd37c"/><text y="37" fill="#f3e9d7" font-size="10">主城</text></g>
+    <g transform="translate(155 932)"><circle cy="-14" r="22" fill="#76a94e"/><circle cx="-16" cy="-5" r="16" fill="#86ba58"/><circle cx="16" cy="-5" r="16" fill="#7caf52"/><rect x="-7" y="4" width="14" height="21" fill="#9b683d"/><text y="37" fill="#f3e9d7" font-size="10">伐木</text></g>
+    <g transform="translate(359 932)"><path d="M-28 18v-35h56v35z" fill="#566159"/><path d="M-34-17L0-42 34-17" fill="#32443d"/><path d="M-15 0h30" stroke="#ffb547" stroke-width="5"/><text y="37" fill="#f3e9d7" font-size="10">修理</text></g>
+  </g>
+  <g stroke="#b68c61" stroke-width="3" stroke-linecap="round"><path d="M347 708h24M359 696v24"/><path d="M551 708h24M563 696v24"/><path d="M143 820h24M155 808v24"/><path d="M347 820h24M359 808v24"/><path d="M449 820h24M461 808v24"/><path d="M245 932h24M257 920v24"/><path d="M449 932h24M461 920v24"/><path d="M551 932h24M563 920v24"/></g>
+
+  <!-- 跨墙火力 -->
+  <path d="M155 676Q228 570 325 419" fill="none" stroke="#f6c453" stroke-width="3"/>
+  <path d="M461 676Q430 570 394 350" fill="none" stroke="#b28dff" stroke-width="4"/>
+
+  <!-- 底部克制操作层 -->
+  <g filter="url(#shadow)"><rect x="22" y="1100" width="676" height="154" rx="28" fill="url(#dock)" stroke="#5d7076" stroke-opacity="0.55"/></g>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" text-anchor="middle">
+    <g transform="translate(43 1118)"><circle cx="46" cy="44" r="39" fill="#172731" stroke="#f6c453" stroke-width="4"/><path d="M35 61l4-36h7l2 36m7 0 4-36h7l4 36" stroke="#f6c453" stroke-width="6"/><text x="46" y="105" fill="#f3e9d7" font-size="13">40</text></g>
+    <g transform="translate(145 1118)"><circle cx="46" cy="44" r="39" fill="#172731" stroke="#5c6f75" stroke-width="2"/><path d="M34 63l7-38h12l8 38" fill="#ff7043"/><text x="46" y="105" fill="#f3e9d7" font-size="13">65</text></g>
+    <g transform="translate(247 1118)"><circle cx="46" cy="44" r="39" fill="#172731" stroke="#5c6f75" stroke-width="2"/><path d="M46 17l19 29-19 21-19-21z" fill="#55c7e8"/><text x="46" y="105" fill="#f3e9d7" font-size="13">55</text></g>
+    <g transform="translate(349 1118)"><circle cx="46" cy="44" r="39" fill="#172731" stroke="#5c6f75" stroke-width="2"/><path d="M30 63l12-19-8-5 21-19-5 18 13 4-24 23" fill="#b28dff"/><text x="46" y="105" fill="#f3e9d7" font-size="13">85</text></g>
+    <rect x="458" y="1118" width="218" height="92" rx="24" fill="#ffb547"/>
+    <text x="567" y="1155" fill="#1a211e" font-size="15">防线就绪</text><text x="567" y="1186" fill="#1a211e" font-size="22" font-weight="800">开始第 8 波</text>
+    <text x="360" y="1238" fill="#a9b6b5" font-size="13">点击空格建造 · 点击建筑升级或拆除</text>
+  </g>
+</svg>

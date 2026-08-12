@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+  <title>ZCamp 方案 H：大尸潮战区与皇室战争式手牌</title>
+  <desc>720×1280 竖屏战场。约六成屏幕用于尸潮，城墙与 5×3 营地被压缩到底部，最下方为四张竖向建筑手牌，没有开始波次按钮。</desc>
+  <defs>
+    <linearGradient id="h-night" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#07131c"/><stop offset="0.55" stop-color="#17383a"/><stop offset="1" stop-color="#334737"/>
+    </linearGradient>
+    <linearGradient id="h-lane" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#173037"/><stop offset="1" stop-color="#465744"/>
+    </linearGradient>
+    <linearGradient id="h-yard" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#78583a"/><stop offset="1" stop-color="#4d3828"/>
+    </linearGradient>
+    <linearGradient id="h-dock" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#172b39"/><stop offset="1" stop-color="#07121b"/>
+    </linearGradient>
+    <linearGradient id="h-card" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#466879"/><stop offset="1" stop-color="#1c3544"/>
+    </linearGradient>
+    <radialGradient id="h-fire"><stop stop-color="#ffe2a0" stop-opacity=".9"/><stop offset="1" stop-color="#ff9d38" stop-opacity="0"/></radialGradient>
+    <filter id="h-shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#000" flood-opacity=".5"/></filter>
+    <g id="h-zombie">
+      <ellipse cy="25" rx="15" ry="7" fill="#071015" opacity=".35"/>
+      <circle cy="-12" r="11" fill="#7d9154"/><circle cx="-4" cy="-14" r="2" fill="#ffd970"/><circle cx="5" cy="-14" r="2" fill="#ffd970"/>
+      <path d="M-14 25l4-30h20l7 30z" fill="#596a45"/><path d="M-10 2l-14 12m34-12 16 9" stroke="#7d9154" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g id="h-brute">
+      <ellipse cy="43" rx="27" ry="10" fill="#071015" opacity=".4"/>
+      <circle cy="-19" r="16" fill="#75884d"/><path d="M-31 42l8-52h47l11 52z" fill="#4c5b3d"/>
+      <path d="M-23-4l-30 29m77-29 35 25" stroke="#75884d" stroke-width="12" stroke-linecap="round"/>
+      <circle cx="-6" cy="-22" r="3" fill="#ef574f"/><circle cx="7" cy="-22" r="3" fill="#ef574f"/>
+    </g>
+  </defs>
+
+  <rect width="720" height="1280" rx="32" fill="url(#h-night)"/>
+
+  <!-- 大面积敌军区：HUD 叠加在战场上，不单独占层 -->
+  <path d="M88 0h544l-58 266 42 214-91 288H195l-91-288 42-214z" fill="url(#h-lane)" opacity=".92"/>
+  <path d="M62 0l82 160-44 220 76 388H0V0zm596 0-82 160 44 220-76 388h176V0z" fill="#0a1e25" opacity=".72"/>
+  <g fill="#0e2c30" opacity=".75"><circle cx="47" cy="144" r="67"/><circle cx="670" cy="180" r="78"/><circle cx="30" cy="482" r="85"/><circle cx="691" cy="510" r="94"/></g>
+
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" filter="url(#h-shadow)">
+    <g transform="translate(22 22)"><rect width="152" height="54" rx="18" fill="#08151e" fill-opacity=".92"/><circle cx="27" cy="27" r="16" fill="#ffd166" stroke="#ffe6a3" stroke-width="3"/><text x="54" y="36" fill="#f3e9d7" font-size="23" font-weight="700">35</text></g>
+    <g transform="translate(230 22)"><rect width="260" height="54" rx="18" fill="#08151e" fill-opacity=".92"/><text x="130" y="25" text-anchor="middle" fill="#f3e9d7" font-size="18" font-weight="700">第 8 / 20 波</text><text x="130" y="44" text-anchor="middle" fill="#ef8b72" font-size="12">剩余 46 · 精英接近</text></g>
+    <circle cx="670" cy="49" r="27" fill="#08151e" fill-opacity=".92"/><path d="M662 36v26m16-26v26" stroke="#f3e9d7" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- 尸潮密度由上至下逐渐增加 -->
+  <g>
+    <use href="#h-zombie" transform="translate(180 128) scale(.72)"/><use href="#h-zombie" transform="translate(258 116) scale(.68)"/><use href="#h-zombie" transform="translate(340 145) scale(.7)"/><use href="#h-zombie" transform="translate(425 116) scale(.66)"/><use href="#h-zombie" transform="translate(520 142) scale(.72)"/>
+    <use href="#h-zombie" transform="translate(125 220) scale(.78)"/><use href="#h-zombie" transform="translate(220 205) scale(.75)"/><use href="#h-zombie" transform="translate(305 242) scale(.8)"/><use href="#h-zombie" transform="translate(392 208) scale(.74)"/><use href="#h-zombie" transform="translate(486 235) scale(.8)"/><use href="#h-zombie" transform="translate(580 212) scale(.75)"/>
+    <use href="#h-zombie" transform="translate(160 330) scale(.83)"/><use href="#h-zombie" transform="translate(246 304) scale(.82)"/><use href="#h-zombie" transform="translate(327 352) scale(.86)"/><use href="#h-zombie" transform="translate(420 317) scale(.8)"/><use href="#h-zombie" transform="translate(516 345) scale(.86)"/>
+    <use href="#h-brute" transform="translate(350 408) scale(.92)"/>
+    <use href="#h-zombie" transform="translate(114 447) scale(.9)"/><use href="#h-zombie" transform="translate(220 446) scale(.88)"/><use href="#h-zombie" transform="translate(482 450) scale(.9)"/><use href="#h-zombie" transform="translate(594 464) scale(.88)"/>
+    <use href="#h-zombie" transform="translate(165 560) scale(.94)"/><use href="#h-zombie" transform="translate(264 538) scale(.94)"/><use href="#h-zombie" transform="translate(350 574) scale(.98)"/><use href="#h-zombie" transform="translate(447 542) scale(.94)"/><use href="#h-zombie" transform="translate(548 575) scale(.96)"/>
+    <use href="#h-brute" transform="translate(226 650) scale(1.02)"/><use href="#h-zombie" transform="translate(348 668) scale(1.02)"/><use href="#h-brute" transform="translate(488 650) scale(1.05)"/>
+  </g>
+
+  <!-- 横向最后防线 -->
+  <g filter="url(#h-shadow)">
+    <rect x="18" y="744" width="684" height="78" rx="16" fill="#46372f" stroke="#a47a4f" stroke-width="4"/>
+    <path d="M25 760h670M25 787h670" stroke="#6d5543" stroke-width="16" stroke-dasharray="44 7"/>
+    <path d="M288 744v78h144v-78" fill="#58463a" stroke="#b48858" stroke-width="5"/>
+    <circle cx="72" cy="770" r="32" fill="url(#h-fire)"/><circle cx="648" cy="770" r="32" fill="url(#h-fire)"/>
+  </g>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif"><rect x="270" y="786" width="180" height="30" rx="13" fill="#07141c"/><path d="M288 801h112" stroke="#e9564a" stroke-width="8" stroke-linecap="round"/><path d="M288 801h144" stroke="#3e4b4f" stroke-width="8" stroke-linecap="round" opacity=".6"/><path d="M288 801h112" stroke="#e9564a" stroke-width="8" stroke-linecap="round"/><text x="420" y="805" text-anchor="end" fill="#f3e9d7" font-size="11">城墙 78%</text></g>
+
+  <!-- 被压缩但完整可见的 5×3 营地 -->
+  <rect x="18" y="822" width="684" height="244" rx="18" fill="url(#h-yard)" stroke="#9f764e" stroke-width="3"/>
+  <g stroke="#98734f" stroke-width="2">
+    <rect x="32" y="836" width="125" height="66" rx="10" fill="#40503c"/><rect x="165" y="836" width="125" height="66" rx="10" fill="#40503c"/><rect x="298" y="836" width="125" height="66" rx="10" fill="#4d3a2a"/><rect x="431" y="836" width="125" height="66" rx="10" fill="#40503c"/><rect x="564" y="836" width="125" height="66" rx="10" fill="#4d3a2a"/>
+    <rect x="32" y="910" width="125" height="66" rx="10" fill="#4d3a2a"/><rect x="165" y="910" width="125" height="66" rx="10" fill="#40503c"/><rect x="298" y="910" width="125" height="66" rx="10" fill="#4d3a2a"/><rect x="431" y="910" width="125" height="66" rx="10" fill="#4d3a2a"/><rect x="564" y="910" width="125" height="66" rx="10" fill="#40503c"/>
+    <rect x="32" y="984" width="125" height="66" rx="10" fill="#40503c"/><rect x="165" y="984" width="125" height="66" rx="10" fill="#4d3a2a"/><rect x="298" y="984" width="125" height="66" rx="10" fill="#40503c"/><rect x="431" y="984" width="125" height="66" rx="10" fill="#4d3a2a"/><rect x="564" y="984" width="125" height="66" rx="10" fill="#4d3a2a"/>
+  </g>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" text-anchor="middle" fill="#f3e9d7" font-size="10">
+    <g transform="translate(94 875)"><rect x="-25" y="-7" width="50" height="25" rx="7" fill="#444b49"/><path d="M-9-7l4-32h7l3 32m7 0 4-32h7l3 32" stroke="#f6c453" stroke-width="6"/><text y="31">机枪</text></g>
+    <g transform="translate(227 875)"><rect x="-27" y="-8" width="54" height="26" rx="7" fill="#474a47"/><path d="M-9-7l5-34H8l6 34" fill="#ff7043"/><text y="31">火炮</text></g>
+    <g transform="translate(493 875)"><rect x="-24" y="-7" width="48" height="25" rx="7" fill="#3f454b"/><path d="M-14-30l10 16m18-16L4-14" stroke="#b28dff" stroke-width="6"/><text y="31">电磁</text></g>
+    <g transform="translate(227 949)"><path d="M0-35l17 23L0 4l-17-16z" fill="#55c7e8"/><text y="25">冰冻</text></g>
+    <g transform="translate(626 949)"><path d="M-25 12v-28L0-37l25 21v28z" fill="#4d5c55" stroke="#ffb547" stroke-width="2"/><rect x="-7" y="-2" width="14" height="14" fill="#ffd37c"/><text y="26">主城</text></g>
+    <g transform="translate(94 1023)"><circle cy="-11" r="18" fill="#78a94d"/><circle cx="-15" cy="-5" r="13" fill="#87ba57"/><circle cx="15" cy="-5" r="13" fill="#7caf52"/><rect x="-5" y="3" width="10" height="15" fill="#9b683d"/><text y="25">伐木</text></g>
+  </g>
+  <g stroke-linecap="round"><path d="M94 850Q188 745 247 646" stroke="#f6c453" stroke-width="3"/><path d="M493 850Q510 756 489 650" stroke="#b28dff" stroke-width="4"/><circle cx="247" cy="646" r="8" fill="#ff7043"/><circle cx="489" cy="650" r="9" fill="#f2edff"/></g>
+
+  <!-- 皇室战争式四卡手牌：无开波按钮 -->
+  <rect x="0" y="1062" width="720" height="218" fill="url(#h-dock)"/>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif">
+    <path d="M82 1081h556" stroke="#425b67" stroke-width="10" stroke-linecap="round"/><path d="M82 1081h318" stroke="#c98a4a" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="60" cy="1081" r="19" fill="#c98a4a" stroke="#f0bd78" stroke-width="3"/><text x="60" y="1087" text-anchor="middle" fill="#17201c" font-size="15" font-weight="700">120</text>
+    <text x="658" y="1086" text-anchor="end" fill="#a9b6b5" font-size="12">建造资源</text>
+  </g>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" text-anchor="middle" filter="url(#h-shadow)">
+    <g transform="translate(74 1103)"><rect width="132" height="158" rx="17" fill="url(#h-card)" stroke="#f6c453" stroke-width="4"/><circle cx="20" cy="20" r="20" fill="#c98a4a" stroke="#ffe0a3" stroke-width="3"/><text x="20" y="27" fill="#17201c" font-size="18" font-weight="700">40</text><rect x="29" y="48" width="74" height="62" rx="13" fill="#263b43"/><path d="M48 98l5-42h8l3 42m13 0 5-42h8l4 42" stroke="#f6c453" stroke-width="8"/><text x="66" y="137" fill="#f3e9d7" font-size="16" font-weight="700">机枪塔</text></g>
+    <g transform="translate(218 1095)"><rect width="132" height="166" rx="17" fill="url(#h-card)" stroke="#ff7043" stroke-width="5"/><circle cx="20" cy="20" r="20" fill="#c98a4a" stroke="#ffe0a3" stroke-width="3"/><text x="20" y="27" fill="#17201c" font-size="18" font-weight="700">65</text><rect x="29" y="48" width="74" height="66" rx="13" fill="#263b43"/><rect x="44" y="88" width="48" height="23" rx="6" fill="#464a48"/><path d="M53 91l7-38h14l8 38" fill="#ff7043"/><text x="66" y="143" fill="#f3e9d7" font-size="16" font-weight="700">火炮塔</text></g>
+    <g transform="translate(362 1103)"><rect width="132" height="158" rx="17" fill="url(#h-card)" stroke="#55c7e8" stroke-width="4"/><circle cx="20" cy="20" r="20" fill="#c98a4a" stroke="#ffe0a3" stroke-width="3"/><text x="20" y="27" fill="#17201c" font-size="18" font-weight="700">55</text><rect x="29" y="48" width="74" height="62" rx="13" fill="#263b43"/><path d="M66 53l27 37-27 25-27-25z" fill="#55c7e8"/><text x="66" y="137" fill="#f3e9d7" font-size="16" font-weight="700">冰冻塔</text></g>
+    <g transform="translate(506 1103)"><rect width="132" height="158" rx="17" fill="url(#h-card)" stroke="#b28dff" stroke-width="4"/><circle cx="20" cy="20" r="20" fill="#c98a4a" stroke="#ffe0a3" stroke-width="3"/><text x="20" y="27" fill="#17201c" font-size="18" font-weight="700">85</text><rect x="29" y="48" width="74" height="62" rx="13" fill="#263b43"/><path d="M43 104l16-25-12-7 27-22-7 21 18 5-31 30" fill="#b28dff"/><text x="66" y="137" fill="#f3e9d7" font-size="16" font-weight="700">电磁塔</text></g>
+  </g>
+</svg>

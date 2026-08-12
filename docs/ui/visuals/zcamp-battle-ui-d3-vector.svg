@@ -1,0 +1,330 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280" role="img" aria-labelledby="title desc">
+  <title id="title">ZCamp 主战场 UI D3 矢量视觉稿</title>
+  <desc id="desc">敌军战场占画面主体，下方依次为薄城墙、严格五列三行防守格、木材资源轨道与四张建筑卡牌。</desc>
+  <metadata id="zcamp-layout-metadata"><![CDATA[
+    {"version":"1.0","canvas":{"width":720,"height":1280},"regions":{"enemy":{"y":0,"height":724},"wall":{"y":708,"height":64},"grid":{"y":772,"height":318,"columns":5,"rows":3,"cellWidth":128,"cellHeight":94,"gapX":8,"gapY":9},"resource":{"y":1090,"height":48},"hand":{"y":1138,"height":142}},"slotIdPattern":"slot-r{row}-c{column}","cardOrder":["machine-gun","cannon","ice","electric"]}
+  ]]></metadata>
+  <defs>
+    <filter id="soft-shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="5" stdDeviation="3" flood-color="#382515" flood-opacity=".38"/>
+    </filter>
+    <filter id="small-shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="3" stdDeviation="1.8" flood-color="#25170e" flood-opacity=".32"/>
+    </filter>
+    <linearGradient id="road-light" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#efbd37"/>
+      <stop offset="1" stop-color="#d89a20"/>
+    </linearGradient>
+    <linearGradient id="board-light" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8baa32"/>
+      <stop offset="1" stop-color="#6e8d25"/>
+    </linearGradient>
+
+    <symbol id="bush" viewBox="0 0 120 70">
+      <path d="M4 62c0-18 11-31 29-31 5-17 19-27 36-24 12 2 22 10 26 21 14-1 25 9 25 24 0 8-3 14-8 18H10C6 68 4 65 4 62z" fill="#317a24" stroke="#1e551d" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M17 49c6-10 16-14 28-11 7-15 28-18 39-5 9-4 20-1 25 7-15-2-24 4-29 13-19-8-35-3-47 7-7-3-12-7-16-11z" fill="#4b9a29"/>
+    </symbol>
+
+    <symbol id="zombie-mohawk" viewBox="0 0 72 86">
+      <ellipse cx="36" cy="80" rx="23" ry="6" fill="#73581e" opacity=".38"/>
+      <path d="M23 53l-5 22h13l5-17 5 17h14l-7-23z" fill="#293849" stroke="#251a13" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M17 45l10-9h20l10 9-6 22H23z" fill="#b8452b" stroke="#251a13" stroke-width="4"/>
+      <path d="M16 47l-7 12m48-12 6 12" stroke="#4f9f3b" stroke-width="9" stroke-linecap="round"/>
+      <circle cx="36" cy="28" r="20" fill="#69b64a" stroke="#251a13" stroke-width="4"/>
+      <path d="M25 12c2-9 12-12 20-7-2 3-4 6-4 10 7-7 14-5 17 0-7 1-12 5-16 10z" fill="#f06d27" stroke="#251a13" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="29" cy="26" r="6" fill="#fff8dc"/><circle cx="46" cy="26" r="6" fill="#fff8dc"/>
+      <circle cx="30" cy="27" r="2.5" fill="#20201b"/><circle cx="45" cy="27" r="2.5" fill="#20201b"/>
+      <path d="M28 39h18l-3 8H31z" fill="#43251d" stroke="#251a13" stroke-width="3"/>
+      <path d="M33 40v5m7-5v5" stroke="#efe7c8" stroke-width="2"/>
+    </symbol>
+
+    <symbol id="zombie-worker" viewBox="0 0 72 86">
+      <ellipse cx="36" cy="80" rx="23" ry="6" fill="#73581e" opacity=".38"/>
+      <path d="M22 54l-4 21h14l4-16 5 16h14l-6-22z" fill="#60452b" stroke="#251a13" stroke-width="4"/>
+      <path d="M17 46l10-10h20l10 10-7 21H23z" fill="#9b6d32" stroke="#251a13" stroke-width="4"/>
+      <path d="M16 47l-7 12m48-12 6 12" stroke="#4f9f3b" stroke-width="9" stroke-linecap="round"/>
+      <circle cx="36" cy="29" r="20" fill="#69b64a" stroke="#251a13" stroke-width="4"/>
+      <path d="M17 24c1-14 10-21 20-21 12 0 19 8 20 21z" fill="#655b45" stroke="#251a13" stroke-width="4"/>
+      <path d="M20 21h34" stroke="#b09254" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="29" cy="29" r="6" fill="#fff8dc"/><circle cx="46" cy="29" r="6" fill="#fff8dc"/>
+      <circle cx="30" cy="30" r="2.5" fill="#20201b"/><circle cx="45" cy="30" r="2.5" fill="#20201b"/>
+      <path d="M28 41h18l-3 8H31z" fill="#43251d" stroke="#251a13" stroke-width="3"/>
+    </symbol>
+
+    <symbol id="elite-zombie" viewBox="0 0 132 146">
+      <ellipse cx="66" cy="137" rx="47" ry="10" fill="#73581e" opacity=".42"/>
+      <path d="M40 101l-5 34h25l6-25 7 25h27l-9-37z" fill="#4d3626" stroke="#241912" stroke-width="6"/>
+      <path d="M27 65l24-17h36l24 17-10 48H36z" fill="#a84d27" stroke="#241912" stroke-width="6"/>
+      <path d="M23 68L9 91m100-23 14 23" stroke="#4d9f3b" stroke-width="18" stroke-linecap="round"/>
+      <path d="M22 62l19-18 12 15-17 25zM110 62L91 44 79 59l17 25z" fill="#d06b2c" stroke="#241912" stroke-width="6"/>
+      <circle cx="66" cy="38" r="31" fill="#64ad47" stroke="#241912" stroke-width="6"/>
+      <path d="M37 29l11-23h41l12 23-12 11H48z" fill="#6b7781" stroke="#241912" stroke-width="6"/>
+      <path d="M53 8h27l9 17H45z" fill="#9ba4ab"/>
+      <circle cx="55" cy="36" r="8" fill="#fff8dc"/><circle cx="79" cy="36" r="8" fill="#fff8dc"/>
+      <circle cx="56" cy="37" r="3" fill="#1f211b"/><circle cx="78" cy="37" r="3" fill="#1f211b"/>
+      <path d="M50 54h32l-5 14H56z" fill="#43251d" stroke="#241912" stroke-width="4"/>
+      <path d="M57 56v8m9-8v8m9-8v8" stroke="#efe7c8" stroke-width="3"/>
+      <path d="M4 88l20-15 14 18-19 16z" fill="#555e66" stroke="#241912" stroke-width="6"/>
+      <path d="M114 83l-15 12 16 18 14-15z" fill="#555e66" stroke="#241912" stroke-width="6"/>
+      <circle cx="66" cy="85" r="14" fill="#62351f" stroke="#241912" stroke-width="5"/>
+      <path d="M59 85h14m-7-7v14" stroke="#eadfc4" stroke-width="4"/>
+    </symbol>
+
+    <symbol id="tower-mg" viewBox="0 0 112 88">
+      <ellipse cx="56" cy="78" rx="41" ry="8" fill="#3b2a18" opacity=".35"/>
+      <path d="M18 56c0-18 17-30 38-30s38 12 38 30v19H18z" fill="#8c6335" stroke="#21160f" stroke-width="5"/>
+      <path d="M25 58c0-13 14-22 31-22s31 9 31 22v13H25z" fill="#68737a" stroke="#21160f" stroke-width="5"/>
+      <circle cx="51" cy="34" r="16" fill="#f1c58f" stroke="#21160f" stroke-width="4"/>
+      <path d="M34 31c2-15 30-20 36 0z" fill="#4c792e" stroke="#21160f" stroke-width="4"/>
+      <path d="M62 43h33v10H62z" fill="#313b40" stroke="#21160f" stroke-width="4"/>
+      <circle cx="98" cy="48" r="7" fill="#58656c" stroke="#21160f" stroke-width="4"/>
+    </symbol>
+
+    <symbol id="tower-cannon" viewBox="0 0 112 88">
+      <ellipse cx="56" cy="79" rx="41" ry="8" fill="#3b2a18" opacity=".35"/>
+      <ellipse cx="56" cy="68" rx="40" ry="15" fill="#9b602b" stroke="#21160f" stroke-width="5"/>
+      <rect x="19" y="57" width="74" height="18" rx="7" fill="#bc7a35" stroke="#21160f" stroke-width="5"/>
+      <path d="M41 20h47l14 17-10 17H40L27 39z" fill="#586168" stroke="#21160f" stroke-width="5"/>
+      <ellipse cx="39" cy="38" rx="15" ry="18" fill="#2c3236" stroke="#21160f" stroke-width="5"/>
+      <ellipse cx="39" cy="38" rx="7" ry="10" fill="#15191b"/>
+      <path d="M55 54v13" stroke="#21160f" stroke-width="7"/>
+    </symbol>
+
+    <symbol id="tower-ice" viewBox="0 0 112 88">
+      <ellipse cx="56" cy="79" rx="40" ry="8" fill="#3b2a18" opacity=".35"/>
+      <ellipse cx="56" cy="68" rx="39" ry="14" fill="#64717a" stroke="#21160f" stroke-width="5"/>
+      <rect x="24" y="51" width="64" height="19" rx="7" fill="#81909a" stroke="#21160f" stroke-width="5"/>
+      <path d="M56 8l23 29-8 24H40l-8-24z" fill="#35c7ee" stroke="#1e3440" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M56 10v47M34 37h44M56 10L34 37l22 20 22-20z" fill="none" stroke="#d8fbff" stroke-width="3"/>
+    </symbol>
+
+    <symbol id="tower-electric" viewBox="0 0 112 88">
+      <ellipse cx="56" cy="79" rx="40" ry="8" fill="#3b2a18" opacity=".35"/>
+      <ellipse cx="56" cy="68" rx="38" ry="14" fill="#555e65" stroke="#21160f" stroke-width="5"/>
+      <path d="M32 66h48L72 47H40z" fill="#6d3ab6" stroke="#21160f" stroke-width="5"/>
+      <path d="M39 47h34l-7-17H46z" fill="#8b4de1" stroke="#21160f" stroke-width="5"/>
+      <circle cx="56" cy="20" r="14" fill="#d06cff" stroke="#34184f" stroke-width="5"/>
+      <circle cx="52" cy="16" r="5" fill="#f9dfff"/>
+      <path d="M26 27l-10 11 12 5-10 12M86 27l10 11-12 5 10 12" fill="none" stroke="#ffd83d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="camp" viewBox="0 0 112 88">
+      <ellipse cx="56" cy="80" rx="43" ry="7" fill="#3b2a18" opacity=".35"/>
+      <path d="M17 71l17-45h44l18 45z" fill="#668c30" stroke="#21160f" stroke-width="5"/>
+      <path d="M34 26l22 46 22-46z" fill="#789f38"/>
+      <path d="M56 17v55" stroke="#21160f" stroke-width="4"/>
+      <path d="M56 18h30l-8 11 8 11H56z" fill="#e95833" stroke="#21160f" stroke-width="4"/>
+      <rect x="47" y="54" width="18" height="18" rx="2" fill="#3b2918"/>
+    </symbol>
+
+    <symbol id="support-tent" viewBox="0 0 112 88">
+      <ellipse cx="56" cy="80" rx="43" ry="7" fill="#3b2a18" opacity=".35"/>
+      <path d="M16 72l20-43h40l20 43z" fill="#568039" stroke="#21160f" stroke-width="5"/>
+      <path d="M36 29l20 43 20-43z" fill="#6d9950"/>
+      <rect x="47" y="54" width="18" height="18" fill="#35271a"/>
+      <rect x="73" y="34" width="22" height="22" rx="5" fill="#f1efe1" stroke="#21160f" stroke-width="4"/>
+      <path d="M84 39v12M78 45h12" stroke="#5e9d43" stroke-width="5"/>
+    </symbol>
+
+    <symbol id="lumber" viewBox="0 0 112 88">
+      <ellipse cx="56" cy="80" rx="43" ry="7" fill="#3b2a18" opacity=".35"/>
+      <path d="M19 42l37-25 37 25v32H19z" fill="#7a4d29" stroke="#21160f" stroke-width="5"/>
+      <path d="M13 43l43-30 43 30-8 9-35-24-35 24z" fill="#b75e2d" stroke="#21160f" stroke-width="5"/>
+      <rect x="43" y="52" width="22" height="22" fill="#37271a"/>
+      <g fill="#bb7736" stroke="#21160f" stroke-width="4">
+        <circle cx="20" cy="70" r="9"/><circle cx="35" cy="72" r="10"/><circle cx="28" cy="58" r="9"/>
+      </g>
+    </symbol>
+
+    <symbol id="wood-icon" viewBox="0 0 42 30">
+      <path d="M6 16l18-11 12 8-18 11z" fill="#b86c2e" stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M4 23l18-11 12 8-18 9z" fill="#d18a3a" stroke="#2b1a10" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="33" cy="20" r="5" fill="#e1a452" stroke="#2b1a10" stroke-width="2"/>
+    </symbol>
+
+    <rect id="grid-cell" width="128" height="94" rx="14" fill="#e6b84d" stroke="#536d21" stroke-width="4"/>
+  </defs>
+
+  <!-- 56% enemy territory -->
+  <rect id="region-enemy-field" data-region="enemy" width="720" height="724" fill="url(#road-light)"/>
+  <path d="M130 0h460c-30 126-23 236 14 348 35 106 24 236-36 376H146c-58-138-68-270-32-378C151 233 158 119 130 0z" fill="#edb531" opacity=".68"/>
+  <g opacity=".96">
+    <use href="#bush" x="-22" y="-10" width="170" height="100"/>
+    <use href="#bush" x="105" y="-22" width="155" height="92"/>
+    <use href="#bush" x="492" y="-16" width="160" height="94"/>
+    <use href="#bush" x="612" y="5" width="135" height="80"/>
+    <use href="#bush" x="-42" y="120" width="150" height="90"/>
+    <use href="#bush" x="630" y="128" width="135" height="82"/>
+    <use href="#bush" x="-48" y="292" width="150" height="88"/>
+    <use href="#bush" x="628" y="312" width="145" height="86"/>
+    <use href="#bush" x="-36" y="500" width="165" height="98"/>
+    <use href="#bush" x="610" y="510" width="168" height="100"/>
+    <use href="#bush" x="-12" y="646" width="178" height="100"/>
+    <use href="#bush" x="558" y="642" width="190" height="105"/>
+  </g>
+  <g fill="#8b7134" opacity=".62">
+    <ellipse cx="227" cy="83" rx="8" ry="5"/><ellipse cx="492" cy="107" rx="10" ry="6"/>
+    <ellipse cx="130" cy="213" rx="9" ry="6"/><ellipse cx="590" cy="262" rx="8" ry="5"/>
+    <ellipse cx="170" cy="454" rx="10" ry="6"/><ellipse cx="553" cy="518" rx="9" ry="5"/>
+    <ellipse cx="104" cy="620" rx="12" ry="7"/><ellipse cx="612" cy="653" rx="11" ry="6"/>
+  </g>
+
+  <!-- Compact HUD -->
+  <g id="hud" data-region="hud" filter="url(#small-shadow)" font-family="Arial, 'Microsoft YaHei', sans-serif" font-weight="700">
+    <g>
+      <rect x="16" y="16" width="143" height="55" rx="12" fill="#4b2e1b" stroke="#1f140e" stroke-width="5"/>
+      <path d="M22 24h129" stroke="#795130" stroke-width="4" stroke-linecap="round"/>
+      <path d="M47 33c-9-12-27-1-21 14 4 10 21 20 21 20s17-10 21-20c6-15-12-26-21-14z" fill="#f15a45" stroke="#21140e" stroke-width="4"/>
+      <circle cx="40" cy="39" r="4" fill="#ffd1b3"/>
+      <text x="83" y="57" font-size="31" fill="#fff6dc" stroke="#21140e" stroke-width="4" paint-order="stroke">35</text>
+    </g>
+    <g>
+      <rect x="16" y="78" width="143" height="55" rx="12" fill="#4b2e1b" stroke="#1f140e" stroke-width="5"/>
+      <path d="M22 86h129" stroke="#795130" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="47" cy="104" r="17" fill="#f2e6bd" stroke="#21140e" stroke-width="4"/>
+      <circle cx="41" cy="101" r="4" fill="#34271d"/><circle cx="53" cy="101" r="4" fill="#34271d"/>
+      <path d="M41 115h12M47 109v9" stroke="#34271d" stroke-width="3"/>
+      <text x="76" y="119" font-size="27" fill="#fff6dc" stroke="#21140e" stroke-width="4" paint-order="stroke">8/20</text>
+    </g>
+    <g>
+      <rect x="16" y="140" width="143" height="55" rx="12" fill="#4b2e1b" stroke="#1f140e" stroke-width="5"/>
+      <path d="M22 148h129" stroke="#795130" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="47" cy="168" r="17" fill="#ffc928" stroke="#6e3b13" stroke-width="4"/>
+      <circle cx="43" cy="163" r="5" fill="#fff09b"/>
+      <text x="83" y="181" font-size="31" fill="#fff6dc" stroke="#21140e" stroke-width="4" paint-order="stroke">46</text>
+    </g>
+    <g>
+      <rect x="651" y="18" width="53" height="55" rx="13" fill="#506276" stroke="#1c2732" stroke-width="5"/>
+      <path d="M659 26h37" stroke="#7f94aa" stroke-width="4" stroke-linecap="round"/>
+      <rect x="666" y="33" width="9" height="29" rx="3" fill="#f5f1dd" stroke="#1c2732" stroke-width="3"/>
+      <rect x="682" y="33" width="9" height="29" rx="3" fill="#f5f1dd" stroke="#1c2732" stroke-width="3"/>
+    </g>
+  </g>
+
+  <!-- Threat depth: small at top, large near wall -->
+  <g id="enemy-layer" data-region="enemy-units" filter="url(#small-shadow)">
+    <use href="#zombie-worker" x="255" y="28" width="43" height="52"/>
+    <use href="#zombie-mohawk" x="372" y="42" width="46" height="55"/>
+    <use href="#zombie-worker" x="515" y="67" width="44" height="53"/>
+    <use href="#zombie-mohawk" x="183" y="108" width="49" height="59"/>
+    <use href="#zombie-worker" x="296" y="110" width="48" height="58"/>
+    <use href="#zombie-worker" x="429" y="112" width="49" height="59"/>
+    <use href="#zombie-mohawk" x="551" y="135" width="51" height="61"/>
+    <use href="#zombie-worker" x="111" y="202" width="54" height="65"/>
+    <use href="#zombie-mohawk" x="224" y="205" width="56" height="67"/>
+    <use href="#elite-zombie" x="317" y="185" width="96" height="106"/>
+    <use href="#zombie-mohawk" x="488" y="217" width="57" height="68"/>
+    <use href="#zombie-worker" x="584" y="235" width="56" height="67"/>
+    <use href="#zombie-mohawk" x="128" y="331" width="62" height="74"/>
+    <use href="#zombie-worker" x="245" y="352" width="61" height="73"/>
+    <use href="#zombie-mohawk" x="394" y="348" width="62" height="74"/>
+    <use href="#zombie-worker" x="556" y="355" width="61" height="73"/>
+    <use href="#zombie-mohawk" x="74" y="480" width="67" height="80"/>
+    <use href="#zombie-worker" x="188" y="455" width="67" height="80"/>
+    <use href="#elite-zombie" x="272" y="438" width="120" height="133"/>
+    <use href="#zombie-mohawk" x="516" y="474" width="69" height="82"/>
+    <use href="#zombie-worker" x="609" y="505" width="65" height="78"/>
+    <use href="#zombie-worker" x="125" y="586" width="69" height="82"/>
+    <use href="#zombie-mohawk" x="420" y="590" width="70" height="84"/>
+  </g>
+
+  <!-- Simple combat marks -->
+  <g id="combat-vfx-layer" data-region="combat-vfx" filter="url(#small-shadow)">
+    <path d="M223 645l54-18-27 26 26 4-64 18 25-24z" fill="#42d3f3" stroke="#174c64" stroke-width="4"/>
+    <path d="M517 640l60 19-31 2 20 25-63-24 31-4z" fill="#42d3f3" stroke="#174c64" stroke-width="4"/>
+    <path d="M442 555c-24 4-38 23-29 44 7 17 31 22 48 11 22 18 57 4 53-23-3-22-24-32-44-25-7-7-17-10-28-7z" fill="#f07b28" stroke="#5d2d19" stroke-width="5"/>
+    <path d="M452 566l8 14 15-7-6 15 15 8-17 2 2 16-12-12-12 11 2-17-16-5 15-8z" fill="#ffd842"/>
+  </g>
+
+  <!-- Thin wall at 56% -->
+  <g id="wall" data-region="wall" filter="url(#small-shadow)">
+    <rect x="0" y="708" width="720" height="64" fill="#654025" stroke="#21160f" stroke-width="5"/>
+    <path d="M0 721h720M0 754h720" stroke="#9a6737" stroke-width="5"/>
+    <g fill="#788087" stroke="#24272a" stroke-width="4">
+      <path d="M0 703h34l7 15v54H0z"/><path d="M54 703h34l7 15v54H47v-54z"/>
+      <path d="M108 703h34l7 15v54h-48v-54z"/><path d="M162 703h34l7 15v54h-48v-54z"/>
+      <path d="M216 703h34l7 15v54h-48v-54z"/><path d="M270 703h34l7 15v54h-48v-54z"/>
+      <path d="M324 703h34l7 15v54h-48v-54z"/><path d="M378 703h34l7 15v54h-48v-54z"/>
+      <path d="M432 703h34l7 15v54h-48v-54z"/><path d="M486 703h34l7 15v54h-48v-54z"/>
+      <path d="M540 703h34l7 15v54h-48v-54z"/><path d="M594 703h34l7 15v54h-48v-54z"/>
+      <path d="M648 703h34l7 15v54h-48v-54z"/><path d="M696 703h24v69h-31v-54z"/>
+    </g>
+    <rect x="300" y="720" width="120" height="43" rx="10" fill="#4c2e1b" stroke="#20140e" stroke-width="5"/>
+    <path d="M309 728h102" stroke="#78502f" stroke-width="4" stroke-linecap="round"/>
+    <path d="M326 739c-6-8-17-1-12 9 3 6 12 12 12 12s10-6 13-12c4-10-7-17-13-9z" fill="#ef5a43" stroke="#21140e" stroke-width="3"/>
+    <text x="375" y="751" font-family="Arial, sans-serif" font-weight="700" font-size="25" fill="#fff4da" stroke="#21140e" stroke-width="4" paint-order="stroke" text-anchor="middle">78%</text>
+  </g>
+
+  <!-- Exact 5 x 3 compact defense board -->
+  <rect id="region-defense-grid" data-region="defense-grid" x="0" y="772" width="720" height="318" fill="url(#board-light)"/>
+  <path d="M0 784h720" stroke="#9fbe42" stroke-width="5"/>
+  <g id="grid-slots" data-region="grid-slots" filter="url(#small-shadow)">
+    <use id="slot-r1-c1" href="#grid-cell" x="24" y="780"/><use id="slot-r1-c2" href="#grid-cell" x="160" y="780"/><use id="slot-r1-c3" href="#grid-cell" x="296" y="780"/><use id="slot-r1-c4" href="#grid-cell" x="432" y="780"/><use id="slot-r1-c5" href="#grid-cell" x="568" y="780"/>
+    <use id="slot-r2-c1" href="#grid-cell" x="24" y="883"/><use id="slot-r2-c2" href="#grid-cell" x="160" y="883"/><use id="slot-r2-c3" href="#grid-cell" x="296" y="883"/><use id="slot-r2-c4" href="#grid-cell" x="432" y="883"/><use id="slot-r2-c5" href="#grid-cell" x="568" y="883"/>
+    <use id="slot-r3-c1" href="#grid-cell" x="24" y="986"/><use id="slot-r3-c2" href="#grid-cell" x="160" y="986"/><use id="slot-r3-c3" href="#grid-cell" x="296" y="986"/><use id="slot-r3-c4" href="#grid-cell" x="432" y="986"/><use id="slot-r3-c5" href="#grid-cell" x="568" y="986"/>
+  </g>
+
+  <!-- Seven buildings, centered on cell anchors -->
+  <g id="building-layer" data-region="buildings" filter="url(#small-shadow)">
+    <use id="building-machine-gun" data-slot="slot-r1-c1" href="#tower-mg" x="32" y="785" width="112" height="88"/>
+    <use id="building-cannon" data-slot="slot-r1-c2" href="#tower-cannon" x="168" y="785" width="112" height="88"/>
+    <use id="building-ice" data-slot="slot-r1-c3" href="#tower-ice" x="304" y="785" width="112" height="88"/>
+    <use id="building-electric" data-slot="slot-r1-c4" href="#tower-electric" x="440" y="785" width="112" height="88"/>
+    <use id="building-camp" data-slot="slot-r1-c5" href="#camp" x="576" y="785" width="112" height="88"/>
+    <use id="building-support" data-slot="slot-r2-c5" href="#support-tent" x="576" y="888" width="112" height="88"/>
+    <use id="building-lumber" data-slot="slot-r3-c1" href="#lumber" x="32" y="991" width="112" height="88"/>
+  </g>
+
+  <!-- Wood resource separator -->
+  <g id="resource-rail" data-region="resource-rail" data-resource="wood">
+    <rect x="0" y="1090" width="720" height="48" fill="#4a2e1c" stroke="#20140e" stroke-width="5"/>
+    <path d="M12 1098h696" stroke="#765031" stroke-width="4" stroke-linecap="round"/>
+    <rect x="16" y="1096" width="138" height="36" rx="10" fill="#684226" stroke="#20140e" stroke-width="4"/>
+    <use href="#wood-icon" x="25" y="1099" width="42" height="30"/>
+    <text x="79" y="1124" font-family="Arial, sans-serif" font-weight="700" font-size="28" fill="#fff3d2" stroke="#20140e" stroke-width="4" paint-order="stroke">120</text>
+    <rect x="171" y="1104" width="525" height="18" rx="9" fill="#2c2118"/>
+    <rect x="171" y="1104" width="365" height="18" rx="9" fill="#c9853d"/>
+    <path d="M178 1109h348" stroke="#e6ae64" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Four-card hand -->
+  <rect id="region-card-hand" data-region="card-hand" x="0" y="1138" width="720" height="142" fill="#2f231b"/>
+  <g id="card-hand" data-region="cards" filter="url(#small-shadow)">
+    <g id="card-machine-gun" data-card="machine-gun" data-cost="40">
+      <rect x="24" y="1146" width="160" height="126" rx="16" fill="#52616a" stroke="#d8c59b" stroke-width="5"/>
+      <rect x="31" y="1153" width="146" height="112" rx="11" fill="#6f8f3d"/>
+      <use href="#tower-mg" x="49" y="1167" width="110" height="86"/>
+      <rect x="33" y="1154" width="67" height="31" rx="12" fill="#4b2e1b" stroke="#20140e" stroke-width="4"/>
+      <use href="#wood-icon" x="38" y="1157" width="30" height="22"/>
+      <text x="72" y="1178" font-family="Arial, sans-serif" font-weight="700" font-size="21" fill="#fff3d2" stroke="#20140e" stroke-width="3" paint-order="stroke">40</text>
+      <text x="104" y="1259" text-anchor="middle" font-family="'Microsoft YaHei', Arial, sans-serif" font-weight="700" font-size="18" fill="#fff7df" stroke="#26311b" stroke-width="4" paint-order="stroke">机枪塔</text>
+    </g>
+    <g id="card-cannon" data-card="cannon" data-cost="65">
+      <rect x="194" y="1146" width="160" height="126" rx="16" fill="#52616a" stroke="#d8c59b" stroke-width="5"/>
+      <rect x="201" y="1153" width="146" height="112" rx="11" fill="#4d87a6"/>
+      <use href="#tower-cannon" x="219" y="1167" width="110" height="86"/>
+      <rect x="203" y="1154" width="67" height="31" rx="12" fill="#4b2e1b" stroke="#20140e" stroke-width="4"/>
+      <use href="#wood-icon" x="208" y="1157" width="30" height="22"/>
+      <text x="242" y="1178" font-family="Arial, sans-serif" font-weight="700" font-size="21" fill="#fff3d2" stroke="#20140e" stroke-width="3" paint-order="stroke">65</text>
+      <text x="274" y="1259" text-anchor="middle" font-family="'Microsoft YaHei', Arial, sans-serif" font-weight="700" font-size="18" fill="#fff7df" stroke="#243441" stroke-width="4" paint-order="stroke">火炮塔</text>
+    </g>
+    <g id="card-ice" data-card="ice" data-cost="55">
+      <rect x="364" y="1146" width="160" height="126" rx="16" fill="#52616a" stroke="#d8c59b" stroke-width="5"/>
+      <rect x="371" y="1153" width="146" height="112" rx="11" fill="#4697ac"/>
+      <use href="#tower-ice" x="389" y="1167" width="110" height="86"/>
+      <rect x="373" y="1154" width="67" height="31" rx="12" fill="#4b2e1b" stroke="#20140e" stroke-width="4"/>
+      <use href="#wood-icon" x="378" y="1157" width="30" height="22"/>
+      <text x="412" y="1178" font-family="Arial, sans-serif" font-weight="700" font-size="21" fill="#fff3d2" stroke="#20140e" stroke-width="3" paint-order="stroke">55</text>
+      <text x="444" y="1259" text-anchor="middle" font-family="'Microsoft YaHei', Arial, sans-serif" font-weight="700" font-size="18" fill="#fff7df" stroke="#243441" stroke-width="4" paint-order="stroke">冰冻塔</text>
+    </g>
+    <g id="card-electric" data-card="electric" data-cost="85">
+      <rect x="534" y="1146" width="160" height="126" rx="16" fill="#52616a" stroke="#d8c59b" stroke-width="5"/>
+      <rect x="541" y="1153" width="146" height="112" rx="11" fill="#7953b0"/>
+      <use href="#tower-electric" x="559" y="1167" width="110" height="86"/>
+      <rect x="543" y="1154" width="67" height="31" rx="12" fill="#4b2e1b" stroke="#20140e" stroke-width="4"/>
+      <use href="#wood-icon" x="548" y="1157" width="30" height="22"/>
+      <text x="582" y="1178" font-family="Arial, sans-serif" font-weight="700" font-size="21" fill="#fff3d2" stroke="#20140e" stroke-width="3" paint-order="stroke">85</text>
+      <text x="614" y="1259" text-anchor="middle" font-family="'Microsoft YaHei', Arial, sans-serif" font-weight="700" font-size="18" fill="#fff7df" stroke="#332343" stroke-width="4" paint-order="stroke">电磁塔</text>
+    </g>
+  </g>
+</svg>

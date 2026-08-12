@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+  <title>ZCamp 方案 F：5×3 三卡建造</title>
+  <desc>上方尸潮大场面、中央城墙、下方五列三行建筑区，底部每次显示三张建造选择卡。</desc>
+  <defs>
+    <linearGradient id="forest" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#09202a"/><stop offset="0.5" stop-color="#245047"/><stop offset="1" stop-color="#463a28"/></linearGradient>
+    <linearGradient id="yard" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#865d35"/><stop offset="1" stop-color="#5d4029"/></linearGradient>
+    <linearGradient id="cardBlue" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#61b9e6"/><stop offset="1" stop-color="#286ca4"/></linearGradient>
+    <linearGradient id="cardGreen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8bcf5d"/><stop offset="1" stop-color="#3f8c46"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000" flood-opacity="0.48"/></filter>
+    <filter id="soft" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="13"/></filter>
+    <pattern id="grass" width="46" height="46" patternUnits="userSpaceOnUse"><path d="M8 32l4-9m1 9l5-7M34 15l3-7m1 7l5-5" stroke="#7aa467" stroke-width="2" opacity="0.18"/></pattern>
+  </defs>
+  <rect width="720" height="1280" rx="34" fill="url(#forest)"/>
+  <rect width="720" height="1280" rx="34" fill="url(#grass)"/>
+
+  <!-- 左资源、右波次 -->
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" filter="url(#shadow)">
+    <g transform="translate(22 24)"><rect width="174" height="60" rx="19" fill="#07141d" fill-opacity="0.9"/><path d="M27 10l15 8-3 29-24 2-6-27z" fill="#c98a4a"/><text x="58" y="41" fill="#f3e9d7" font-size="27" font-weight="800">150</text></g>
+    <g transform="translate(22 94)"><rect width="174" height="60" rx="19" fill="#07141d" fill-opacity="0.9"/><circle cx="29" cy="30" r="17" fill="#ffd166" stroke="#ffe9a6" stroke-width="3"/><text x="58" y="41" fill="#f3e9d7" font-size="27" font-weight="800">320</text></g>
+    <g transform="translate(466 24)"><rect width="232" height="104" rx="22" fill="#111c2a" fill-opacity="0.94" stroke="#798899" stroke-width="3"/><text x="116" y="39" text-anchor="middle" fill="#f3e9d7" font-size="24" font-weight="800">第 3 / 20 波</text><path d="M26 72h180" stroke="#342f3a" stroke-width="18" stroke-linecap="round"/><path d="M26 72h74" stroke="#ff7043" stroke-width="18" stroke-linecap="round"/></g>
+  </g>
+
+  <!-- 宽阔尸潮区 -->
+  <g stroke="#d8dfc5" stroke-width="2">
+    <g transform="translate(300 180) scale(.72)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(365 196) scale(.75)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(430 176) scale(.7)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(262 235) scale(1.05)"><circle cy="-12" r="12" fill="#71864a"/><path d="M-20 31l6-36h29l8 36z" fill="#58663e"/></g>
+    <g transform="translate(340 255) scale(.8)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(410 245) scale(.78)"><circle cy="-12" r="11" fill="#a8d94c"/><path d="M-15 29l5-33h20l7 33z" fill="#71864a"/></g>
+    <g transform="translate(498 242) scale(1.12)"><circle cy="-12" r="12" fill="#71864a"/><path d="M-20 31l6-36h29l8 36z" fill="#58663e"/><rect x="-16" y="-1" width="32" height="12" fill="#59676c"/></g>
+    <g transform="translate(208 310) scale(.75)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(300 320) scale(.83)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(382 332) scale(.77)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(470 314) scale(.75)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(551 328) scale(.73)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(250 390) scale(.79)"><circle cy="-12" r="11" fill="#a8d94c"/><path d="M-15 29l5-33h20l7 33z" fill="#71864a"/></g>
+    <g transform="translate(350 400) scale(1.18)"><circle cy="-12" r="12" fill="#71864a"/><path d="M-20 31l6-36h29l8 36z" fill="#58663e"/><rect x="-16" y="-1" width="32" height="12" fill="#59676c"/></g>
+    <g transform="translate(455 390) scale(.82)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+  </g>
+  <path d="M150 750Q230 620 346 400" fill="none" stroke="#f6c453" stroke-width="4"/>
+  <path d="M570 750Q515 610 458 391" fill="none" stroke="#b28dff" stroke-width="5"/>
+  <circle cx="455" cy="390" r="20" fill="none" stroke="#b28dff" stroke-width="4"/>
+
+  <!-- 城墙 -->
+  <ellipse cx="360" cy="500" rx="310" ry="98" fill="#ffb547" opacity="0.22" filter="url(#soft)"/>
+  <g filter="url(#shadow)">
+    <path d="M34 458H686V558H34Z" fill="#5b5146" stroke="#b58a59" stroke-width="5"/>
+    <path d="M48 458v-34h58v34m26 0v-34h58v34m26 0v-34h58v34m172 0v-34h58v34m26 0v-34h58v34m26 0v-34h58v34" fill="#74665a" stroke="#b58a59" stroke-width="5"/>
+    <path d="M294 558v-70q66-58 132 0v70" fill="#3d403c" stroke="#bd9361" stroke-width="5"/>
+    <circle cx="155" cy="480" r="13" fill="#ffb547"/><circle cx="565" cy="480" r="13" fill="#ffb547"/>
+  </g>
+
+  <!-- 围墙内 5×3 建筑庭院 -->
+  <path d="M34 558H686V1088H34Z" fill="url(#yard)" stroke="#a77a4d" stroke-width="5"/>
+  <path d="M34 558v530M686 558v530" stroke="#d49d64" stroke-opacity="0.42" stroke-width="14"/>
+  <g stroke="#9a6c45" stroke-width="3">
+    <rect x="48" y="590" width="116" height="136" rx="14" fill="#40543f"/><rect x="175" y="590" width="116" height="136" rx="14" fill="#40543f"/><rect x="302" y="590" width="116" height="136" rx="14" fill="#6e4a30"/><rect x="429" y="590" width="116" height="136" rx="14" fill="#40543f"/><rect x="556" y="590" width="116" height="136" rx="14" fill="#6e4a30"/>
+    <rect x="48" y="740" width="116" height="136" rx="14" fill="#40543f"/><rect x="175" y="740" width="116" height="136" rx="14" fill="#6e4a30"/><rect x="302" y="740" width="116" height="136" rx="14" fill="#40543f"/><rect x="429" y="740" width="116" height="136" rx="14" fill="#6e4a30"/><rect x="556" y="740" width="116" height="136" rx="14" fill="#40543f"/>
+    <rect x="48" y="890" width="116" height="136" rx="14" fill="#40543f"/><rect x="175" y="890" width="116" height="136" rx="14" fill="#6e4a30"/><rect x="302" y="890" width="116" height="136" rx="14" fill="#6e4a30"/><rect x="429" y="890" width="116" height="136" rx="14" fill="#40543f"/><rect x="556" y="890" width="116" height="136" rx="14" fill="#6e4a30"/>
+  </g>
+  <text x="52" y="582" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" fill="#ffe0a3" font-size="13">前排 · 火力与维修</text>
+
+  <!-- 格内内容 -->
+  <g filter="url(#shadow)" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" text-anchor="middle">
+    <g transform="translate(106 658)"><rect x="-27" y="-15" width="54" height="35" rx="8" fill="#444d4b"/><path d="M-10-15l4-46h9l3 46m8 0 5-46h9l3 46" stroke="#f6c453" stroke-width="7" stroke-linecap="round"/><text y="48" fill="#f3e9d7" font-size="12">机枪塔</text></g>
+    <g transform="translate(233 658)"><rect x="-30" y="-17" width="60" height="37" rx="8" fill="#454a48"/><path d="M-11-15l6-50H10l7 50" fill="#ff7043"/><text y="48" fill="#f3e9d7" font-size="12">火炮塔</text></g>
+    <g transform="translate(487 658)"><rect x="-28" y="-16" width="56" height="36" rx="8" fill="#42464e"/><path d="M-19-50l14 26m24-26L5-24M-19-50l7-15m31 15l-7-15" stroke="#b28dff" stroke-width="7"/><text y="48" fill="#f3e9d7" font-size="12">电磁塔</text></g>
+    <g transform="translate(106 808)"><circle cy="-18" r="27" fill="#74a94e"/><circle cx="-21" cy="-7" r="19" fill="#84ba58"/><circle cx="21" cy="-7" r="19" fill="#7caf52"/><rect x="-9" y="4" width="18" height="27" fill="#9b683d"/><text y="49" fill="#f3e9d7" font-size="12">伐木场</text></g>
+    <g transform="translate(360 808)"><path d="M-35 22v-44h70v44z" fill="#566159"/><path d="M-43-22L0-54 43-22" fill="#32443d"/><path d="M-20-5h40" stroke="#ffb547" stroke-width="6"/><text y="49" fill="#f3e9d7" font-size="12">修理所</text></g>
+    <g transform="translate(614 808)"><path d="M-34 20v-42l34-28 34 28v42z" fill="#4d5c55" stroke="#ffb547" stroke-width="3"/><rect x="-10" y="-5" width="20" height="23" fill="#ffd37c"/><text y="49" fill="#f3e9d7" font-size="12">主城</text></g>
+    <g transform="translate(106 958)"><circle cy="-18" r="27" fill="#74a94e"/><circle cx="-21" cy="-7" r="19" fill="#84ba58"/><circle cx="21" cy="-7" r="19" fill="#7caf52"/><rect x="-9" y="4" width="18" height="27" fill="#9b683d"/><text y="49" fill="#f3e9d7" font-size="12">伐木场</text></g>
+    <g transform="translate(487 958)"><rect x="-28" y="-18" width="56" height="38" rx="8" fill="#3d4b46"/><path d="M0-66l22 35L0-9l-22-22z" fill="#55c7e8"/><text y="49" fill="#f3e9d7" font-size="12">冰冻塔</text></g>
+  </g>
+  <g stroke="#c0966b" stroke-width="3" stroke-linecap="round"><path d="M348 658h24M360 646v24"/><path d="M602 958h24M614 946v24"/><path d="M221 958h24M233 946v24"/><path d="M348 958h24M360 946v24"/></g>
+
+  <!-- 三卡建造区：部分覆盖庭院下沿 -->
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" text-anchor="middle" filter="url(#shadow)">
+    <g transform="translate(34 1048) rotate(-3 102 108)"><rect width="204" height="214" rx="22" fill="url(#cardGreen)" stroke="#bfe89f" stroke-width="4"/><text x="102" y="34" fill="#f7fff1" font-size="20" font-weight="800">伐木场</text><circle cx="102" cy="98" r="43" fill="#3e7c42"/><circle cx="102" cy="88" r="35" fill="#8bd05f"/><rect x="94" y="112" width="16" height="31" fill="#8d5b34"/><text x="102" y="184" fill="#fff4c8" font-size="22" font-weight="800">木材 50</text></g>
+    <g transform="translate(258 1034)"><rect width="204" height="228" rx="22" fill="url(#cardBlue)" stroke="#bcecff" stroke-width="5"/><text x="102" y="38" fill="#f4fbff" font-size="20" font-weight="800">火炮塔</text><circle cx="102" cy="108" r="48" fill="#295f86"/><rect x="71" y="107" width="62" height="38" rx="9" fill="#464a48"/><path d="M90 110l7-55h15l8 55" fill="#ff7043"/><text x="102" y="198" fill="#fff4c8" font-size="22" font-weight="800">木材 65</text></g>
+    <g transform="translate(482 1048) rotate(3 102 108)"><rect width="204" height="214" rx="22" fill="url(#cardBlue)" stroke="#bcecff" stroke-width="4"/><text x="102" y="34" fill="#f4fbff" font-size="20" font-weight="800">修理所</text><circle cx="102" cy="98" r="43" fill="#295f86"/><path d="M67 123v-43h70v43z" fill="#566159"/><path d="M59 80l43-31 43 31" fill="#32443d"/><path d="M82 101h40" stroke="#ffb547" stroke-width="7"/><text x="102" y="184" fill="#fff4c8" font-size="22" font-weight="800">木材 70</text></g>
+  </g>
+</svg>

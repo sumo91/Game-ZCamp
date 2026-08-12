@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+  <title>ZCamp 主战场方案 D：沉浸式全屏战斗</title>
+  <desc>参考 Survivor.io 与 Rush Royale 的悬浮信息、升级进度和全屏战斗感。</desc>
+  <defs>
+    <linearGradient id="world" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#07121b"/>
+      <stop offset="0.45" stop-color="#18303a"/>
+      <stop offset="1" stop-color="#324037"/>
+    </linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#26383e"/>
+      <stop offset="0.5" stop-color="#506064"/>
+      <stop offset="1" stop-color="#26383e"/>
+    </linearGradient>
+    <linearGradient id="dock" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1c2c38" stop-opacity="0.92"/><stop offset="1" stop-color="#09131d" stop-opacity="0.97"/></linearGradient>
+    <radialGradient id="camp"><stop stop-color="#ffd478" stop-opacity="0.65"/><stop offset="1" stop-color="#ffb547" stop-opacity="0"/></radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.5"/></filter>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="noise" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="6" cy="9" r="1.3" fill="#a5b0ad" opacity="0.07"/><circle cx="27" cy="25" r="1" fill="#a5b0ad" opacity="0.05"/></pattern>
+  </defs>
+  <rect width="720" height="1280" rx="34" fill="url(#world)"/>
+  <rect width="720" height="1280" rx="34" fill="url(#noise)"/>
+
+  <!-- 顶部等级进度和悬浮信息 -->
+  <rect x="0" y="0" width="720" height="12" fill="#17252d"/>
+  <rect x="0" y="0" width="458" height="12" fill="#55c7e8"/>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif">
+    <g transform="translate(18 28)" filter="url(#shadow)">
+      <rect width="164" height="64" rx="22" fill="#0c1822" fill-opacity="0.92"/>
+      <circle cx="34" cy="32" r="23" fill="#243944" stroke="#55c7e8" stroke-width="3"/>
+      <text x="34" y="40" text-anchor="middle" fill="#f3e9d7" font-size="22" font-weight="700">7</text>
+      <text x="70" y="28" fill="#a9b6b5" font-size="13">营地等级</text>
+      <text x="70" y="50" fill="#f3e9d7" font-size="16" font-weight="700">32 / 50 XP</text>
+    </g>
+    <g transform="translate(196 28)" filter="url(#shadow)">
+      <rect width="132" height="64" rx="22" fill="#0c1822" fill-opacity="0.92"/>
+      <path d="M21 16l13 7-2 25-21 2-5-23z" fill="#c98a4a"/>
+      <text x="51" y="40" fill="#f3e9d7" font-size="23" font-weight="700">84.1</text>
+    </g>
+    <g transform="translate(342 28)" filter="url(#shadow)">
+      <rect width="116" height="64" rx="22" fill="#0c1822" fill-opacity="0.92"/>
+      <circle cx="29" cy="32" r="15" fill="#ffd166"/>
+      <text x="54" y="40" fill="#f3e9d7" font-size="23" font-weight="700">35</text>
+    </g>
+    <g transform="translate(472 28)" filter="url(#shadow)">
+      <rect width="176" height="64" rx="22" fill="#0c1822" fill-opacity="0.92"/>
+      <text x="88" y="27" text-anchor="middle" fill="#a9b6b5" font-size="13">战斗进行中</text>
+      <text x="88" y="51" text-anchor="middle" fill="#f3e9d7" font-size="20" font-weight="700">第 7 / 20 波</text>
+    </g>
+    <circle cx="681" cy="60" r="26" fill="#0c1822" fill-opacity="0.92" filter="url(#shadow)"/>
+    <path d="M672 47v26m16-26v26" stroke="#f3e9d7" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- 全屏战场，没有外框 -->
+  <path d="M246 88 C225 250 253 388 228 548 C204 708 238 865 218 1055 H502 C482 865 516 708 492 548 C467 388 495 250 474 88Z" fill="url(#road)"/>
+  <path d="M260 88C240 250 268 388 244 548C221 705 253 866 235 1055M460 88C480 250 452 388 476 548C499 705 467 866 485 1055" fill="none" stroke="#8b9899" stroke-opacity="0.28" stroke-width="4" stroke-dasharray="12 19"/>
+  <ellipse cx="360" cy="140" rx="132" ry="42" fill="#07121b" opacity="0.88"/>
+  <path d="M300 145Q360 112 420 145" fill="none" stroke="#e9564a" stroke-opacity="0.68" stroke-width="4" stroke-dasharray="10 9"/>
+
+  <!-- 道路两侧自然嵌入的塔位 -->
+  <g fill="#21343c" stroke="#66797c" stroke-width="2">
+    <ellipse cx="102" cy="235" rx="46" ry="27"/><ellipse cx="618" cy="235" rx="46" ry="27"/>
+    <ellipse cx="88" cy="420" rx="46" ry="27"/><ellipse cx="632" cy="420" rx="46" ry="27"/>
+    <ellipse cx="88" cy="610" rx="46" ry="27"/><ellipse cx="632" cy="610" rx="46" ry="27"/>
+    <ellipse cx="102" cy="790" rx="46" ry="27"/><ellipse cx="618" cy="790" rx="46" ry="27"/>
+    <ellipse cx="128" cy="940" rx="46" ry="27"/><ellipse cx="592" cy="940" rx="46" ry="27"/>
+  </g>
+  <g filter="url(#shadow)">
+    <g transform="translate(102 224)"><rect x="-24" y="-28" width="48" height="30" rx="8" fill="#3b4b4c"/><path d="M-8-25l4-38h8l2 38m7 0 4-38h8l4 38" stroke="#f6c453" stroke-width="7" stroke-linecap="round"/></g>
+    <g transform="translate(632 408)"><rect x="-26" y="-28" width="52" height="30" rx="8" fill="#424947"/><path d="M-10-25l5-43H9l6 43" fill="#ff7043"/></g>
+    <g transform="translate(88 598)"><rect x="-24" y="-28" width="48" height="30" rx="8" fill="#3b4b4c"/><path d="M0-71l20 32L0-18l-20-21z" fill="#55c7e8"/></g>
+    <g transform="translate(618 778)"><rect x="-25" y="-28" width="50" height="30" rx="8" fill="#424750"/><path d="M-17-57l12 23m22-23L5-34M-17-57l6-14m28 14L11-71" stroke="#b28dff" stroke-width="7" stroke-linecap="round"/></g>
+  </g>
+
+  <!-- 高密度尸潮 -->
+  <g stroke="#d6dec3" stroke-width="2">
+    <g transform="translate(330 175) scale(.76)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(382 205) scale(.72)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(350 260) scale(1.18)"><circle cy="-12" r="12" fill="#71864a"/><path d="M-20 31l6-36h29l8 36z" fill="#58663e"/><rect x="-16" y="-1" width="32" height="12" fill="#59676c"/></g>
+    <g transform="translate(399 328) scale(.74)"><circle cy="-12" r="11" fill="#a8d94c"/><path d="M-15 29l5-33h20l7 33z" fill="#71864a"/></g>
+    <g transform="translate(320 386) scale(.8)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(376 442) scale(.84)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+    <g transform="translate(335 505) scale(.72)"><circle cy="-12" r="11" fill="#a8d94c"/><path d="M-15 29l5-33h20l7 33z" fill="#71864a"/></g>
+    <g transform="translate(390 570) scale(1.12)"><circle cy="-12" r="12" fill="#71864a"/><path d="M-20 31l6-36h29l8 36z" fill="#58663e"/></g>
+    <g transform="translate(338 648) scale(.82)"><circle cy="-12" r="11" fill="#71864a"/><path d="M-15 29l5-33h20l7 33z" fill="#637340"/></g>
+  </g>
+  <path d="M102 195Q210 205 322 260" fill="none" stroke="#f6c453" stroke-width="4"/>
+  <path d="M632 375Q510 405 408 438" fill="none" stroke="#ff7043" stroke-width="6"/>
+  <circle cx="402" cy="442" r="34" fill="#ff7043" opacity="0.2" stroke="#ff9b70" stroke-width="4"/>
+  <path d="M88 568Q200 570 324 642" fill="none" stroke="#55c7e8" stroke-width="8" opacity="0.62"/>
+  <path d="M618 746L506 720 392 570 337 504" fill="none" stroke="#b28dff" stroke-width="5" stroke-linejoin="round" filter="url(#glow)"/>
+
+  <!-- 浮动战况提示 -->
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" filter="url(#shadow)">
+    <rect x="256" y="712" width="208" height="54" rx="20" fill="#0c1822" fill-opacity="0.88" stroke="#e9564a" stroke-opacity="0.7"/>
+    <text x="360" y="745" text-anchor="middle" fill="#f3e9d7" font-size="18" font-weight="700">⚠ 重装尸接近城墙</text>
+  </g>
+
+  <!-- 营地与世界内耐久 -->
+  <ellipse cx="360" cy="950" rx="238" ry="154" fill="url(#camp)"/>
+  <path d="M205 910h310v70H205z" fill="#52554c" stroke="#a28158" stroke-width="4" filter="url(#shadow)"/>
+  <path d="M224 910v-30h44v30m30 0v-30h44v30m36 0v-30h44v30m30 0v-30h44v30" fill="#66675d" stroke="#a28158" stroke-width="4"/>
+  <path d="M305 1042l55-57 55 57v62H305z" fill="#34443c" stroke="#ffb547" stroke-width="4" filter="url(#shadow)"/>
+  <rect x="343" y="1040" width="34" height="46" rx="4" fill="#ffd47a"/>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif">
+    <rect x="252" y="846" width="216" height="44" rx="17" fill="#0c1822" fill-opacity="0.9"/>
+    <path d="M270 868h124" stroke="#37454b" stroke-width="10" stroke-linecap="round"/>
+    <path d="M270 868h86" stroke="#e9564a" stroke-width="10" stroke-linecap="round"/>
+    <text x="408" y="873" fill="#f3e9d7" font-size="14">69 / 100</text>
+  </g>
+
+  <!-- 侧边上下文按钮 -->
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" text-anchor="middle" filter="url(#shadow)">
+    <circle cx="668" cy="850" r="35" fill="#152530" stroke="#60747a"/>
+    <path d="M651 856l8-18 17-5 10 13-7 20-20 4z" fill="none" stroke="#f3e9d7" stroke-width="4"/>
+    <text x="668" y="900" fill="#a9b6b5" font-size="13">维修</text>
+    <circle cx="668" cy="960" r="35" fill="#152530" stroke="#55c7e8"/>
+    <path d="M651 964l17-26 17 26M668 939v43" fill="none" stroke="#55c7e8" stroke-width="5" stroke-linecap="round"/>
+    <text x="668" y="1010" fill="#55c7e8" font-size="13">强化</text>
+  </g>
+
+  <!-- 战斗态紧凑底栏 -->
+  <g filter="url(#shadow)"><rect x="20" y="1118" width="680" height="142" rx="30" fill="url(#dock)" stroke="#5d7076" stroke-opacity="0.55"/></g>
+  <g font-family="Noto Sans SC, Microsoft YaHei, sans-serif" text-anchor="middle">
+    <g transform="translate(38 1132)"><rect width="132" height="108" rx="20" fill="#22343e" stroke="#f6c453" stroke-width="3"/><circle cx="42" cy="43" r="25" fill="#162630"/><path d="M32 60l4-34h7l2 34m6 0 4-34h7l4 34" stroke="#f6c453" stroke-width="6"/><text x="96" y="39" fill="#f3e9d7" font-size="16">机枪</text><text x="96" y="65" fill="#ffd166" font-size="15">40</text><text x="66" y="94" fill="#a9b6b5" font-size="12">Lv.1</text></g>
+    <g transform="translate(180 1132)"><rect width="132" height="108" rx="20" fill="#1a2b35" stroke="#556a71"/><circle cx="42" cy="43" r="25" fill="#162630"/><path d="M31 61l7-35h13l8 35" fill="#ff7043"/><text x="96" y="39" fill="#f3e9d7" font-size="16">火炮</text><text x="96" y="65" fill="#ffd166" font-size="15">65</text><text x="66" y="94" fill="#a9b6b5" font-size="12">Lv.1</text></g>
+    <g transform="translate(322 1132)"><rect width="132" height="108" rx="20" fill="#1a2b35" stroke="#556a71"/><circle cx="42" cy="43" r="25" fill="#162630"/><path d="M42 17l18 27-18 20-18-20z" fill="#55c7e8"/><text x="96" y="39" fill="#f3e9d7" font-size="16">冰冻</text><text x="96" y="65" fill="#ffd166" font-size="15">55</text><text x="66" y="94" fill="#a9b6b5" font-size="12">Lv.1</text></g>
+    <g transform="translate(464 1132)"><rect width="132" height="108" rx="20" fill="#1a2b35" stroke="#556a71"/><circle cx="42" cy="43" r="25" fill="#162630"/><path d="M25 62l13-20-9-5 22-20-6 19 14 5-25 23" fill="#b28dff"/><text x="96" y="39" fill="#f3e9d7" font-size="16">电磁</text><text x="96" y="65" fill="#ffd166" font-size="15">85</text><text x="66" y="94" fill="#a9b6b5" font-size="12">Lv.1</text></g>
+    <g transform="translate(610 1132)"><circle cx="38" cy="45" r="37" fill="#55c7e8"/><path d="M26 46l9 9 17-23" fill="none" stroke="#12202a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><text x="38" y="101" fill="#55c7e8" font-size="13">升级就绪</text></g>
+  </g>
+</svg>

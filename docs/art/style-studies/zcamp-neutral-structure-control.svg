@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280">
+  <rect width="720" height="1280" fill="#e8ebed"/>
+
+  <!-- Enemy field: neutral spatial control only -->
+  <rect x="0" y="0" width="720" height="720" fill="#cdd3d6"/>
+  <path d="M250 0 L470 0 L550 720 L170 720 Z" fill="#dfe3e5"/>
+  <path d="M360 70 L360 690" stroke="#b8c0c4" stroke-width="4" stroke-dasharray="10 14"/>
+
+  <!-- Compact HUD anchors -->
+  <rect x="18" y="18" width="130" height="54" rx="18" fill="#444b50"/>
+  <circle cx="46" cy="45" r="17" fill="#aab1b5"/>
+  <text x="78" y="57" font-family="Arial, sans-serif" font-weight="700" font-size="30" fill="white">35</text>
+  <rect x="286" y="16" width="148" height="84" rx="20" fill="#444b50"/>
+  <text x="360" y="53" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="28" fill="white">8/20</text>
+  <text x="360" y="83" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="22" fill="white">● 46</text>
+  <rect x="650" y="18" width="52" height="52" rx="15" fill="#444b50"/>
+  <rect x="667" y="31" width="6" height="27" rx="3" fill="white"/>
+  <rect x="680" y="31" width="6" height="27" rx="3" fill="white"/>
+
+  <!-- Small enemy markers -->
+  <g fill="#687176">
+    <circle cx="248" cy="122" r="9"/><circle cx="312" cy="116" r="9"/><circle cx="376" cy="126" r="9"/><circle cx="440" cy="114" r="9"/>
+    <circle cx="205" cy="170" r="9"/><circle cx="270" cy="165" r="9"/><circle cx="335" cy="176" r="9"/><circle cx="400" cy="162" r="9"/><circle cx="465" cy="174" r="9"/>
+    <circle cx="165" cy="225" r="10"/><circle cx="230" cy="218" r="10"/><circle cx="295" cy="232" r="10"/><circle cx="360" cy="214" r="10"/><circle cx="425" cy="232" r="10"/><circle cx="490" cy="218" r="10"/><circle cx="555" cy="230" r="10"/>
+    <circle cx="125" cy="292" r="10"/><circle cx="200" cy="280" r="10"/><circle cx="275" cy="302" r="10"/><circle cx="350" cy="286" r="10"/><circle cx="425" cy="302" r="10"/><circle cx="500" cy="282" r="10"/><circle cx="575" cy="294" r="10"/>
+    <circle cx="95" cy="372" r="11"/><circle cx="175" cy="350" r="11"/><circle cx="255" cy="382" r="11"/><circle cx="335" cy="356" r="11"/><circle cx="415" cy="380" r="11"/><circle cx="495" cy="352" r="11"/><circle cx="575" cy="374" r="11"/>
+    <circle cx="125" cy="455" r="12"/><circle cx="220" cy="432" r="12"/><circle cx="315" cy="466" r="12"/><circle cx="410" cy="438" r="12"/><circle cx="505" cy="466" r="12"/><circle cx="600" cy="438" r="12"/>
+    <circle cx="88" cy="554" r="13"/><circle cx="190" cy="520" r="13"/><circle cx="292" cy="566" r="13"/><circle cx="394" cy="528" r="13"/><circle cx="496" cy="568" r="13"/><circle cx="598" cy="524" r="13"/>
+    <circle cx="145" cy="640" r="14"/><circle cx="265" cy="618" r="14"/><circle cx="455" cy="626" r="14"/><circle cx="575" cy="646" r="14"/>
+  </g>
+
+  <!-- Elite enemy anchors -->
+  <g fill="#3f484d" stroke="#ffffff" stroke-width="3">
+    <path d="M480 242 l22 12 8 28-16 26-28 0-16-26 8-28z"/>
+    <path d="M210 350 l24 13 9 31-17 28-32 0-17-28 9-31z"/>
+    <path d="M520 402 l24 13 9 31-17 28-32 0-17-28 9-31z"/>
+    <path d="M315 545 l26 14 10 34-19 30-34 0-19-30 10-34z"/>
+  </g>
+
+  <!-- Minimal combat vectors -->
+  <path d="M160 684 L245 565 M250 688 L330 548 M465 690 L505 548" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M470 690 C500 645 470 615 525 575" fill="none" stroke="#7d858a" stroke-width="7"/>
+
+  <!-- Thin continuous wall -->
+  <rect x="18" y="706" width="684" height="68" rx="10" fill="#747c80" stroke="#3f474b" stroke-width="5"/>
+  <path d="M24 720 H696 M24 740 H696 M24 760 H696" stroke="#a8afb2" stroke-width="4"/>
+  <rect x="254" y="724" width="212" height="38" rx="19" fill="#333a3e"/>
+  <rect x="302" y="735" width="145" height="16" rx="8" fill="#a5adb1"/>
+  <text x="375" y="752" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="20" fill="white">78%</text>
+  <path d="M276 738 C270 728 254 733 258 746 L276 759 294 746 C298 733 282 728 276 738z" fill="#d8dcde"/>
+
+  <!-- Exact 5 x 3 board: 15 identical 128 x 94 cells -->
+  <rect x="16" y="774" width="688" height="316" rx="12" fill="#aeb6ba"/>
+  <g fill="#f4f5f5" stroke="#70787c" stroke-width="4">
+    <rect x="24" y="780" width="128" height="94" rx="10"/>
+    <rect x="160" y="780" width="128" height="94" rx="10"/>
+    <rect x="296" y="780" width="128" height="94" rx="10"/>
+    <rect x="432" y="780" width="128" height="94" rx="10"/>
+    <rect x="568" y="780" width="128" height="94" rx="10"/>
+    <rect x="24" y="883" width="128" height="94" rx="10"/>
+    <rect x="160" y="883" width="128" height="94" rx="10"/>
+    <rect x="296" y="883" width="128" height="94" rx="10"/>
+    <rect x="432" y="883" width="128" height="94" rx="10"/>
+    <rect x="568" y="883" width="128" height="94" rx="10"/>
+    <rect x="24" y="986" width="128" height="94" rx="10"/>
+    <rect x="160" y="986" width="128" height="94" rx="10"/>
+    <rect x="296" y="986" width="128" height="94" rx="10"/>
+    <rect x="432" y="986" width="128" height="94" rx="10"/>
+    <rect x="568" y="986" width="128" height="94" rx="10"/>
+  </g>
+
+  <!-- Building footprint anchors, all contained and centered -->
+  <g fill="#596267" stroke="#ffffff" stroke-width="3">
+    <circle cx="88" cy="827" r="33"/><path d="M69 830 L107 812 L107 838 Z" fill="#d9dddf"/>
+    <circle cx="224" cy="827" r="33"/><rect x="204" y="814" width="40" height="26" rx="7" fill="#d9dddf"/>
+    <circle cx="360" cy="827" r="33"/><path d="M360 796 L383 832 360 855 337 832 Z" fill="#d9dddf"/>
+    <circle cx="496" cy="827" r="33"/><path d="M476 843 C488 797 504 855 518 809" fill="none" stroke="#d9dddf" stroke-width="8"/>
+    <rect x="596" y="799" width="72" height="56" rx="12"/><path d="M588 814 L632 789 676 814" fill="#d9dddf"/>
+    <rect x="600" y="904" width="64" height="52" rx="10"/><path d="M592 919 L632 897 672 919" fill="#d9dddf"/>
+    <rect x="51" y="1008" width="74" height="50" rx="10"/><circle cx="120" cy="1046" r="12" fill="#d9dddf"/>
+  </g>
+
+  <!-- Full-width wood resource rail -->
+  <rect x="0" y="1090" width="720" height="54" fill="#4c555a"/>
+  <circle cx="42" cy="1117" r="19" fill="#c7cdd0"/>
+  <text x="72" y="1128" font-family="Arial, sans-serif" font-weight="700" font-size="29" fill="white">120</text>
+  <rect x="146" y="1107" width="536" height="20" rx="10" fill="#22292d"/>
+  <rect x="146" y="1107" width="390" height="20" rx="10" fill="#b9c0c3"/>
+
+  <!-- Four equal cards -->
+  <g fill="#596267" stroke="#d9dddf" stroke-width="4">
+    <rect x="24" y="1152" width="160" height="120" rx="18"/>
+    <rect x="194" y="1152" width="160" height="120" rx="18"/>
+    <rect x="364" y="1152" width="160" height="120" rx="18"/>
+    <rect x="534" y="1152" width="160" height="120" rx="18"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-weight="700" font-size="24" fill="white">
+    <text x="45" y="1183">● 40</text><text x="215" y="1183">● 65</text><text x="385" y="1183">● 55</text><text x="555" y="1183">● 85</text>
+  </g>
+  <g fill="#d9dddf">
+    <path d="M70 1245 L138 1213 L138 1251 Z"/>
+    <rect x="236" y="1215" width="78" height="42" rx="12"/>
+    <path d="M444 1208 L478 1240 444 1264 410 1240 Z"/>
+    <path d="M574 1256 C592 1198 616 1268 652 1208" fill="none" stroke="#d9dddf" stroke-width="11"/>
+  </g>
+</svg>
