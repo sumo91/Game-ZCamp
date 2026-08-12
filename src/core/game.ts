@@ -731,9 +731,15 @@ export class GameSimulation {
   }
 
   private findTarget(building: { lanePosition: number }, tower: TowerDefinition): EnemyRuntimeState | undefined {
-    const candidates = this.state.enemies.filter((enemy) => enemy.hp > 0 && Math.abs(enemy.position - building.lanePosition) <= tower.range);
+    // Keep normal range differences, but never let a live wall-contact enemy
+    // disappear from targeting just because the scalar lane/depth values do
+    // not share the same geometric axis.
+    const candidates = this.state.enemies.filter((enemy) => enemy.hp > 0 && (enemy.atWall || Math.abs(enemy.position - building.lanePosition) <= tower.range));
     const focused = candidates.find((enemy) => enemy.id === this.state.focusFireTargetId && this.state.focusFireRemainingSeconds > EPSILON);
-    return focused ?? candidates.sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))[0];
+    const wallContact = candidates
+      .filter((enemy) => enemy.atWall)
+      .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))[0];
+    return focused ?? wallContact ?? candidates.sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))[0];
   }
 
   private getCardEffect(kind: CardEffect["kind"], towerId?: string): CardEffect | undefined {

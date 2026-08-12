@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { starterCatalog, type CardEffect, type ContentCatalog, type EnemyDefinition } from "../../src/core/content";
+import { CAMP_SLOT_IDS } from "../../src/core/types";
 import type { CardInstance } from "../../src/core/types";
 import { GameSimulation, INITIAL_WOOD, SUPPLY_CYCLE_SECONDS, WALL_MAX_HP } from "../../src/core/game";
 
@@ -57,6 +58,78 @@ describe("GameSimulation third-stage combat and card content", () => {
     expect(game.getState().buildings).toEqual([expect.objectContaining({ id: "main-city", slotId: "slot-r3-c3", kind: "main_city" })]);
     expect(game.getState().hand.map((card) => card.definitionId)).toEqual(["machine_gun", "cannon", "lumberyard", "frost"]);
     expect(game.getState().nextSupplyCard?.definitionId).toBe("machine_gun");
+  });
+
+  it("attacks an enemy after it reaches the wall from every tower and legal row slot", () => {
+    const legalTowerSlots = CAMP_SLOT_IDS.filter((slotId) => slotId !== "slot-r3-c3");
+    for (const tower of starterCatalog.towers) {
+      for (const slotId of legalTowerSlots) {
+        const game = new GameSimulation();
+        game.getState().wood = 1000;
+        playBase(game, tower.id, slotId);
+        startRunning(game);
+
+        const enemy = game.getState().enemies.find((candidate) => candidate.definitionId === "walker");
+        expect(enemy).toBeDefined();
+        enemy!.position = 1;
+        enemy!.atWall = true;
+        enemy!.attackCooldownSeconds = 99;
+        const hpBeforeAttack = enemy!.hp;
+        game.drainEvents();
+
+        game.tick(0.25);
+
+        const events = game.drainEvents();
+        const towerAttack = events.find((event) => event.type === "tower_attack");
+        const enemyHit = events.find((event) => event.type === "enemy_hit" && event.enemyId === enemy!.id);
+        expect(towerAttack, tower.id + " at " + slotId).toMatchObject({
+          type: "tower_attack",
+          towerDefinitionId: tower.id,
+          targetId: enemy!.id,
+        });
+        expect(enemyHit, tower.id + " hit at " + slotId).toMatchObject({
+          type: "enemy_hit",
+          enemyId: enemy!.id,
+        });
+        expect(enemyHit?.type === "enemy_hit" ? enemyHit.remainingHp : hpBeforeAttack).toBeLessThan(hpBeforeAttack);
+      }
+    }
+  });
+
+  it("prioritizes wall contact while preserving legal focus-fire priority", () => {
+    const prepare = (): GameSimulation => {
+      const game = new GameSimulation();
+      game.getState().wood = 1000;
+      playBase(game, "machine_gun", "slot-r1-c1");
+      startRunning(game);
+      const wallEnemy = game.getState().enemies[0]!;
+      wallEnemy.position = 1;
+      wallEnemy.atWall = true;
+      wallEnemy.attackCooldownSeconds = 99;
+      wallEnemy.hp = 1000;
+      wallEnemy.maxHp = 1000;
+      game.getState().enemies.push({ ...wallEnemy, id: "near-enemy", position: 0.1, atWall: false });
+      game.getState().enemies.push({ ...wallEnemy, id: "far-enemy", position: 0.9, atWall: false });
+      game.drainEvents();
+      return game;
+    };
+
+    const wallPriority = prepare();
+    wallPriority.getState().enemies = wallPriority.getState().enemies.filter((enemy) => enemy.id !== "far-enemy");
+    wallPriority.tick(0.25);
+    expect(wallPriority.drainEvents().find((event) => event.type === "tower_attack")?.targetId).toBe("walker-0");
+
+    const validFocus = prepare();
+    validFocus.getState().focusFireTargetId = "near-enemy";
+    validFocus.getState().focusFireRemainingSeconds = 1;
+    validFocus.tick(0.25);
+    expect(validFocus.drainEvents().find((event) => event.type === "tower_attack")?.targetId).toBe("near-enemy");
+
+    const invalidFocus = prepare();
+    invalidFocus.getState().focusFireTargetId = "far-enemy";
+    invalidFocus.getState().focusFireRemainingSeconds = 1;
+    invalidFocus.tick(0.25);
+    expect(invalidFocus.drainEvents().find((event) => event.type === "tower_attack")?.targetId).toBe("walker-0");
   });
 
   it("keeps opening planning, supply, and combat frozen until five seconds", () => {
