@@ -70,6 +70,39 @@ describe("v0.2 growth candidate core regression matrix", () => {
     expect(removedRuntimeFields.every((field) => !(field in state))).toBe(true);
   });
 
+  it("pauses and resumes the opening countdown without advancing time, resources, or the first wave", () => {
+    const game = new GameSimulation(quietCatalog());
+    const lumberyard = buildAt(game, "slot-r1-c1", "lumberyard");
+    expect(lumberyard.kind).toBe("lumberyard");
+
+    game.tick(1.5);
+    const beforePause = structuredClone(game.getState());
+    expect(beforePause.phase).toBe("OPENING_COUNTDOWN");
+    expect(beforePause.openingCountdownRemainingSeconds).toBeCloseTo(3.5, 8);
+
+    expect(game.dispatch({ type: "pause" })).toEqual({ accepted: true });
+    expect(game.getState().phase).toBe("TACTICAL_PAUSE");
+    const pausedCountdown = game.getState().openingCountdownRemainingSeconds;
+    const pausedWood = game.getState().wood;
+    const pausedBattleTime = game.getState().effectiveBattleTimeSeconds;
+    game.tick(10);
+    expect(game.getState().openingCountdownRemainingSeconds).toBe(pausedCountdown);
+    expect(game.getState().wood).toBe(pausedWood);
+    expect(game.getState().effectiveBattleTimeSeconds).toBe(pausedBattleTime);
+    expect(game.getState().wave).toBe(beforePause.wave);
+    expect(game.getState().spawnedEnemies).toBe(beforePause.spawnedEnemies);
+    expect(game.getState().enemies).toEqual(beforePause.enemies);
+
+    expect(game.dispatch({ type: "build_building", slotId: "slot-r1-c2", definitionId: "arrow_tower" }).accepted).toBe(true);
+    expect(game.dispatch({ type: "resume" })).toEqual({ accepted: true });
+    expect(game.getState().phase).toBe("OPENING_COUNTDOWN");
+    expect(game.getState().openingCountdownRemainingSeconds).toBe(pausedCountdown);
+
+    game.tick(pausedCountdown);
+    expect(game.getState().phase).toBe("RUNNING");
+    expect(game.getState().wave).toBe(1);
+  });
+
   it("charges exact build costs and leaves invalid, occupied, and city targets atomic", () => {
     const game = new GameSimulation();
     expect(buildAt(game, "slot-r1-c1", "arrow_tower").growthDefinitionId).toBe("arrow_tower");

@@ -677,8 +677,8 @@ export class GameSimulation {
   }
 
   private pause(): CommandResult {
-    if (this.state.phase !== "RUNNING") return { accepted: false, reason: "只能在战斗中进入战术暂停" };
-    this.state.pausedFromPhase = "RUNNING";
+    if (this.state.phase !== "OPENING_COUNTDOWN" && this.state.phase !== "RUNNING") return { accepted: false, reason: "只能在可操作阶段进入战术暂停" };
+    this.state.pausedFromPhase = this.state.phase;
     this.state.phase = "TACTICAL_PAUSE";
     return { accepted: true };
   }

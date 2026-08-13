@@ -97,6 +97,12 @@ export interface GrowthTraitOptionView {
 
 export type GrowthInputPriority = "result" | "system_pause" | "trait_draft" | "transform" | "building" | "none";
 
+export interface GrowthPauseControlView {
+  visible: boolean;
+  enabled: boolean;
+  label: "暂停" | "继续";
+}
+
 export type GrowthPointerHit =
   | { kind: "slot"; slotId: string }
   | { kind: "action"; index: number }
@@ -360,6 +366,12 @@ export function getGrowthInputPriority(phase: GamePhase, transformOpen: boolean)
   if (transformOpen) return "transform";
   if (phase === "OPENING_COUNTDOWN" || phase === "RUNNING" || phase === "TACTICAL_PAUSE") return "building";
   return "none";
+}
+
+export function deriveGrowthPauseControl(phase: GamePhase): GrowthPauseControlView {
+  if (phase === "OPENING_COUNTDOWN" || phase === "RUNNING") return { visible: true, enabled: true, label: "暂停" };
+  if (phase === "TACTICAL_PAUSE") return { visible: true, enabled: true, label: "继续" };
+  return { visible: false, enabled: false, label: "暂停" };
 }
 
 export function hitGrowthPointer(x: number, y: number): GrowthPointerHit {

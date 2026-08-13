@@ -7,6 +7,7 @@ import type { BuildingState, EnemyRuntimeState, GameEvent, GamePhase, GameState 
 import {
   deriveBuildingDetail,
   deriveEmptySlotActions,
+  deriveGrowthPauseControl,
   deriveTraitOptions,
   deriveTransformOptions,
   decideGrowthAction,
@@ -315,8 +316,9 @@ export class GameScene extends Phaser.Scene {
 
   private toggleTacticalPause(): void {
     const phase = this.simulation.getState().phase;
-    if (phase === "RUNNING") this.simulation.dispatch({ type: "pause" });
-    else if (phase === "TACTICAL_PAUSE") this.simulation.dispatch({ type: "resume" });
+    const pauseControl = deriveGrowthPauseControl(phase);
+    if (pauseControl.label === "暂停" && pauseControl.enabled) this.simulation.dispatch({ type: "pause" });
+    else if (pauseControl.label === "继续" && pauseControl.enabled) this.simulation.dispatch({ type: "resume" });
     this.renderState();
   }
 
@@ -476,10 +478,10 @@ export class GameScene extends Phaser.Scene {
     this.statusText.setText(transient ? this.messageText.text : this.statusLabel(state)).setColor(transient ? this.messageColor : "#fff0b0");
     this.messageText.setVisible(false);
 
-    const canPause = state.phase === "RUNNING" || state.phase === "TACTICAL_PAUSE";
-    this.pauseButtonLabel.setText(state.phase === "TACTICAL_PAUSE" ? "继续" : "暂停");
-    this.pauseButton.setFillStyle(state.phase === "OPENING_COUNTDOWN" ? COLORS.line : COLORS.blue, 1).setVisible(canPause);
-    this.pauseButtonLabel.setVisible(canPause);
+    const pauseControl = deriveGrowthPauseControl(state.phase);
+    this.pauseButtonLabel.setText(pauseControl.label);
+    this.pauseButton.setFillStyle(pauseControl.enabled ? COLORS.blue : COLORS.line, 1).setVisible(pauseControl.visible);
+    this.pauseButtonLabel.setVisible(pauseControl.visible);
     this.countdownText.setVisible(state.phase === "OPENING_COUNTDOWN");
     if (state.phase === "OPENING_COUNTDOWN") this.countdownText.setText(String(Math.ceil(state.openingCountdownRemainingSeconds)));
     this.battleNoticeText.setVisible(this.battleNoticeTimer > 0);
@@ -694,8 +696,8 @@ export class GameScene extends Phaser.Scene {
     const priority = getGrowthInputPriority(state.phase, this.transformOpen);
     const buildingInput = priority === "building";
     for (const button of this.actionButtons) button.input!.enabled = buildingInput && button.visible;
-    const pauseInput = priority === "building" && (state.phase === "RUNNING" || state.phase === "TACTICAL_PAUSE");
-    this.pauseButton.input!.enabled = pauseInput;
+    const pauseControl = deriveGrowthPauseControl(state.phase);
+    this.pauseButton.input!.enabled = priority === "building" && pauseControl.enabled;
     const transformInput = priority === "transform";
     this.transformCloseButton.input!.enabled = transformInput;
     for (const button of this.transformButtons) button.input!.enabled = transformInput && button.visible;

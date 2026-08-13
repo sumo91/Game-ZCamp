@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { starterCatalog } from "../../src/core/content";
 import { GameSimulation } from "../../src/core/game";
-import { deriveBuildingDetail, deriveEmptySlotActions, deriveTraitOptions, deriveTransformOptions, decideGrowthAction, decideGrowthPointer, decideGrowthTrait, decideGrowthTransform, formatGrowthTraitEffect, getGrowthInputPriority, hitGrowthPointer } from "../../src/phaser/growthUi";
+import { deriveBuildingDetail, deriveEmptySlotActions, deriveTraitOptions, deriveTransformOptions, decideGrowthAction, decideGrowthPointer, decideGrowthTrait, decideGrowthTransform, deriveGrowthPauseControl, formatGrowthTraitEffect, getGrowthInputPriority, hitGrowthPointer } from "../../src/phaser/growthUi";
 import { GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS } from "../../src/phaser/layout";
 
 function build(game: GameSimulation, slotId: string, definitionId: "arrow_tower" | "lumberyard"): string {
@@ -153,5 +153,13 @@ describe("growth UI derivation and input", () => {
     expect(decideGrowthPointer("transform", transform).kind).toBe("dispatch");
     expect(decideGrowthPointer("transform", close!).kind).toBe("dispatch");
     expect(decideGrowthPointer("transform", slot).kind).toBe("blocked");
+  });
+
+  it("keeps the tactical pause control visible and enabled during the opening countdown", () => {
+    expect(deriveGrowthPauseControl("OPENING_COUNTDOWN")).toEqual({ visible: true, enabled: true, label: "暂停" });
+    expect(deriveGrowthPauseControl("RUNNING")).toEqual({ visible: true, enabled: true, label: "暂停" });
+    expect(deriveGrowthPauseControl("TACTICAL_PAUSE")).toEqual({ visible: true, enabled: true, label: "继续" });
+    expect(deriveGrowthPauseControl("TRAIT_DRAFT").visible).toBe(false);
+    expect(deriveGrowthPauseControl("VICTORY").enabled).toBe(false);
   });
 });
