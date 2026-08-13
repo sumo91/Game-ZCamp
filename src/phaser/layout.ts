@@ -9,6 +9,26 @@ export const RESOURCE_RAIL = { x: 24, y: 1090, width: 672, height: 48 };
 export const CONTEXT_PANEL = { x: 24, y: 1138, width: 672, height: 142 };
 export const CARD_HAND = { x: 24, y: 1138, width: 672, height: 142 };
 
+export interface LogicalBounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export const GROWTH_TRANSFORM_OPTION_BOUNDS: readonly LogicalBounds[] = [
+  { x: 46, y: 455, width: 300, height: 150 },
+  { x: 374, y: 455, width: 300, height: 150 },
+  { x: 46, y: 635, width: 300, height: 150 },
+  { x: 374, y: 635, width: 300, height: 150 },
+];
+export const GROWTH_TRANSFORM_CLOSE_BOUNDS: LogicalBounds = { x: 240, y: 850, width: 240, height: 56 };
+export const GROWTH_CONTEXT_ACTION_BOUNDS: readonly LogicalBounds[] = [
+  { x: 42, y: 1220, width: 204, height: 56 },
+  { x: 258, y: 1220, width: 204, height: 56 },
+  { x: 474, y: 1220, width: 204, height: 56 },
+];
+
 export interface CampSlotLayout {
   id: string;
   row: number;

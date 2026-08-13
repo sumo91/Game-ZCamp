@@ -132,7 +132,7 @@ export function getGrowthCannonBurn(content: BuildingGrowthContent, building: Bu
   const stacks = getGrowthTraitStacks(building, "cannon_burn");
   if (!profile || profile.tower.id !== "cannon" || effect?.kind !== "tower_burn" || stacks <= 0) return null;
   return {
-    damagePerSecond: profile.baseAttackDamage * effect.damagePercent * Math.pow(1.5, stacks - 1),
+    damagePerSecond: profile.baseAttackDamage * effect.damagePercent * Math.pow(effect.stackMultiplier, stacks - 1),
     durationSeconds: effect.durationSeconds,
   };
 }

@@ -26,11 +26,12 @@ export type GrowthAttackType = "single" | "splash" | "slow" | "chain";
 export interface GrowthBuildingDefinition {
   id: GrowthBuildingId;
   displayName: string;
+  role: string;
   kind: "tower" | "lumberyard";
   buildable: boolean;
   buildCost: number;
   upgradeCosts: readonly [number, number, number, number];
-  maxLevel: 5;
+  maxLevel: number;
   baseProductionPerSecond?: readonly [number, number, number, number, number];
 }
 
@@ -55,7 +56,7 @@ export interface GrowthTowerDefinition {
 export interface GrowthTransformationRoute {
   from: "arrow_tower";
   to: GrowthSpecialTowerId;
-  goldCost: 10;
+  goldCost: number;
 }
 
 export type GrowthTraitSource = "common" | "lumberyard" | GrowthSpecialTowerId;
@@ -71,7 +72,7 @@ export type GrowthTraitEffect =
   | { kind: "tower_penetration"; extraTargets: 1; carryMultiplier: 0.7 }
   | { kind: "tower_elite_damage_percent"; amount: 0.3 }
   | { kind: "tower_splash_radius_percent"; amount: 0.2 }
-  | { kind: "tower_burn"; durationSeconds: 3; damagePercent: 0.2 }
+  | { kind: "tower_burn"; durationSeconds: 3; damagePercent: 0.2; stackMultiplier: 1.5 }
   | { kind: "tower_slow_depth"; durationSeconds: 0.5; extraSlowMultiplier: 0.05 }
   | { kind: "tower_vulnerability_percent"; amount: 0.25 }
   | { kind: "tower_chain"; extraTargets: 1 }
@@ -106,6 +107,7 @@ const GROWTH_BUILDINGS: readonly GrowthBuildingDefinition[] = [
   {
     id: "arrow_tower",
     displayName: "箭塔",
+    role: "基础单体防御",
     kind: "tower",
     buildable: true,
     buildCost: 40,
@@ -115,6 +117,7 @@ const GROWTH_BUILDINGS: readonly GrowthBuildingDefinition[] = [
   {
     id: "lumberyard",
     displayName: "木材厂",
+    role: "持续生产木材",
     kind: "lumberyard",
     buildable: true,
     buildCost: 60,
@@ -145,7 +148,7 @@ const SPECIAL_TOWER_TRAITS: readonly GrowthTraitDefinition[] = [
   { id: "machine_penetration", displayName: "穿透弹", role: "穿透目标 +1；后续目标承受本次伤害的 70%", pool: "special_tower", source: "machine_gun", repeatable: true, effect: { kind: "tower_penetration", extraTargets: 1, carryMultiplier: 0.7 } },
   { id: "machine_hunter", displayName: "猎杀", role: "对精英和 Boss 额外伤害 +30%", pool: "special_tower", source: "machine_gun", repeatable: true, effect: { kind: "tower_elite_damage_percent", amount: 0.3 } },
   { id: "cannon_blast", displayName: "扩爆", role: "爆炸半径 +20%", pool: "special_tower", source: "cannon", repeatable: true, effect: { kind: "tower_splash_radius_percent", amount: 0.2 } },
-  { id: "cannon_burn", displayName: "燃烧", role: "命中使目标燃烧 3 秒", pool: "special_tower", source: "cannon", repeatable: true, effect: { kind: "tower_burn", durationSeconds: 3, damagePercent: 0.2 } },
+  { id: "cannon_burn", displayName: "燃烧", role: "命中使目标燃烧 3 秒", pool: "special_tower", source: "cannon", repeatable: true, effect: { kind: "tower_burn", durationSeconds: 3, damagePercent: 0.2, stackMultiplier: 1.5 } },
   { id: "frost_deep", displayName: "深寒", role: "减速持续时间 +0.5 秒，减速倍率额外降低 0.05", pool: "special_tower", source: "frost", repeatable: true, effect: { kind: "tower_slow_depth", durationSeconds: 0.5, extraSlowMultiplier: 0.05 } },
   { id: "frost_vulnerability", displayName: "冰霜标记", role: "该塔对正被自己减速的目标伤害 +25%", pool: "special_tower", source: "frost", repeatable: true, effect: { kind: "tower_vulnerability_percent", amount: 0.25 } },
   { id: "electric_chain", displayName: "弹射", role: "该塔弹射目标 +1", pool: "special_tower", source: "electric", repeatable: true, effect: { kind: "tower_chain", extraTargets: 1 } },
@@ -259,7 +262,7 @@ export function validateBuildingGrowthContent(content: BuildingGrowthContent): v
   assertUnique(content.traits.map((definition) => definition.id), "trait definitions");
   assertUnique(content.transformations.map((route) => route.to), "transformation routes");
   for (const definition of content.buildings) {
-    if (!definition.buildable || definition.maxLevel !== 5 || definition.buildCost <= 0 || definition.upgradeCosts.length !== 4 || definition.upgradeCosts.some((cost) => cost <= 0)) {
+    if (!definition.buildable || !definition.role.trim() || definition.maxLevel !== 5 || definition.buildCost <= 0 || definition.upgradeCosts.length !== 4 || definition.upgradeCosts.some((cost) => cost <= 0)) {
       throw new Error("Growth building " + definition.id + " has invalid build or upgrade costs.");
     }
     if (definition.kind === "lumberyard" && definition.baseProductionPerSecond?.length !== 5) throw new Error("Lumberyard growth production table must contain five levels.");

@@ -12,15 +12,17 @@ import {
   decideGrowthAction,
   decideGrowthTrait,
   decideGrowthTransform,
+  decideGrowthPointer,
   getGrowthInputPriority,
+  hitGrowthPointer,
   type GrowthActionView,
   type GrowthBuildingDetailView,
   type GrowthTraitOptionView,
 } from "./growthUi";
-import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
+import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
 
 type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number };
-type PanelAction = { label: string; available: boolean; reason: string; run: () => void };
+type PanelAction = { label: string; available: boolean; reason: string; description: string; resourceLabel: string; statusLabel: string; run: () => void };
 
 const COLORS = {
   bg: 0x1d3824,
@@ -212,14 +214,15 @@ export class GameScene extends Phaser.Scene {
     this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
       const state = this.simulation.getState();
       const priority = getGrowthInputPriority(state.phase, this.transformOpen);
-      if (priority === "transform" && pointer.x >= 240 && pointer.x <= 480 && pointer.y >= 850 && pointer.y <= 906) {
+      const hit = hitGrowthPointer(pointer.x, pointer.y);
+      const decision = decideGrowthPointer(priority, hit);
+      if (decision.kind === "dispatch" && decision.hit.kind === "transform_close") {
         this.transformOpen = false;
         this.renderState();
         return;
       }
-      if (priority !== "building") return;
-      const layout = CAMP_SLOT_LAYOUTS.find((candidate) => pointer.x >= candidate.x && pointer.x <= candidate.x + candidate.width && pointer.y >= candidate.y && pointer.y <= candidate.y + candidate.height);
-      if (layout) this.handleSlotClick(layout.id);
+      if (decision.kind !== "dispatch" || decision.hit.kind !== "slot") return;
+      this.handleSlotClick(decision.hit.slotId);
     });
   }
 
@@ -229,10 +232,12 @@ export class GameScene extends Phaser.Scene {
     this.contextTitle = this.add.text(42, 1147, "营地操作", this.textStyle(19, "#fff3d2")).setDepth(16);
     this.contextDetail = this.add.text(42, 1173, "点击空格建造，点击建筑查看", { ...this.textStyle(14, "#d6d39c"), wordWrap: { width: 620 } }).setDepth(16);
     this.contextHint = this.add.text(42, 1195, "", { ...this.textStyle(13, "#f6c453"), wordWrap: { width: 620 } }).setDepth(16);
-    const centers = [144, 360, 576];
-    for (let index = 0; index < centers.length; index += 1) {
-      const button = this.add.rectangle(centers[index]!, 1248, 204, 56, COLORS.panel, 1).setDepth(16).setInteractive({ useHandCursor: true });
-      const label = this.add.text(centers[index]!, 1248, "", { ...this.textStyle(14, "#ffffff"), align: "center", wordWrap: { width: 188 } }).setOrigin(0.5).setDepth(17);
+    for (let index = 0; index < GROWTH_CONTEXT_ACTION_BOUNDS.length; index += 1) {
+      const bounds = GROWTH_CONTEXT_ACTION_BOUNDS[index]!;
+      const centerX = bounds.x + bounds.width / 2;
+      const centerY = bounds.y + bounds.height / 2;
+      const button = this.add.rectangle(centerX, centerY, bounds.width, bounds.height, COLORS.panel, 1).setDepth(16).setInteractive({ useHandCursor: true });
+      const label = this.add.text(centerX, centerY, "", { ...this.textStyle(14, "#ffffff"), align: "center", wordWrap: { width: bounds.width - 16 } }).setOrigin(0.5).setDepth(17);
       button.on("pointerdown", () => this.handleActionClick(index));
       this.actionButtons.push(button);
       this.actionLabels.push(label);
@@ -245,19 +250,20 @@ export class GameScene extends Phaser.Scene {
     this.transformPanel.setStrokeStyle(3, COLORS.gold, 1);
     this.transformTitle = this.add.text(360, 352, "改造箭塔", this.textStyle(28, "#f6c453")).setOrigin(0.5).setDepth(72);
     this.transformHint = this.add.text(360, 395, "选择一种确定性特殊塔 · 背景建筑保持可见", { ...this.textStyle(15, "#dbe6f4"), align: "center" }).setOrigin(0.5).setDepth(72);
-    const centers = [{ x: 196, y: 530 }, { x: 524, y: 530 }, { x: 196, y: 710 }, { x: 524, y: 710 }];
-    for (const center of centers) {
+    for (const bounds of GROWTH_TRANSFORM_OPTION_BOUNDS) {
       const index = this.transformButtons.length;
-      const button = this.add.rectangle(center.x, center.y, 300, 150, COLORS.panel, 1).setDepth(72).setInteractive({ useHandCursor: true });
-      const label = this.add.text(center.x + 26, center.y, "", { ...this.textStyle(15, "#fff3d2"), wordWrap: { width: 230 }, align: "left" }).setOrigin(0, 0.5).setDepth(74);
+      const centerX = bounds.x + bounds.width / 2;
+      const centerY = bounds.y + bounds.height / 2;
+      const button = this.add.rectangle(centerX, centerY, bounds.width, bounds.height, COLORS.panel, 1).setDepth(72).setInteractive({ useHandCursor: true });
+      const label = this.add.text(bounds.x + 76, centerY, "", { ...this.textStyle(15, "#fff3d2"), wordWrap: { width: bounds.width - 92 }, align: "left" }).setOrigin(0, 0.5).setDepth(74);
       const icon = this.add.graphics().setDepth(74);
       button.on("pointerdown", () => this.handleTransformClick(index));
       this.transformButtons.push(button);
       this.transformLabels.push(label);
       this.transformIcons.push(icon);
     }
-    this.transformCloseButton = this.add.rectangle(360, 878, 240, 56, COLORS.blue, 1).setDepth(72).setInteractive({ useHandCursor: true });
-    this.transformCloseLabel = this.add.text(360, 878, "返回建筑详情", this.textStyle(16, "#ffffff")).setOrigin(0.5).setDepth(73);
+    this.transformCloseButton = this.add.rectangle(GROWTH_TRANSFORM_CLOSE_BOUNDS.x + GROWTH_TRANSFORM_CLOSE_BOUNDS.width / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.y + GROWTH_TRANSFORM_CLOSE_BOUNDS.height / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.width, GROWTH_TRANSFORM_CLOSE_BOUNDS.height, COLORS.blue, 1).setDepth(72).setInteractive({ useHandCursor: true });
+    this.transformCloseLabel = this.add.text(GROWTH_TRANSFORM_CLOSE_BOUNDS.x + GROWTH_TRANSFORM_CLOSE_BOUNDS.width / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.y + GROWTH_TRANSFORM_CLOSE_BOUNDS.height / 2, "返回建筑详情", this.textStyle(16, "#ffffff")).setOrigin(0.5).setDepth(73);
 
     this.traitOverlay = this.add.rectangle(360, 640, 720, 1280, 0x07101d, 0.66).setDepth(80).setInteractive();
     this.traitPanel = this.add.rectangle(360, 650, 660, 900, COLORS.panelDeep, 0.99).setDepth(81);
@@ -508,14 +514,27 @@ export class GameScene extends Phaser.Scene {
       this.contextTitle.setText("空建筑格 · 第 " + (layout.row + 1) + " 排·第 " + (layout.column + 1) + " 格");
       this.contextDetail.setText("选择一种建筑 · 两项费用均来自核心成长内容");
       this.contextHint.setText(transient ? this.messageText.text : "资源不足时仍可查看按钮，点击只提示准确差额");
-      this.panelActions = actions.map((action) => ({ label: action.label, available: action.affordable, reason: action.reason, run: () => this.performBuild(action) }));
+      this.panelActions = actions.map((action) => ({
+        label: action.label,
+        available: action.affordable,
+        reason: action.reason,
+        description: action.description,
+        resourceLabel: action.resourceLabel,
+        statusLabel: action.statusLabel,
+        run: () => this.performBuild(action),
+      }));
     } else if (building.kind === "main_city") {
       this.contextTitle.setText("主城 · 固定");
       this.contextDetail.setText("+0.5 木材/秒 · 第 3 排·第 3 格");
       this.contextHint.setText(transient ? this.messageText.text : "主城不可建造、升级、改造或拆除");
     } else {
-      const detail = deriveBuildingDetail(starterCatalog.buildingGrowth, state, building)!;
-      this.renderBuildingDetail(detail, transient ? this.messageText.text : "");
+      const detail = deriveBuildingDetail(starterCatalog.buildingGrowth, state, building);
+      if (detail) this.renderBuildingDetail(detail, transient ? this.messageText.text : "");
+      else {
+        this.contextTitle.setText("建筑内容不可用");
+        this.contextDetail.setText("当前建筑缺少成长内容定义，未显示猜测费用或等级");
+        this.contextHint.setText(transient ? this.messageText.text : "暂无合法操作");
+      }
     }
     this.renderActionButtons();
   }
@@ -527,14 +546,30 @@ export class GameScene extends Phaser.Scene {
     this.contextHint.setText(transientHint || (this.destroyConfirm ? "拆除不返还资源 · 再次确认将永久失去等级与词条" : traitText));
     if (this.destroyConfirm) {
       this.panelActions = [
-        { label: "取消拆除", available: true, reason: "返回建筑详情", run: () => { this.destroyConfirm = false; } },
-        { label: "确认拆除", available: true, reason: "", run: () => this.performDestroy() },
+        { label: "取消拆除", available: true, reason: "返回建筑详情", description: "返回建筑详情", resourceLabel: "", statusLabel: "返回", run: () => { this.destroyConfirm = false; } },
+        { label: "确认拆除", available: true, reason: "", description: "永久移除当前建筑", resourceLabel: "", statusLabel: "确认", run: () => this.performDestroy() },
       ];
       return;
     }
-    this.panelActions = [{ label: detail.upgrade.label, available: detail.upgrade.affordable, reason: detail.upgrade.reason, run: () => this.performUpgrade(detail.upgrade) }];
-    if (detail.canTransform) this.panelActions.push({ label: "改造｜金币 10", available: true, reason: "打开四路改造选择", run: () => { this.transformOpen = true; } });
-    this.panelActions.push({ label: "拆除", available: true, reason: "拆除不返还资源", run: () => { this.destroyConfirm = true; } });
+    this.panelActions = [{
+      label: detail.upgrade.label,
+      available: detail.upgrade.affordable,
+      reason: detail.upgrade.reason,
+      description: detail.upgrade.description,
+      resourceLabel: detail.upgrade.resourceLabel,
+      statusLabel: detail.upgrade.statusLabel,
+      run: () => this.performUpgrade(detail.upgrade),
+    }];
+    if (detail.canTransform) this.panelActions.push({
+      label: "改造｜" + detail.transformResourceLabel + " " + (detail.transformCostLabel ?? ""),
+      available: true,
+      reason: "打开四路改造选择",
+      description: "选择特殊塔职责",
+      resourceLabel: detail.transformResourceLabel,
+      statusLabel: "查看改造",
+      run: () => { this.transformOpen = true; },
+    });
+    this.panelActions.push({ label: "拆除", available: true, reason: "拆除不返还资源", description: "移除当前建筑", resourceLabel: "", statusLabel: "可拆除", run: () => { this.destroyConfirm = true; } });
   }
 
   private renderActionButtons(): void {
@@ -549,7 +584,8 @@ export class GameScene extends Phaser.Scene {
       button.setFillStyle(action.available ? index === 2 ? COLORS.line : COLORS.blue : 0x3c4439, 1);
       button.setAlpha(action.available ? 1 : 0.72);
       button.setStrokeStyle(2, action.available ? COLORS.gold : 0x77796c, 1);
-      label.setText(action.label).setColor(action.available ? "#ffffff" : "#c0c3b5");
+      const resource = action.resourceLabel ? " · " + action.resourceLabel : "";
+      label.setText(action.label + "\n" + action.description + resource + " · " + action.statusLabel).setColor(action.available ? "#ffffff" : "#c0c3b5");
     }
   }
 
@@ -576,9 +612,12 @@ export class GameScene extends Phaser.Scene {
       if (!option) continue;
       const color = TRANSFORM_COLORS[option.targetTowerId] ?? COLORS.gold;
       button.setFillStyle(option.affordable ? 0x41543d : 0x343a34, 1).setAlpha(option.affordable ? 1 : 0.8).setStrokeStyle(2, option.affordable ? color : 0x74786c, 1);
-      label.setText(option.name + "\n" + option.role + "\n金币 " + option.goldCost + (option.affordable ? " · 可改造" : " · " + option.reason)).setColor(option.affordable ? "#fff3d2" : "#c6c7bc");
-      icon.clear().fillStyle(color, option.affordable ? 1 : 0.6).fillCircle((index % 2 === 0 ? 82 : 410), index < 2 ? 530 : 710, 24);
-      this.drawTowerGlyph(icon, option.targetTowerId, (index % 2 === 0 ? 82 : 410), index < 2 ? 530 : 710, color);
+      label.setText(option.name + "\n" + option.role + "\n" + option.resourceLabel + " " + option.goldCost + " · " + option.statusLabel).setColor(option.affordable ? "#fff3d2" : "#c6c7bc");
+      const bounds = GROWTH_TRANSFORM_OPTION_BOUNDS[index]!;
+      const iconX = bounds.x + 36;
+      const iconY = bounds.y + bounds.height / 2;
+      icon.clear().fillStyle(color, option.affordable ? 1 : 0.6).fillCircle(iconX, iconY, 24);
+      this.drawTowerGlyph(icon, option.targetTowerId, iconX, iconY, color);
     }
   }
 
@@ -665,7 +704,7 @@ export class GameScene extends Phaser.Scene {
       const selected = this.selectedSlotId === layout.id;
       this.dynamic.fillStyle(building ? 0x263d32 : 0x263a2c, 1).fillRect(layout.x, layout.y, layout.width, layout.height);
       this.dynamic.lineStyle(selected ? 4 : 2, selected ? COLORS.gold : COLORS.line, 1).strokeRect(layout.x, layout.y, layout.width, layout.height);
-      if (building) this.drawBuilding(building, layout.x + layout.width / 2, layout.y + layout.height / 2 - (selected ? 6 : 0));
+      if (building) this.drawBuilding(building, layout.x + layout.width / 2, layout.y + layout.height / 2 - (selected ? 6 : 0), this.growthMaxLevel(state, building));
       else {
         this.dynamic.fillStyle(selected ? COLORS.gold : 0x53644a, selected ? 0.95 : 0.7).fillCircle(layout.x + layout.width / 2, layout.y + layout.height / 2, selected ? 20 : 17);
         this.dynamic.lineStyle(2, selected ? COLORS.text : 0xa8b18c, 0.8).lineBetween(layout.x + layout.width / 2 - 9, layout.y + layout.height / 2, layout.x + layout.width / 2 + 9, layout.y + layout.height / 2).lineBetween(layout.x + layout.width / 2, layout.y + layout.height / 2 - 9, layout.x + layout.width / 2, layout.y + layout.height / 2 + 9);
@@ -778,7 +817,12 @@ export class GameScene extends Phaser.Scene {
     this.dynamic.lineStyle(4, dark, 1).lineBetween(x - 6, y + bodyHeight, x - 9, legY + 3).lineBetween(x + 6, y + bodyHeight, x + 9, legY + 3);
   }
 
-  private drawBuilding(building: BuildingState, x: number, y: number): void {
+  private growthMaxLevel(state: GameState, building: BuildingState): number | null {
+    if (building.model !== "growth" || !building.growthDefinitionId) return null;
+    return deriveBuildingDetail(starterCatalog.buildingGrowth, state, building)?.maxLevel ?? null;
+  }
+
+  private drawBuilding(building: BuildingState, x: number, y: number, maxLevel: number | null): void {
     if (building.kind === "main_city") {
       this.dynamic.fillStyle(0x73552c, 1).fillRect(x - 34, y - 18, 68, 34);
       this.dynamic.lineStyle(3, COLORS.gold, 1).strokeRect(x - 34, y - 18, 68, 34);
@@ -796,9 +840,8 @@ export class GameScene extends Phaser.Scene {
       this.dynamic.fillStyle(0x2a1d14, 1).fillRect(x - 9, y - 1, 18, 18);
       this.dynamic.fillStyle(0xc9853d, 1).fillCircle(x - 23, y + 16, 7).fillCircle(x - 11, y + 19, 7);
     }
-    const maxLevel = 5;
     this.dynamic.fillStyle(0x202a22, 1).fillRect(x - 19, y + 25, 38, 4);
-    this.dynamic.fillStyle(COLORS.gold, 1).fillRect(x - 19, y + 25, 38 * Math.min(1, building.level / maxLevel), 4);
+    if (maxLevel !== null && maxLevel > 0) this.dynamic.fillStyle(COLORS.gold, 1).fillRect(x - 19, y + 25, 38 * Math.min(1, building.level / maxLevel), 4);
   }
 
   private drawTowerGlyph(graphics: Phaser.GameObjects.Graphics, towerId: string, x: number, y: number, color: number): void {
