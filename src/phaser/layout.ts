@@ -6,6 +6,7 @@ export const ENEMY_ZONE = { x: 24, y: 0, width: 672, height: 724 };
 export const WALL_ZONE = { x: 24, y: 708, width: 672, height: 64 };
 export const GRID_ZONE = { x: 24, y: 772, width: 672, height: 318 };
 export const RESOURCE_RAIL = { x: 24, y: 1090, width: 672, height: 48 };
+export const CONTEXT_PANEL = { x: 24, y: 1138, width: 672, height: 142 };
 export const CARD_HAND = { x: 24, y: 1138, width: 672, height: 142 };
 
 export interface CampSlotLayout {
