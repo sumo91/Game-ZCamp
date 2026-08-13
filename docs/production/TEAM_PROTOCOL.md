@@ -46,7 +46,8 @@
 
 ## 长期事实源
 
-- 阶段玩法设计：`docs/尸潮营地_连续尸潮动态卡牌_阶段版本设计_v0.1.md`
+- 当前阶段玩法设计：`docs/尸潮营地_建筑成长改造_阶段版本设计_v0.2.md`
+- 历史阶段玩法设计：`docs/尸潮营地_连续尸潮动态卡牌_阶段版本设计_v0.1.md`
 - UI 规范：`docs/ui/ZCamp_UI_Bible.md`
 - 美术规范：`docs/art/ZCamp_Art_Bible.md`
 - UI SVG 母版：`docs/ui/visuals/zcamp-battle-ui-d3-vector.svg`
