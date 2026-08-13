@@ -167,6 +167,66 @@ describe("growth building combat and economy integration", () => {
     expect(game.drainEvents().some((event) => event.type === "enemy_hit")).toBe(false);
   });
 
+  it("refreshes an active cannon burn without double-settling the covered step", () => {
+    const run = (deltaSeconds: number, steps: number, initialRemainingSeconds: number): { burnDamage: number; remaining: number } => {
+      const { game, building } = makeGrowthTower("cannon", [trait("cannon_burn", 2)]);
+      building.attackCooldownSeconds = 0.1;
+      silenceFutureSpawns(game);
+      const target = enemy("refresh-target", 1, 100000);
+      target.growthBurnStates = [{ sourceBuildingId: building.id, damagePerSecond: 10.5, remainingSeconds: initialRemainingSeconds }];
+      game.getState().enemies = [target];
+      game.drainEvents();
+      for (let index = 0; index < steps; index += 1) game.tick(deltaSeconds);
+      const directDamage = 35;
+      return { burnDamage: 100000 - target.hp - directDamage, remaining: target.growthBurnStates?.[0]?.remainingSeconds ?? 0 };
+    };
+    const quarter = run(0.25, 4, 0.15);
+    const eighth = run(0.125, 8, 0.15);
+    const thirtyHz = run(1 / 30, 30, 0.15);
+    expect(quarter.burnDamage).toBeCloseTo(10.5, 6);
+    expect(eighth.burnDamage).toBeCloseTo(quarter.burnDamage, 6);
+    expect(thirtyHz.burnDamage).toBeCloseTo(quarter.burnDamage, 6);
+    expect(quarter.remaining).toBeCloseTo(2.1, 6);
+    expect(eighth.remaining).toBeCloseTo(quarter.remaining, 6);
+    expect(thirtyHz.remaining).toBeCloseTo(quarter.remaining, 6);
+
+    const expiredBeforeAttack = run(0.25, 4, 0.05);
+    expect(expiredBeforeAttack.burnDamage).toBeCloseTo((0.05 + 0.9) * 10.5, 6);
+    expect(expiredBeforeAttack.remaining).toBeCloseTo(2.1, 6);
+  });
+
+  it("keeps two cannon burn sources independent when one tower is dismantled", () => {
+    const game = new GameSimulation(quietCatalog());
+    game.getState().wood = 1000;
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c2", definitionId: "arrow_tower" });
+    const first = game.getState().buildings.find((building) => building.slotId === "slot-r1-c1")!;
+    const second = game.getState().buildings.find((building) => building.slotId === "slot-r1-c2")!;
+    game.getState().gold = 20;
+    expect(game.dispatch({ type: "transform_tower", buildingId: first.id, targetTowerId: "cannon" }).accepted).toBe(true);
+    expect(game.dispatch({ type: "transform_tower", buildingId: second.id, targetTowerId: "cannon" }).accepted).toBe(true);
+    first.attackCooldownSeconds = 99;
+    second.attackCooldownSeconds = 99;
+    startRunning(game);
+    silenceFutureSpawns(game);
+    const target = enemy("two-source-target", 1, 100000);
+    target.growthBurnStates = [
+      { sourceBuildingId: first.id, damagePerSecond: 7, remainingSeconds: 3 },
+      { sourceBuildingId: second.id, damagePerSecond: 7, remainingSeconds: 3 },
+    ];
+    game.getState().enemies = [target];
+    game.drainEvents();
+    game.tick(0.25);
+    expect(100000 - target.hp).toBeCloseTo(3.5, 6);
+    expect(target.growthBurnStates?.map((state) => state.sourceBuildingId)).toEqual([first.id, second.id]);
+    expect(game.dispatch({ type: "destroy_building", slotId: first.slotId }).accepted).toBe(true);
+    expect(target.growthBurnStates).toEqual([{ sourceBuildingId: second.id, damagePerSecond: 7, remainingSeconds: 2.75 }]);
+    const hpAfterDestroy = target.hp;
+    game.tick(0.25);
+    expect(hpAfterDestroy - target.hp).toBeCloseTo(1.75, 6);
+    expect(target.growthBurnStates).toEqual([{ sourceBuildingId: second.id, damagePerSecond: 7, remainingSeconds: 2.5 }]);
+  });
+
   it("settles two growth lumberyards independently, discounts only the owner, and stockpiles once per wave", () => {
     const game = new GameSimulation(quietCatalog());
     game.getState().wood = 1000;

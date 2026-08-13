@@ -54,6 +54,7 @@ export class GameSimulation {
   private state: GameState;
   private events: GameEvent[] = [];
   private randomState: number;
+  private growthBurnRemainingAtStepStart = new Map<string, number>();
 
   public constructor(catalog: ContentCatalog = starterCatalog, seed = 1337) {
     validateCatalog(catalog);
@@ -668,10 +669,12 @@ export class GameSimulation {
   }
 
   private advanceGrowthBurnStates(deltaSeconds: number): void {
+    this.growthBurnRemainingAtStepStart.clear();
     for (const enemy of this.state.enemies) {
       const activeStates: GrowthBurnState[] = [];
       for (const state of enemy.growthBurnStates ?? []) {
         if (!this.isActiveGrowthSource(state.sourceBuildingId)) continue;
+        this.growthBurnRemainingAtStepStart.set(this.growthBurnStateKey(enemy.id, state.sourceBuildingId), state.remainingSeconds);
         const burnStep = Math.min(deltaSeconds, state.remainingSeconds);
         if (enemy.hp > 0 && burnStep > EPSILON) this.applyContinuousDamage(enemy, state.damagePerSecond * burnStep, "growth-burn:" + state.sourceBuildingId);
         const remainingSeconds = Math.max(0, state.remainingSeconds - deltaSeconds);
@@ -903,7 +906,12 @@ export class GameSimulation {
         for (const enemy of [target, ...splashTargets]) {
           if (enemy.hp <= 0) continue;
           this.applyGrowthBurn(enemy, building.id, burn.damagePerSecond, burn.durationSeconds);
-          this.advanceFreshGrowthBurn(enemy, building.id, burn.damagePerSecond, Math.max(0, deltaSeconds - attackOffsetSeconds));
+          const activeAfterAttackSeconds = Math.max(0, deltaSeconds - attackOffsetSeconds);
+          const previousRemainingSeconds = this.growthBurnRemainingAtStepStart.get(this.growthBurnStateKey(enemy.id, building.id));
+          const uncoveredAfterAttackSeconds = previousRemainingSeconds === undefined
+            ? activeAfterAttackSeconds
+            : Math.max(0, deltaSeconds - Math.max(attackOffsetSeconds, previousRemainingSeconds));
+          this.advanceFreshGrowthBurn(enemy, building.id, burn.damagePerSecond, activeAfterAttackSeconds, uncoveredAfterAttackSeconds);
           this.events.push({ type: "enemy_burned", enemyId: enemy.id, position: enemy.position, damagePerSecond: burn.damagePerSecond, durationSeconds: burn.durationSeconds, areaRadius: getGrowthCannonSplashRadius(this.catalog.buildingGrowth, building), sourceBuildingId: building.id });
         }
       }
@@ -969,9 +977,13 @@ export class GameSimulation {
     states.push({ sourceBuildingId, damagePerSecond, remainingSeconds: durationSeconds });
   }
 
-  private advanceFreshGrowthBurn(enemy: EnemyRuntimeState, sourceBuildingId: string, damagePerSecond: number, activeSeconds: number): void {
+  private growthBurnStateKey(enemyId: string, sourceBuildingId: string): string {
+    return enemyId + "\u0000" + sourceBuildingId;
+  }
+
+  private advanceFreshGrowthBurn(enemy: EnemyRuntimeState, sourceBuildingId: string, damagePerSecond: number, activeSeconds: number, damageSeconds = activeSeconds): void {
     if (activeSeconds <= EPSILON) return;
-    if (enemy.hp > 0) this.applyContinuousDamage(enemy, damagePerSecond * activeSeconds, "growth-burn:" + sourceBuildingId);
+    if (enemy.hp > 0 && damageSeconds > EPSILON) this.applyContinuousDamage(enemy, damagePerSecond * damageSeconds, "growth-burn:" + sourceBuildingId);
     const states = enemy.growthBurnStates ?? [];
     const state = states.find((candidate) => candidate.sourceBuildingId === sourceBuildingId);
     if (!state) return;
