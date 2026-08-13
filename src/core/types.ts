@@ -53,9 +53,23 @@ export interface EnemyRuntimeState {
   abilityCooldownSeconds: number;
   burnDamagePerSecond: number;
   burnRemainingSeconds: number;
+  growthSlowStates?: GrowthSlowState[];
+  growthBurnStates?: GrowthBurnState[];
   chargeWarningRemainingSeconds: number;
   chargeRemainingSeconds: number;
   chargeTargetPosition: number;
+}
+
+export interface GrowthSlowState {
+  sourceBuildingId: string;
+  multiplier: number;
+  remainingSeconds: number;
+}
+
+export interface GrowthBurnState {
+  sourceBuildingId: string;
+  damagePerSecond: number;
+  remainingSeconds: number;
 }
 
 export interface CardInstance {
@@ -122,7 +136,7 @@ export type GameEvent =
   | { type: "enemy_charge_warning"; enemyId: string; position: number; durationSeconds: number }
   | { type: "enemy_charge_started"; enemyId: string; position: number; targetPosition: number }
   | { type: "enemy_charge_impact"; enemyId: string; position: number }
-  | { type: "enemy_burned"; enemyId: string; position: number; damagePerSecond: number; durationSeconds: number; areaRadius: number }
+  | { type: "enemy_burned"; enemyId: string; position: number; damagePerSecond: number; durationSeconds: number; areaRadius: number; sourceBuildingId?: string }
   | { type: "overlord_inspire"; enemyId: string; targetIds: string[]; durationSeconds: number; multiplier: number }
   | { type: "focus_fire_marked"; enemyId: string | null; nextSpawn: boolean; durationSeconds: number }
   | { type: "card_received"; cardInstanceId: string; definitionId: string; fromWaiting: boolean }

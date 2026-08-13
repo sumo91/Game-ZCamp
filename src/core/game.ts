@@ -2,6 +2,17 @@ import { FIRST_BATCH_CARD_IDS, SUPPLY_CATEGORY_PATTERN, starterCatalog, validate
 import type { CardDefinition, CardEffect, ContentCatalog, EnemyDefinition, TowerDefinition } from "./content";
 import { getGrowthBuildingDefinition, getGrowthTraitDefinition, getGrowthTowerDefinition, getGrowthUpgradeCost, selectTraitOptions } from "./buildingGrowth";
 import type { GrowthBuildingId, GrowthSpecialTowerId, GrowthTraitId } from "./buildingGrowth";
+import {
+  getGrowthCannonBurn,
+  getGrowthCannonSplashRadius,
+  getGrowthElectricChainExtraTargets,
+  getGrowthFrostSlow,
+  getGrowthMachinePenetrationMultiplier,
+  getGrowthMachinePenetrationTargets,
+  getGrowthTowerAttackProfile,
+  getGrowthTowerDamage,
+} from "./growthCombat";
+import { getGrowthLumberyardUpgradeDiscount, getGrowthLumberyardWaveStockpile } from "./growthEconomy";
 import { getUpgradeCost } from "./costs";
 import { getWoodProductionPerSecond } from "./resources";
 import { CAMP_SLOT_IDS } from "./types";
@@ -11,6 +22,8 @@ import type {
   CardTarget,
   CommandResult,
   EnemyRuntimeState,
+  GrowthBurnState,
+  GrowthSlowState,
   GameCommand,
   GameEvent,
   GamePhase,
@@ -218,7 +231,10 @@ export class GameSimulation {
     const nextWave = Math.min(MAX_WAVE, Math.floor(this.state.effectiveBattleTimeSeconds / WAVE_INTERVAL_SECONDS) + 1);
     this.state.wave = nextWave;
     this.state.nextWaveTimeRemainingSeconds = nextWave < MAX_WAVE ? Math.max(0, nextWave * WAVE_INTERVAL_SECONDS - this.state.effectiveBattleTimeSeconds) : 0;
-    for (let wave = previousWave + 1; wave <= nextWave; wave += 1) this.events.push({ type: "wave_started", wave });
+    for (let wave = previousWave + 1; wave <= nextWave; wave += 1) {
+      this.state.wood += this.state.buildings.reduce((total, building) => total + getGrowthLumberyardWaveStockpile(this.catalog.buildingGrowth, building), 0);
+      this.events.push({ type: "wave_started", wave });
+    }
   }
 
   private spawnDueEnemies(): void {
@@ -267,6 +283,8 @@ export class GameSimulation {
       abilityCooldownSeconds: definition.signature?.initialCooldownSeconds ?? 0,
       burnDamagePerSecond: 0,
       burnRemainingSeconds: 0,
+      growthSlowStates: [],
+      growthBurnStates: [],
       chargeWarningRemainingSeconds: 0,
       chargeRemainingSeconds: 0,
       chargeTargetPosition: 0,
@@ -513,7 +531,8 @@ export class GameSimulation {
     if (this.state.pendingTraitDraft) return { accepted: false, reason: "请先选择当前建筑词条" };
     const building = this.state.buildings.find((candidate) => candidate.id === buildingId);
     if (!building || building.model !== "growth" || !building.growthDefinitionId) return { accepted: false, reason: "不是新版成长建筑" };
-    const cost = getGrowthUpgradeCost(this.catalog.buildingGrowth, building.growthDefinitionId, building.level);
+    const discount = getGrowthLumberyardUpgradeDiscount(this.catalog.buildingGrowth, building);
+    const cost = getGrowthUpgradeCost(this.catalog.buildingGrowth, building.growthDefinitionId, building.level, discount);
     if (cost === null) return { accepted: false, reason: "建筑已达到 Lv.5" };
     if (this.state.wood < cost) return { accepted: false, reason: "木材不足" };
     const options = selectTraitOptions(this.catalog.buildingGrowth, building.growthDefinitionId, (maxExclusive) => this.nextRandomInt(maxExclusive));
@@ -588,6 +607,7 @@ export class GameSimulation {
     if (index < 0) return { accepted: false, reason: "该格没有可拆除建筑" };
     const building = this.state.buildings[index]!;
     if (building.kind === "main_city") return { accepted: false, reason: "主城不可拆除" };
+    this.removeGrowthSourceStates(building.id);
     this.state.buildings.splice(index, 1);
     this.events.push({ type: "building_destroyed", buildingId: building.id, slotId: building.slotId });
     return { accepted: true, buildingId: building.id };
@@ -640,7 +660,38 @@ export class GameSimulation {
     if (this.state.overlordInspireRemainingSeconds <= EPSILON) this.state.overlordInspireMultiplier = 1;
   }
 
+  private isActiveGrowthSource(sourceBuildingId: string): boolean {
+    const source = this.state.buildings.find((building) => building.id === sourceBuildingId);
+    return source?.model === "growth" && source.kind === "tower";
+  }
+
+  private advanceGrowthBurnStates(deltaSeconds: number): void {
+    for (const enemy of this.state.enemies) {
+      const activeStates: GrowthBurnState[] = [];
+      for (const state of enemy.growthBurnStates ?? []) {
+        if (!this.isActiveGrowthSource(state.sourceBuildingId)) continue;
+        const burnStep = Math.min(deltaSeconds, state.remainingSeconds);
+        if (enemy.hp > 0 && burnStep > EPSILON) this.applyDamage(enemy, state.damagePerSecond * burnStep, "growth-burn:" + state.sourceBuildingId);
+        const remainingSeconds = Math.max(0, state.remainingSeconds - deltaSeconds);
+        if (remainingSeconds > EPSILON) activeStates.push({ ...state, remainingSeconds });
+      }
+      enemy.growthBurnStates = activeStates;
+    }
+  }
+
+  private advanceGrowthSlowStates(enemy: EnemyRuntimeState, deltaSeconds: number): number {
+    const activeStates: GrowthSlowState[] = [];
+    for (const state of enemy.growthSlowStates ?? []) {
+      if (!this.isActiveGrowthSource(state.sourceBuildingId)) continue;
+      const remainingSeconds = Math.max(0, state.remainingSeconds - deltaSeconds);
+      if (remainingSeconds > EPSILON) activeStates.push({ ...state, remainingSeconds });
+    }
+    enemy.growthSlowStates = activeStates;
+    return activeStates.reduce((multiplier, state) => Math.min(multiplier, state.multiplier), 1);
+  }
+
   private updateEnemies(deltaSeconds: number): void {
+    this.advanceGrowthBurnStates(deltaSeconds);
     const frozen = this.state.globalFreezeRemainingSeconds > EPSILON;
     if (!frozen) {
       const overlord = this.state.enemies.find((enemy) => enemy.definitionId === "overlord_boss" && enemy.hp > 0);
@@ -675,6 +726,7 @@ export class GameSimulation {
         enemy.burnRemainingSeconds = Math.max(0, enemy.burnRemainingSeconds - deltaSeconds);
         if (enemy.burnRemainingSeconds <= EPSILON) enemy.burnDamagePerSecond = 0;
       }
+      const growthSlowMultiplier = this.advanceGrowthSlowStates(enemy, deltaSeconds);
       if (enemy.hp <= 0 || frozen) continue;
 
       enemy.attackCooldownSeconds = Math.max(0, enemy.attackCooldownSeconds - deltaSeconds);
@@ -711,7 +763,7 @@ export class GameSimulation {
         }
       }
 
-      let speed = definition.moveSpeed * enemy.slowMultiplier;
+      let speed = definition.moveSpeed * enemy.slowMultiplier * growthSlowMultiplier;
       if (this.state.overlordInspireRemainingSeconds > EPSILON && definition.tier !== "boss") {
         speed *= this.state.overlordInspireMultiplier;
       }
@@ -722,7 +774,11 @@ export class GameSimulation {
 
   private resolveTowerAttacks(deltaSeconds: number): void {
     for (const building of this.state.buildings) {
-      if (building.kind !== "tower" || building.model === "growth") continue;
+      if (building.kind !== "tower") continue;
+      if (building.model === "growth") {
+        this.resolveGrowthTowerAttack(building, deltaSeconds);
+        continue;
+      }
       building.attackCooldownSeconds = Math.max(0, building.attackCooldownSeconds - deltaSeconds);
       if (building.attackCooldownSeconds > EPSILON) continue;
       const tower = this.getTowerDefinition(building.definitionId);
@@ -796,6 +852,124 @@ export class GameSimulation {
     }
   }
 
+  private resolveGrowthTowerAttack(building: BuildingState, deltaSeconds: number): void {
+    const profile = getGrowthTowerAttackProfile(this.catalog.buildingGrowth, building);
+    if (!profile) return;
+    const cooldownBefore = building.attackCooldownSeconds;
+    building.attackCooldownSeconds = Math.max(0, building.attackCooldownSeconds - deltaSeconds);
+    if (building.attackCooldownSeconds > EPSILON) return;
+    const attackOffsetSeconds = Math.min(deltaSeconds, Math.max(0, cooldownBefore));
+    const target = this.findTarget(building, { range: profile.range });
+    building.attackCooldownSeconds = profile.attackIntervalSeconds;
+    if (!target) return;
+
+    const splashTargets = profile.tower.attackType === "splash"
+      ? this.state.enemies
+        .filter((enemy) => enemy.id !== target.id && enemy.hp > 0 && this.isGrowthTargetInRange(enemy, target.position, getGrowthCannonSplashRadius(this.catalog.buildingGrowth, building)))
+        .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))
+      : [];
+    const directDamage = this.getGrowthDamage(building, target);
+    this.applyDamage(target, directDamage, building.id);
+    this.events.push({ type: "tower_attack", buildingId: building.id, towerDefinitionId: profile.tower.id, targetId: target.id, targetPosition: target.position });
+
+    if (profile.tower.id === "frost") {
+      const slow = getGrowthFrostSlow(this.catalog.buildingGrowth, building);
+      if (slow && target.hp > 0) this.applyGrowthSlow(target, building.id, slow.multiplier, slow.durationSeconds);
+    }
+
+    if (profile.tower.id === "cannon") {
+      for (const enemy of splashTargets) {
+        this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * 0.45, building.id);
+        this.events.push({ type: "tower_special", buildingId: building.id, effect: "溅射", targetId: enemy.id });
+      }
+      const burn = getGrowthCannonBurn(this.catalog.buildingGrowth, building);
+      if (burn) {
+        for (const enemy of [target, ...splashTargets]) {
+          if (enemy.hp <= 0) continue;
+          this.applyGrowthBurn(enemy, building.id, burn.damagePerSecond, burn.durationSeconds);
+          this.advanceFreshGrowthBurn(enemy, building.id, burn.damagePerSecond, Math.max(0, deltaSeconds - attackOffsetSeconds));
+          this.events.push({ type: "enemy_burned", enemyId: enemy.id, position: enemy.position, damagePerSecond: burn.damagePerSecond, durationSeconds: burn.durationSeconds, areaRadius: getGrowthCannonSplashRadius(this.catalog.buildingGrowth, building), sourceBuildingId: building.id });
+        }
+      }
+    }
+
+    if (profile.tower.id === "electric") {
+      const chainTargets = this.state.enemies
+        .filter((enemy) => enemy.id !== target.id && enemy.hp > 0 && this.isGrowthTargetInRange(enemy, target.position, profile.range))
+        .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))
+        .slice(0, Math.max(0, (profile.tower.chainTargets ?? 1) - 1 + getGrowthElectricChainExtraTargets(this.catalog.buildingGrowth, building)));
+      for (const enemy of chainTargets) {
+        this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * 0.55, building.id);
+        this.events.push({ type: "tower_special", buildingId: building.id, effect: "弹射", targetId: enemy.id });
+      }
+    }
+
+    if (profile.tower.id === "machine_gun") {
+      const penetrationTargets = this.state.enemies
+        .filter((enemy) => enemy.id !== target.id && enemy.hp > 0 && enemy.position < target.position && this.isGrowthTargetInRange(enemy, target.position, profile.range))
+        .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))
+        .slice(0, getGrowthMachinePenetrationTargets(this.catalog.buildingGrowth, building));
+      const carryMultiplier = getGrowthMachinePenetrationMultiplier(this.catalog.buildingGrowth);
+      for (const enemy of penetrationTargets) {
+        this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * carryMultiplier, building.id);
+        this.events.push({ type: "tower_special", buildingId: building.id, effect: "穿透", targetId: enemy.id });
+      }
+    }
+  }
+
+  private isGrowthTargetInRange(enemy: EnemyRuntimeState, targetPosition: number, range: number): boolean {
+    return enemy.atWall || Math.abs(enemy.position - targetPosition) <= range;
+  }
+
+  private getGrowthDamage(building: BuildingState, enemy: EnemyRuntimeState): number {
+    const ownSlowActive = building.growthDefinitionId === "frost" && (enemy.growthSlowStates ?? []).some((state) => state.sourceBuildingId === building.id && state.remainingSeconds > EPSILON);
+    return getGrowthTowerDamage(this.catalog.buildingGrowth, building, {
+      tier: this.getEnemyDefinition(enemy.definitionId).tier,
+      hp: enemy.hp,
+      maxHp: enemy.maxHp,
+      atWall: enemy.atWall,
+    }, ownSlowActive);
+  }
+
+  private applyGrowthSlow(enemy: EnemyRuntimeState, sourceBuildingId: string, multiplier: number, durationSeconds: number): void {
+    const states = enemy.growthSlowStates ?? (enemy.growthSlowStates = []);
+    const existing = states.find((state) => state.sourceBuildingId === sourceBuildingId);
+    if (existing) {
+      existing.multiplier = multiplier;
+      existing.remainingSeconds = Math.max(existing.remainingSeconds, durationSeconds);
+      return;
+    }
+    states.push({ sourceBuildingId, multiplier, remainingSeconds: durationSeconds });
+  }
+
+  private applyGrowthBurn(enemy: EnemyRuntimeState, sourceBuildingId: string, damagePerSecond: number, durationSeconds: number): void {
+    const states = enemy.growthBurnStates ?? (enemy.growthBurnStates = []);
+    const existing = states.find((state) => state.sourceBuildingId === sourceBuildingId);
+    if (existing) {
+      existing.damagePerSecond = damagePerSecond;
+      existing.remainingSeconds = Math.max(existing.remainingSeconds, durationSeconds);
+      return;
+    }
+    states.push({ sourceBuildingId, damagePerSecond, remainingSeconds: durationSeconds });
+  }
+
+  private advanceFreshGrowthBurn(enemy: EnemyRuntimeState, sourceBuildingId: string, damagePerSecond: number, activeSeconds: number): void {
+    if (activeSeconds <= EPSILON) return;
+    if (enemy.hp > 0) this.applyDamage(enemy, damagePerSecond * activeSeconds, "growth-burn:" + sourceBuildingId);
+    const states = enemy.growthBurnStates ?? [];
+    const state = states.find((candidate) => candidate.sourceBuildingId === sourceBuildingId);
+    if (!state) return;
+    state.remainingSeconds = Math.max(0, state.remainingSeconds - activeSeconds);
+    enemy.growthBurnStates = states.filter((candidate) => candidate.remainingSeconds > EPSILON);
+  }
+
+  private removeGrowthSourceStates(sourceBuildingId: string): void {
+    for (const enemy of this.state.enemies) {
+      enemy.growthSlowStates = (enemy.growthSlowStates ?? []).filter((state) => state.sourceBuildingId !== sourceBuildingId);
+      enemy.growthBurnStates = (enemy.growthBurnStates ?? []).filter((state) => state.sourceBuildingId !== sourceBuildingId);
+    }
+  }
+
   private getTowerDamage(building: BuildingState, tower: TowerDefinition, target: EnemyRuntimeState): number {
     let damage = tower.damage + Math.max(0, building.level - 1) * Math.max(1, tower.damage * 0.25);
     const focusEffect = this.getCardEffect("focus_fire");
@@ -820,7 +994,7 @@ export class GameSimulation {
     }
   }
 
-  private findTarget(building: { lanePosition: number }, tower: TowerDefinition): EnemyRuntimeState | undefined {
+  private findTarget(building: { lanePosition: number }, tower: { range: number }): EnemyRuntimeState | undefined {
     // Keep normal range differences, but never let a live wall-contact enemy
     // disappear from targeting just because the scalar lane/depth values do
     // not share the same geometric axis.
@@ -858,7 +1032,7 @@ export class GameSimulation {
   }
 
   private hasTowerSynergy(): boolean {
-    return new Set(this.state.buildings.filter((building) => building.kind === "tower").map((building) => building.definitionId)).size >= 3;
+    return new Set(this.state.buildings.filter((building) => building.kind === "tower" && building.model !== "growth").map((building) => building.definitionId)).size >= 3;
   }
 
   private applyDamage(enemy: EnemyRuntimeState, damage: number, sourceId: string): void {

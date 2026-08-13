@@ -1,5 +1,7 @@
 export * from "./clock";
 export * from "./buildingGrowth";
+export * from "./growthCombat";
+export * from "./growthEconomy";
 export * from "./content";
 export * from "./game";
 export * from "./random";
