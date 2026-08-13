@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import "./styles.css";
 import { GameScene } from "./phaser/GameScene";
+import { LobbyScene } from "./phaser/LobbyScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -15,7 +16,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [GameScene],
+  scene: [LobbyScene, GameScene],
 };
 
 new Phaser.Game(config);

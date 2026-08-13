@@ -1,4 +1,5 @@
 import type { GrowthBuildingId, GrowthTraitId } from "./buildingGrowth";
+import type { HeroId } from "./hero";
 
 export type EnemyTier = "normal" | "elite" | "boss" | "challenge";
 
@@ -36,6 +37,12 @@ export interface PendingTraitDraft {
   options: [GrowthTraitId, GrowthTraitId, GrowthTraitId];
   createdAtLevel: number;
   returnPhase: PlayPhase;
+}
+
+export interface HeroState {
+  id: string;
+  definitionId: HeroId;
+  attackCooldownSeconds: number;
 }
 
 export interface EnemyRuntimeState {
@@ -83,9 +90,12 @@ export interface GameState {
   gold: number;
   wallHp: number;
   wallMaxHp: number;
+  wallShield: number;
+  wallShieldMax: number;
   overlordInspireRemainingSeconds: number;
   overlordInspireMultiplier: number;
   seed: number;
+  hero: HeroState | null;
   buildings: BuildingState[];
   enemies: EnemyRuntimeState[];
   pendingTraitDraft: PendingTraitDraft | null;

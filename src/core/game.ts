@@ -16,6 +16,8 @@ import {
 } from "./growthCombat";
 import { getGrowthLumberyardUpgradeDiscount, getGrowthLumberyardWaveStockpile } from "./growthEconomy";
 import { getWoodProductionPerSecond } from "./resources";
+import { getHeroDefinition, starterHeroContent } from "./hero";
+import type { HeroId } from "./hero";
 import { CAMP_SLOT_IDS } from "./types";
 import type {
   BuildingState,
@@ -32,6 +34,7 @@ import type {
 
 export const MAX_WAVE = 10;
 export const WALL_MAX_HP = 100;
+export const WALL_SHIELD_MAX = 100;
 export const INITIAL_WOOD = 120;
 export const INITIAL_GOLD = 0;
 export const OPENING_COUNTDOWN_SECONDS = 5;
@@ -49,10 +52,14 @@ export class GameSimulation {
   private randomState: number;
   private growthBurnRemainingAtStepStart = new Map<string, number>();
 
-  public constructor(catalog: ContentCatalog = starterCatalog, seed = 1337) {
+  private readonly heroId: HeroId | null;
+
+  public constructor(catalog: ContentCatalog = starterCatalog, seed = 1337, heroId?: HeroId) {
     validateCatalog(catalog);
+    if (heroId !== undefined && !getHeroDefinition(starterHeroContent, heroId)) throw new Error("Unknown hero: " + heroId);
     this.catalog = catalog;
     this.initialSeed = seed >>> 0;
+    this.heroId = heroId ?? null;
     this.randomState = this.initialSeed;
     this.state = this.createInitialState();
   }
@@ -138,9 +145,12 @@ export class GameSimulation {
       gold: INITIAL_GOLD,
       wallHp: WALL_MAX_HP,
       wallMaxHp: WALL_MAX_HP,
+      wallShield: this.heroId ? WALL_SHIELD_MAX : 0,
+      wallShieldMax: this.heroId ? WALL_SHIELD_MAX : 0,
       overlordInspireRemainingSeconds: 0,
       overlordInspireMultiplier: 1,
       seed: this.initialSeed,
+      hero: this.heroId ? { id: "hero-camp-warden", definitionId: this.heroId, attackCooldownSeconds: 0 } : null,
       buildings: [this.createMainCity()],
       enemies: [],
       pendingTraitDraft: null,
@@ -476,6 +486,21 @@ export class GameSimulation {
       if (building.kind !== "tower") continue;
       this.resolveGrowthTowerAttack(building, deltaSeconds);
     }
+    const hero = this.state.hero;
+    if (!hero) return;
+    const heroBuilding: BuildingState = {
+      id: hero.id,
+      slotId: "slot-r3-c3",
+      kind: "tower",
+      definitionId: "arrow_tower",
+      growthDefinitionId: "arrow_tower",
+      level: 1,
+      lanePosition: 0.5,
+      attackCooldownSeconds: hero.attackCooldownSeconds,
+      traits: [],
+    };
+    this.resolveGrowthTowerAttack(heroBuilding, deltaSeconds);
+    hero.attackCooldownSeconds = heroBuilding.attackCooldownSeconds;
   }
 
   private resolveGrowthTowerAttack(building: BuildingState, deltaSeconds: number): void {
@@ -651,7 +676,9 @@ export class GameSimulation {
   }
 
   private applyWallDamage(amount: number): void {
-    this.state.wallHp = Math.max(0, this.state.wallHp - amount);
+    const shieldDamage = Math.min(this.state.wallShield, amount);
+    this.state.wallShield = Math.max(0, this.state.wallShield - shieldDamage);
+    this.state.wallHp = Math.max(0, this.state.wallHp - Math.max(0, amount - shieldDamage));
   }
 
   private removeDefeatedEnemies(): void {

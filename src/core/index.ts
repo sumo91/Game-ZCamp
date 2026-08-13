@@ -7,3 +7,4 @@ export * from "./game";
 export * from "./random";
 export * from "./resources";
 export * from "./types";
+export * from "./hero";
