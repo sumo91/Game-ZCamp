@@ -217,6 +217,28 @@ describe("v0.2 growth candidate core regression matrix", () => {
     expect(game.getState()).toEqual(before);
   });
 
+  it("does not advance RNG or state when a one-gold-short transform fails before a later upgrade draft", () => {
+    const prepare = (includeFailedTransform: boolean): GameSimulation => {
+      const game = new GameSimulation(undefined, 90210);
+      game.getState().wood = 90;
+      const building = buildAt(game, "slot-r1-c1", "arrow_tower");
+      game.getState().gold = 9;
+      const beforeFailure = structuredClone(game.getState());
+      if (includeFailedTransform) {
+        expect(game.dispatch({ type: "transform_tower", buildingId: building.id, targetTowerId: "cannon" })).toEqual({ accepted: false, reason: "金币不足" });
+        expect(game.getState()).toEqual(beforeFailure);
+      }
+      game.getState().wood = 50;
+      expect(game.dispatch({ type: "upgrade_building", buildingId: building.id })).toEqual({ accepted: true, buildingId: building.id });
+      return game;
+    };
+
+    const withFailedTransform = prepare(true);
+    const control = prepare(false);
+    expect(withFailedTransform.getState()).toEqual(control.getState());
+    expect(withFailedTransform.nextRandomInt(1000)).toBe(control.nextRandomInt(1000));
+  });
+
   it("keeps special re-upgrades exclusive and isolates a common trait to one of two towers", () => {
     const game = new GameSimulation();
     game.getState().wood = 140;
@@ -294,6 +316,27 @@ describe("v0.2 growth candidate core regression matrix", () => {
     expect(game.getState()).toEqual(snapshot);
     expect(game.dispatch({ type: "restart" })).toEqual({ accepted: true });
     expect(game.getState().phase).toBe("OPENING_COUNTDOWN");
+  });
+
+  it("actually triggers overlord inspire with typed duration and multiplier before final-boss victory remains available", () => {
+    const game = new GameSimulation(quietCatalog());
+    startRunning(game);
+    silenceFutureSpawns(game);
+    const overlord = runtimeEnemy("overlord_boss", 100, true);
+    overlord.abilityCooldownSeconds = 0;
+    const target = runtimeEnemy("walker", 100, false);
+    game.getState().enemies = [overlord, target];
+    game.drainEvents();
+
+    game.tick(0.25);
+    const inspire = game.drainEvents().find((event) => event.type === "overlord_inspire");
+    expect(inspire).toMatchObject({ enemyId: overlord.id, targetIds: [target.id], durationSeconds: 4, multiplier: 1.25 });
+    expect(game.getState().overlordInspireRemainingSeconds).toBeCloseTo(3.75, 8);
+    expect(game.getState().overlordInspireMultiplier).toBe(1.25);
+
+    game.tick(4);
+    expect(game.getState().overlordInspireRemainingSeconds).toBe(0);
+    expect(game.getState().overlordInspireMultiplier).toBe(1);
   });
 
   it("transitions to defeat on wall loss and freezes, resumes, and restores a running game", () => {
