@@ -1,5 +1,7 @@
 import { FIRST_BATCH_CARD_IDS, SUPPLY_CATEGORY_PATTERN, starterCatalog, validateCatalog } from "./content";
 import type { CardDefinition, CardEffect, ContentCatalog, EnemyDefinition, TowerDefinition } from "./content";
+import { getGrowthBuildingDefinition, getGrowthTraitDefinition, getGrowthTowerDefinition, getGrowthUpgradeCost, selectTraitOptions } from "./buildingGrowth";
+import type { GrowthBuildingId, GrowthSpecialTowerId, GrowthTraitId } from "./buildingGrowth";
 import { getUpgradeCost } from "./costs";
 import { getWoodProductionPerSecond } from "./resources";
 import { CAMP_SLOT_IDS } from "./types";
@@ -62,6 +64,14 @@ export class GameSimulation {
         return this.playCard(command.cardInstanceId, command.target);
       case "discard_card":
         return this.discardCard(command.cardInstanceId);
+      case "build_building":
+        return this.buildGrowthBuilding(command.slotId, command.definitionId);
+      case "upgrade_building":
+        return this.upgradeGrowthBuilding(command.buildingId);
+      case "choose_building_trait":
+        return this.chooseGrowthTrait(command.buildingId, command.traitDefinitionId);
+      case "transform_tower":
+        return this.transformGrowthTower(command.buildingId, command.targetTowerId);
       case "destroy_building":
         return this.destroyBuilding(command.slotId);
       case "pause":
@@ -82,7 +92,7 @@ export class GameSimulation {
 
   public tick(deltaSeconds: number): void {
     if (!Number.isFinite(deltaSeconds) || deltaSeconds <= 0) return;
-    if (this.state.phase === "SYSTEM_PAUSE" || this.state.phase === "TACTICAL_PAUSE" || this.state.phase === "VICTORY" || this.state.phase === "DEFEAT") return;
+    if (this.state.phase === "SYSTEM_PAUSE" || this.state.phase === "TACTICAL_PAUSE" || this.state.phase === "TRAIT_DRAFT" || this.state.phase === "VICTORY" || this.state.phase === "DEFEAT") return;
 
     if (this.state.phase === "OPENING_COUNTDOWN") {
       const remaining = this.state.openingCountdownRemainingSeconds - deltaSeconds;
@@ -149,11 +159,12 @@ export class GameSimulation {
       supplyBatchNumber: 1,
       supplyBatchRemaining: remaining,
       permanentApplications: {},
+      pendingTraitDraft: null,
     };
   }
 
   private createMainCity(): BuildingState {
-    return { id: MAIN_CITY_ID, slotId: "slot-r3-c3", kind: "main_city", definitionId: "main_city", level: 1, lanePosition: 0.5, attackCooldownSeconds: 0 };
+    return { id: MAIN_CITY_ID, slotId: "slot-r3-c3", kind: "main_city", definitionId: "main_city", level: 1, lanePosition: 0.5, attackCooldownSeconds: 0, model: "legacy_card", traits: [] };
   }
 
   private createCardInstance(definitionId: string, batchNumber: number, batchIndex: number): CardInstance {
@@ -472,6 +483,96 @@ export class GameSimulation {
     return { accepted: true, cardInstanceId: entry.card.instanceId };
   }
 
+  private buildGrowthBuilding(slotId: string, definitionId: GrowthBuildingId): CommandResult {
+    if (!this.canOperateBase()) return { accepted: false, reason: "当前状态不可建造" };
+    if (!CAMP_SLOT_IDS.includes(slotId)) return { accepted: false, reason: "请选择合法营地格" };
+    if (this.state.buildings.some((building) => building.slotId === slotId)) return { accepted: false, reason: "该格已有建筑" };
+    const definition = getGrowthBuildingDefinition(this.catalog.buildingGrowth, definitionId);
+    if (!definition?.buildable) return { accepted: false, reason: "该建筑不可建造" };
+    if (this.state.wood < definition.buildCost) return { accepted: false, reason: "木材不足" };
+    this.state.wood -= definition.buildCost;
+    const building: BuildingState = {
+      id: "growth-" + slotId,
+      slotId,
+      kind: definition.kind,
+      definitionId,
+      growthDefinitionId: definitionId,
+      model: "growth",
+      level: 1,
+      lanePosition: this.getLanePosition(slotId),
+      attackCooldownSeconds: 0,
+      traits: [],
+    };
+    this.state.buildings.push(building);
+    this.events.push({ type: "building_built", buildingId: building.id, slotId, definitionId });
+    return { accepted: true, buildingId: building.id };
+  }
+
+  private upgradeGrowthBuilding(buildingId: string): CommandResult {
+    if (!this.canOperateBase()) return { accepted: false, reason: "当前状态不可升级" };
+    if (this.state.pendingTraitDraft) return { accepted: false, reason: "请先选择当前建筑词条" };
+    const building = this.state.buildings.find((candidate) => candidate.id === buildingId);
+    if (!building || building.model !== "growth" || !building.growthDefinitionId) return { accepted: false, reason: "不是新版成长建筑" };
+    const cost = getGrowthUpgradeCost(this.catalog.buildingGrowth, building.growthDefinitionId, building.level);
+    if (cost === null) return { accepted: false, reason: "建筑已达到 Lv.5" };
+    if (this.state.wood < cost) return { accepted: false, reason: "木材不足" };
+    const options = selectTraitOptions(this.catalog.buildingGrowth, building.growthDefinitionId, (maxExclusive) => this.nextRandomInt(maxExclusive));
+    if (!options) return { accepted: false, reason: "当前建筑没有足够的词条选项" };
+    const currentPhase = this.state.phase;
+    if (currentPhase !== "OPENING_COUNTDOWN" && currentPhase !== "RUNNING" && currentPhase !== "TACTICAL_PAUSE") return { accepted: false, reason: "当前状态不可升级" };
+    const returnPhase: PlayPhase = currentPhase === "OPENING_COUNTDOWN" ? "OPENING_COUNTDOWN" : "TACTICAL_PAUSE";
+    this.state.wood -= cost;
+    building.level += 1;
+    const draft = { buildingId, options: [options[0], options[1], options[2]] as [GrowthTraitId, GrowthTraitId, GrowthTraitId], createdAtLevel: building.level, returnPhase };
+    this.state.pendingTraitDraft = draft;
+    this.state.phase = "TRAIT_DRAFT";
+    this.events.push({ type: "building_upgraded", buildingId, level: building.level });
+    this.events.push({ type: "building_trait_draft_created", buildingId, optionDefinitionIds: [...options], level: building.level });
+    return { accepted: true, buildingId };
+  }
+
+  private chooseGrowthTrait(buildingId: string, traitDefinitionId: GrowthTraitId): CommandResult {
+    if (this.state.phase === "SYSTEM_PAUSE") return { accepted: false, reason: "系统暂停中，恢复后才能选择词条" };
+    if (this.state.phase !== "TRAIT_DRAFT" || !this.state.pendingTraitDraft) return { accepted: false, reason: "当前没有待选择词条" };
+    const draft = this.state.pendingTraitDraft;
+    if (draft.buildingId !== buildingId) return { accepted: false, reason: "只能选择当前建筑词条" };
+    if (!draft.options.includes(traitDefinitionId)) return { accepted: false, reason: "只能选择当前三个词条之一" };
+    const building = this.state.buildings.find((candidate) => candidate.id === buildingId);
+    const trait = getGrowthTraitDefinition(this.catalog.buildingGrowth, traitDefinitionId);
+    if (!building || building.model !== "growth" || !trait) return { accepted: false, reason: "词条目标已失效" };
+    const traits = building.traits ?? (building.traits = []);
+    const existing = traits.find((candidate) => candidate.definitionId === traitDefinitionId);
+    if (existing && trait.repeatable) {
+      existing.stacks += 1;
+      existing.acquiredAtLevel = draft.createdAtLevel;
+    } else if (!existing) {
+      traits.push({ definitionId: traitDefinitionId, stacks: 1, acquiredAtLevel: draft.createdAtLevel });
+    } else {
+      return { accepted: false, reason: "该词条不能重复获得" };
+    }
+    this.state.pendingTraitDraft = null;
+    this.state.phase = draft.returnPhase;
+    this.events.push({ type: "building_trait_chosen", buildingId, traitDefinitionId, level: draft.createdAtLevel });
+    return { accepted: true, buildingId };
+  }
+
+  private transformGrowthTower(buildingId: string, targetTowerId: GrowthSpecialTowerId): CommandResult {
+    if (!this.canOperateBase()) return { accepted: false, reason: "当前状态不可改造" };
+    if (this.state.pendingTraitDraft) return { accepted: false, reason: "请先选择当前建筑词条" };
+    const building = this.state.buildings.find((candidate) => candidate.id === buildingId);
+    const route = this.catalog.buildingGrowth.transformations.find((candidate) => candidate.from === building?.growthDefinitionId && candidate.to === targetTowerId);
+    if (!building || building.model !== "growth" || building.growthDefinitionId !== "arrow_tower" || !route) return { accepted: false, reason: "只有箭塔可以改造成特殊塔" };
+    if (this.state.gold < route.goldCost) return { accepted: false, reason: "金币不足" };
+    const target = getGrowthTowerDefinition(this.catalog.buildingGrowth, targetTowerId);
+    if (!target) return { accepted: false, reason: "目标塔型无效" };
+    this.state.gold -= route.goldCost;
+    building.definitionId = targetTowerId;
+    building.growthDefinitionId = targetTowerId;
+    building.attackCooldownSeconds = Math.min(building.attackCooldownSeconds, target.baseAttackIntervalSeconds);
+    this.events.push({ type: "tower_transformed", buildingId, fromTowerId: "arrow_tower", toTowerId: targetTowerId });
+    return { accepted: true, buildingId };
+  }
+
   private fillFromWaitingCard(): void {
     if (!this.state.supplyWaitingCard || this.state.hand.length >= HAND_LIMIT) return;
     const waiting = this.state.supplyWaitingCard;
@@ -502,6 +603,8 @@ export class GameSimulation {
       level: 1,
       lanePosition: this.getLanePosition(slotId),
       attackCooldownSeconds: 0,
+      model: "legacy_card",
+      traits: [],
     };
   }
 
@@ -619,7 +722,7 @@ export class GameSimulation {
 
   private resolveTowerAttacks(deltaSeconds: number): void {
     for (const building of this.state.buildings) {
-      if (building.kind !== "tower") continue;
+      if (building.kind !== "tower" || building.model === "growth") continue;
       building.attackCooldownSeconds = Math.max(0, building.attackCooldownSeconds - deltaSeconds);
       if (building.attackCooldownSeconds > EPSILON) continue;
       const tower = this.getTowerDefinition(building.definitionId);
@@ -830,7 +933,7 @@ export class GameSimulation {
   }
 
   private systemPause(): CommandResult {
-    if (this.state.phase !== "OPENING_COUNTDOWN" && this.state.phase !== "RUNNING" && this.state.phase !== "TACTICAL_PAUSE") return { accepted: false, reason: "当前不可系统暂停" };
+    if (this.state.phase !== "OPENING_COUNTDOWN" && this.state.phase !== "RUNNING" && this.state.phase !== "TACTICAL_PAUSE" && this.state.phase !== "TRAIT_DRAFT") return { accepted: false, reason: "当前不可系统暂停" };
     this.state.systemPausedFromPhase = this.state.phase;
     this.state.phase = "SYSTEM_PAUSE";
     return { accepted: true };

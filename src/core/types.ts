@@ -1,7 +1,9 @@
+import type { GrowthBuildingId, GrowthTraitId } from "./buildingGrowth";
+
 export type EnemyTier = "normal" | "elite" | "boss" | "challenge";
 
 export type PlayPhase = "OPENING_COUNTDOWN" | "RUNNING" | "TACTICAL_PAUSE";
-export type GamePhase = PlayPhase | "SYSTEM_PAUSE" | "VICTORY" | "DEFEAT";
+export type GamePhase = PlayPhase | "TRAIT_DRAFT" | "SYSTEM_PAUSE" | "VICTORY" | "DEFEAT";
 
 export const CAMP_ROWS = 3;
 export const CAMP_COLUMNS = 5;
@@ -19,6 +21,22 @@ export interface BuildingState {
   level: number;
   lanePosition: number;
   attackCooldownSeconds: number;
+  model?: "legacy_card" | "growth";
+  growthDefinitionId?: GrowthBuildingId;
+  traits?: BuildingTraitState[];
+}
+
+export interface BuildingTraitState {
+  definitionId: GrowthTraitId;
+  stacks: number;
+  acquiredAtLevel: number;
+}
+
+export interface PendingTraitDraft {
+  buildingId: string;
+  options: [GrowthTraitId, GrowthTraitId, GrowthTraitId];
+  createdAtLevel: number;
+  returnPhase: PlayPhase;
 }
 
 export interface EnemyRuntimeState {
@@ -54,7 +72,7 @@ export type CardTarget =
 export interface GameState {
   phase: GamePhase;
   pausedFromPhase: PlayPhase | null;
-  systemPausedFromPhase: PlayPhase | null;
+  systemPausedFromPhase: GamePhase | null;
   wave: number;
   maxWave: number;
   effectiveBattleTimeSeconds: number;
@@ -89,6 +107,7 @@ export interface GameState {
   supplyBatchNumber: number;
   supplyBatchRemaining: CardInstance[];
   permanentApplications: Record<string, number>;
+  pendingTraitDraft: PendingTraitDraft | null;
 }
 
 export type GameEvent =
@@ -113,6 +132,9 @@ export type GameEvent =
   | { type: "building_built"; buildingId: string; slotId: string; definitionId: string }
   | { type: "building_upgraded"; buildingId: string; level: number }
   | { type: "building_destroyed"; buildingId: string; slotId: string }
+  | { type: "building_trait_draft_created"; buildingId: string; optionDefinitionIds: GrowthTraitId[]; level: number }
+  | { type: "building_trait_chosen"; buildingId: string; traitDefinitionId: GrowthTraitId; level: number }
+  | { type: "tower_transformed"; buildingId: string; fromTowerId: "arrow_tower"; toTowerId: Exclude<GrowthBuildingId, "arrow_tower" | "lumberyard"> }
   | { type: "permanent_applied"; cardInstanceId: string; definitionId: string }
   | { type: "tactical_used"; cardInstanceId: string; definitionId: string }
   | { type: "wall_repaired"; amount: number };
@@ -120,6 +142,10 @@ export type GameEvent =
 export type GameCommand =
   | { type: "play_card"; cardInstanceId: string; target?: CardTarget }
   | { type: "discard_card"; cardInstanceId: string }
+  | { type: "build_building"; slotId: string; definitionId: "arrow_tower" | "lumberyard" }
+  | { type: "upgrade_building"; buildingId: string }
+  | { type: "choose_building_trait"; buildingId: string; traitDefinitionId: GrowthTraitId }
+  | { type: "transform_tower"; buildingId: string; targetTowerId: "machine_gun" | "cannon" | "frost" | "electric" }
   | { type: "destroy_building"; slotId: string }
   | { type: "pause" }
   | { type: "resume" }

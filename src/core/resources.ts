@@ -9,7 +9,7 @@ type WoodIncomeState = Pick<GameState, "buildings" | "permanentApplications">;
 /** The single source of truth for the wood production shown and settled by the game. */
 export function getWoodProductionPerSecond(state: WoodIncomeState, catalog: ContentCatalog = starterCatalog): number {
   const lumberyardIncome = state.buildings
-    .filter((building) => building.kind === "lumberyard")
+    .filter((building) => building.kind === "lumberyard" && building.model !== "growth")
     .reduce((total, building) => total + (LUMBERYARD_INCOME[building.level] ?? 0), 0);
   const incomeCard = catalog.cards.find((card) => card.category === "permanent" && card.effect.kind === "wood_income");
   const woodBuffs = incomeCard?.effect.kind === "wood_income"

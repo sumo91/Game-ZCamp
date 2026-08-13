@@ -1,4 +1,6 @@
 import type { EnemyTier } from "./types";
+import { starterBuildingGrowthContent, validateBuildingGrowthContent } from "./buildingGrowth";
+import type { BuildingGrowthContent } from "./buildingGrowth";
 
 export type TowerIconKey = "machine_gun" | "cannon" | "frost" | "electric";
 
@@ -111,6 +113,7 @@ export interface ContentCatalog {
   enemies: EnemyDefinition[];
   waves: WaveDefinition[];
   cards: CardDefinition[];
+  buildingGrowth: BuildingGrowthContent;
 }
 
 const towers: TowerDefinition[] = [
@@ -276,7 +279,7 @@ export const SUPPLY_CATEGORY_PATTERN: CardCategory[] = [
   "base", "base", "permanent", "base", "tactical", "base",
   "permanent", "base", "tactical", "base", "permanent", "base",
 ];
-export const starterCatalog: ContentCatalog = { towers, enemies, waves, cards };
+export const starterCatalog: ContentCatalog = { towers, enemies, waves, cards, buildingGrowth: starterBuildingGrowthContent };
 
 export const EXPECTED_WAVE_COUNTS: Array<Record<string, number>> = [
   { walker: 34 },
@@ -298,6 +301,7 @@ function assertUniqueIds(ids: string[], label: string): void {
 }
 
 export function validateCatalog(catalog: ContentCatalog): void {
+  validateBuildingGrowthContent(catalog.buildingGrowth);
   if (catalog.towers.length === 0 || catalog.enemies.length === 0 || catalog.waves.length === 0 || catalog.cards.length === 0) {
     throw new Error("Content catalog must contain towers, enemies, waves, and cards.");
   }

@@ -60,6 +60,169 @@ describe("GameSimulation third-stage combat and card content", () => {
     expect(game.getState().nextSupplyCard?.definitionId).toBe("machine_gun");
   });
 
+  it("builds only the two growth buildings with wood and preserves atomic failures", () => {
+    const game = new GameSimulation();
+    game.getState().wood = 39;
+    const before = structuredClone(game.getState());
+    expect(game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" })).toEqual({ accepted: false, reason: "木材不足" });
+    expect(game.getState().wood).toBe(before.wood);
+    expect(game.getState().buildings).toEqual(before.buildings);
+    game.getState().wood = 120;
+    const arrow = game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    const lumberyard = game.dispatch({ type: "build_building", slotId: "slot-r1-c2", definitionId: "lumberyard" });
+    expect(arrow.accepted).toBe(true);
+    expect(lumberyard.accepted).toBe(true);
+    expect(game.getState().wood).toBe(20);
+    expect(game.getState().buildings.filter((building) => building.model === "growth")).toEqual([
+      expect.objectContaining({ id: "growth-slot-r1-c1", growthDefinitionId: "arrow_tower", level: 1, traits: [] }),
+      expect.objectContaining({ id: "growth-slot-r1-c2", growthDefinitionId: "lumberyard", level: 1, traits: [] }),
+    ]);
+    expect(game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "lumberyard" })).toEqual({ accepted: false, reason: "该格已有建筑" });
+    expect(game.dispatch({ type: "build_building", slotId: "slot-r3-c3", definitionId: "arrow_tower" })).toEqual({ accepted: false, reason: "该格已有建筑" });
+  });
+
+  it("upgrades atomically, freezes into a trait draft, and returns to the prior phase", () => {
+    const game = new GameSimulation();
+    game.getState().wood = 90;
+    const built = game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    expect(built.accepted).toBe(true);
+    const buildingId = game.getState().buildings.find((building) => building.model === "growth")!.id;
+    const timeBefore = game.getState().effectiveBattleTimeSeconds;
+    game.getState().wood = 49;
+    expect(game.dispatch({ type: "upgrade_building", buildingId })).toEqual({ accepted: false, reason: "木材不足" });
+    expect(game.getState().buildings.find((building) => building.id === buildingId)!.level).toBe(1);
+    game.getState().wood = 50;
+    expect(game.dispatch({ type: "upgrade_building", buildingId })).toEqual({ accepted: true, buildingId });
+    expect(game.getState().wood).toBe(0);
+    expect(game.getState().phase).toBe("TRAIT_DRAFT");
+    expect(game.getState().pendingTraitDraft).toMatchObject({ buildingId, createdAtLevel: 2, returnPhase: "OPENING_COUNTDOWN" });
+    expect(new Set(game.getState().pendingTraitDraft!.options).size).toBe(3);
+    expect(game.getState().effectiveBattleTimeSeconds).toBe(timeBefore);
+    expect(game.dispatch({ type: "upgrade_building", buildingId })).toEqual({ accepted: false, reason: "当前状态不可升级" });
+    expect(game.dispatch({ type: "build_building", slotId: "slot-r1-c2", definitionId: "lumberyard" })).toEqual({ accepted: false, reason: "当前状态不可建造" });
+    const selected = game.getState().pendingTraitDraft!.options[0]!;
+    expect(game.dispatch({ type: "choose_building_trait", buildingId, traitDefinitionId: "lumber_output" })).toEqual({ accepted: false, reason: "只能选择当前三个词条之一" });
+    expect(game.dispatch({ type: "choose_building_trait", buildingId, traitDefinitionId: selected })).toEqual({ accepted: true, buildingId });
+    expect(game.getState().phase).toBe("OPENING_COUNTDOWN");
+    expect(game.getState().pendingTraitDraft).toBeNull();
+    expect(game.getState().buildings.find((building) => building.id === buildingId)!.traits).toEqual([{ definitionId: selected, stacks: 1, acquiredAtLevel: 2 }]);
+  });
+
+  it("keeps a draft stable through system pause and rejects a non-option", () => {
+    const game = new GameSimulation();
+    game.getState().wood = 90;
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    const buildingId = game.getState().buildings.find((building) => building.model === "growth")!.id;
+    game.dispatch({ type: "upgrade_building", buildingId });
+    const options = game.getState().pendingTraitDraft!.options;
+    expect(game.dispatch({ type: "system_pause" }).accepted).toBe(true);
+    expect(game.getState().phase).toBe("SYSTEM_PAUSE");
+    expect(game.dispatch({ type: "choose_building_trait", buildingId, traitDefinitionId: "lumber_output" })).toEqual({ accepted: false, reason: "系统暂停中，恢复后才能选择词条" });
+    expect(game.dispatch({ type: "system_resume" }).accepted).toBe(true);
+    expect(game.getState().phase).toBe("TRAIT_DRAFT");
+    expect(game.getState().pendingTraitDraft!.options).toEqual(options);
+  });
+
+  it("returns to tactical pause after an upgrade started during running combat", () => {
+    const game = new GameSimulation(quietCatalog());
+    game.getState().wood = 90;
+    startRunning(game);
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    const buildingId = game.getState().buildings.find((building) => building.model === "growth")!.id;
+    expect(game.dispatch({ type: "upgrade_building", buildingId }).accepted).toBe(true);
+    expect(game.getState().phase).toBe("TRAIT_DRAFT");
+    expect(game.getState().pendingTraitDraft!.returnPhase).toBe("TACTICAL_PAUSE");
+    const selected = game.getState().pendingTraitDraft!.options[0]!;
+    game.dispatch({ type: "choose_building_trait", buildingId, traitDefinitionId: selected });
+    expect(game.getState().phase).toBe("TACTICAL_PAUSE");
+    expect(game.getState().effectiveBattleTimeSeconds).toBe(0);
+  });
+
+  it("gives identical trait drafts for the same seed and command sequence", () => {
+    const prepare = (seed: number): GameSimulation => {
+      const game = new GameSimulation(undefined, seed);
+      game.getState().wood = 90;
+      game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+      const buildingId = game.getState().buildings.find((building) => building.model === "growth")!.id;
+      game.dispatch({ type: "upgrade_building", buildingId });
+      return game;
+    };
+    const first = prepare(2026);
+    const second = prepare(2026);
+    expect(first.getState().pendingTraitDraft).toEqual(second.getState().pendingTraitDraft);
+    expect(first.getState().wood).toBe(second.getState().wood);
+  });
+
+  it("keeps traits on one building and transforms an arrow tower for ten gold without a draft", () => {
+    const game = new GameSimulation();
+    game.getState().wood = 90;
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    const building = game.getState().buildings.find((candidate) => candidate.model === "growth")!;
+    game.dispatch({ type: "upgrade_building", buildingId: building.id });
+    const option = game.getState().pendingTraitDraft!.options[0]!;
+    game.dispatch({ type: "choose_building_trait", buildingId: building.id, traitDefinitionId: option });
+    game.getState().gold = 10;
+    const idBefore = building.id;
+    const levelBefore = building.level;
+    const slotBefore = building.slotId;
+    expect(game.dispatch({ type: "transform_tower", buildingId: building.id, targetTowerId: "cannon" })).toEqual({ accepted: true, buildingId: building.id });
+    expect(game.getState().gold).toBe(0);
+    expect(game.getState().pendingTraitDraft).toBeNull();
+    expect(game.getState().buildings.find((candidate) => candidate.id === idBefore)).toMatchObject({ id: idBefore, slotId: slotBefore, level: levelBefore, definitionId: "cannon", growthDefinitionId: "cannon", model: "growth", traits: [{ definitionId: option, stacks: 1 }] });
+    expect(game.dispatch({ type: "transform_tower", buildingId: idBefore, targetTowerId: "frost" })).toEqual({ accepted: false, reason: "只有箭塔可以改造成特殊塔" });
+  });
+
+  it("isolates traits between two same-kind growth buildings and supports every transform route", () => {
+    const isolated = new GameSimulation();
+    isolated.getState().wood = 140;
+    isolated.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    isolated.dispatch({ type: "build_building", slotId: "slot-r1-c2", definitionId: "arrow_tower" });
+    const first = isolated.getState().buildings.find((building) => building.slotId === "slot-r1-c1")!;
+    const second = isolated.getState().buildings.find((building) => building.slotId === "slot-r1-c2")!;
+    isolated.getState().wood = 50;
+    isolated.dispatch({ type: "upgrade_building", buildingId: first.id });
+    const option = isolated.getState().pendingTraitDraft!.options[0]!;
+    isolated.dispatch({ type: "choose_building_trait", buildingId: first.id, traitDefinitionId: option });
+    expect(first.traits).toEqual([{ definitionId: option, stacks: 1, acquiredAtLevel: 2 }]);
+    expect(second.traits).toEqual([]);
+
+    for (const targetTowerId of ["machine_gun", "cannon", "frost", "electric"] as const) {
+      const game = new GameSimulation();
+      game.getState().wood = 40;
+      game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+      const buildingId = game.getState().buildings.find((building) => building.model === "growth")!.id;
+      game.getState().gold = 10;
+      expect(game.dispatch({ type: "transform_tower", buildingId, targetTowerId })).toEqual({ accepted: true, buildingId });
+      expect(game.getState().buildings.find((building) => building.id === buildingId)?.growthDefinitionId).toBe(targetTowerId);
+    }
+  });
+
+  it("allows a transformed special tower to keep the shared upgrade ladder and its own trait pool", () => {
+    const game = new GameSimulation();
+    game.getState().wood = 40;
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    const buildingId = game.getState().buildings.find((building) => building.model === "growth")!.id;
+    game.getState().gold = 10;
+    game.dispatch({ type: "transform_tower", buildingId, targetTowerId: "cannon" });
+    game.getState().wood = 50;
+    expect(game.dispatch({ type: "upgrade_building", buildingId })).toEqual({ accepted: true, buildingId });
+    expect(game.getState().pendingTraitDraft!.options.some((id) => id === "cannon_blast" || id === "cannon_burn")).toBe(true);
+  });
+
+  it("blocks all growth operation until the pending draft is resolved and restart clears it", () => {
+    const game = new GameSimulation();
+    game.getState().wood = 90;
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    const buildingId = game.getState().buildings.find((building) => building.model === "growth")!.id;
+    game.dispatch({ type: "upgrade_building", buildingId });
+    game.getState().gold = 10;
+    expect(game.dispatch({ type: "transform_tower", buildingId, targetTowerId: "machine_gun" })).toEqual({ accepted: false, reason: "当前状态不可改造" });
+    expect(game.dispatch({ type: "destroy_building", slotId: "slot-r1-c1" })).toEqual({ accepted: false, reason: "当前状态不可拆除" });
+    expect(game.dispatch({ type: "restart" })).toEqual({ accepted: true });
+    expect(game.getState().pendingTraitDraft).toBeNull();
+    expect(game.getState().buildings).toEqual([expect.objectContaining({ id: "main-city", model: "legacy_card" })]);
+  });
+
   it("attacks an enemy after it reaches the wall from every tower and legal row slot", () => {
     const legalTowerSlots = CAMP_SLOT_IDS.filter((slotId) => slotId !== "slot-r3-c3");
     for (const tower of starterCatalog.towers) {
