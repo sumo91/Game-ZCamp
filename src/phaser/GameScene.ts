@@ -17,12 +17,13 @@ import {
   hitGrowthPointer,
   type GrowthActionView,
   type GrowthBuildingDetailView,
+  type GrowthResource,
   type GrowthTraitOptionView,
 } from "./growthUi";
 import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
 
 type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number };
-type PanelAction = { label: string; available: boolean; reason: string; description: string; resourceLabel: string; statusLabel: string; run: () => void };
+type PanelAction = { label: string; available: boolean; reason: string; description: string; resource: GrowthResource | null; resourceLabel: string; statusLabel: string; run: () => void };
 
 const COLORS = {
   bg: 0x1d3824,
@@ -58,6 +59,7 @@ export class GameScene extends Phaser.Scene {
   private slotLabels: Phaser.GameObjects.Text[] = [];
   private actionButtons: Phaser.GameObjects.Rectangle[] = [];
   private actionLabels: Phaser.GameObjects.Text[] = [];
+  private actionIcons: Phaser.GameObjects.Graphics[] = [];
   private contextPanel!: Phaser.GameObjects.Rectangle;
   private contextTitle!: Phaser.GameObjects.Text;
   private contextDetail!: Phaser.GameObjects.Text;
@@ -93,6 +95,7 @@ export class GameScene extends Phaser.Scene {
   private transformButtons: Phaser.GameObjects.Rectangle[] = [];
   private transformLabels: Phaser.GameObjects.Text[] = [];
   private transformIcons: Phaser.GameObjects.Graphics[] = [];
+  private transformCostIcons: Phaser.GameObjects.Graphics[] = [];
   private traitOverlay!: Phaser.GameObjects.Rectangle;
   private traitPanel!: Phaser.GameObjects.Rectangle;
   private traitTitle!: Phaser.GameObjects.Text;
@@ -237,10 +240,12 @@ export class GameScene extends Phaser.Scene {
       const centerX = bounds.x + bounds.width / 2;
       const centerY = bounds.y + bounds.height / 2;
       const button = this.add.rectangle(centerX, centerY, bounds.width, bounds.height, COLORS.panel, 1).setDepth(16).setInteractive({ useHandCursor: true });
-      const label = this.add.text(centerX, centerY, "", { ...this.textStyle(14, "#ffffff"), align: "center", wordWrap: { width: bounds.width - 16 } }).setOrigin(0.5).setDepth(17);
+      const label = this.add.text(centerX + 18, centerY, "", { ...this.textStyle(14, "#ffffff"), align: "center", wordWrap: { width: bounds.width - 36 } }).setOrigin(0.5).setDepth(17);
+      const icon = this.add.graphics().setDepth(17);
       button.on("pointerdown", () => this.handleActionClick(index));
       this.actionButtons.push(button);
       this.actionLabels.push(label);
+      this.actionIcons.push(icon);
     }
   }
 
@@ -257,10 +262,12 @@ export class GameScene extends Phaser.Scene {
       const button = this.add.rectangle(centerX, centerY, bounds.width, bounds.height, COLORS.panel, 1).setDepth(72).setInteractive({ useHandCursor: true });
       const label = this.add.text(bounds.x + 76, centerY, "", { ...this.textStyle(15, "#fff3d2"), wordWrap: { width: bounds.width - 92 }, align: "left" }).setOrigin(0, 0.5).setDepth(74);
       const icon = this.add.graphics().setDepth(74);
+      const costIcon = this.add.graphics().setDepth(74);
       button.on("pointerdown", () => this.handleTransformClick(index));
       this.transformButtons.push(button);
       this.transformLabels.push(label);
       this.transformIcons.push(icon);
+      this.transformCostIcons.push(costIcon);
     }
     this.transformCloseButton = this.add.rectangle(GROWTH_TRANSFORM_CLOSE_BOUNDS.x + GROWTH_TRANSFORM_CLOSE_BOUNDS.width / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.y + GROWTH_TRANSFORM_CLOSE_BOUNDS.height / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.width, GROWTH_TRANSFORM_CLOSE_BOUNDS.height, COLORS.blue, 1).setDepth(72).setInteractive({ useHandCursor: true });
     this.transformCloseLabel = this.add.text(GROWTH_TRANSFORM_CLOSE_BOUNDS.x + GROWTH_TRANSFORM_CLOSE_BOUNDS.width / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.y + GROWTH_TRANSFORM_CLOSE_BOUNDS.height / 2, "返回建筑详情", this.textStyle(16, "#ffffff")).setOrigin(0.5).setDepth(73);
@@ -488,15 +495,22 @@ export class GameScene extends Phaser.Scene {
   }
 
   private renderResourceIcons(): void {
-    this.woodIcon.clear();
-    this.woodIcon.fillStyle(0xc9853d, 1).fillRect(36, 1105, 24, 14);
-    this.woodIcon.fillStyle(0xe2ad64, 1).fillCircle(36, 1112, 7);
-    this.woodIcon.lineStyle(2, 0x6f401f, 1).strokeCircle(36, 1112, 5);
-    this.woodIcon.lineStyle(2, 0x6f401f, 0.9).lineBetween(44, 1108, 58, 1108).lineBetween(44, 1116, 58, 1116);
-    this.goldIcon.clear();
-    this.goldIcon.fillStyle(COLORS.gold, 1).fillCircle(184, 1106, 9);
-    this.goldIcon.lineStyle(2, 0x714c17, 1).strokeCircle(184, 1106, 7);
-    this.goldIcon.lineStyle(2, 0xfff0a0, 0.8).lineBetween(180, 1106, 188, 1106);
+    this.drawResourceIcon(this.woodIcon, "wood", 36, 1112);
+    this.drawResourceIcon(this.goldIcon, "gold", 184, 1106);
+  }
+
+  private drawResourceIcon(graphics: Phaser.GameObjects.Graphics, resource: GrowthResource, x: number, y: number, scale = 1): void {
+    graphics.clear();
+    if (resource === "wood") {
+      graphics.fillStyle(0xc9853d, 1).fillRect(x - 11 * scale, y - 6 * scale, 22 * scale, 12 * scale);
+      graphics.fillStyle(0xe2ad64, 1).fillCircle(x - 11 * scale, y, 6 * scale);
+      graphics.lineStyle(Math.max(1, 2 * scale), 0x6f401f, 1).strokeCircle(x - 11 * scale, y, 4.5 * scale);
+      graphics.lineBetween(x - 4 * scale, y - 3 * scale, x + 10 * scale, y - 3 * scale).lineBetween(x - 4 * scale, y + 3 * scale, x + 10 * scale, y + 3 * scale);
+      return;
+    }
+    graphics.fillStyle(COLORS.gold, 1).fillCircle(x, y, 8 * scale);
+    graphics.lineStyle(Math.max(1, 2 * scale), 0x714c17, 1).strokeCircle(x, y, 6 * scale);
+    graphics.lineStyle(Math.max(1, 1.5 * scale), 0xfff0a0, 0.85).lineBetween(x - 3 * scale, y, x + 3 * scale, y);
   }
 
   private renderContext(state: GameState): void {
@@ -519,6 +533,7 @@ export class GameScene extends Phaser.Scene {
         available: action.affordable,
         reason: action.reason,
         description: action.description,
+        resource: action.resource,
         resourceLabel: action.resourceLabel,
         statusLabel: action.statusLabel,
         run: () => this.performBuild(action),
@@ -546,8 +561,8 @@ export class GameScene extends Phaser.Scene {
     this.contextHint.setText(transientHint || (this.destroyConfirm ? "拆除不返还资源 · 再次确认将永久失去等级与词条" : traitText));
     if (this.destroyConfirm) {
       this.panelActions = [
-        { label: "取消拆除", available: true, reason: "返回建筑详情", description: "返回建筑详情", resourceLabel: "", statusLabel: "返回", run: () => { this.destroyConfirm = false; } },
-        { label: "确认拆除", available: true, reason: "", description: "永久移除当前建筑", resourceLabel: "", statusLabel: "确认", run: () => this.performDestroy() },
+        { label: "取消拆除", available: true, reason: "返回建筑详情", description: "返回建筑详情", resource: null, resourceLabel: "", statusLabel: "返回", run: () => { this.destroyConfirm = false; } },
+        { label: "确认拆除", available: true, reason: "", description: "永久移除当前建筑", resource: null, resourceLabel: "", statusLabel: "确认", run: () => this.performDestroy() },
       ];
       return;
     }
@@ -556,6 +571,7 @@ export class GameScene extends Phaser.Scene {
       available: detail.upgrade.affordable,
       reason: detail.upgrade.reason,
       description: detail.upgrade.description,
+      resource: detail.upgrade.resource,
       resourceLabel: detail.upgrade.resourceLabel,
       statusLabel: detail.upgrade.statusLabel,
       run: () => this.performUpgrade(detail.upgrade),
@@ -565,11 +581,12 @@ export class GameScene extends Phaser.Scene {
       available: true,
       reason: "打开四路改造选择",
       description: "选择特殊塔职责",
+      resource: detail.transformResource,
       resourceLabel: detail.transformResourceLabel,
       statusLabel: "查看改造",
       run: () => { this.transformOpen = true; },
     });
-    this.panelActions.push({ label: "拆除", available: true, reason: "拆除不返还资源", description: "移除当前建筑", resourceLabel: "", statusLabel: "可拆除", run: () => { this.destroyConfirm = true; } });
+    this.panelActions.push({ label: "拆除", available: true, reason: "拆除不返还资源", description: "移除当前建筑", resource: null, resourceLabel: "", statusLabel: "可拆除", run: () => { this.destroyConfirm = true; } });
   }
 
   private renderActionButtons(): void {
@@ -577,13 +594,19 @@ export class GameScene extends Phaser.Scene {
       const action = this.panelActions[index];
       const button = this.actionButtons[index]!;
       const label = this.actionLabels[index]!;
+      const icon = this.actionIcons[index]!;
+      const bounds = GROWTH_CONTEXT_ACTION_BOUNDS[index]!;
       const visible = Boolean(action);
       button.setVisible(visible);
       label.setVisible(visible);
+      icon.setVisible(visible && Boolean(action?.resource));
       if (!action) continue;
       button.setFillStyle(action.available ? index === 2 ? COLORS.line : COLORS.blue : 0x3c4439, 1);
       button.setAlpha(action.available ? 1 : 0.72);
       button.setStrokeStyle(2, action.available ? COLORS.gold : 0x77796c, 1);
+      label.setPosition(bounds.x + bounds.width / 2 + 18, bounds.y + bounds.height / 2);
+      if (action.resource) this.drawResourceIcon(icon, action.resource, bounds.x + 22, bounds.y + bounds.height / 2, 0.78);
+      else icon.clear();
       const resource = action.resourceLabel ? " · " + action.resourceLabel : "";
       label.setText(action.label + "\n" + action.description + resource + " · " + action.statusLabel).setColor(action.available ? "#ffffff" : "#c0c3b5");
     }
@@ -606,9 +629,11 @@ export class GameScene extends Phaser.Scene {
       const button = this.transformButtons[index]!;
       const label = this.transformLabels[index]!;
       const icon = this.transformIcons[index]!;
+      const costIcon = this.transformCostIcons[index]!;
       button.setVisible(visible && Boolean(option));
       label.setVisible(visible && Boolean(option));
       icon.setVisible(visible && Boolean(option));
+      costIcon.setVisible(visible && Boolean(option));
       if (!option) continue;
       const color = TRANSFORM_COLORS[option.targetTowerId] ?? COLORS.gold;
       button.setFillStyle(option.affordable ? 0x41543d : 0x343a34, 1).setAlpha(option.affordable ? 1 : 0.8).setStrokeStyle(2, option.affordable ? color : 0x74786c, 1);
@@ -618,6 +643,7 @@ export class GameScene extends Phaser.Scene {
       const iconY = bounds.y + bounds.height / 2;
       icon.clear().fillStyle(color, option.affordable ? 1 : 0.6).fillCircle(iconX, iconY, 24);
       this.drawTowerGlyph(icon, option.targetTowerId, iconX, iconY, color);
+      this.drawResourceIcon(costIcon, option.resource, bounds.x + 64, iconY + 22, 0.58);
     }
   }
 

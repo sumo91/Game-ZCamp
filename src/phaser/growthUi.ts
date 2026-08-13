@@ -64,6 +64,7 @@ export interface GrowthBuildingDetailView {
   canTransform: boolean;
   transformCostLabel: string | null;
   transformCost: number | null;
+  transformResource: GrowthResource;
   transformResourceLabel: string;
   transformStatusLabel: string;
   transformAffordable: boolean;
@@ -74,6 +75,7 @@ export interface GrowthTransformView {
   targetTowerId: GrowthSpecialTowerId;
   name: string;
   role: string;
+  resource: GrowthResource;
   goldCost: number;
   resourceLabel: string;
   statusLabel: string;
@@ -184,7 +186,11 @@ export function formatGrowthTraitEffectAtStacks(content: BuildingGrowthContent, 
     case "tower_splash_radius_percent":
       return "爆炸半径累计 +" + formatGrowthPercent(effect.amount * stacks);
     case "tower_burn":
-      return "命中使目标燃烧 " + formatGrowthNumber(effect.durationSeconds) + " 秒；燃烧伤害倍率 ×" + formatGrowthNumber(Math.pow(effect.stackMultiplier, stacks - 1));
+      {
+        const stackMultiplier = Math.pow(effect.stackMultiplier, stacks - 1);
+        const damagePercent = effect.damagePercent * stackMultiplier;
+        return "命中使目标燃烧 " + formatGrowthNumber(effect.durationSeconds) + " 秒；燃烧伤害：基础攻击的 " + formatGrowthPercent(damagePercent) + "/秒（" + formatGrowthPercent(effect.damagePercent) + " × " + formatGrowthNumber(stackMultiplier) + "）";
+      }
     case "tower_slow_depth":
       return "减速持续时间累计 +" + formatGrowthNumber(effect.durationSeconds * stacks) + " 秒；减速倍率额外降低 " + formatGrowthNumber(effect.extraSlowMultiplier * stacks);
     case "tower_vulnerability_percent":
@@ -297,6 +303,7 @@ export function deriveBuildingDetail(content: BuildingGrowthContent, state: Game
     canTransform: building.growthDefinitionId === "arrow_tower" && transformCostLabel !== null,
     transformCostLabel,
     transformCost,
+    transformResource: "gold",
     transformResourceLabel: resourceLabel("gold"),
     transformStatusLabel: transformCost === null ? "暂无合法目标" : transformAffordable ? "可改造" : "金币不足",
     transformAffordable,
@@ -313,6 +320,7 @@ export function deriveTransformOptions(content: BuildingGrowthContent, state: Ga
       targetTowerId: route.to,
       name: tower?.displayName ?? route.to,
       role: tower?.role ?? "特殊塔",
+      resource: "gold",
       goldCost: route.goldCost,
       resourceLabel: resourceLabel("gold"),
       statusLabel: affordable ? "可改造" : "金币不足",

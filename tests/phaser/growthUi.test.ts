@@ -125,7 +125,8 @@ describe("growth UI derivation and input", () => {
     expect(formatGrowthTraitEffect(starterCatalog.buildingGrowth, "lumber_upgrade_discount", 3)).toContain("累计 -35%");
     expect(formatGrowthTraitEffect(starterCatalog.buildingGrowth, "lumber_wave_stockpile", 3)).toContain("提供木材 15");
     expect(formatGrowthTraitEffect(starterCatalog.buildingGrowth, "machine_penetration", 3)).toContain("穿透目标 +3");
-    expect(formatGrowthTraitEffect(starterCatalog.buildingGrowth, "cannon_burn", 3)).toContain("倍率 ×2.25");
+    expect(formatGrowthTraitEffect(starterCatalog.buildingGrowth, "cannon_burn", 3)).toContain("基础攻击的 45%/秒");
+    expect(formatGrowthTraitEffect(starterCatalog.buildingGrowth, "cannon_burn", 3)).toContain("20% × 2.25");
   });
 
   it("enforces priority and blocks lower hot zones while allowing modal actions", () => {
