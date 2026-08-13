@@ -18,6 +18,8 @@ describe("building growth domain content", () => {
       ["machine_gun", 10], ["cannon", 10], ["frost", 10], ["electric", 10],
     ]);
     expect(starterBuildingGrowthContent.buildings[1]!.baseProductionPerSecond).toEqual([1, 1.6, 2.4, 3.4, 4.6]);
+    expect(starterBuildingGrowthContent.towers.find((tower) => tower.id === "cannon")?.splashDamageMultiplier).toBe(0.45);
+    expect(starterBuildingGrowthContent.towers.find((tower) => tower.id === "electric")?.chainDamageMultiplier).toBe(0.55);
   });
 
   it("shares exact upgrade costs and caps lumberyard discounts at 35 percent", () => {
@@ -89,5 +91,13 @@ describe("building growth domain content", () => {
       buildings: starterBuildingGrowthContent.buildings.map((definition) => definition.id === "lumberyard" ? { ...definition, id: "machine_gun" as "lumberyard" } : definition),
     };
     expect(() => validateBuildingGrowthContent(invalid)).toThrow("exactly the arrow_tower and lumberyard");
+  });
+
+  it("rejects missing typed secondary damage multipliers", () => {
+    const invalid = {
+      ...starterBuildingGrowthContent,
+      towers: starterBuildingGrowthContent.towers.map((tower) => tower.id === "cannon" ? { ...tower, splashDamageMultiplier: undefined } : tower),
+    };
+    expect(() => validateBuildingGrowthContent(invalid)).toThrow("secondary damage content");
   });
 });

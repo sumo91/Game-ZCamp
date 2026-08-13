@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { starterCatalog, type ContentCatalog } from "../../src/core/content";
 import { GameSimulation } from "../../src/core/game";
+import { getGrowthTowerAttackProfile } from "../../src/core/growthCombat";
 import { getWoodProductionPerSecond } from "../../src/core/resources";
 import type { BuildingState, EnemyRuntimeState } from "../../src/core/types";
 
@@ -9,6 +10,17 @@ function quietCatalog(): ContentCatalog {
     ...starterCatalog,
     enemies: starterCatalog.enemies.map((enemy) => ({ ...enemy, moveSpeed: 0, wallDamage: 0 })),
   };
+}
+
+function movingCatalog(): ContentCatalog {
+  return {
+    ...starterCatalog,
+    enemies: starterCatalog.enemies.map((enemy) => ({ ...enemy, moveSpeed: 1, wallDamage: 0 })),
+  };
+}
+
+function silenceFutureSpawns(game: GameSimulation): void {
+  game.getState().waveSpawnProgress = starterCatalog.waves.map((wave) => wave.spawnEvents.length);
 }
 
 function startRunning(game: GameSimulation): void {
@@ -110,7 +122,7 @@ describe("growth building combat and economy integration", () => {
     expect(cannonTarget.growthBurnStates).toEqual([{ sourceBuildingId: cannon.building.id, damagePerSecond: 10.5, remainingSeconds: 2.75 }]);
     cannon.building.attackCooldownSeconds = 0;
     cannon.game.tick(0.25);
-    expect(cannon.game.getState().enemies[0]!.growthBurnStates).toHaveLength(1);
+    expect(cannon.game.getState().enemies[0]!.growthBurnStates).toEqual([{ sourceBuildingId: cannon.building.id, damagePerSecond: 10.5, remainingSeconds: 2.75 }]);
 
     const electric = makeGrowthTower("electric", [trait("electric_chain")]);
     electric.game.getState().enemies = [enemy("primary"), enemy("chain-a", 0.9), enemy("chain-b", 0.8), enemy("chain-c", 0.7)];
@@ -216,6 +228,31 @@ describe("growth building combat and economy integration", () => {
     expect(paused.game.getState().wood).toBe(woodBefore);
   });
 
+  it("pays each surviving growth lumberyard's stockpile once in wave 1 and once in wave 2", () => {
+    const game = new GameSimulation(quietCatalog());
+    game.getState().wood = 1000;
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "lumberyard" });
+    game.dispatch({ type: "build_building", slotId: "slot-r1-c2", definitionId: "lumberyard" });
+    const first = game.getState().buildings.find((building) => building.slotId === "slot-r1-c1")!;
+    const second = game.getState().buildings.find((building) => building.slotId === "slot-r1-c2")!;
+    first.traits = [trait("lumber_wave_stockpile", 1)];
+    second.traits = [trait("lumber_wave_stockpile", 2)];
+    game.getState().wood = 0;
+    startRunning(game);
+    const production = getWoodProductionPerSecond(game.getState());
+    expect(game.getState().wave).toBe(1);
+    expect(game.getState().wood).toBe(15);
+    game.tick(0.25);
+    const afterFirstQuarter = game.getState().wood;
+    expect(afterFirstQuarter).toBeCloseTo(15 + production * 0.25, 8);
+    game.tick(59.75);
+    const afterWaveTwo = game.getState().wood;
+    expect(game.getState().wave).toBe(2);
+    expect(afterWaveTwo).toBeCloseTo(afterFirstQuarter + production * 59.75 + 15, 8);
+    game.tick(0.25);
+    expect(game.getState().wood).toBeCloseTo(afterWaveTwo + production * 0.25, 8);
+  });
+
   it("freezes growth wood, enemies, and effective time during a forced trait draft", () => {
     const game = new GameSimulation(quietCatalog());
     game.getState().wood = 100;
@@ -228,5 +265,107 @@ describe("growth building combat and economy integration", () => {
     const snapshot = structuredClone({ wood: game.getState().wood, enemies: game.getState().enemies, effectiveBattleTimeSeconds: game.getState().effectiveBattleTimeSeconds });
     game.tick(20);
     expect({ wood: game.getState().wood, enemies: game.getState().enemies, effectiveBattleTimeSeconds: game.getState().effectiveBattleTimeSeconds }).toEqual(snapshot);
+  });
+
+  it("settles a source burn at its real DPS regardless of 0.25, 0.125, or 30Hz ticks", () => {
+    const run = (deltaSeconds: number, steps: number): number => {
+      const { game, building } = makeGrowthTower("cannon");
+      building.attackCooldownSeconds = 99;
+      silenceFutureSpawns(game);
+      const target = enemy("burn-target", 1, 1000);
+      target.growthBurnStates = [{ sourceBuildingId: building.id, damagePerSecond: 0.2, remainingSeconds: 3 }];
+      game.getState().enemies = [target];
+      for (let index = 0; index < steps; index += 1) game.tick(deltaSeconds);
+      return 1000 - target.hp;
+    };
+    const quarter = run(0.25, 12);
+    const eighth = run(0.125, 24);
+    const thirtyHz = run(1 / 30, 90);
+    expect(quarter).toBeCloseTo(0.6, 6);
+    expect(eighth).toBeCloseTo(quarter, 6);
+    expect(thirtyHz).toBeCloseTo(quarter, 6);
+  });
+
+  it("integrates a growth slow across its expiry point independent of tick splitting", () => {
+    const run = (deltaSeconds: number, steps: number): number => {
+      const game = new GameSimulation(movingCatalog());
+      game.getState().wood = 1000;
+      game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+      const building = game.getState().buildings.find((candidate) => candidate.model === "growth")!;
+      game.getState().gold = 10;
+      game.dispatch({ type: "transform_tower", buildingId: building.id, targetTowerId: "frost" });
+      building.attackCooldownSeconds = 99;
+      startRunning(game);
+      silenceFutureSpawns(game);
+      const target = enemy("slow-target", 0, 1000);
+      target.atWall = false;
+      target.growthSlowStates = [{ sourceBuildingId: building.id, multiplier: 0.5, remainingSeconds: 0.2 }];
+      game.getState().enemies = [target];
+      for (let index = 0; index < steps; index += 1) game.tick(deltaSeconds);
+      return target.position;
+    };
+    const quarter = run(0.25, 1);
+    const split = run(0.125, 2);
+    expect(quarter).toBeCloseTo(0.15, 6);
+    expect(split).toBeCloseTo(quarter, 6);
+  });
+
+  it("uses the strongest active source and preserves expiry boundaries under split ticks", () => {
+    const run = (deltaSeconds: number, steps: number): number => {
+      const game = new GameSimulation(movingCatalog());
+      game.getState().wood = 1000;
+      game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+      game.dispatch({ type: "build_building", slotId: "slot-r1-c2", definitionId: "arrow_tower" });
+      const first = game.getState().buildings.find((building) => building.slotId === "slot-r1-c1")!;
+      const second = game.getState().buildings.find((building) => building.slotId === "slot-r1-c2")!;
+      first.attackCooldownSeconds = 99;
+      second.attackCooldownSeconds = 99;
+      startRunning(game);
+      silenceFutureSpawns(game);
+      const target = enemy("multi-slow-target", 0, 1000);
+      target.atWall = false;
+      target.growthSlowStates = [
+        { sourceBuildingId: first.id, multiplier: 0.5, remainingSeconds: 0.2 },
+        { sourceBuildingId: second.id, multiplier: 0.8, remainingSeconds: 0.25 },
+      ];
+      game.getState().enemies = [target];
+      for (let index = 0; index < steps; index += 1) game.tick(deltaSeconds);
+      return target.position;
+    };
+    const quarter = run(0.25, 1);
+    const split = run(0.125, 2);
+    expect(quarter).toBeCloseTo(0.14, 6);
+    expect(split).toBeCloseTo(quarter, 6);
+  });
+
+  it("preserves overshoot for multiple growth attacks at maximum attack-speed layers", () => {
+    const run = (deltaSeconds: number, steps: number): { attacks: number; cooldown: number; attackTimes: number[]; damage: number } => {
+      const { game, building } = makeGrowthTower("arrow_tower", [trait("tower_attack_speed", 4)]);
+      building.level = 5;
+      building.attackCooldownSeconds = 0;
+      silenceFutureSpawns(game);
+      const target = enemy("attack-target", 1, 100000);
+      game.getState().enemies = [target];
+      const interval = getGrowthTowerAttackProfile(starterCatalog.buildingGrowth, building)!.attackIntervalSeconds;
+      let attacks = 0;
+      const attackTimes: number[] = [];
+      let damage = 0;
+      for (let index = 0; index < steps; index += 1) {
+        game.tick(deltaSeconds);
+        const events = game.drainEvents();
+        const stepAttacks = events.filter((event) => event.type === "tower_attack").length;
+        attacks += stepAttacks;
+        damage += events.filter((event) => event.type === "enemy_hit").reduce((total, event) => total + event.damage, 0);
+        if (stepAttacks > 0) attackTimes.push((index + 1) * deltaSeconds - deltaSeconds + deltaSeconds + building.attackCooldownSeconds - interval);
+      }
+      return { attacks, cooldown: building.attackCooldownSeconds, attackTimes, damage };
+    };
+    const quarter = run(0.25, 12);
+    const split = run(0.125, 24);
+    expect(split.attacks).toBe(quarter.attacks);
+    expect(split.cooldown).toBeCloseTo(quarter.cooldown, 6);
+    expect(split.damage).toBeCloseTo(quarter.damage, 6);
+    expect(split.attackTimes).toHaveLength(quarter.attackTimes.length);
+    split.attackTimes.forEach((time, index) => expect(time).toBeCloseTo(quarter.attackTimes[index]!, 6));
   });
 });

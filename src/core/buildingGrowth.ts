@@ -43,9 +43,11 @@ export interface GrowthTowerDefinition {
   range: number;
   attackType: GrowthAttackType;
   splashRadius?: number;
+  splashDamageMultiplier?: number;
   slowMultiplier?: number;
   slowDurationSeconds?: number;
   chainTargets?: number;
+  chainDamageMultiplier?: number;
   levelDamageMultiplier: 0.2;
   levelAttackSpeedMultiplier: 0.1;
 }
@@ -125,9 +127,9 @@ const GROWTH_BUILDINGS: readonly GrowthBuildingDefinition[] = [
 const GROWTH_TOWERS: readonly GrowthTowerDefinition[] = [
   { id: "arrow_tower", displayName: "箭塔", role: "基础单体防御", baseDamage: 7, baseAttackIntervalSeconds: 1, range: 0.6, attackType: "single", levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
   { id: "machine_gun", displayName: "机枪塔", role: "快速单体输出", baseDamage: 12, baseAttackIntervalSeconds: 0.75, range: 0.6, attackType: "single", levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
-  { id: "cannon", displayName: "炮塔", role: "范围清怪", baseDamage: 35, baseAttackIntervalSeconds: 2.1, range: 0.65, attackType: "splash", splashRadius: 0.18, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
+  { id: "cannon", displayName: "炮塔", role: "范围清怪", baseDamage: 35, baseAttackIntervalSeconds: 2.1, range: 0.65, attackType: "splash", splashRadius: 0.18, splashDamageMultiplier: 0.45, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
   { id: "frost", displayName: "冰冻塔", role: "减速控制", baseDamage: 4, baseAttackIntervalSeconds: 1, range: 0.65, attackType: "slow", slowMultiplier: 0.52, slowDurationSeconds: 1.4, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
-  { id: "electric", displayName: "电磁塔", role: "链式压制", baseDamage: 12, baseAttackIntervalSeconds: 1.4, range: 0.62, attackType: "chain", chainTargets: 3, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
+  { id: "electric", displayName: "电磁塔", role: "链式压制", baseDamage: 12, baseAttackIntervalSeconds: 1.4, range: 0.62, attackType: "chain", chainTargets: 3, chainDamageMultiplier: 0.55, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
 ];
 
 const COMMON_TOWER_TRAITS: readonly GrowthTraitDefinition[] = [
@@ -269,6 +271,9 @@ export function validateBuildingGrowthContent(content: BuildingGrowthContent): v
     if (!tower.displayName.trim() || !tower.role.trim() || tower.baseDamage <= 0 || tower.baseAttackIntervalSeconds <= 0 || tower.range <= 0 || tower.levelDamageMultiplier !== 0.2 || tower.levelAttackSpeedMultiplier !== 0.1) {
       throw new Error("Growth tower " + tower.id + " has invalid base attributes.");
     }
+    if (tower.attackType === "splash" && (tower.splashDamageMultiplier === undefined || tower.splashDamageMultiplier <= 0 || tower.chainDamageMultiplier !== undefined)) throw new Error("Growth splash tower " + tower.id + " has invalid secondary damage content.");
+    if (tower.attackType === "chain" && (tower.chainDamageMultiplier === undefined || tower.chainDamageMultiplier <= 0 || tower.splashDamageMultiplier !== undefined)) throw new Error("Growth chain tower " + tower.id + " has invalid secondary damage content.");
+    if (tower.attackType !== "splash" && tower.attackType !== "chain" && (tower.splashDamageMultiplier !== undefined || tower.chainDamageMultiplier !== undefined)) throw new Error("Growth tower " + tower.id + " has unexpected secondary damage content.");
   }
   if (content.transformations.length !== 4 || content.transformations.some((route) => route.from !== "arrow_tower" || route.goldCost !== 10 || !ids.has(route.to))) throw new Error("Growth transformations must expose four ten-gold arrow tower routes.");
   const traitIds = new Set(content.traits.map((trait) => trait.id));

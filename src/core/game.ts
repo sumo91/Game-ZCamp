@@ -9,8 +9,10 @@ import {
   getGrowthFrostSlow,
   getGrowthMachinePenetrationMultiplier,
   getGrowthMachinePenetrationTargets,
+  getGrowthSecondaryDamageMultiplier,
   getGrowthTowerAttackProfile,
   getGrowthTowerDamage,
+  compareStableIds,
 } from "./growthCombat";
 import { getGrowthLumberyardUpgradeDiscount, getGrowthLumberyardWaveStockpile } from "./growthEconomy";
 import { getUpgradeCost } from "./costs";
@@ -671,7 +673,7 @@ export class GameSimulation {
       for (const state of enemy.growthBurnStates ?? []) {
         if (!this.isActiveGrowthSource(state.sourceBuildingId)) continue;
         const burnStep = Math.min(deltaSeconds, state.remainingSeconds);
-        if (enemy.hp > 0 && burnStep > EPSILON) this.applyDamage(enemy, state.damagePerSecond * burnStep, "growth-burn:" + state.sourceBuildingId);
+        if (enemy.hp > 0 && burnStep > EPSILON) this.applyContinuousDamage(enemy, state.damagePerSecond * burnStep, "growth-burn:" + state.sourceBuildingId);
         const remainingSeconds = Math.max(0, state.remainingSeconds - deltaSeconds);
         if (remainingSeconds > EPSILON) activeStates.push({ ...state, remainingSeconds });
       }
@@ -680,14 +682,25 @@ export class GameSimulation {
   }
 
   private advanceGrowthSlowStates(enemy: EnemyRuntimeState, deltaSeconds: number): number {
-    const activeStates: GrowthSlowState[] = [];
-    for (const state of enemy.growthSlowStates ?? []) {
-      if (!this.isActiveGrowthSource(state.sourceBuildingId)) continue;
-      const remainingSeconds = Math.max(0, state.remainingSeconds - deltaSeconds);
-      if (remainingSeconds > EPSILON) activeStates.push({ ...state, remainingSeconds });
+    let remainingSeconds = deltaSeconds;
+    let effectiveSlowSeconds = 0;
+    const states: GrowthSlowState[] = (enemy.growthSlowStates ?? [])
+      .filter((state) => this.isActiveGrowthSource(state.sourceBuildingId) && state.remainingSeconds > EPSILON)
+      .map((state) => ({ ...state }));
+    while (remainingSeconds > EPSILON) {
+      const multiplier = states.reduce((lowest, state) => Math.min(lowest, state.multiplier), 1);
+      const nextExpiry = states.reduce((soonest, state) => Math.min(soonest, state.remainingSeconds), remainingSeconds);
+      const slice = Math.min(remainingSeconds, nextExpiry);
+      effectiveSlowSeconds += slice * multiplier;
+      remainingSeconds -= slice;
+      for (const state of states) state.remainingSeconds = Math.max(0, state.remainingSeconds - slice);
+      for (let index = states.length - 1; index >= 0; index -= 1) {
+        if (states[index]!.remainingSeconds <= EPSILON) states.splice(index, 1);
+      }
+      if (slice <= EPSILON) break;
     }
-    enemy.growthSlowStates = activeStates;
-    return activeStates.reduce((multiplier, state) => Math.min(multiplier, state.multiplier), 1);
+    enemy.growthSlowStates = states;
+    return effectiveSlowSeconds;
   }
 
   private updateEnemies(deltaSeconds: number): void {
@@ -726,7 +739,7 @@ export class GameSimulation {
         enemy.burnRemainingSeconds = Math.max(0, enemy.burnRemainingSeconds - deltaSeconds);
         if (enemy.burnRemainingSeconds <= EPSILON) enemy.burnDamagePerSecond = 0;
       }
-      const growthSlowMultiplier = this.advanceGrowthSlowStates(enemy, deltaSeconds);
+      const effectiveGrowthSlowSeconds = this.advanceGrowthSlowStates(enemy, deltaSeconds);
       if (enemy.hp <= 0 || frozen) continue;
 
       enemy.attackCooldownSeconds = Math.max(0, enemy.attackCooldownSeconds - deltaSeconds);
@@ -763,11 +776,11 @@ export class GameSimulation {
         }
       }
 
-      let speed = definition.moveSpeed * enemy.slowMultiplier * growthSlowMultiplier;
+      let speed = definition.moveSpeed * enemy.slowMultiplier;
       if (this.state.overlordInspireRemainingSeconds > EPSILON && definition.tier !== "boss") {
         speed *= this.state.overlordInspireMultiplier;
       }
-      enemy.position = Math.min(1, enemy.position + speed * deltaSeconds);
+      enemy.position = Math.min(1, enemy.position + speed * effectiveGrowthSlowSeconds);
       enemy.atWall = enemy.position >= 1 - EPSILON;
     }
   }
@@ -828,7 +841,7 @@ export class GameSimulation {
         const extraJumps = chainEffect?.kind === "tower_chain" && this.getPermanentApplications("tower_chain", tower.id) > 0 ? chainEffect.extraTargets : 0;
         const chainTargets = this.state.enemies
           .filter((enemy) => enemy.id !== target.id && enemy.hp > 0 && Math.abs(enemy.position - target.position) <= tower.range)
-          .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))
+          .sort((left, right) => right.position - left.position || compareStableIds(left.id, right.id))
           .slice(0, Math.max(0, (tower.chainTargets ?? 1) - 1 + extraJumps));
         for (const enemy of chainTargets) {
           this.emitTowerSpecialIfNeeded(building, tower, enemy);
@@ -841,7 +854,7 @@ export class GameSimulation {
         const penetrationTargets = penetrationEffect?.kind === "tower_penetration" && this.getPermanentApplications("tower_penetration", tower.id) > 0
           ? this.state.enemies
             .filter((enemy) => enemy.id !== target.id && enemy.hp > 0 && enemy.position < target.position && Math.abs(enemy.position - target.position) <= tower.range)
-            .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))
+            .sort((left, right) => right.position - left.position || compareStableIds(left.id, right.id))
             .slice(0, Math.max(0, Math.floor(penetrationEffect.amount)))
           : [];
         for (const penetrationTarget of penetrationTargets) {
@@ -856,17 +869,20 @@ export class GameSimulation {
     const profile = getGrowthTowerAttackProfile(this.catalog.buildingGrowth, building);
     if (!profile) return;
     const cooldownBefore = building.attackCooldownSeconds;
-    building.attackCooldownSeconds = Math.max(0, building.attackCooldownSeconds - deltaSeconds);
-    if (building.attackCooldownSeconds > EPSILON) return;
+    if (cooldownBefore > deltaSeconds + EPSILON) {
+      building.attackCooldownSeconds = cooldownBefore - deltaSeconds;
+      return;
+    }
     const attackOffsetSeconds = Math.min(deltaSeconds, Math.max(0, cooldownBefore));
     const target = this.findTarget(building, { range: profile.range });
-    building.attackCooldownSeconds = profile.attackIntervalSeconds;
+    const activeAfterAttackSeconds = Math.max(0, deltaSeconds - attackOffsetSeconds);
+    building.attackCooldownSeconds = Math.max(0, profile.attackIntervalSeconds - activeAfterAttackSeconds);
     if (!target) return;
 
     const splashTargets = profile.tower.attackType === "splash"
       ? this.state.enemies
         .filter((enemy) => enemy.id !== target.id && enemy.hp > 0 && this.isGrowthTargetInRange(enemy, target.position, getGrowthCannonSplashRadius(this.catalog.buildingGrowth, building)))
-        .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))
+        .sort((left, right) => right.position - left.position || compareStableIds(left.id, right.id))
       : [];
     const directDamage = this.getGrowthDamage(building, target);
     this.applyDamage(target, directDamage, building.id);
@@ -879,7 +895,7 @@ export class GameSimulation {
 
     if (profile.tower.id === "cannon") {
       for (const enemy of splashTargets) {
-        this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * 0.45, building.id);
+        this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * getGrowthSecondaryDamageMultiplier(profile), building.id);
         this.events.push({ type: "tower_special", buildingId: building.id, effect: "溅射", targetId: enemy.id });
       }
       const burn = getGrowthCannonBurn(this.catalog.buildingGrowth, building);
@@ -896,10 +912,10 @@ export class GameSimulation {
     if (profile.tower.id === "electric") {
       const chainTargets = this.state.enemies
         .filter((enemy) => enemy.id !== target.id && enemy.hp > 0 && this.isGrowthTargetInRange(enemy, target.position, profile.range))
-        .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))
+        .sort((left, right) => right.position - left.position || compareStableIds(left.id, right.id))
         .slice(0, Math.max(0, (profile.tower.chainTargets ?? 1) - 1 + getGrowthElectricChainExtraTargets(this.catalog.buildingGrowth, building)));
       for (const enemy of chainTargets) {
-        this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * 0.55, building.id);
+        this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * getGrowthSecondaryDamageMultiplier(profile), building.id);
         this.events.push({ type: "tower_special", buildingId: building.id, effect: "弹射", targetId: enemy.id });
       }
     }
@@ -907,7 +923,7 @@ export class GameSimulation {
     if (profile.tower.id === "machine_gun") {
       const penetrationTargets = this.state.enemies
         .filter((enemy) => enemy.id !== target.id && enemy.hp > 0 && enemy.position < target.position && this.isGrowthTargetInRange(enemy, target.position, profile.range))
-        .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))
+        .sort((left, right) => right.position - left.position || compareStableIds(left.id, right.id))
         .slice(0, getGrowthMachinePenetrationTargets(this.catalog.buildingGrowth, building));
       const carryMultiplier = getGrowthMachinePenetrationMultiplier(this.catalog.buildingGrowth);
       for (const enemy of penetrationTargets) {
@@ -955,7 +971,7 @@ export class GameSimulation {
 
   private advanceFreshGrowthBurn(enemy: EnemyRuntimeState, sourceBuildingId: string, damagePerSecond: number, activeSeconds: number): void {
     if (activeSeconds <= EPSILON) return;
-    if (enemy.hp > 0) this.applyDamage(enemy, damagePerSecond * activeSeconds, "growth-burn:" + sourceBuildingId);
+    if (enemy.hp > 0) this.applyContinuousDamage(enemy, damagePerSecond * activeSeconds, "growth-burn:" + sourceBuildingId);
     const states = enemy.growthBurnStates ?? [];
     const state = states.find((candidate) => candidate.sourceBuildingId === sourceBuildingId);
     if (!state) return;
@@ -1002,8 +1018,8 @@ export class GameSimulation {
     const focused = candidates.find((enemy) => enemy.id === this.state.focusFireTargetId && this.state.focusFireRemainingSeconds > EPSILON);
     const wallContact = candidates
       .filter((enemy) => enemy.atWall)
-      .sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))[0];
-    return focused ?? wallContact ?? candidates.sort((left, right) => right.position - left.position || left.id.localeCompare(right.id))[0];
+      .sort((left, right) => right.position - left.position || compareStableIds(left.id, right.id))[0];
+    return focused ?? wallContact ?? candidates.sort((left, right) => right.position - left.position || compareStableIds(left.id, right.id))[0];
   }
 
   private getCardEffect(kind: CardEffect["kind"], towerId?: string): CardEffect | undefined {
@@ -1038,6 +1054,14 @@ export class GameSimulation {
   private applyDamage(enemy: EnemyRuntimeState, damage: number, sourceId: string): void {
     const definition = this.getEnemyDefinition(enemy.definitionId);
     const actualDamage = Math.max(1, damage * (definition.damageMultiplier ?? 1));
+    enemy.hp = Math.max(0, enemy.hp - actualDamage);
+    this.events.push({ type: "enemy_hit", enemyId: enemy.id, position: enemy.position, damage: actualDamage, remainingHp: enemy.hp });
+  }
+
+  private applyContinuousDamage(enemy: EnemyRuntimeState, damage: number, sourceId: string): void {
+    const definition = this.getEnemyDefinition(enemy.definitionId);
+    const actualDamage = Math.max(0, damage * (definition.damageMultiplier ?? 1));
+    if (actualDamage <= EPSILON) return;
     enemy.hp = Math.max(0, enemy.hp - actualDamage);
     this.events.push({ type: "enemy_hit", enemyId: enemy.id, position: enemy.position, damage: actualDamage, remainingHp: enemy.hp });
   }

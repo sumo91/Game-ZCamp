@@ -5,6 +5,12 @@ import type { BuildingState, EnemyTier } from "./types";
 /** The minimum movement multiplier allowed by any growth frost slow. */
 export const GROWTH_FROST_MIN_SLOW_MULTIPLIER = 0.1;
 
+/** Locale-independent ordering for deterministic simulation IDs. */
+export function compareStableIds(left: string, right: string): number {
+  if (left === right) return 0;
+  return left < right ? -1 : 1;
+}
+
 export interface GrowthTowerAttackProfile {
   tower: GrowthTowerDefinition;
   baseAttackDamage: number;
@@ -112,6 +118,12 @@ export function getGrowthElectricChainExtraTargets(content: BuildingGrowthConten
 export function getGrowthMachinePenetrationMultiplier(content: BuildingGrowthContent): number {
   const effect = getEffect(content, "machine_penetration");
   return effect?.kind === "tower_penetration" ? effect.carryMultiplier : 0;
+}
+
+export function getGrowthSecondaryDamageMultiplier(profile: GrowthTowerAttackProfile): number {
+  if (profile.tower.attackType === "splash") return profile.tower.splashDamageMultiplier ?? 0;
+  if (profile.tower.attackType === "chain") return profile.tower.chainDamageMultiplier ?? 0;
+  return 0;
 }
 
 export function getGrowthCannonBurn(content: BuildingGrowthContent, building: BuildingState): { damagePerSecond: number; durationSeconds: number } | null {

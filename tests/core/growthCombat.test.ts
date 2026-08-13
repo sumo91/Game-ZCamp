@@ -34,6 +34,28 @@ function trait(definitionId: NonNullable<BuildingState["traits"]>[number]["defin
 }
 
 describe("growth combat and economy selectors", () => {
+  it("derives every tower's Lv.1/Lv.3/Lv.5 profile from typed content", () => {
+    const expected = {
+      arrow_tower: { damage: 7, interval: 1, range: 0.6 },
+      machine_gun: { damage: 12, interval: 0.75, range: 0.6 },
+      cannon: { damage: 35, interval: 2.1, range: 0.65 },
+      frost: { damage: 4, interval: 1, range: 0.65 },
+      electric: { damage: 12, interval: 1.4, range: 0.62 },
+    } as const;
+    for (const [towerId, base] of Object.entries(expected)) {
+      for (const level of [1, 3, 5]) {
+        const profile = getGrowthTowerAttackProfile(starterBuildingGrowthContent, growthBuilding(towerId as keyof typeof expected, level))!;
+        expect(profile.baseAttackDamage, towerId + " Lv." + level).toBeCloseTo(base.damage * (1 + 0.2 * (level - 1)), 8);
+        expect(profile.attackIntervalSeconds, towerId + " Lv." + level).toBeCloseTo(base.interval / (1 + 0.1 * (level - 1)), 8);
+        expect(profile.range, towerId + " Lv." + level).toBeCloseTo(base.range, 8);
+      }
+    }
+    const transformed = growthBuilding("arrow_tower", 3);
+    transformed.growthDefinitionId = "cannon";
+    transformed.definitionId = "cannon";
+    expect(getGrowthTowerAttackProfile(starterBuildingGrowthContent, transformed)!.baseAttackDamage).toBeCloseTo(35 * 1.4, 8);
+  });
+
   it("derives level, own trait damage, attack speed, and range without shared mutation", () => {
     const building = growthBuilding("arrow_tower", 3, [trait("tower_damage", 2), trait("tower_attack_speed", 2), trait("tower_range", 1)]);
     const profile = getGrowthTowerAttackProfile(starterBuildingGrowthContent, building)!;
