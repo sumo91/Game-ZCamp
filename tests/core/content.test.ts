@@ -33,16 +33,35 @@ describe("growth candidate content", () => {
         expect(Math.max(...times) - Math.min(...times)).toBeLessThanOrEqual(CROWD_PULSE_WINDOW_SECONDS + 0.000001);
         expect(Math.min(...times)).toBeGreaterThanOrEqual(pulseIndex * CROWD_PULSE_INTERVAL_SECONDS);
       }
+      if (index === 0) {
+        expect([...pulses.values()].every((times) => times.length === 2)).toBe(true);
+      }
       expect(wave.spawnEvents.every((event, eventIndex) => event.atSeconds >= 0 && event.atSeconds <= 40 && (eventIndex === 0 || event.atSeconds >= wave.spawnEvents[eventIndex - 1]!.atSeconds))).toBe(true);
     }
     expect(starterCatalog.waves[4]!.spawnEvents.at(-1)).toEqual({ atSeconds: 39.5, enemyId: "charger_boss" });
     expect(starterCatalog.waves[9]!.spawnEvents.at(-1)).toEqual({ atSeconds: 39.5, enemyId: "overlord_boss" });
   });
 
+  it("eases only wave one while waves two through ten retain the frozen exact composition", () => {
+    expect(EXPECTED_WAVE_COUNTS[0]).toEqual({ walker: 32 });
+    expect(starterCatalog.waves[0]!.spawnEvents.filter((event) => event.enemyId === "walker")).toHaveLength(32);
+    expect(EXPECTED_WAVE_COUNTS.slice(1)).toEqual([
+      { walker: 32, runner: 16 },
+      { walker: 32, runner: 24, tank: 8 },
+      { walker: 40, runner: 32, tank: 12 },
+      { walker: 32, runner: 24, tank: 16, armored: 2, charger_boss: 1 },
+      { walker: 48, runner: 40, tank: 20 },
+      { walker: 40, runner: 32, tank: 24, armored: 4 },
+      { walker: 48, runner: 48, tank: 24, brute: 2 },
+      { walker: 56, runner: 48, tank: 32, armored: 2, brute: 2 },
+      { walker: 48, runner: 40, tank: 40, armored: 2, brute: 2, overlord_boss: 1 },
+    ]);
+  });
+
   it("keeps ordinary enemy budgets halved while elite and boss values stay fixed", () => {
     type Budget = { hp: number; wallDamage: number; gold: number; xp: number };
     const baselineCounts: Array<Record<string, number>> = [
-      { walker: 17 }, { walker: 16, runner: 8 }, { walker: 16, runner: 12, tank: 4 },
+      { walker: 16 }, { walker: 16, runner: 8 }, { walker: 16, runner: 12, tank: 4 },
       { walker: 20, runner: 16, tank: 6 }, { walker: 16, runner: 12, tank: 8, armored: 2, charger_boss: 1 },
       { walker: 24, runner: 20, tank: 10 }, { walker: 20, runner: 16, tank: 12, armored: 4 },
       { walker: 24, runner: 24, tank: 12, brute: 2 }, { walker: 28, runner: 24, tank: 16, armored: 2, brute: 2 },

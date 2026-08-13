@@ -98,7 +98,7 @@ function createWave(wave: number, composition: Record<string, number>, finalBoss
 }
 
 const waves: WaveDefinition[] = [
-  createWave(1, { walker: 34 }),
+  createWave(1, { walker: 32 }),
   createWave(2, { walker: 32, runner: 16 }),
   createWave(3, { walker: 32, runner: 24, tank: 8 }),
   createWave(4, { walker: 40, runner: 32, tank: 12 }),
@@ -117,7 +117,7 @@ export const starterCatalog: ContentCatalog = {
 };
 
 export const EXPECTED_WAVE_COUNTS: Array<Record<string, number>> = [
-  { walker: 34 },
+  { walker: 32 },
   { walker: 32, runner: 16 },
   { walker: 32, runner: 24, tank: 8 },
   { walker: 40, runner: 32, tank: 12 },
