@@ -3,6 +3,7 @@ import { GameSimulation } from "../../src/core/game";
 import { starterCatalog } from "../../src/core/content";
 import { getWoodProductionPerSecond } from "../../src/core/resources";
 import { starterHeroContent, validateHeroContent } from "../../src/core/hero";
+import { resolveBattleConfig } from "../../src/core/battleConfig";
 
 describe("camp warden foundation", () => {
   it("validates one legal level and hero without inventing extra choices", () => {
@@ -11,6 +12,14 @@ describe("camp warden foundation", () => {
     expect(starterHeroContent.heroes).toHaveLength(1);
     expect(starterHeroContent.heroes[0]?.detailLines).toEqual(["基础攻击 · 复用 Lv.1 箭塔档案", "木材总产量 +10%", "开局城墙护盾 +100"]);
     expect(() => validateHeroContent({ ...starterHeroContent, heroes: [{ ...starterHeroContent.heroes[0]!, woodProductionMultiplier: 1.2 }] })).toThrow();
+  });
+
+  it("resolves the selected battle config and rejects invalid references", () => {
+    const config = resolveBattleConfig({ heroId: "camp_warden", levelId: "first_defense" });
+    expect(config.hero.displayName).toBe("营地守望者");
+    expect(config.level.waveCount).toBe(10);
+    expect(() => resolveBattleConfig({ heroId: "missing_hero", levelId: "first_defense" })).toThrow("Unknown hero");
+    expect(() => resolveBattleConfig({ heroId: "camp_warden", levelId: "missing_level" })).toThrow("Unknown level");
   });
 
   it("starts every new battle with an independent hero and shield", () => {
@@ -45,7 +54,23 @@ describe("camp warden foundation", () => {
     const before = game.getState().enemies[0]!.hp;
     game.tick(0.25);
     const events = game.drainEvents();
-    expect(events.some((event) => event.type === "tower_attack" && event.buildingId === "hero-camp-warden" && event.towerDefinitionId === "arrow_tower")).toBe(true);
+    expect(events.some((event) => event.type === "tower_attack" && event.buildingId === "hero-" + starterHeroContent.heroes[0]!.id && event.towerDefinitionId === "arrow_tower")).toBe(true);
+    expect(game.getState().enemies[0]!.hp).toBeLessThan(before);
+  });
+
+  it("uses the selected definition for shield, attack profile and runtime identity", () => {
+    const definition = starterHeroContent.heroes[0]!;
+    const game = new GameSimulation(starterCatalog, 1337, {
+      heroId: definition.id,
+      levelId: starterHeroContent.levels[0]!.id,
+    });
+    expect(game.getState().wallShieldMax).toBe(definition.startingWallShield);
+    expect(game.getState().hero?.id).toBe("hero-" + definition.id);
+    game.tick(5);
+    const before = game.getState().enemies[0]!.hp;
+    game.tick(0.25);
+    const attack = game.drainEvents().find((event) => event.type === "tower_attack" && event.buildingId === game.getState().hero?.id);
+    expect(attack && attack.type === "tower_attack" ? attack.towerDefinitionId : null).toBe(definition.attackBuildingId);
     expect(game.getState().enemies[0]!.hp).toBeLessThan(before);
   });
 

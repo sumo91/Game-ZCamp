@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { starterHeroContent } from "../core/hero";
 import { decideLobbyPointer, deriveLobbyView } from "./lobbyUi";
-import { LOGICAL_HEIGHT, LOGICAL_WIDTH } from "./layout";
+import { LOBBY_ARTIFACT_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH } from "./layout";
 
 const COLORS = { bg: 0x172d20, panel: 0x29442d, panelLight: 0x3f5b3b, line: 0xb89b4c, gold: 0xf6c453, text: "#fff3d2", muted: "#d6d39c", cyan: "#8dd8c3" };
 
@@ -23,23 +23,29 @@ export class LobbyScene extends Phaser.Scene {
     this.add.text(44, 150, "营地", this.textStyle(28, COLORS.text)).setDepth(3);
     this.add.text(44, 190, "当前出战配置", this.textStyle(15, COLORS.cyan)).setDepth(3);
 
-    this.levelCard = this.makeCard(40, 230, 640, 190, "第一防线", "十波连续尸潮 · 当前可用", "点击查看关卡规则");
+    this.levelCard = this.makeCard(40, 230, 640, 190, this.view.levelName, this.view.levelSubtitle, "点击查看关卡规则");
     this.levelCard.on("pointerdown", () => this.handle("level"));
-    this.heroCard = this.makeCard(40, 450, 640, 300, "营地守望者", "基础驻守英雄 · 点击查看详情", "");
+    this.heroCard = this.makeCard(40, 450, 640, 300, this.view.heroName, this.view.heroRole + " · 点击查看详情", "");
     this.heroCard.on("pointerdown", () => this.handle("hero"));
-    this.add.text(78, 548, "基础攻击", this.textStyle(18, COLORS.text)).setDepth(4);
-    this.add.text(78, 585, "自动索敌 · 复用 Lv.1 箭塔档案", this.textStyle(15, COLORS.muted)).setDepth(4);
-    this.add.text(78, 635, "木材总产量 +10%", this.textStyle(15, COLORS.muted)).setDepth(4);
-    this.add.text(78, 675, "开局城墙护盾 +100", this.textStyle(15, COLORS.muted)).setDepth(4);
+    this.view.heroDetails.forEach((detail, index) => {
+      this.add.text(78, 548 + index * 48, detail, this.textStyle(index === 0 ? 17 : 15, index === 0 ? COLORS.text : COLORS.muted)).setDepth(4);
+    });
     const heroGlyph = this.add.graphics().setDepth(4);
     heroGlyph.fillStyle(0x5b7042, 1).fillCircle(570, 590, 58);
     heroGlyph.lineStyle(4, COLORS.gold, 1).strokeCircle(570, 590, 58);
     heroGlyph.fillStyle(COLORS.gold, 1).fillTriangle(570, 525, 530, 590, 610, 590);
     heroGlyph.fillStyle(0x213524, 1).fillCircle(570, 579, 11);
 
-    const artifact = this.add.rectangle(40, 790, 640, 120, 0x202f24, 1).setDepth(2).setStrokeStyle(2, 0x68755a, 1);
-    this.add.text(72, 820, "神器 / 养成位", this.textStyle(19, COLORS.text)).setDepth(4);
-    this.add.text(72, 855, "尚未开放 · 本阶段不提供可用套组", this.textStyle(15, COLORS.muted)).setDepth(4);
+    const artifact = this.add.rectangle(
+      LOBBY_ARTIFACT_BOUNDS.x + LOBBY_ARTIFACT_BOUNDS.width / 2,
+      LOBBY_ARTIFACT_BOUNDS.y + LOBBY_ARTIFACT_BOUNDS.height / 2,
+      LOBBY_ARTIFACT_BOUNDS.width,
+      LOBBY_ARTIFACT_BOUNDS.height,
+      0x202f24,
+      1,
+    ).setDepth(2).setStrokeStyle(2, 0x68755a, 1);
+    this.add.text(LOBBY_ARTIFACT_BOUNDS.x + 32, LOBBY_ARTIFACT_BOUNDS.y + 30, this.view.artifactLabel, this.textStyle(19, COLORS.text)).setDepth(4);
+    this.add.text(LOBBY_ARTIFACT_BOUNDS.x + 32, LOBBY_ARTIFACT_BOUNDS.y + 65, "本阶段不提供可用套组", this.textStyle(15, COLORS.muted)).setDepth(4);
     artifact.setAlpha(0.88);
 
     this.startButton = this.add.rectangle(360, 1010, 640, 88, 0x476d3d, 1).setDepth(3).setInteractive({ useHandCursor: true });
@@ -74,7 +80,7 @@ export class LobbyScene extends Phaser.Scene {
       this.scene.start("GameScene", { heroId: this.view.heroId, levelId: this.view.levelId });
       return;
     }
-    if (decision === "show_level") this.infoText.setText("第一防线：十波固定尸潮，60 秒一波。当前没有其他关卡可选择。");
+    if (decision === "show_level") this.infoText.setText(this.view.levelName + "：" + this.view.levelSubtitle + "。当前没有其他关卡可选择。");
     if (decision === "show_hero") this.infoText.setText(this.view.heroName + "：" + this.view.heroDetails.join(" · ") + "。基础攻击自动进行，不是主动技能。");
   }
 

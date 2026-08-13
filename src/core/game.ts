@@ -16,8 +16,9 @@ import {
 } from "./growthCombat";
 import { getGrowthLumberyardUpgradeDiscount, getGrowthLumberyardWaveStockpile } from "./growthEconomy";
 import { getWoodProductionPerSecond } from "./resources";
-import { getHeroDefinition, starterHeroContent } from "./hero";
-import type { HeroId } from "./hero";
+import { resolveBattleConfig } from "./battleConfig";
+import type { BattleConfig } from "./battleConfig";
+import type { HeroDefinition, HeroId, LevelDefinition } from "./hero";
 import { CAMP_SLOT_IDS } from "./types";
 import type {
   BuildingState,
@@ -34,7 +35,6 @@ import type {
 
 export const MAX_WAVE = 10;
 export const WALL_MAX_HP = 100;
-export const WALL_SHIELD_MAX = 100;
 export const INITIAL_WOOD = 120;
 export const INITIAL_GOLD = 0;
 export const OPENING_COUNTDOWN_SECONDS = 5;
@@ -52,14 +52,18 @@ export class GameSimulation {
   private randomState: number;
   private growthBurnRemainingAtStepStart = new Map<string, number>();
 
-  private readonly heroId: HeroId | null;
+  private readonly battleConfig: { heroId: HeroId; levelId: BattleConfig["levelId"]; hero: HeroDefinition; level: LevelDefinition } | null;
+  private readonly heroDefinition: HeroDefinition | null;
+  private readonly levelDefinition: LevelDefinition | null;
 
-  public constructor(catalog: ContentCatalog = starterCatalog, seed = 1337, heroId?: HeroId) {
+  public constructor(catalog: ContentCatalog = starterCatalog, seed = 1337, heroOrConfig?: HeroId | BattleConfig) {
     validateCatalog(catalog);
-    if (heroId !== undefined && !getHeroDefinition(starterHeroContent, heroId)) throw new Error("Unknown hero: " + heroId);
+    const requestedConfig = typeof heroOrConfig === "string" ? { heroId: heroOrConfig, levelId: "first_defense" } : heroOrConfig;
+    this.battleConfig = requestedConfig ? resolveBattleConfig(requestedConfig) : null;
+    this.heroDefinition = this.battleConfig?.hero ?? null;
+    this.levelDefinition = this.battleConfig?.level ?? null;
     this.catalog = catalog;
     this.initialSeed = seed >>> 0;
-    this.heroId = heroId ?? null;
     this.randomState = this.initialSeed;
     this.state = this.createInitialState();
   }
@@ -129,28 +133,29 @@ export class GameSimulation {
   }
 
   private createInitialState(): GameState {
+    const maxWave = this.levelDefinition?.waveCount ?? MAX_WAVE;
     return {
       phase: "OPENING_COUNTDOWN",
       pausedFromPhase: null,
       systemPausedFromPhase: null,
       wave: 0,
-      maxWave: MAX_WAVE,
+      maxWave,
       effectiveBattleTimeSeconds: 0,
       nextWaveTimeRemainingSeconds: WAVE_INTERVAL_SECONDS,
       openingCountdownRemainingSeconds: OPENING_COUNTDOWN_SECONDS,
-      waveSpawnProgress: Array.from({ length: MAX_WAVE }, () => 0),
+      waveSpawnProgress: Array.from({ length: maxWave }, () => 0),
       spawnedEnemies: 0,
       defeatedEnemies: 0,
       wood: INITIAL_WOOD,
       gold: INITIAL_GOLD,
       wallHp: WALL_MAX_HP,
       wallMaxHp: WALL_MAX_HP,
-      wallShield: this.heroId ? WALL_SHIELD_MAX : 0,
-      wallShieldMax: this.heroId ? WALL_SHIELD_MAX : 0,
+      wallShield: this.heroDefinition?.startingWallShield ?? 0,
+      wallShieldMax: this.heroDefinition?.startingWallShield ?? 0,
       overlordInspireRemainingSeconds: 0,
       overlordInspireMultiplier: 1,
       seed: this.initialSeed,
-      hero: this.heroId ? { id: "hero-camp-warden", definitionId: this.heroId, attackCooldownSeconds: 0 } : null,
+      hero: this.heroDefinition ? { id: "hero-" + this.heroDefinition.id, definitionId: this.heroDefinition.id, attackCooldownSeconds: 0 } : null,
       buildings: [this.createMainCity()],
       enemies: [],
       pendingTraitDraft: null,
@@ -183,7 +188,7 @@ export class GameSimulation {
         continue;
       }
       this.state.effectiveBattleTimeSeconds += step;
-      this.state.wood += getWoodProductionPerSecond(this.state, this.catalog) * step;
+      this.state.wood += getWoodProductionPerSecond(this.state, this.catalog, this.heroDefinition) * step;
       this.updateWaveSchedule();
       this.updateEnemies(step);
       if (this.state.phase !== "RUNNING") return;
@@ -199,9 +204,9 @@ export class GameSimulation {
 
   private updateWaveSchedule(): void {
     const previousWave = this.state.wave;
-    const nextWave = Math.min(MAX_WAVE, Math.floor(this.state.effectiveBattleTimeSeconds / WAVE_INTERVAL_SECONDS) + 1);
+    const nextWave = Math.min(this.state.maxWave, Math.floor(this.state.effectiveBattleTimeSeconds / WAVE_INTERVAL_SECONDS) + 1);
     this.state.wave = nextWave;
-    this.state.nextWaveTimeRemainingSeconds = nextWave < MAX_WAVE ? Math.max(0, nextWave * WAVE_INTERVAL_SECONDS - this.state.effectiveBattleTimeSeconds) : 0;
+    this.state.nextWaveTimeRemainingSeconds = nextWave < this.state.maxWave ? Math.max(0, nextWave * WAVE_INTERVAL_SECONDS - this.state.effectiveBattleTimeSeconds) : 0;
     for (let wave = previousWave + 1; wave <= nextWave; wave += 1) {
       this.state.wood += this.state.buildings.reduce((total, building) => total + getGrowthLumberyardWaveStockpile(this.catalog.buildingGrowth, building), 0);
       this.events.push({ type: "wave_started", wave });
@@ -226,7 +231,7 @@ export class GameSimulation {
 
   private getNextSpawnTime(): number | null {
     let nextTime: number | null = null;
-    for (let waveIndex = 0; waveIndex < MAX_WAVE; waveIndex += 1) {
+    for (let waveIndex = 0; waveIndex < this.state.maxWave; waveIndex += 1) {
       const wave = this.catalog.waves[waveIndex];
       const progress = this.state.waveSpawnProgress[waveIndex] ?? 0;
       const spawnEvent = wave?.spawnEvents[progress];
@@ -487,13 +492,14 @@ export class GameSimulation {
       this.resolveGrowthTowerAttack(building, deltaSeconds);
     }
     const hero = this.state.hero;
-    if (!hero) return;
+    const heroDefinition = this.heroDefinition;
+    if (!hero || !heroDefinition) return;
     const heroBuilding: BuildingState = {
       id: hero.id,
       slotId: "slot-r3-c3",
       kind: "tower",
-      definitionId: "arrow_tower",
-      growthDefinitionId: "arrow_tower",
+      definitionId: heroDefinition.attackBuildingId,
+      growthDefinitionId: heroDefinition.attackBuildingId,
       level: 1,
       lanePosition: 0.5,
       attackCooldownSeconds: hero.attackCooldownSeconds,

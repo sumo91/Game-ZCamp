@@ -1,9 +1,11 @@
 import Phaser from "phaser";
 import { starterCatalog, type EnemyDefinition } from "../core/content";
+import { resolveBattleConfig } from "../core/battleConfig";
+import type { BattleLaunchData } from "../core/battleConfig";
 import { getGrowthBuildingPresentation } from "../core/buildingGrowth";
 import { GameSimulation } from "../core/game";
 import { getWoodProductionPerSecond } from "../core/resources";
-import type { HeroId } from "../core/hero";
+import type { HeroDefinition } from "../core/hero";
 import type { BuildingState, EnemyRuntimeState, GameEvent, GamePhase, GameState } from "../core/types";
 import {
   deriveBuildingDetail,
@@ -22,6 +24,7 @@ import {
   type GrowthResource,
   type GrowthTraitOptionView,
 } from "./growthUi";
+import { deriveResultActions } from "./lobbyUi";
 import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
 
 type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number };
@@ -51,6 +54,8 @@ const TRANSFORM_COLORS: Record<string, number> = {
 
 export class GameScene extends Phaser.Scene {
   private simulation!: GameSimulation;
+  private heroDefinition!: HeroDefinition;
+  private readonly resultActions = deriveResultActions();
   private dynamic!: Phaser.GameObjects.Graphics;
   private feedbacks: Feedback[] = [];
   private selectedSlotId: string | null = null;
@@ -126,8 +131,10 @@ export class GameScene extends Phaser.Scene {
     this.showcaseCapture = this.showcaseMode && (showcaseParam === "charge" || showcaseParam === "inspire") ? showcaseParam : null;
   }
 
-  public init(data: { heroId?: HeroId; levelId?: string }): void {
-    this.simulation = new GameSimulation(starterCatalog, 1337, data.heroId ?? "camp_warden");
+  public init(data: BattleLaunchData = {}): void {
+    const battleConfig = resolveBattleConfig(data);
+    this.heroDefinition = battleConfig.hero;
+    this.simulation = new GameSimulation(starterCatalog, 1337, battleConfig);
     if (this.showcaseMode) {
       const state = this.simulation.getState();
       state.wallMaxHp = 1000000;
@@ -205,7 +212,7 @@ export class GameScene extends Phaser.Scene {
     this.waveText = this.add.text(32, 40, "", this.textStyle(22, "#fff3d2")).setDepth(10);
     this.timerText = this.add.text(32, 72, "", this.textStyle(14, "#ffe08a")).setDepth(10);
     this.enemyText = this.add.text(320, 56, "", this.textStyle(14, "#fff3d2")).setDepth(10);
-    this.heroText = this.add.text(434, 18, "营地守望者 · 基础攻击", { ...this.textStyle(13, "#fff3d2"), align: "right" }).setOrigin(1, 0).setDepth(10);
+    this.heroText = this.add.text(434, 18, this.heroDefinition.displayName + " · " + this.heroDefinition.role, { ...this.textStyle(13, "#fff3d2"), align: "right" }).setOrigin(1, 0).setDepth(10);
     this.shieldText = this.add.text(360, 724, "", { ...this.textStyle(14, "#bce9e4"), align: "center", stroke: "#162b27", strokeThickness: 3 }).setOrigin(0.5).setDepth(10);
     this.wallText = this.add.text(360, 748, "", { ...this.textStyle(16, "#fff3d2"), align: "center", stroke: "#21170f", strokeThickness: 4 }).setOrigin(0.5).setDepth(10);
     this.statusText = this.add.text(34, 762, "", this.textStyle(13, "#fff0b0")).setDepth(10);
@@ -308,10 +315,10 @@ export class GameScene extends Phaser.Scene {
     this.resultTitle = this.add.text(360, 486, "", this.textStyle(42, "#ffffff")).setOrigin(0.5).setDepth(111);
     this.resultHint = this.add.text(360, 548, "", { ...this.textStyle(18, "#dbe6f4"), align: "center", wordWrap: { width: 500 } }).setOrigin(0.5).setDepth(111);
     this.resultRestartButton = this.add.rectangle(360, 636, 180, 56, COLORS.blue, 1).setDepth(111).setInteractive({ useHandCursor: true });
-    this.resultRestartLabel = this.add.text(360, 636, "再战", this.textStyle(17, "#ffffff")).setOrigin(0.5).setDepth(112);
+    this.resultRestartLabel = this.add.text(360, 636, this.resultActions.rematchLabel, this.textStyle(17, "#ffffff")).setOrigin(0.5).setDepth(112);
     this.resultRestartButton.on("pointerdown", () => this.restartSimulation());
     this.resultLobbyButton = this.add.rectangle(360, 706, 180, 56, COLORS.panel, 1).setDepth(111).setInteractive({ useHandCursor: true });
-    this.resultLobbyLabel = this.add.text(360, 706, "返回营地", this.textStyle(17, "#fff3d2")).setOrigin(0.5).setDepth(112);
+    this.resultLobbyLabel = this.add.text(360, 706, this.resultActions.lobbyLabel, this.textStyle(17, "#fff3d2")).setOrigin(0.5).setDepth(112);
     this.resultLobbyButton.on("pointerdown", () => this.scene.start("LobbyScene"));
   }
 
@@ -479,15 +486,16 @@ export class GameScene extends Phaser.Scene {
     const terminal = state.phase === "VICTORY" || state.phase === "DEFEAT";
     this.timerText.setText(terminal ? "战斗结束" : state.phase === "OPENING_COUNTDOWN" || state.wave === 0 ? "首波准备中" : "下一波  " + this.formatSeconds(state.nextWaveTimeRemainingSeconds));
     this.woodText.setText("木材  " + Math.floor(state.wood));
-    this.woodRateText.setText("+" + this.formatRate(getWoodProductionPerSecond(state)) + "/秒");
+    this.woodRateText.setText("+" + this.formatRate(getWoodProductionPerSecond(state, starterCatalog, this.heroDefinition)) + "/秒");
     this.goldText.setText("金币  " + Math.floor(state.gold));
     this.renderResourceIcons();
 
     const shownWallMax = this.showcaseMode ? 100 : state.wallMaxHp;
     const shownWallHp = this.showcaseMode ? 100 : Math.ceil(state.wallHp);
-    const shownShield = this.showcaseMode ? 100 : Math.ceil(state.wallShield);
+    const shownShieldMax = this.showcaseMode ? this.heroDefinition.startingWallShield : state.wallShieldMax;
+    const shownShield = this.showcaseMode ? shownShieldMax : Math.ceil(state.wallShield);
     const wallRatio = state.wallMaxHp > 0 ? state.wallHp / state.wallMaxHp : 0;
-    this.shieldText.setText("护盾  " + shownShield + " / " + (this.showcaseMode ? 100 : state.wallShieldMax));
+    this.shieldText.setText("护盾  " + shownShield + " / " + shownShieldMax);
     this.wallText.setText("城墙  " + shownWallHp + " / " + shownWallMax).setColor(wallRatio > 0.35 ? "#fff3d2" : "#f06a6a");
     const activeEnemyCount = state.enemies.filter((enemy) => enemy.hp > 0).length;
     this.enemyText.setText("威胁  " + activeEnemyCount + " · 击杀  " + state.defeatedEnemies);
@@ -556,9 +564,9 @@ export class GameScene extends Phaser.Scene {
         run: () => this.performBuild(action),
       }));
     } else if (building.kind === "main_city") {
-      this.contextTitle.setText("营地守望者 · 驻守");
-      this.contextDetail.setText("基础攻击 · 复用 Lv.1 箭塔档案 · 第 3 排·第 3 格");
-      this.contextHint.setText(transient ? this.messageText.text : "木材总产量 +10% · 开局护盾 +100 · 不可建造/升级/改造/拆除");
+      this.contextTitle.setText(this.heroDefinition.displayName + " · 驻守");
+      this.contextDetail.setText(this.heroDefinition.detailLines[0] + " · 第 3 排·第 3 格");
+      this.contextHint.setText(transient ? this.messageText.text : this.heroDefinition.detailLines.slice(1).join(" · ") + " · 不可建造/升级/改造/拆除");
     } else {
       const detail = deriveBuildingDetail(starterCatalog.buildingGrowth, state, building);
       if (detail) this.renderBuildingDetail(detail, transient ? this.messageText.text : "");
@@ -919,7 +927,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private buildingLabel(building: BuildingState): string {
-    if (building.kind === "main_city") return "营地守望者 · 驻守";
+    if (building.kind === "main_city") return this.heroDefinition.displayName + " · 驻守";
     if (building.kind === "lumberyard") return "木材厂 Lv." + building.level;
     const towerId = building.growthDefinitionId && building.growthDefinitionId !== "lumberyard" ? building.growthDefinitionId : "arrow_tower";
     const presentation = getGrowthBuildingPresentation(starterCatalog.buildingGrowth, towerId);
