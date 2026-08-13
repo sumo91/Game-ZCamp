@@ -88,6 +88,11 @@ export interface GrowthTraitDefinition {
   effect: GrowthTraitEffect;
 }
 
+export interface GrowthTraitPlacement {
+  pool: GrowthTraitPool;
+  source: GrowthTraitSource;
+}
+
 export interface BuildingGrowthContent {
   buildings: readonly GrowthBuildingDefinition[];
   towers: readonly GrowthTowerDefinition[];
@@ -164,7 +169,26 @@ export const starterBuildingGrowthContent: BuildingGrowthContent = {
   traits: [...COMMON_TOWER_TRAITS, ...SPECIAL_TOWER_TRAITS, ...LUMBERYARD_TRAITS],
 };
 
-export const starterGrowthContent = starterBuildingGrowthContent;
+export const EXPECTED_GROWTH_TRAIT_PLACEMENTS: Readonly<Record<GrowthTraitId, GrowthTraitPlacement>> = {
+  tower_damage: { pool: "common_tower", source: "common" },
+  tower_attack_speed: { pool: "common_tower", source: "common" },
+  tower_range: { pool: "common_tower", source: "common" },
+  tower_elite_damage: { pool: "common_tower", source: "common" },
+  tower_wall_guard: { pool: "common_tower", source: "common" },
+  tower_finisher: { pool: "common_tower", source: "common" },
+  machine_penetration: { pool: "special_tower", source: "machine_gun" },
+  machine_hunter: { pool: "special_tower", source: "machine_gun" },
+  cannon_blast: { pool: "special_tower", source: "cannon" },
+  cannon_burn: { pool: "special_tower", source: "cannon" },
+  frost_deep: { pool: "special_tower", source: "frost" },
+  frost_vulnerability: { pool: "special_tower", source: "frost" },
+  electric_chain: { pool: "special_tower", source: "electric" },
+  electric_overload: { pool: "special_tower", source: "electric" },
+  lumber_output: { pool: "lumberyard", source: "lumberyard" },
+  lumber_flat: { pool: "lumberyard", source: "lumberyard" },
+  lumber_upgrade_discount: { pool: "lumberyard", source: "lumberyard" },
+  lumber_wave_stockpile: { pool: "lumberyard", source: "lumberyard" },
+};
 
 export function getGrowthBuildingDefinition(content: BuildingGrowthContent, id: GrowthBuildingId): GrowthBuildingDefinition | undefined {
   return content.buildings.find((definition) => definition.id === id);
@@ -223,7 +247,11 @@ export function validateBuildingGrowthContent(content: BuildingGrowthContent): v
   const assertUnique = (ids: readonly string[], label: string): void => {
     if (new Set(ids).size !== ids.length) throw new Error("Growth " + label + " must have unique IDs.");
   };
-  if (content.buildings.length !== 2) throw new Error("Growth content must contain exactly two buildable building definitions.");
+  const expectedBuildableKinds = { arrow_tower: "tower", lumberyard: "lumberyard" } as const;
+  const expectedBuildableIds = new Set(Object.keys(expectedBuildableKinds));
+  if (content.buildings.length !== expectedBuildableIds.size || content.buildings.some((definition) => !definition.buildable || !expectedBuildableIds.has(definition.id) || expectedBuildableKinds[definition.id as keyof typeof expectedBuildableKinds] !== definition.kind)) {
+    throw new Error("Growth content must contain exactly the arrow_tower and lumberyard buildable definitions.");
+  }
   assertUnique(content.buildings.map((definition) => definition.id), "building definitions");
   assertUnique(content.towers.map((definition) => definition.id), "tower definitions");
   assertUnique(content.traits.map((definition) => definition.id), "trait definitions");
@@ -244,24 +272,13 @@ export function validateBuildingGrowthContent(content: BuildingGrowthContent): v
   }
   if (content.transformations.length !== 4 || content.transformations.some((route) => route.from !== "arrow_tower" || route.goldCost !== 10 || !ids.has(route.to))) throw new Error("Growth transformations must expose four ten-gold arrow tower routes.");
   const traitIds = new Set(content.traits.map((trait) => trait.id));
-  const requiredTraitIds: readonly GrowthTraitId[] = [
-    "tower_damage", "tower_attack_speed", "tower_range", "tower_elite_damage", "tower_wall_guard", "tower_finisher",
-    "machine_penetration", "machine_hunter", "cannon_blast", "cannon_burn", "frost_deep", "frost_vulnerability", "electric_chain", "electric_overload",
-    "lumber_output", "lumber_flat", "lumber_upgrade_discount", "lumber_wave_stockpile",
-  ];
-  if (requiredTraitIds.some((id) => !traitIds.has(id))) throw new Error("Growth trait content is incomplete.");
-  const specialTraitOwners: Partial<Record<GrowthTraitId, GrowthSpecialTowerId>> = {
-    machine_penetration: "machine_gun", machine_hunter: "machine_gun",
-    cannon_blast: "cannon", cannon_burn: "cannon",
-    frost_deep: "frost", frost_vulnerability: "frost",
-    electric_chain: "electric", electric_overload: "electric",
-  };
+  const expectedTraitIds = Object.keys(EXPECTED_GROWTH_TRAIT_PLACEMENTS) as GrowthTraitId[];
+  if (traitIds.size !== expectedTraitIds.length || expectedTraitIds.some((id) => !traitIds.has(id))) throw new Error("Growth trait content is incomplete.");
   for (const trait of content.traits) {
-    if (!trait.displayName.trim() || !trait.role.trim() || trait.pool === "common_tower" && trait.source !== "common" || trait.pool === "lumberyard" && trait.source !== "lumberyard") {
+    const expectedPlacement = EXPECTED_GROWTH_TRAIT_PLACEMENTS[trait.id];
+    if (!expectedPlacement || !trait.displayName.trim() || !trait.role.trim() || trait.pool !== expectedPlacement.pool || trait.source !== expectedPlacement.source) {
       throw new Error("Growth trait " + trait.id + " has an invalid pool or visible content.");
     }
-    const expectedOwner = specialTraitOwners[trait.id];
-    if (expectedOwner !== undefined && (trait.pool !== "special_tower" || trait.source !== expectedOwner)) throw new Error("Growth trait " + trait.id + " has an invalid exclusive owner.");
   }
   if (getTraitCandidates(content, "arrow_tower").length < 3 || getTraitCandidates(content, "lumberyard").length < 3) throw new Error("Growth basic trait pools must contain three distinct options.");
   for (const towerId of ["machine_gun", "cannon", "frost", "electric"] as const) {

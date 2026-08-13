@@ -81,6 +81,33 @@ describe("GameSimulation third-stage combat and card content", () => {
     expect(game.dispatch({ type: "build_building", slotId: "slot-r3-c3", definitionId: "arrow_tower" })).toEqual({ accepted: false, reason: "该格已有建筑" });
   });
 
+  it("keeps legacy base cards from upgrading growth buildings", () => {
+    const lumberyardGame = new GameSimulation();
+    const lumberyardCard = handCard(lumberyardGame, "lumberyard")!;
+    lumberyardGame.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "lumberyard" });
+    const lumberyard = lumberyardGame.getState().buildings.find((building) => building.slotId === "slot-r1-c1")!;
+    lumberyardGame.getState().wood = 1000;
+    const lumberyardWood = lumberyardGame.getState().wood;
+    expect(lumberyardGame.dispatch({ type: "play_card", cardInstanceId: lumberyardCard.instanceId, target: { kind: "slot", slotId: lumberyard.slotId } })).toEqual({ accepted: false, reason: "只能对同类建筑使用这张牌" });
+    expect(lumberyardGame.getState().wood).toBe(lumberyardWood);
+    expect(lumberyardGame.getState().hand.some((card) => card.instanceId === lumberyardCard.instanceId)).toBe(true);
+    expect(lumberyard.level).toBe(1);
+
+    const transformedGame = new GameSimulation();
+    const cannonCard = handCard(transformedGame, "cannon")!;
+    transformedGame.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
+    const transformed = transformedGame.getState().buildings.find((building) => building.slotId === "slot-r1-c1")!;
+    transformedGame.getState().gold = 10;
+    transformedGame.dispatch({ type: "transform_tower", buildingId: transformed.id, targetTowerId: "cannon" });
+    transformedGame.getState().wood = 1000;
+    const transformedWood = transformedGame.getState().wood;
+    expect(transformedGame.dispatch({ type: "play_card", cardInstanceId: cannonCard.instanceId, target: { kind: "slot", slotId: transformed.slotId } })).toEqual({ accepted: false, reason: "只能对同类建筑使用这张牌" });
+    expect(transformedGame.getState().wood).toBe(transformedWood);
+    expect(transformedGame.getState().hand.some((card) => card.instanceId === cannonCard.instanceId)).toBe(true);
+    expect(transformed.level).toBe(1);
+    expect(transformed.growthDefinitionId).toBe("cannon");
+  });
+
   it("upgrades atomically, freezes into a trait draft, and returns to the prior phase", () => {
     const game = new GameSimulation();
     game.getState().wood = 90;
@@ -132,6 +159,19 @@ describe("GameSimulation third-stage combat and card content", () => {
     expect(game.dispatch({ type: "upgrade_building", buildingId }).accepted).toBe(true);
     expect(game.getState().phase).toBe("TRAIT_DRAFT");
     expect(game.getState().pendingTraitDraft!.returnPhase).toBe("TACTICAL_PAUSE");
+    const frozenSnapshot = structuredClone({
+      wood: game.getState().wood,
+      enemies: game.getState().enemies,
+      wave: game.getState().wave,
+      effectiveBattleTimeSeconds: game.getState().effectiveBattleTimeSeconds,
+    });
+    game.tick(20);
+    expect({
+      wood: game.getState().wood,
+      enemies: game.getState().enemies,
+      wave: game.getState().wave,
+      effectiveBattleTimeSeconds: game.getState().effectiveBattleTimeSeconds,
+    }).toEqual(frozenSnapshot);
     const selected = game.getState().pendingTraitDraft!.options[0]!;
     game.dispatch({ type: "choose_building_trait", buildingId, traitDefinitionId: selected });
     expect(game.getState().phase).toBe("TACTICAL_PAUSE");

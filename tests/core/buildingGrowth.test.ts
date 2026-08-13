@@ -54,12 +54,25 @@ describe("building growth domain content", () => {
     expect(() => validateBuildingGrowthContent(invalid)).toThrow("Growth trait content is incomplete");
   });
 
+  it("fails fast when a common or lumberyard trait is assigned to the wrong pool", () => {
+    const wrongCommonPool = {
+      ...starterBuildingGrowthContent,
+      traits: starterBuildingGrowthContent.traits.map((trait) => trait.id === "tower_damage" ? { ...trait, pool: "special_tower" as const, source: "machine_gun" as const } : trait),
+    };
+    const wrongLumberyardPool = {
+      ...starterBuildingGrowthContent,
+      traits: starterBuildingGrowthContent.traits.map((trait) => trait.id === "lumber_output" ? { ...trait, pool: "common_tower" as const, source: "common" as const } : trait),
+    };
+    expect(() => validateBuildingGrowthContent(wrongCommonPool)).toThrow("invalid pool");
+    expect(() => validateBuildingGrowthContent(wrongLumberyardPool)).toThrow("invalid pool");
+  });
+
   it("fails fast when a special trait is assigned to another tower", () => {
     const invalid = {
       ...starterBuildingGrowthContent,
       traits: starterBuildingGrowthContent.traits.map((trait) => trait.id === "machine_penetration" ? { ...trait, source: "cannon" as const } : trait),
     };
-    expect(() => validateBuildingGrowthContent(invalid)).toThrow("invalid exclusive owner");
+    expect(() => validateBuildingGrowthContent(invalid)).toThrow("invalid pool");
   });
 
   it("fails fast when a transformation points outside the typed tower catalog", () => {
@@ -68,5 +81,13 @@ describe("building growth domain content", () => {
       transformations: [...starterBuildingGrowthContent.transformations.slice(0, 3), { from: "arrow_tower" as const, to: "missing" as "machine_gun", goldCost: 10 as const }],
     };
     expect(() => validateBuildingGrowthContent(invalid)).toThrow("Growth transformations");
+  });
+
+  it("rejects a third or substitute buildable definition", () => {
+    const invalid = {
+      ...starterBuildingGrowthContent,
+      buildings: starterBuildingGrowthContent.buildings.map((definition) => definition.id === "lumberyard" ? { ...definition, id: "machine_gun" as "lumberyard" } : definition),
+    };
+    expect(() => validateBuildingGrowthContent(invalid)).toThrow("exactly the arrow_tower and lumberyard");
   });
 });

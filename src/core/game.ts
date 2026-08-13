@@ -609,7 +609,7 @@ export class GameSimulation {
   }
 
   private baseTargetMatches(building: BuildingState, effect: Extract<CardDefinition["effect"], { kind: "base" }>): boolean {
-    return building.kind === effect.targetKind && building.definitionId === effect.definitionId;
+    return building.model === "legacy_card" && building.kind === effect.targetKind && building.definitionId === effect.definitionId;
   }
 
   private grantShield(amount: number, durationSeconds: number): void {
