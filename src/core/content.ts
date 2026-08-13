@@ -40,6 +40,7 @@ export interface SpawnEvent {
 export interface WaveDefinition {
   wave: number;
   startSeconds: number;
+  pulseIntervalSeconds: number;
   spawnEvents: SpawnEvent[];
 }
 
@@ -60,11 +61,11 @@ const enemies: EnemyDefinition[] = [
 ];
 
 export const CROWD_PULSE_COUNT = 16;
-export const CROWD_PULSE_INTERVAL_SECONDS = 2.6;
+export const EXPECTED_WAVE_PULSE_INTERVAL_SECONDS = [3.2, 3, 2.8, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6] as const;
 export const CROWD_PULSE_WINDOW_SECONDS = 0.4;
 const CONTENT_EPSILON = 0.000001;
 
-function createWave(wave: number, composition: Record<string, number>, finalBossId?: string): WaveDefinition {
+function createWave(wave: number, composition: Record<string, number>, pulseIntervalSeconds: number, finalBossId?: string): WaveDefinition {
   const normalIds = ["walker", "runner", "tank"];
   const eliteIds = ["armored", "brute"];
   const spawnIds: string[] = [];
@@ -90,24 +91,24 @@ function createWave(wave: number, composition: Record<string, number>, finalBoss
     cursor += pulseIds.length;
     const microInterval = pulseIds.length > 1 ? CROWD_PULSE_WINDOW_SECONDS / (pulseIds.length - 1) : 0;
     for (const [microIndex, enemyId] of pulseIds.entries()) {
-      spawnEvents.push({ atSeconds: pulseIndex * CROWD_PULSE_INTERVAL_SECONDS + microIndex * microInterval, enemyId });
+      spawnEvents.push({ atSeconds: pulseIndex * pulseIntervalSeconds + microIndex * microInterval, enemyId });
     }
   }
   if (finalBossId) spawnEvents.push({ atSeconds: 39.5, enemyId: finalBossId });
-  return { wave, startSeconds: (wave - 1) * 60, spawnEvents };
+  return { wave, startSeconds: (wave - 1) * 60, pulseIntervalSeconds, spawnEvents };
 }
 
 const waves: WaveDefinition[] = [
-  createWave(1, { walker: 32 }),
-  createWave(2, { walker: 32, runner: 16 }),
-  createWave(3, { walker: 32, runner: 24, tank: 8 }),
-  createWave(4, { walker: 40, runner: 32, tank: 12 }),
-  createWave(5, { walker: 32, runner: 24, tank: 16, armored: 2 }, "charger_boss"),
-  createWave(6, { walker: 48, runner: 40, tank: 20 }),
-  createWave(7, { walker: 40, runner: 32, tank: 24, armored: 4 }),
-  createWave(8, { walker: 48, runner: 48, tank: 24, brute: 2 }),
-  createWave(9, { walker: 56, runner: 48, tank: 32, armored: 2, brute: 2 }),
-  createWave(10, { walker: 48, runner: 40, tank: 40, armored: 2, brute: 2 }, "overlord_boss"),
+  createWave(1, { walker: 28 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[0]),
+  createWave(2, { walker: 30, runner: 14 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[1]),
+  createWave(3, { walker: 30, runner: 22, tank: 8 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[2]),
+  createWave(4, { walker: 40, runner: 32, tank: 12 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[3]),
+  createWave(5, { walker: 32, runner: 24, tank: 16, armored: 2 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[4], "charger_boss"),
+  createWave(6, { walker: 48, runner: 40, tank: 20 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[5]),
+  createWave(7, { walker: 40, runner: 32, tank: 24, armored: 4 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[6]),
+  createWave(8, { walker: 48, runner: 48, tank: 24, brute: 2 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[7]),
+  createWave(9, { walker: 56, runner: 48, tank: 32, armored: 2, brute: 2 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[8]),
+  createWave(10, { walker: 48, runner: 40, tank: 40, armored: 2, brute: 2 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[9], "overlord_boss"),
 ];
 
 export const starterCatalog: ContentCatalog = {
@@ -117,9 +118,9 @@ export const starterCatalog: ContentCatalog = {
 };
 
 export const EXPECTED_WAVE_COUNTS: Array<Record<string, number>> = [
-  { walker: 32 },
-  { walker: 32, runner: 16 },
-  { walker: 32, runner: 24, tank: 8 },
+  { walker: 28 },
+  { walker: 30, runner: 14 },
+  { walker: 30, runner: 22, tank: 8 },
   { walker: 40, runner: 32, tank: 12 },
   { walker: 32, runner: 24, tank: 16, armored: 2, charger_boss: 1 },
   { walker: 48, runner: 40, tank: 20 },
@@ -165,21 +166,24 @@ export function validateCatalog(catalog: ContentCatalog): void {
 
   for (const [index, wave] of catalog.waves.entries()) {
     const expectedWave = index + 1;
+    const expectedPulseInterval = EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[index];
     if (wave.wave !== expectedWave || wave.startSeconds !== index * 60 || wave.spawnEvents.length === 0) throw new Error("Wave " + expectedWave + " has an invalid fixed-timeline start.");
+    if (wave.pulseIntervalSeconds !== expectedPulseInterval) throw new Error("Wave " + expectedWave + " has an invalid pulse interval.");
     const expectedCounts = EXPECTED_WAVE_COUNTS[index]!;
     for (const event of wave.spawnEvents) if (!catalog.enemies.some((enemy) => enemy.id === event.enemyId)) throw new Error("Wave " + wave.wave + " references unknown enemy " + event.enemyId + ".");
     const actualCounts = wave.spawnEvents.reduce((counts, event) => { counts[event.enemyId] = (counts[event.enemyId] ?? 0) + 1; return counts; }, {} as Record<string, number>);
     if (Object.keys(expectedCounts).some((id) => actualCounts[id] !== expectedCounts[id]) || Object.keys(actualCounts).some((id) => actualCounts[id] !== expectedCounts[id])) throw new Error("Wave " + wave.wave + " does not match the formal ten-wave composition.");
     let previousAtSeconds = -Infinity;
     for (const event of wave.spawnEvents) {
-      if (event.atSeconds < 0 || event.atSeconds > 40 || event.atSeconds < previousAtSeconds) throw new Error("Wave " + wave.wave + " contains an invalid spawn time.");
+      const maximumSpawnTime = event.enemyId.endsWith("_boss") ? 40 : wave.pulseIntervalSeconds * (CROWD_PULSE_COUNT - 1) + CROWD_PULSE_WINDOW_SECONDS;
+      if (event.atSeconds < 0 || event.atSeconds > maximumSpawnTime || event.atSeconds < previousAtSeconds) throw new Error("Wave " + wave.wave + " contains an invalid spawn time.");
       previousAtSeconds = event.atSeconds;
     }
     if (wave.wave === 10 && wave.spawnEvents.at(-1)?.enemyId !== finalBossId) throw new Error("The final boss must be the last spawn event of wave 10.");
     const crowdEvents = wave.spawnEvents.filter((event) => !event.enemyId.endsWith("_boss"));
     const pulseGroups = new Map<number, SpawnEvent[]>();
     for (const event of crowdEvents) {
-      const pulseIndex = Math.round(event.atSeconds / CROWD_PULSE_INTERVAL_SECONDS);
+      const pulseIndex = Math.round(event.atSeconds / wave.pulseIntervalSeconds);
       const group = pulseGroups.get(pulseIndex) ?? [];
       group.push(event);
       pulseGroups.set(pulseIndex, group);
@@ -188,10 +192,11 @@ export function validateCatalog(catalog: ContentCatalog): void {
     for (const [pulseIndex, group] of pulseGroups) {
       const first = group[0]!.atSeconds;
       const last = group.at(-1)!.atSeconds;
-      const anchor = pulseIndex * CROWD_PULSE_INTERVAL_SECONDS;
+      const anchor = pulseIndex * wave.pulseIntervalSeconds;
       if (first < anchor || last > anchor + CROWD_PULSE_WINDOW_SECONDS + CONTENT_EPSILON) throw new Error("Wave " + wave.wave + " contains a crowd pulse outside its micro-window.");
     }
-    if (crowdEvents.at(-1)!.atSeconds < 39 || crowdEvents.at(-1)!.atSeconds >= 39.5) throw new Error("Wave " + wave.wave + " crowd must reach the late 39-second pulse.");
+    const finalCrowdAnchor = wave.pulseIntervalSeconds * (CROWD_PULSE_COUNT - 1);
+    if (crowdEvents.at(-1)!.atSeconds < finalCrowdAnchor || crowdEvents.at(-1)!.atSeconds > finalCrowdAnchor + CROWD_PULSE_WINDOW_SECONDS + CONTENT_EPSILON) throw new Error("Wave " + wave.wave + " crowd must reach its final pulse.");
   }
 }
 
