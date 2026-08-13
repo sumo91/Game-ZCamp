@@ -25,8 +25,6 @@ export type GrowthAttackType = "single" | "splash" | "slow" | "chain";
 
 export interface GrowthBuildingDefinition {
   id: GrowthBuildingId;
-  displayName: string;
-  role: string;
   kind: "tower" | "lumberyard";
   buildable: boolean;
   buildCost: number;
@@ -37,8 +35,6 @@ export interface GrowthBuildingDefinition {
 
 export interface GrowthTowerDefinition {
   id: GrowthTowerId;
-  displayName: string;
-  role: string;
   baseDamage: number;
   baseAttackIntervalSeconds: number;
   range: number;
@@ -96,9 +92,16 @@ export interface GrowthTraitPlacement {
   source: GrowthTraitSource;
 }
 
+export interface GrowthBuildingPresentation {
+  id: GrowthBuildingId;
+  displayName: string;
+  role: string;
+}
+
 export interface BuildingGrowthContent {
   buildings: readonly GrowthBuildingDefinition[];
   towers: readonly GrowthTowerDefinition[];
+  presentations: readonly GrowthBuildingPresentation[];
   transformations: readonly GrowthTransformationRoute[];
   traits: readonly GrowthTraitDefinition[];
 }
@@ -106,8 +109,6 @@ export interface BuildingGrowthContent {
 const GROWTH_BUILDINGS: readonly GrowthBuildingDefinition[] = [
   {
     id: "arrow_tower",
-    displayName: "箭塔",
-    role: "基础单体防御",
     kind: "tower",
     buildable: true,
     buildCost: 40,
@@ -116,8 +117,6 @@ const GROWTH_BUILDINGS: readonly GrowthBuildingDefinition[] = [
   },
   {
     id: "lumberyard",
-    displayName: "木材厂",
-    role: "持续生产木材",
     kind: "lumberyard",
     buildable: true,
     buildCost: 60,
@@ -128,11 +127,20 @@ const GROWTH_BUILDINGS: readonly GrowthBuildingDefinition[] = [
 ];
 
 const GROWTH_TOWERS: readonly GrowthTowerDefinition[] = [
-  { id: "arrow_tower", displayName: "箭塔", role: "基础单体防御", baseDamage: 7, baseAttackIntervalSeconds: 1, range: 0.6, attackType: "single", levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
-  { id: "machine_gun", displayName: "机枪塔", role: "快速单体输出", baseDamage: 12, baseAttackIntervalSeconds: 0.75, range: 0.6, attackType: "single", levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
-  { id: "cannon", displayName: "炮塔", role: "范围清怪", baseDamage: 35, baseAttackIntervalSeconds: 2.1, range: 0.65, attackType: "splash", splashRadius: 0.18, splashDamageMultiplier: 0.45, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
-  { id: "frost", displayName: "冰冻塔", role: "减速控制", baseDamage: 4, baseAttackIntervalSeconds: 1, range: 0.65, attackType: "slow", slowMultiplier: 0.52, slowDurationSeconds: 1.4, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
-  { id: "electric", displayName: "电磁塔", role: "链式压制", baseDamage: 12, baseAttackIntervalSeconds: 1.4, range: 0.62, attackType: "chain", chainTargets: 3, chainDamageMultiplier: 0.55, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
+  { id: "arrow_tower", baseDamage: 7, baseAttackIntervalSeconds: 1, range: 0.6, attackType: "single", levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
+  { id: "machine_gun", baseDamage: 12, baseAttackIntervalSeconds: 0.75, range: 0.6, attackType: "single", levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
+  { id: "cannon", baseDamage: 35, baseAttackIntervalSeconds: 2.1, range: 0.65, attackType: "splash", splashRadius: 0.18, splashDamageMultiplier: 0.45, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
+  { id: "frost", baseDamage: 4, baseAttackIntervalSeconds: 1, range: 0.65, attackType: "slow", slowMultiplier: 0.52, slowDurationSeconds: 1.4, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
+  { id: "electric", baseDamage: 12, baseAttackIntervalSeconds: 1.4, range: 0.62, attackType: "chain", chainTargets: 3, chainDamageMultiplier: 0.55, levelDamageMultiplier: 0.2, levelAttackSpeedMultiplier: 0.1 },
+];
+
+const GROWTH_BUILDING_PRESENTATIONS: readonly GrowthBuildingPresentation[] = [
+  { id: "arrow_tower", displayName: "箭塔", role: "基础单体防御" },
+  { id: "machine_gun", displayName: "机枪塔", role: "快速单体输出" },
+  { id: "cannon", displayName: "炮塔", role: "范围清怪" },
+  { id: "frost", displayName: "冰冻塔", role: "减速控制" },
+  { id: "electric", displayName: "电磁塔", role: "链式压制" },
+  { id: "lumberyard", displayName: "木材厂", role: "持续生产木材" },
 ];
 
 const COMMON_TOWER_TRAITS: readonly GrowthTraitDefinition[] = [
@@ -165,6 +173,7 @@ const LUMBERYARD_TRAITS: readonly GrowthTraitDefinition[] = [
 export const starterBuildingGrowthContent: BuildingGrowthContent = {
   buildings: GROWTH_BUILDINGS,
   towers: GROWTH_TOWERS,
+  presentations: GROWTH_BUILDING_PRESENTATIONS,
   transformations: [
     { from: "arrow_tower", to: "machine_gun", goldCost: 10 },
     { from: "arrow_tower", to: "cannon", goldCost: 10 },
@@ -201,6 +210,10 @@ export function getGrowthBuildingDefinition(content: BuildingGrowthContent, id: 
 
 export function getGrowthTowerDefinition(content: BuildingGrowthContent, id: GrowthTowerId): GrowthTowerDefinition | undefined {
   return content.towers.find((definition) => definition.id === id);
+}
+
+export function getGrowthBuildingPresentation(content: BuildingGrowthContent, id: GrowthBuildingId): GrowthBuildingPresentation | undefined {
+  return content.presentations.find((presentation) => presentation.id === id);
 }
 
 export function getGrowthTraitDefinition(content: BuildingGrowthContent, id: GrowthTraitId): GrowthTraitDefinition | undefined {
@@ -259,10 +272,11 @@ export function validateBuildingGrowthContent(content: BuildingGrowthContent): v
   }
   assertUnique(content.buildings.map((definition) => definition.id), "building definitions");
   assertUnique(content.towers.map((definition) => definition.id), "tower definitions");
+  assertUnique(content.presentations.map((presentation) => presentation.id), "building presentations");
   assertUnique(content.traits.map((definition) => definition.id), "trait definitions");
   assertUnique(content.transformations.map((route) => route.to), "transformation routes");
   for (const definition of content.buildings) {
-    if (!definition.buildable || !definition.role.trim() || definition.maxLevel !== 5 || definition.buildCost <= 0 || definition.upgradeCosts.length !== 4 || definition.upgradeCosts.some((cost) => cost <= 0)) {
+    if (!definition.buildable || definition.maxLevel !== 5 || definition.buildCost <= 0 || definition.upgradeCosts.length !== 4 || definition.upgradeCosts.some((cost) => cost <= 0)) {
       throw new Error("Growth building " + definition.id + " has invalid build or upgrade costs.");
     }
     if (definition.kind === "lumberyard" && definition.baseProductionPerSecond?.length !== 5) throw new Error("Lumberyard growth production table must contain five levels.");
@@ -271,12 +285,16 @@ export function validateBuildingGrowthContent(content: BuildingGrowthContent): v
   const ids = new Set(content.towers.map((definition) => definition.id));
   if ((["arrow_tower", "machine_gun", "cannon", "frost", "electric"] as const).some((id) => !ids.has(id))) throw new Error("Growth tower content is incomplete.");
   for (const tower of content.towers) {
-    if (!tower.displayName.trim() || !tower.role.trim() || tower.baseDamage <= 0 || tower.baseAttackIntervalSeconds <= 0 || tower.range <= 0 || tower.levelDamageMultiplier !== 0.2 || tower.levelAttackSpeedMultiplier !== 0.1) {
+    if (tower.baseDamage <= 0 || tower.baseAttackIntervalSeconds <= 0 || tower.range <= 0 || tower.levelDamageMultiplier !== 0.2 || tower.levelAttackSpeedMultiplier !== 0.1) {
       throw new Error("Growth tower " + tower.id + " has invalid base attributes.");
     }
     if (tower.attackType === "splash" && (tower.splashDamageMultiplier === undefined || tower.splashDamageMultiplier <= 0 || tower.chainDamageMultiplier !== undefined)) throw new Error("Growth splash tower " + tower.id + " has invalid secondary damage content.");
     if (tower.attackType === "chain" && (tower.chainDamageMultiplier === undefined || tower.chainDamageMultiplier <= 0 || tower.splashDamageMultiplier !== undefined)) throw new Error("Growth chain tower " + tower.id + " has invalid secondary damage content.");
     if (tower.attackType !== "splash" && tower.attackType !== "chain" && (tower.splashDamageMultiplier !== undefined || tower.chainDamageMultiplier !== undefined)) throw new Error("Growth tower " + tower.id + " has unexpected secondary damage content.");
+  }
+  const expectedPresentationIds = new Set<GrowthBuildingId>(["arrow_tower", "machine_gun", "cannon", "frost", "electric", "lumberyard"]);
+  if (content.presentations.length !== expectedPresentationIds.size || content.presentations.some((presentation) => !expectedPresentationIds.has(presentation.id) || !presentation.displayName.trim() || !presentation.role.trim())) {
+    throw new Error("Growth building presentation content is incomplete.");
   }
   if (content.transformations.length !== 4 || content.transformations.some((route) => route.from !== "arrow_tower" || route.goldCost !== 10 || !ids.has(route.to))) throw new Error("Growth transformations must expose four ten-gold arrow tower routes.");
   const traitIds = new Set(content.traits.map((trait) => trait.id));

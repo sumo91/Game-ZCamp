@@ -105,7 +105,8 @@ describe("growth UI derivation and input", () => {
     const building = game.getState().buildings.find((candidate) => candidate.id === buildingId)!;
     const content = {
       ...starterCatalog.buildingGrowth,
-      buildings: starterCatalog.buildingGrowth.buildings.map((definition) => definition.id === "arrow_tower" ? { ...definition, maxLevel: 4 as const, role: "改造后的箭塔职责" } : definition),
+      buildings: starterCatalog.buildingGrowth.buildings.map((definition) => definition.id === "arrow_tower" ? { ...definition, maxLevel: 4 as const } : definition),
+      presentations: starterCatalog.buildingGrowth.presentations.map((presentation) => presentation.id === "arrow_tower" ? { ...presentation, role: "改造后的箭塔职责" } : presentation),
       transformations: starterCatalog.buildingGrowth.transformations.map((route) => ({ ...route, goldCost: 13 as const })),
     };
     const detail = deriveBuildingDetail(content, game.getState(), building)!;

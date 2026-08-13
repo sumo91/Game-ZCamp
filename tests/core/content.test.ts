@@ -40,6 +40,7 @@ describe("growth candidate content", () => {
   });
 
   it("keeps ordinary enemy budgets halved while elite and boss values stay fixed", () => {
+    type Budget = { hp: number; wallDamage: number; gold: number; xp: number };
     const baselineCounts: Array<Record<string, number>> = [
       { walker: 17 }, { walker: 16, runner: 8 }, { walker: 16, runner: 12, tank: 4 },
       { walker: 20, runner: 16, tank: 6 }, { walker: 16, runner: 12, tank: 8, armored: 2, charger_boss: 1 },
@@ -47,23 +48,32 @@ describe("growth candidate content", () => {
       { walker: 24, runner: 24, tank: 12, brute: 2 }, { walker: 28, runner: 24, tank: 16, armored: 2, brute: 2 },
       { walker: 24, runner: 20, tank: 20, armored: 2, brute: 2, overlord_boss: 1 },
     ];
-    const baselineStats: Record<string, [number, number, number, number]> = {
-      walker: [18, 2.5, 0.5, 0.5], runner: [12, 2, 0.5, 0.5], tank: [55, 6, 1, 1.5],
-      armored: [45, 4, 3, 1.5], brute: [70, 9, 3, 2.5], charger_boss: [280, 28, 20, 12], overlord_boss: [720, 48, 0, 24],
+    const baselineStats: Record<string, Budget> = {
+      walker: { hp: 18, wallDamage: 2.5, gold: 0.5, xp: 0.5 }, runner: { hp: 12, wallDamage: 2, gold: 0.5, xp: 0.5 }, tank: { hp: 55, wallDamage: 6, gold: 1, xp: 1.5 },
+      armored: { hp: 45, wallDamage: 4, gold: 3, xp: 1.5 }, brute: { hp: 70, wallDamage: 9, gold: 3, xp: 2.5 }, charger_boss: { hp: 280, wallDamage: 28, gold: 20, xp: 12 }, overlord_boss: { hp: 720, wallDamage: 48, gold: 0, xp: 24 },
     };
-    const currentStats = Object.fromEntries(starterCatalog.enemies.map((enemy) => [enemy.id, [enemy.maxHp, enemy.wallDamage, enemy.goldReward, enemy.xpReward]])) as Record<string, [number, number, number, number]>;
-    const total = (counts: Record<string, number>, stats: Record<string, [number, number, number, number]>, index: number) => Object.entries(counts).reduce((sum, [id, count]) => sum + stats[id]![index] * count, 0);
+    const currentStats = Object.fromEntries(starterCatalog.enemies.map((enemy) => [enemy.id, { hp: enemy.maxHp, wallDamage: enemy.wallDamage, gold: enemy.goldReward, xp: enemy.xpReward }])) as Record<string, Budget>;
+    const total = (counts: Record<string, number>, stats: Record<string, Budget>, key: keyof Budget) => Object.entries(counts).reduce((sum, [id, count]) => sum + stats[id]![key] * count, 0);
     for (const [waveIndex, counts] of EXPECTED_WAVE_COUNTS.entries()) {
       expect(Object.values(counts).reduce((sum, value) => sum + value, 0)).toBeGreaterThanOrEqual(Object.values(baselineCounts[waveIndex]!).reduce((sum, value) => sum + value, 0) * 1.9);
-      for (let statIndex = 0; statIndex < 4; statIndex += 1) {
-        const ratio = total(counts, currentStats, statIndex) / total(baselineCounts[waveIndex]!, baselineStats, statIndex);
+      for (const key of ["hp", "wallDamage", "gold", "xp"] as const) {
+        const ratio = total(counts, currentStats, key) / total(baselineCounts[waveIndex]!, baselineStats, key);
         expect(ratio).toBeGreaterThanOrEqual(0.95);
         expect(ratio).toBeLessThanOrEqual(1.05);
       }
     }
-    expect(Object.fromEntries(starterCatalog.enemies.filter((enemy) => enemy.tier !== "normal").map((enemy) => [enemy.id, [enemy.maxHp, enemy.wallDamage, enemy.goldReward, enemy.xpReward]]))).toEqual({
-      armored: [45, 4, 3, 1.5], brute: [70, 9, 3, 2.5], charger_boss: [280, 28, 20, 12], overlord_boss: [720, 48, 0, 24],
+    expect(Object.fromEntries(starterCatalog.enemies.filter((enemy) => enemy.tier !== "normal").map((enemy) => [enemy.id, currentStats[enemy.id]]))).toEqual({
+      armored: { hp: 45, wallDamage: 4, gold: 3, xp: 1.5 }, brute: { hp: 70, wallDamage: 9, gold: 3, xp: 2.5 }, charger_boss: { hp: 280, wallDamage: 28, gold: 20, xp: 12 }, overlord_boss: { hp: 720, wallDamage: 48, gold: 0, xp: 24 },
     });
+  });
+
+  it("derives the wave ten tail from the catalog's unique final boss flag", () => {
+    const reassignedFinalBoss = starterCatalog.enemies.map((enemy) => {
+      if (enemy.id === "overlord_boss") return { ...enemy, isFinalBoss: undefined };
+      if (enemy.id === "charger_boss") return { ...enemy, isFinalBoss: true };
+      return enemy;
+    });
+    expect(() => validateCatalog({ ...starterCatalog, enemies: reassignedFinalBoss })).toThrow("final boss");
   });
 
   it("rejects unknown enemy references and shifted wave starts", () => {

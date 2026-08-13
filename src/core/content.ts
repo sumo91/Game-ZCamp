@@ -159,7 +159,9 @@ export function validateCatalog(catalog: ContentCatalog): void {
   if (charger.signature.warningSeconds <= 0 || charger.signature.chargeDistance <= 0 || charger.signature.chargeDurationSeconds <= 0 || charger.signature.initialCooldownSeconds < 0 || charger.signature.cooldownSeconds <= 0 || overlord.signature.inspireDurationSeconds <= 0 || overlord.signature.inspireMultiplier < 1 || overlord.signature.initialCooldownSeconds < 0 || overlord.signature.cooldownSeconds <= 0) throw new Error("Boss signature mechanic values are invalid.");
   const expectedGoldRewards: Record<string, number> = { walker: 0.25, runner: 0.25, tank: 0.5, armored: 3, brute: 3, charger_boss: 20, overlord_boss: 0 };
   for (const enemy of catalog.enemies) if (enemy.goldReward !== expectedGoldRewards[enemy.id]) throw new Error("Enemy " + enemy.id + " has an invalid gold reward.");
-  if (catalog.enemies.filter((enemy) => enemy.isFinalBoss).length !== 1) throw new Error("Content catalog must define exactly one final boss.");
+  const finalBosses = catalog.enemies.filter((enemy) => enemy.isFinalBoss);
+  if (finalBosses.length !== 1) throw new Error("Content catalog must define exactly one final boss.");
+  const finalBossId = finalBosses[0]!.id;
 
   for (const [index, wave] of catalog.waves.entries()) {
     const expectedWave = index + 1;
@@ -173,7 +175,7 @@ export function validateCatalog(catalog: ContentCatalog): void {
       if (event.atSeconds < 0 || event.atSeconds > 40 || event.atSeconds < previousAtSeconds) throw new Error("Wave " + wave.wave + " contains an invalid spawn time.");
       previousAtSeconds = event.atSeconds;
     }
-    if (wave.wave === 10 && wave.spawnEvents.at(-1)?.enemyId !== "overlord_boss") throw new Error("The final boss must be the last spawn event of wave 10.");
+    if (wave.wave === 10 && wave.spawnEvents.at(-1)?.enemyId !== finalBossId) throw new Error("The final boss must be the last spawn event of wave 10.");
     const crowdEvents = wave.spawnEvents.filter((event) => !event.enemyId.endsWith("_boss"));
     const pulseGroups = new Map<number, SpawnEvent[]>();
     for (const event of crowdEvents) {

@@ -1,5 +1,6 @@
 import {
   getGrowthBuildingDefinition,
+  getGrowthBuildingPresentation,
   getGrowthTowerDefinition,
   getGrowthTraitDefinition,
   getGrowthUpgradeCost,
@@ -148,7 +149,7 @@ function getStats(content: BuildingGrowthContent, building: BuildingState): Grow
 function categoryLabel(content: BuildingGrowthContent, source: string): string {
   if (source === "common") return "通用 · 本塔生效";
   if (source === "lumberyard") return "木材厂专属";
-  return (getGrowthTowerDefinition(content, source as GrowthSpecialTowerId)?.displayName ?? source) + "专属";
+  return (getGrowthBuildingPresentation(content, source as GrowthSpecialTowerId)?.displayName ?? source) + "专属";
 }
 
 export function formatGrowthTraitEffect(content: BuildingGrowthContent, traitId: GrowthTraitId, nextStacks = 1): string {
@@ -210,7 +211,8 @@ export function formatGrowthTraitEffectAtStacks(content: BuildingGrowthContent, 
 
 function makeBuildAction(content: BuildingGrowthContent, state: GameState, slotId: string, definitionId: BuildableGrowthId): GrowthActionView {
   const definition = getGrowthBuildingDefinition(content, definitionId);
-  if (!definition) {
+  const presentation = getGrowthBuildingPresentation(content, definitionId);
+  if (!definition || !presentation) {
     return {
       kind: "build",
       label: "建造项不可用",
@@ -228,12 +230,12 @@ function makeBuildAction(content: BuildingGrowthContent, state: GameState, slotI
   const affordable = state.wood >= definition.buildCost;
   return {
     kind: "build",
-    label: "建造" + definition.displayName + "｜木材 " + definition.buildCost,
+    label: "建造" + presentation.displayName + "｜木材 " + definition.buildCost,
     definitionId,
     cost: definition.buildCost,
     resource: "wood",
     resourceLabel: resourceLabel("wood"),
-    description: definition.role,
+    description: presentation.role,
     statusLabel: statusLabel("build", affordable, definition.buildCost, "wood"),
     affordable,
     reason: affordable ? "可建造" : formatGrowthShortfall("wood", state.wood, definition.buildCost),
@@ -249,8 +251,9 @@ export function deriveBuildingDetail(content: BuildingGrowthContent, state: Game
   if (!building.growthDefinitionId) return null;
   const definition = getGrowthBuildingDefinition(content, building.growthDefinitionId);
   const towerDefinition = building.kind === "tower" ? getGrowthTowerDefinition(content, building.growthDefinitionId as GrowthTowerId) : undefined;
+  const presentation = getGrowthBuildingPresentation(content, building.growthDefinitionId);
   const isLumberyard = building.kind === "lumberyard";
-  if ((isLumberyard && !definition) || (!isLumberyard && !towerDefinition)) return null;
+  if (!presentation || (isLumberyard && !definition) || (!isLumberyard && !towerDefinition)) return null;
   const maxLevelDefinition = definition ?? getGrowthBuildingDefinition(content, "arrow_tower");
   if (!maxLevelDefinition) return null;
   const maxLevel = maxLevelDefinition.maxLevel;
@@ -279,8 +282,8 @@ export function deriveBuildingDetail(content: BuildingGrowthContent, state: Game
   return {
     buildingId: building.id,
     definitionId: building.growthDefinitionId,
-    name: isLumberyard ? definition!.displayName : definition?.displayName ?? towerDefinition!.displayName,
-    role: isLumberyard ? definition!.role : definition?.role ?? towerDefinition!.role,
+    name: presentation.displayName,
+    role: presentation.role,
     level: building.level,
     maxLevel,
     current,
@@ -314,12 +317,12 @@ export function deriveBuildingDetail(content: BuildingGrowthContent, state: Game
 export function deriveTransformOptions(content: BuildingGrowthContent, state: GameState, building: BuildingState): GrowthTransformView[] {
   if (building.growthDefinitionId !== "arrow_tower") return [];
   return content.transformations.map((route) => {
-    const tower = getGrowthTowerDefinition(content, route.to);
+    const presentation = getGrowthBuildingPresentation(content, route.to);
     const affordable = state.gold >= route.goldCost;
     return {
       targetTowerId: route.to,
-      name: tower?.displayName ?? route.to,
-      role: tower?.role ?? "特殊塔",
+      name: presentation?.displayName ?? route.to,
+      role: presentation?.role ?? "特殊塔",
       resource: "gold",
       goldCost: route.goldCost,
       resourceLabel: resourceLabel("gold"),

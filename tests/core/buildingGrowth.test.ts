@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  getGrowthBuildingPresentation,
   getGrowthUpgradeCost,
   getTraitCandidates,
   selectTraitOptions,
@@ -20,6 +21,14 @@ describe("building growth domain content", () => {
     expect(starterBuildingGrowthContent.buildings[1]!.baseProductionPerSecond).toEqual([1, 1.6, 2.4, 3.4, 4.6]);
     expect(starterBuildingGrowthContent.towers.find((tower) => tower.id === "cannon")?.splashDamageMultiplier).toBe(0.45);
     expect(starterBuildingGrowthContent.towers.find((tower) => tower.id === "electric")?.chainDamageMultiplier).toBe(0.55);
+  });
+
+  it("derives every visible building label from the single presentation catalog", () => {
+    expect(starterBuildingGrowthContent.buildings.every((definition) => !("displayName" in definition) && !("role" in definition))).toBe(true);
+    expect(starterBuildingGrowthContent.towers.every((definition) => !("displayName" in definition) && !("role" in definition))).toBe(true);
+    expect(getGrowthBuildingPresentation(starterBuildingGrowthContent, "arrow_tower")).toMatchObject({ displayName: "箭塔", role: "基础单体防御" });
+    expect(getGrowthBuildingPresentation(starterBuildingGrowthContent, "machine_gun")).toMatchObject({ displayName: "机枪塔", role: "快速单体输出" });
+    expect(getGrowthBuildingPresentation(starterBuildingGrowthContent, "lumberyard")).toMatchObject({ displayName: "木材厂", role: "持续生产木材" });
   });
 
   it("shares exact upgrade costs and caps lumberyard discounts at 35 percent", () => {

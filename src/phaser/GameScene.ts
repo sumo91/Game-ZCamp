@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { starterCatalog, type EnemyDefinition } from "../core/content";
-import { getGrowthTowerDefinition } from "../core/buildingGrowth";
+import { getGrowthBuildingPresentation } from "../core/buildingGrowth";
 import { GameSimulation } from "../core/game";
 import { getWoodProductionPerSecond } from "../core/resources";
 import type { BuildingState, EnemyRuntimeState, GameEvent, GamePhase, GameState } from "../core/types";
@@ -893,8 +893,8 @@ export class GameScene extends Phaser.Scene {
     if (building.kind === "main_city") return "主城 · 固定";
     if (building.kind === "lumberyard") return "木材厂 Lv." + building.level;
     const towerId = building.growthDefinitionId && building.growthDefinitionId !== "lumberyard" ? building.growthDefinitionId : "arrow_tower";
-    const tower = getGrowthTowerDefinition(starterCatalog.buildingGrowth, towerId);
-    return (tower?.displayName ?? "箭塔") + " Lv." + building.level;
+    const presentation = getGrowthBuildingPresentation(starterCatalog.buildingGrowth, towerId);
+    return (presentation?.displayName ?? "箭塔") + " Lv." + building.level;
   }
 
   private growthTowerColor(towerId: string): number {
