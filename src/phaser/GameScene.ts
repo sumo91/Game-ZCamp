@@ -469,7 +469,7 @@ export class GameScene extends Phaser.Scene {
     const shownWallMax = this.showcaseMode ? 100 : state.wallMaxHp;
     const shownWallHp = this.showcaseMode ? 100 : Math.ceil(state.wallHp);
     const wallRatio = state.wallMaxHp > 0 ? state.wallHp / state.wallMaxHp : 0;
-    this.wallText.setText("城墙  " + shownWallHp + " / " + shownWallMax + (state.wallShieldHp > 0 ? "   护盾 " + Math.ceil(state.wallShieldHp) : "")).setColor(wallRatio > 0.35 ? "#fff3d2" : "#f06a6a");
+    this.wallText.setText("城墙  " + shownWallHp + " / " + shownWallMax).setColor(wallRatio > 0.35 ? "#fff3d2" : "#f06a6a");
     const activeEnemyCount = state.enemies.filter((enemy) => enemy.hp > 0).length;
     this.enemyText.setText("威胁  " + activeEnemyCount + " · 击杀  " + state.defeatedEnemies);
     const transient = this.messageTimer > 0 && this.messageText.text.length > 0;
@@ -482,8 +482,6 @@ export class GameScene extends Phaser.Scene {
     this.pauseButtonLabel.setVisible(canPause);
     this.countdownText.setVisible(state.phase === "OPENING_COUNTDOWN");
     if (state.phase === "OPENING_COUNTDOWN") this.countdownText.setText(String(Math.ceil(state.openingCountdownRemainingSeconds)));
-    if (state.globalFreezeNextSpawn && this.battleNoticeTimer <= 0) this.showBattleNotice("全场短冻预置 · 下一只敌人启动", "#8ce8ff", 0.2);
-    if (state.globalFreezeRemainingSeconds > 0 && this.battleNoticeTimer <= 0) this.showBattleNotice("全场短冻 · 敌停塔不停", "#8ce8ff", 0.2);
     this.battleNoticeText.setVisible(this.battleNoticeTimer > 0);
 
     this.renderContext(state);
@@ -719,7 +717,6 @@ export class GameScene extends Phaser.Scene {
     this.dynamic.lineStyle(2, 0x2a1c14, 0.9).lineBetween(WALL_ZONE.x, 756, WALL_ZONE.x + WALL_ZONE.width, 756);
     this.dynamic.fillStyle(0x271d15, 0.7).fillRect(44, 712, 632, 7);
     this.dynamic.fillStyle(wallRatio > 0.35 ? COLORS.success : COLORS.danger, 1).fillRect(44, 712, 632 * wallRatio, 7);
-    if (state.wallShieldHp > 0) this.dynamic.lineStyle(3, COLORS.cyan, 0.95).strokeRect(30, 711, 660, 56);
     if (wallRatio < 0.5) {
       this.dynamic.lineStyle(3, COLORS.danger, 0.8).lineBetween(178, 731, 205, 752).lineBetween(205, 752, 226, 735);
       this.dynamic.lineBetween(514, 730, 492, 752).lineBetween(492, 752, 470, 739);
@@ -742,7 +739,6 @@ export class GameScene extends Phaser.Scene {
       label.setColor(building?.kind === "main_city" ? "#ffe08a" : selected ? "#fff3b0" : "#d6d39c");
     }
 
-    if (state.globalFreezeRemainingSeconds > 0) this.dynamic.lineStyle(4, COLORS.cyan, 0.85).strokeRect(30, 198, 660, 430);
     const visibleEnemyIds = new Set<string>();
     for (const enemy of state.enemies) {
       if (enemy.hp <= 0) continue;
@@ -751,13 +747,12 @@ export class GameScene extends Phaser.Scene {
       const y = this.enemyY(enemy.position);
       const definition = this.enemyDefinition(enemy.definitionId);
       const radius = definition.tier === "boss" ? 21 : definition.tier === "elite" ? 16 : enemy.definitionId === "tank" ? 14 : 11;
-      if (state.focusFireTargetId === enemy.id && state.focusFireRemainingSeconds > 0) this.dynamic.lineStyle(3, COLORS.gold, 1).strokeCircle(x, y, radius + 9);
       if (enemy.chargeWarningRemainingSeconds > 0) {
         this.dynamic.lineStyle(4, COLORS.danger, 0.95).strokeCircle(x, y, radius + 14);
         this.dynamic.lineStyle(2, COLORS.danger, 0.45).strokeCircle(x, y, radius + 20);
       }
       if (state.overlordInspireRemainingSeconds > 0 && definition.tier !== "boss") this.dynamic.lineStyle(3, COLORS.orange, 0.7).strokeCircle(x, y, radius + 6);
-      if (enemy.burnRemainingSeconds > 0 || (enemy.growthBurnStates?.length ?? 0) > 0) this.dynamic.lineStyle(2, COLORS.orange, 0.8).strokeCircle(x, y, 24);
+      if ((enemy.growthBurnStates?.length ?? 0) > 0) this.dynamic.lineStyle(2, COLORS.orange, 0.8).strokeCircle(x, y, 24);
       this.drawEnemy(definition, enemy, x, y, radius);
       this.dynamic.fillStyle(0x263029, 1).fillRect(x - 20, y - 30, 40, 4);
       this.dynamic.fillStyle(COLORS.success, 1).fillRect(x - 20, y - 30, 40 * Math.max(0, enemy.hp / enemy.maxHp), 4);
@@ -767,8 +762,8 @@ export class GameScene extends Phaser.Scene {
         label = this.add.text(x, y - radius - 14, "", { ...this.textStyle(labelSize, definition.tier === "boss" ? "#f06a6a" : definition.tier === "elite" ? "#f28b37" : "#e4efdc"), align: "center", stroke: "#19231b", strokeThickness: definition.tier === "boss" ? 4 : 3 }).setOrigin(0.5).setDepth(7);
         this.enemyLabels.set(enemy.id, label);
       }
-      const warningLabel = enemy.chargeWarningRemainingSeconds > 0 ? " · ⚠冲锋" : enemy.burnRemainingSeconds > 0 || (enemy.growthBurnStates?.length ?? 0) > 0 ? " · 燃烧" : "";
-      const showLabel = definition.tier !== "normal" || warningLabel.length > 0 || (state.focusFireTargetId === enemy.id && state.focusFireRemainingSeconds > 0);
+      const warningLabel = enemy.chargeWarningRemainingSeconds > 0 ? " · ⚠冲锋" : (enemy.growthBurnStates?.length ?? 0) > 0 ? " · 燃烧" : "";
+      const showLabel = definition.tier !== "normal" || warningLabel.length > 0;
       label.setPosition(x, y - radius - 14).setText(definition.displayName + warningLabel).setVisible(showLabel);
     }
     for (const [enemyId, label] of this.enemyLabels) if (!visibleEnemyIds.has(enemyId)) label.setVisible(false);
@@ -793,9 +788,6 @@ export class GameScene extends Phaser.Scene {
       else if (event.type === "overlord_inspire") this.showBattleNotice("尸潮君王鼓舞 · 残余尸潮 +" + Math.round((event.multiplier - 1) * 100) + "%", "#f6c453", this.showcaseCapture === "inspire" ? 60 : event.durationSeconds);
       else if (event.type === "enemy_burned") this.showBattleNotice("燃烧 · " + event.damagePerSecond + "/秒 · " + event.durationSeconds + "秒", "#f28b37", 1.4);
       else if (event.type === "tower_special") this.showBattleNotice(event.effect + "命中", event.effect === "过载" ? "#d06cff" : "#f6c453", 0.8);
-      else if (event.type === "global_freeze_armed") this.showBattleNotice("全场短冻已预置 · 等待下一只敌人", "#8ce8ff", 2.2);
-      else if (event.type === "global_freeze_started") this.showBattleNotice("全场短冻启动 · 敌停塔不停", "#8ce8ff", event.durationSeconds);
-      else if (event.type === "focus_fire_marked") this.showBattleNotice(event.nextSpawn ? "集中火力已预置 · 锁定下一只" : "集中火力锁定目标", "#ffb45c", 1.6);
       else if (event.type === "wave_started") this.showMessage("第 " + event.wave + " 波尸潮已接近", false);
       const captureCharge = this.showcaseCapture === "charge" && (event.type === "enemy_charge_warning" || event.type === "enemy_charge_started" || event.type === "enemy_charge_impact");
       const captureInspire = this.showcaseCapture === "inspire" && event.type === "overlord_inspire";
@@ -844,7 +836,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private growthMaxLevel(state: GameState, building: BuildingState): number | null {
-    if (building.model !== "growth" || !building.growthDefinitionId) return null;
+    if (!building.growthDefinitionId) return null;
     return deriveBuildingDetail(starterCatalog.buildingGrowth, state, building)?.maxLevel ?? null;
   }
 

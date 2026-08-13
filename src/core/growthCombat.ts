@@ -35,12 +35,11 @@ function getEffect(content: BuildingGrowthContent, traitId: GrowthTraitId): Grow
 }
 
 export function getGrowthTraitStacks(building: BuildingState, traitId: GrowthTraitId): number {
-  if (building.model !== "growth") return 0;
   return Math.max(0, building.traits?.find((trait) => trait.definitionId === traitId)?.stacks ?? 0);
 }
 
 export function getGrowthTowerAttackProfile(content: BuildingGrowthContent, building: BuildingState): GrowthTowerAttackProfile | null {
-  if (building.model !== "growth" || building.kind !== "tower" || !building.growthDefinitionId || building.growthDefinitionId === "lumberyard") return null;
+  if (building.kind !== "tower" || !building.growthDefinitionId || building.growthDefinitionId === "lumberyard") return null;
   const tower = getGrowthTowerDefinition(content, building.growthDefinitionId);
   if (!tower) return null;
   const level = Math.max(1, building.level);

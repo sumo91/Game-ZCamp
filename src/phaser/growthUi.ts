@@ -246,7 +246,7 @@ export function deriveEmptySlotActions(content: BuildingGrowthContent, state: Ga
 }
 
 export function deriveBuildingDetail(content: BuildingGrowthContent, state: GameState, building: BuildingState): GrowthBuildingDetailView | null {
-  if (building.model !== "growth" || !building.growthDefinitionId) return null;
+  if (!building.growthDefinitionId) return null;
   const definition = getGrowthBuildingDefinition(content, building.growthDefinitionId);
   const towerDefinition = building.kind === "tower" ? getGrowthTowerDefinition(content, building.growthDefinitionId as GrowthTowerId) : undefined;
   const isLumberyard = building.kind === "lumberyard";
@@ -312,7 +312,7 @@ export function deriveBuildingDetail(content: BuildingGrowthContent, state: Game
 }
 
 export function deriveTransformOptions(content: BuildingGrowthContent, state: GameState, building: BuildingState): GrowthTransformView[] {
-  if (building.model !== "growth" || building.growthDefinitionId !== "arrow_tower") return [];
+  if (building.growthDefinitionId !== "arrow_tower") return [];
   return content.transformations.map((route) => {
     const tower = getGrowthTowerDefinition(content, route.to);
     const affordable = state.gold >= route.goldCost;

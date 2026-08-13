@@ -38,11 +38,7 @@ function enemy(id: string, position = 1, hp = 100): EnemyRuntimeState {
     maxHp: hp,
     atWall: position >= 1,
     attackCooldownSeconds: 99,
-    slowMultiplier: 1,
-    slowRemainingSeconds: 0,
     abilityCooldownSeconds: 99,
-    burnDamagePerSecond: 0,
-    burnRemainingSeconds: 0,
     growthSlowStates: [],
     growthBurnStates: [],
     chargeWarningRemainingSeconds: 0,
@@ -55,7 +51,7 @@ function makeGrowthTower(towerId: "arrow_tower" | "machine_gun" | "cannon" | "fr
   const game = new GameSimulation(quietCatalog());
   game.getState().wood = 1000;
   expect(game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" }).accepted).toBe(true);
-  const building = game.getState().buildings.find((candidate) => candidate.model === "growth")!;
+  const building = game.getState().buildings.find((candidate) => candidate.growthDefinitionId === "arrow_tower")!;
   if (towerId !== "arrow_tower") {
     game.getState().gold = 10;
     expect(game.dispatch({ type: "transform_tower", buildingId: building.id, targetTowerId: towerId }).accepted).toBe(true);
@@ -87,7 +83,7 @@ describe("growth building combat and economy integration", () => {
     }
   });
 
-  it("keeps growth damage local and does not duplicate legacy settlement", () => {
+  it("keeps growth damage local and does not duplicate settlement", () => {
     const game = new GameSimulation(quietCatalog());
     game.getState().wood = 1000;
     game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
@@ -97,7 +93,6 @@ describe("growth building combat and economy integration", () => {
     first.traits = [trait("tower_damage", 2)];
     first.attackCooldownSeconds = 0;
     second.attackCooldownSeconds = 99;
-    game.getState().permanentApplications.tower_boss_damage = 99;
     startRunning(game);
     game.getState().enemies = [enemy("target")];
     game.drainEvents();
@@ -240,8 +235,7 @@ describe("growth building combat and economy integration", () => {
     second.traits = [];
     first.level = 3;
     expect(getWoodProductionPerSecond(game.getState())).toBeCloseTo(0.5 + (2.4 + 0.8) * 1.5 + 1.6, 8);
-    game.getState().permanentApplications.wood_efficiency = 2;
-    expect(getWoodProductionPerSecond(game.getState())).toBeCloseTo(0.5 + (2.4 + 0.8) * 1.5 + 1.6 + 1, 8);
+    expect(getWoodProductionPerSecond(game.getState())).toBeCloseTo(0.5 + (2.4 + 0.8) * 1.5 + 1.6, 8);
     first.level = 2;
 
     game.getState().wood = 65;
@@ -253,7 +247,7 @@ describe("growth building combat and economy integration", () => {
     const stockpileGame = new GameSimulation(quietCatalog());
     stockpileGame.getState().wood = 1000;
     stockpileGame.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "lumberyard" });
-    const stockpileYard = stockpileGame.getState().buildings.find((building) => building.model === "growth")!;
+    const stockpileYard = stockpileGame.getState().buildings.find((building) => building.growthDefinitionId === "lumberyard")!;
     stockpileYard.traits = [trait("lumber_wave_stockpile", 2)];
     stockpileGame.getState().wood = 0;
     startRunning(stockpileGame);
@@ -279,7 +273,7 @@ describe("growth building combat and economy integration", () => {
     second.game.tick(0.125);
     expect(second.game.getState().enemies[0]!.hp).toBeCloseTo(first.game.getState().enemies[0]!.hp, 8);
     const paused = makeGrowthTower("arrow_tower");
-    paused.game.getState().buildings.push({ id: "yard", slotId: "slot-r1-c2", kind: "lumberyard", definitionId: "lumberyard", growthDefinitionId: "lumberyard", model: "growth", level: 1, lanePosition: 0.2, attackCooldownSeconds: 0, traits: [] });
+    paused.game.getState().buildings.push({ id: "yard", slotId: "slot-r1-c2", kind: "lumberyard", definitionId: "lumberyard", growthDefinitionId: "lumberyard", level: 1, lanePosition: 0.2, attackCooldownSeconds: 0, traits: [] });
     const woodBefore = paused.game.getState().wood;
     startRunning(paused.game);
     paused.game.getState().wood = woodBefore;
@@ -351,7 +345,7 @@ describe("growth building combat and economy integration", () => {
       const game = new GameSimulation(movingCatalog());
       game.getState().wood = 1000;
       game.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" });
-      const building = game.getState().buildings.find((candidate) => candidate.model === "growth")!;
+      const building = game.getState().buildings.find((candidate) => candidate.growthDefinitionId === "arrow_tower")!;
       game.getState().gold = 10;
       game.dispatch({ type: "transform_tower", buildingId: building.id, targetTowerId: "frost" });
       building.attackCooldownSeconds = 99;
