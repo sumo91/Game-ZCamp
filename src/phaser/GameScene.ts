@@ -947,7 +947,8 @@ export class GameScene extends Phaser.Scene {
       const iconX = bounds.x + 36;
       const iconY = bounds.y + bounds.height / 2;
       icon.clear().fillStyle(color, option.affordable ? 1 : 0.6).fillCircle(iconX, iconY, 24);
-      this.drawTowerGlyph(icon, option.targetTowerId, iconX, iconY, color);
+      // Silhouette tone: glyph bodies must contrast with the same-hue background circle.
+      this.drawTowerGlyph(icon, option.targetTowerId, iconX, iconY, 0x2c3a2f);
       costIcon.clear();
       this.drawResourceIcon(costIcon, option.resource, bounds.x + 64, iconY + 22, 0.58);
     }
@@ -1267,10 +1268,12 @@ export class GameScene extends Phaser.Scene {
     if (building.kind === "main_city") {
       this.dynamic.fillStyle(0x344e39, 1).fillCircle(x, y, 28);
       this.dynamic.lineStyle(3, 0x72d6c9, 1).strokeCircle(x, y, 28);
-      this.dynamic.fillStyle(COLORS.gold, 1);
-      fillTriangle(this.dynamic, x, y - 40, x - 20, y - 3, x + 20, y - 3);
-      this.dynamic.fillStyle(0x213524, 1).fillCircle(x, y - 12, 8);
-      this.dynamic.lineStyle(3, COLORS.gold, 1).lineBetween(x - 12, y + 8, x + 12, y + 8);
+      // Gold keep with battlements: the former triangle roof never rendered (path-fill defect).
+      this.dynamic.fillStyle(COLORS.gold, 1).fillRect(x - 15, y - 6, 30, 22);
+      this.dynamic.fillStyle(0xffe08a, 1).fillRect(x - 15, y - 6, 30, 4);
+      this.dynamic.fillStyle(COLORS.gold, 1).fillRect(x - 15, y - 13, 7, 7).fillRect(x - 3.5, y - 13, 7, 7).fillRect(x + 8, y - 13, 7, 7);
+      this.dynamic.fillStyle(0x213524, 1).fillCircle(x, y + 5, 7);
+      this.dynamic.lineStyle(3, COLORS.gold, 1).lineBetween(x - 12, y + 12, x + 12, y + 12);
       return;
     }
     const towerId = building.growthDefinitionId ?? "arrow_tower";
@@ -1280,10 +1283,13 @@ export class GameScene extends Phaser.Scene {
     this.dynamic.lineStyle(3, 0x202a22, 1).strokeCircle(x, y + 8, 23);
     if (building.kind === "tower") this.drawTowerGlyph(this.dynamic, towerId, x, y, color);
     else if (building.kind === "lumberyard") {
-      this.dynamic.fillStyle(color, 1);
-      fillTriangle(this.dynamic, x, y - 28, x - 25, y + 8, x + 25, y + 8);
-      this.dynamic.fillStyle(0x2a1d14, 1).fillRect(x - 9, y - 1, 18, 18);
-      this.dynamic.fillStyle(0xc9853d, 1).fillCircle(x - 23, y + 16, 7).fillCircle(x - 11, y + 19, 7);
+      // Planked cabin, stroked gable roof, log ends with rings — mirroring the slot bar icon.
+      this.dynamic.fillStyle(0x9c6a34, 1).fillRect(x - 19, y - 4, 38, 22);
+      this.dynamic.lineStyle(2, 0x6f401f, 1).lineBetween(x - 17, y + 3, x + 17, y + 3).lineBetween(x - 17, y + 10, x + 17, y + 10);
+      this.dynamic.fillStyle(0x2a1d14, 1).fillRect(x - 6, y + 2, 12, 16);
+      this.dynamic.lineStyle(6, color, 1).lineBetween(x - 22, y - 4, x, y - 25).lineBetween(x, y - 25, x + 22, y - 4).lineBetween(x - 25, y - 4, x + 25, y - 4);
+      this.dynamic.fillStyle(0xc9853d, 1).fillCircle(x - 24, y + 15, 6).fillCircle(x - 12, y + 18, 6).fillCircle(x + 24, y + 15, 6);
+      this.dynamic.lineStyle(2, 0x6f401f, 1).strokeCircle(x - 24, y + 15, 4).strokeCircle(x - 12, y + 18, 4).strokeCircle(x + 24, y + 15, 4);
     }
     this.dynamic.fillStyle(0x202a22, 1).fillRect(x - 19, y + 25, 38, 4);
     if (maxLevel !== null && maxLevel > 0) this.dynamic.fillStyle(COLORS.gold, 1).fillRect(x - 19, y + 25, 38 * Math.min(1, building.level / maxLevel), 4);
@@ -1299,17 +1305,24 @@ export class GameScene extends Phaser.Scene {
       graphics.lineStyle(10, color, 1).lineBetween(x - 2, y - 5, x + 25, y - 18);
       graphics.fillStyle(0x202a22, 1).fillCircle(x + 27, y - 19, 7);
     } else if (towerId === "frost") {
-      graphics.fillStyle(color, 1);
-      fillTriangle(graphics, x, y - 31, x - 18, y + 2, x + 18, y + 2);
-      graphics.lineStyle(2, 0xe6fbff, 0.9).lineBetween(x, y - 27, x, y - 3).lineBetween(x - 14, y - 2, x + 14, y - 2);
+      // Snowflake crystal: pale core with six spokes (replaces the never-rendered triangle peak).
+      graphics.fillStyle(color, 1).fillCircle(x, y - 7, 14);
+      graphics.lineStyle(3, 0xe6fbff, 0.95).lineBetween(x - 13, y - 7, x + 13, y - 7);
+      graphics.lineBetween(x - 6.5, y - 18.3, x + 6.5, y + 4.3).lineBetween(x + 6.5, y - 18.3, x - 6.5, y + 4.3);
+      graphics.fillStyle(0xe6fbff, 1).fillCircle(x, y - 7, 4);
+      graphics.fillStyle(color, 1).fillRect(x - 9, y + 8, 18, 4);
     } else if (towerId === "electric") {
       graphics.fillStyle(color, 1).fillRect(x - 14, y - 11, 28, 24);
       graphics.lineStyle(3, 0xf2d8ff, 1).strokeCircle(x, y - 14, 12);
       graphics.lineStyle(3, color, 1).lineBetween(x - 23, y - 20, x - 10, y - 8).lineBetween(x + 23, y - 20, x + 10, y - 8);
     } else {
-      graphics.fillStyle(color, 1);
-      fillTriangle(graphics, x, y - 31, x - 18, y + 5, x + 18, y + 5);
-      graphics.lineStyle(4, 0xfff3c1, 1).lineBetween(x - 3, y - 1, x + 14, y - 11).lineBetween(x - 3, y + 2, x + 14, y + 12);
+      // Battlement tower with a flying arrow, matching the slot bar arrow_tower icon.
+      graphics.fillStyle(color, 1).fillRect(x - 13, y - 18, 26, 24);
+      graphics.fillStyle(0xffffff, 0.3).fillRect(x - 13, y - 18, 26, 4);
+      graphics.fillStyle(color, 1).fillRect(x - 13, y - 24, 6, 6).fillRect(x - 3, y - 24, 6, 6).fillRect(x + 7, y - 24, 6, 6);
+      graphics.fillStyle(0x2a1d14, 1).fillRect(x - 2, y - 10, 4, 12);
+      graphics.lineStyle(4, 0xfff3c1, 1).lineBetween(x + 5, y - 1, x + 18, y - 14);
+      graphics.lineBetween(x + 18, y - 14, x + 10, y - 13).lineBetween(x + 18, y - 14, x + 17, y - 6);
     }
   }
 
