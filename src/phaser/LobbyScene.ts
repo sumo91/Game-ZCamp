@@ -3,7 +3,6 @@ import { starterHeroContent } from "../core/hero";
 import { decideLobbyPointer, deriveLobbyView } from "./lobbyUi";
 import { FxDirector } from "./fx/FxDirector";
 import { getSoundDirector } from "./fx/SoundDirector";
-import { fillTriangle } from "./fx/draw";
 import { LOBBY_ARTIFACT_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH } from "./layout";
 
 const COLORS = { bg: 0x172d20, panel: 0x29442d, panelLight: 0x3f5b3b, line: 0xb89b4c, gold: 0xf6c453, text: "#fff3d2", muted: "#d6d39c", cyan: "#8dd8c3" };
@@ -41,9 +40,11 @@ export class LobbyScene extends Phaser.Scene {
     const heroGlyph = this.add.graphics().setDepth(4);
     heroGlyph.fillStyle(0x5b7042, 1).fillCircle(570, 590, 58);
     heroGlyph.lineStyle(4, COLORS.gold, 1).strokeCircle(570, 590, 58);
-    heroGlyph.fillStyle(COLORS.gold, 1);
-    fillTriangle(heroGlyph, 570, 525, 530, 590, 610, 590);
-    heroGlyph.fillStyle(0x213524, 1).fillCircle(570, 579, 11);
+    // Gold keep matching the in-battle main city; the former triangle roof never rendered.
+    heroGlyph.fillStyle(COLORS.gold, 1).fillRect(540, 578, 60, 44);
+    heroGlyph.fillStyle(0xffe08a, 1).fillRect(540, 578, 60, 8);
+    heroGlyph.fillStyle(COLORS.gold, 1).fillRect(540, 564, 14, 14).fillRect(563, 564, 14, 14).fillRect(586, 564, 14, 14);
+    heroGlyph.fillStyle(0x213524, 1).fillCircle(570, 602, 14);
 
     const artifact = this.add.rectangle(
       LOBBY_ARTIFACT_BOUNDS.x + LOBBY_ARTIFACT_BOUNDS.width / 2,

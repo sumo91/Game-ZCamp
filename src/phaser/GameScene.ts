@@ -30,7 +30,6 @@ import { AMBIENT_NOTICE_MIN_INTERVAL_SECONDS, ThrottleGate, coinFlightLabel, dec
 import type { FeedbackNotice, ProjectileStyle } from "./feedback";
 import { FxDirector } from "./fx/FxDirector";
 import { getSoundDirector } from "./fx/SoundDirector";
-import { fillTriangle } from "./fx/draw";
 import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE, deriveSlotActionBarBounds, slotBarButtonCenterX } from "./layout";
 
 type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number; style?: ProjectileStyle; jitter?: number[] };
@@ -1225,9 +1224,11 @@ export class GameScene extends Phaser.Scene {
     if (definition.tier === "boss") {
       this.dynamic.fillStyle(dark, 1).fillRect(x - 18, y - 1, 36, 28);
       this.dynamic.fillStyle(color, 1).fillCircle(x, headY, 15);
-      this.dynamic.fillStyle(0x482c25, 1);
-      fillTriangle(this.dynamic, x, headY - 19, x - 13, headY - 5, x - 5, headY - 22);
-      fillTriangle(this.dynamic, x, headY - 20, x + 13, headY - 5, x + 5, headY - 22);
+      // Horns: tapered two-segment strokes replacing never-rendered path fills.
+      this.dynamic.lineStyle(6, 0x482c25, 1).lineBetween(x - 5, headY - 11, x - 10, headY - 19);
+      this.dynamic.lineStyle(3, 0x482c25, 1).lineBetween(x - 10, headY - 19, x - 14, headY - 26);
+      this.dynamic.lineStyle(6, 0x482c25, 1).lineBetween(x + 5, headY - 11, x + 10, headY - 19);
+      this.dynamic.lineStyle(3, 0x482c25, 1).lineBetween(x + 10, headY - 19, x + 14, headY - 26);
       this.dynamic.fillStyle(light, 1).fillCircle(x - 5, headY - 1, 3).fillCircle(x + 5, headY - 1, 3);
       this.dynamic.lineStyle(5, color, 1).lineBetween(x - 22, y + 2, x - 31, y + 18).lineBetween(x + 22, y + 2, x + 31, y + 18);
       this.dynamic.lineStyle(5, dark, 1).lineBetween(x - 10, y + 26, x - 15, legY + 5).lineBetween(x + 10, y + 26, x + 15, legY + 5);
@@ -1249,9 +1250,9 @@ export class GameScene extends Phaser.Scene {
     this.dynamic.fillStyle(color, 1).fillRect(x - bodyWidth, y - 1, bodyWidth * 2, bodyHeight);
     if (elite) {
       this.dynamic.lineStyle(3, light, 0.9).strokeRect(x - bodyWidth - 3, y - 5, bodyWidth * 2 + 6, bodyHeight + 7);
-      this.dynamic.fillStyle(0xd98b31, 1);
-      fillTriangle(this.dynamic, x - 19, y - 5, x - 8, y - 16, x - 5, y + 4);
-      fillTriangle(this.dynamic, x + 19, y - 5, x + 8, y - 16, x + 5, y + 4);
+      // Pauldrons: rimmed shoulder pads replacing never-rendered path fills.
+      this.dynamic.fillStyle(0xd98b31, 1).fillCircle(x - 13, y - 5, 6).fillCircle(x + 13, y - 5, 6);
+      this.dynamic.lineStyle(2, 0x8a5216, 1).strokeCircle(x - 13, y - 5, 6).strokeCircle(x + 13, y - 5, 6);
     }
     this.dynamic.fillStyle(color, 1).fillCircle(x + (runner ? 4 : 0), headY, runner ? 8 : 9);
     this.dynamic.fillStyle(light, 1).fillCircle(x - 3 + (runner ? 4 : 0), headY - 1, 2).fillCircle(x + 3 + (runner ? 4 : 0), headY - 1, 2);
