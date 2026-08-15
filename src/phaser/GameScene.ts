@@ -30,11 +30,13 @@ import { AMBIENT_NOTICE_MIN_INTERVAL_SECONDS, ThrottleGate, coinFlightLabel, dec
 import type { FeedbackNotice, ProjectileStyle } from "./feedback";
 import { FxDirector } from "./fx/FxDirector";
 import { getSoundDirector } from "./fx/SoundDirector";
-import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE, deriveSlotActionBarBounds } from "./layout";
+import { fillTriangle } from "./fx/draw";
+import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE, deriveSlotActionBarBounds, slotBarButtonCenterX } from "./layout";
 
 type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number; style?: ProjectileStyle; jitter?: number[] };
 type ShotFeedback = { kind: "shot"; x: number; y: number; targetX: number; targetY: number; ttl: number; style?: ProjectileStyle; jitter?: number[] };
-type PanelAction = { label: string; available: boolean; reason: string; description: string; resource: GrowthResource | null; resourceLabel: string; statusLabel: string; run: () => void };
+type SlotBarIcon = "arrow_tower" | "lumberyard" | "upgrade" | "transform" | "destroy";
+type PanelAction = { label: string; available: boolean; reason: string; description: string; resource: GrowthResource | null; resourceLabel: string; statusLabel: string; cost: number | null; iconKind: SlotBarIcon; run: () => void };
 
 const COLORS = {
   bg: 0x1d3824,
@@ -146,7 +148,9 @@ export class GameScene extends Phaser.Scene {
   private pauseBadgeText!: Phaser.GameObjects.Text;
   private slotBarButtons: Phaser.GameObjects.Rectangle[] = [];
   private slotBarLabels: Phaser.GameObjects.Text[] = [];
+  private slotBarIcons: Phaser.GameObjects.Graphics[] = [];
   private slotBarBounds: LogicalBounds | null = null;
+  private slotBarRenderKey = "";
   private suppressScenePointer = false;
 
   public constructor() {
@@ -272,10 +276,12 @@ export class GameScene extends Phaser.Scene {
     for (let index = 0; index < 3; index += 1) {
       const button = this.add.rectangle(0, 0, 100, 46, COLORS.blue, 1).setDepth(18).setVisible(false).setInteractive({ useHandCursor: true });
       const label = this.add.text(0, 0, "", { ...this.textStyle(13, "#ffffff"), align: "center" }).setOrigin(0.5).setDepth(19).setVisible(false);
+      const icon = this.add.graphics().setDepth(19).setVisible(false);
       button.on("pointerdown", () => this.handleActionClick(index));
       this.bindPressFeedback(button);
       this.slotBarButtons.push(button);
       this.slotBarLabels.push(label);
+      this.slotBarIcons.push(icon);
     }
   }
 
@@ -334,7 +340,7 @@ export class GameScene extends Phaser.Scene {
     for (let index = 0; index < this.slotBarButtons.length; index += 1) {
       const button = this.slotBarButtons[index]!;
       if (!button.visible) continue;
-      const centerX = bounds.x + 52 + index * 106;
+      const centerX = slotBarButtonCenterX(bounds, index);
       if (x >= centerX - 50 && x <= centerX + 50 && y >= bounds.y + 7 && y <= bounds.y + 51) return true;
     }
     return false;
@@ -584,6 +590,11 @@ export class GameScene extends Phaser.Scene {
         traitDraft: state.pendingTraitDraft ? [...state.pendingTraitDraft.options] : null,
       };
       (window as Window & { __zcampDebug?: Record<string, unknown> }).__zcampDebug = debugState;
+      (window as Window & { __zcampSlotBar?: unknown }).__zcampSlotBar = {
+        bounds: this.slotBarBounds,
+        actions: this.panelActions.map((action) => ({ iconKind: action.iconKind, cost: action.cost, available: action.available })),
+        icons: this.slotBarIcons.map((icon) => ({ visible: icon.visible, commands: icon.commandBuffer?.length ?? -1 })),
+      };
       document.body.dataset.zcampPhase = state.phase;
       document.body.dataset.zcampWave = String(state.wave);
       document.body.dataset.zcampEnemyCount = String(debugState.enemyCount);
@@ -717,12 +728,14 @@ export class GameScene extends Phaser.Scene {
   }
 
   private renderResourceIcons(): void {
+    this.woodIcon.clear();
     this.drawResourceIcon(this.woodIcon, "wood", 36, RESOURCE_RAIL.y + 22);
+    this.goldIcon.clear();
     this.drawResourceIcon(this.goldIcon, "gold", 184, RESOURCE_RAIL.y + 16);
   }
 
+  /** Caller owns clearing: slot bar buttons draw their body icon and resource cost into one Graphics. */
   private drawResourceIcon(graphics: Phaser.GameObjects.Graphics, resource: GrowthResource, x: number, y: number, scale = 1): void {
-    graphics.clear();
     if (resource === "wood") {
       graphics.fillStyle(0xc9853d, 1).fillRect(x - 11 * scale, y - 6 * scale, 22 * scale, 12 * scale);
       graphics.fillStyle(0xe2ad64, 1).fillCircle(x - 11 * scale, y, 6 * scale);
@@ -758,6 +771,8 @@ export class GameScene extends Phaser.Scene {
         resource: action.resource,
         resourceLabel: action.resourceLabel,
         statusLabel: action.statusLabel,
+        cost: action.cost,
+        iconKind: action.definitionId as SlotBarIcon,
         run: () => this.performBuild(action),
       }));
     } else if (building.kind === "main_city") {
@@ -782,8 +797,8 @@ export class GameScene extends Phaser.Scene {
     this.contextHint.setText(transientHint || (this.destroyConfirm ? "拆除不返还资源 · 再次确认将永久失去等级与词条" : traitText));
     if (this.destroyConfirm) {
       this.panelActions = [
-        { label: "取消拆除", available: true, reason: "返回建筑详情", description: "返回建筑详情", resource: null, resourceLabel: "", statusLabel: "返回", run: () => { this.destroyConfirm = false; } },
-        { label: "确认拆除", available: true, reason: "", description: "永久移除当前建筑", resource: null, resourceLabel: "", statusLabel: "确认", run: () => this.performDestroy() },
+        { label: "取消拆除", available: true, reason: "返回建筑详情", description: "返回建筑详情", resource: null, resourceLabel: "", statusLabel: "返回", cost: null, iconKind: "destroy", run: () => { this.destroyConfirm = false; } },
+        { label: "确认拆除", available: true, reason: "", description: "永久移除当前建筑", resource: null, resourceLabel: "", statusLabel: "确认", cost: null, iconKind: "destroy", run: () => this.performDestroy() },
       ];
       return;
     }
@@ -795,6 +810,8 @@ export class GameScene extends Phaser.Scene {
       resource: detail.upgrade.resource,
       resourceLabel: detail.upgrade.resourceLabel,
       statusLabel: detail.upgrade.statusLabel,
+      cost: detail.upgrade.cost,
+      iconKind: "upgrade",
       run: () => this.performUpgrade(detail.upgrade),
     }];
     if (detail.canTransform) this.panelActions.push({
@@ -805,31 +822,92 @@ export class GameScene extends Phaser.Scene {
       resource: detail.transformResource,
       resourceLabel: detail.transformResourceLabel,
       statusLabel: "查看改造",
+      cost: detail.transformCost,
+      iconKind: "transform",
       run: () => { this.transformOpen = true; },
     });
-    this.panelActions.push({ label: "拆除", available: true, reason: "拆除不返还资源", description: "移除当前建筑", resource: null, resourceLabel: "", statusLabel: "可拆除", run: () => { this.destroyConfirm = true; } });
+    this.panelActions.push({ label: "拆除", available: true, reason: "拆除不返还资源", description: "移除当前建筑", resource: null, resourceLabel: "", statusLabel: "可拆除", cost: null, iconKind: "destroy", run: () => { this.destroyConfirm = true; } });
   }
 
-  /** Floating near-slot action bar mirroring the first three panel actions; closes with the selection. */
+  /** Floating near-slot action bar: icon glyph + resource cost row, width follows visible buttons.
+   * Redraws only when the bar configuration changes; per-frame buffer churn can drop fills mid-render. */
   private renderSlotActionBar(state: GameState): void {
     const show = this.selectedSlotId !== null && this.panelActions.length > 0 && getGrowthInputPriority(state.phase, this.transformOpen) === "building";
-    this.slotBarBounds = show ? deriveSlotActionBarBounds(this.selectedSlotId!) : null;
+    const visibleCount = show ? Math.min(3, this.panelActions.length) : 0;
+    const renderKey = show ? [this.selectedSlotId, visibleCount, this.destroyConfirm, ...this.panelActions.map((action) => action.iconKind + ":" + action.cost + ":" + action.available)].join("|") : "";
+    if (renderKey === this.slotBarRenderKey) return;
+    this.slotBarRenderKey = renderKey;
+    this.slotBarBounds = show && this.selectedSlotId ? deriveSlotActionBarBounds(this.selectedSlotId, visibleCount) : null;
     for (let index = 0; index < this.slotBarButtons.length; index += 1) {
       const button = this.slotBarButtons[index]!;
       const label = this.slotBarLabels[index]!;
+      const icon = this.slotBarIcons[index]!;
       const action = this.panelActions[index];
       const visible = show && Boolean(action);
       button.setVisible(visible);
       if (button.input) button.input.enabled = visible;
       label.setVisible(visible);
+      icon.setVisible(visible);
+      icon.clear();
       if (!visible || !action || !this.slotBarBounds) continue;
-      const centerX = this.slotBarBounds.x + 52 + index * 106;
+      const centerX = slotBarButtonCenterX(this.slotBarBounds, index);
       const centerY = this.slotBarBounds.y + this.slotBarBounds.height / 2;
       button.setPosition(centerX, centerY).setSize(100, 44);
       button.setFillStyle(action.available ? COLORS.blue : 0x3c4439, 1).setAlpha(action.available ? 1 : 0.75).setStrokeStyle(2, action.available ? COLORS.gold : 0x77796c, 1);
-      const costSuffix = action.resource && action.resourceLabel ? "\n" + action.resourceLabel : "";
-      label.setPosition(centerX, centerY).setText(action.label.split("｜")[0] + costSuffix).setColor(action.available ? "#ffffff" : "#c0c3b5");
+      if (this.destroyConfirm) {
+        label.setOrigin(0.5, 0.5).setPosition(centerX, centerY).setFontSize("14px").setText(action.label).setColor("#ffffff");
+        continue;
+      }
+      this.drawSlotBarIcon(icon, action.iconKind, centerX, centerY - 9, action.available);
+      if (action.cost !== null && action.resource) {
+        this.drawResourceIcon(icon, action.resource, centerX - 13, centerY + 13, 0.62);
+        label.setOrigin(0, 0.5).setPosition(centerX - 2, centerY + 13).setFontSize("14px").setText(String(action.cost)).setColor(action.available ? "#ffe9a0" : "#f06a6a");
+      } else {
+        label.setText("");
+      }
     }
+  }
+
+  /** Floating bar icons are composed of rect/circle/line primitives only: the Graphics path
+   * pipeline silently drops filled triangles in this build, while these primitives render
+   * reliably. Designs mirror the on-map building art so options read at a glance. */
+  private drawSlotBarIcon(graphics: Phaser.GameObjects.Graphics, kind: SlotBarIcon, x: number, y: number, available: boolean): void {
+    const alpha = available ? 1 : 0.55;
+    graphics.setAlpha(available ? 1 : 0.7);
+    if (kind === "arrow_tower") {
+      // Battlement tower on a stone base, with one cream arrow like the map glyph.
+      graphics.fillStyle(0x55636a, alpha).fillRect(x - 13, y + 7, 22, 5);
+      graphics.fillStyle(COLORS.gold, alpha).fillRect(x - 11, y - 8, 16, 15);
+      graphics.fillStyle(0xffe08a, alpha).fillRect(x - 11, y - 8, 16, 3);
+      graphics.fillStyle(COLORS.gold, alpha).fillRect(x - 11, y - 12, 4, 4).fillRect(x - 5, y - 12, 4, 4).fillRect(x + 1, y - 12, 4, 4);
+      graphics.fillStyle(0x2a1d14, alpha).fillRect(x - 7, y - 3, 3, 8);
+      graphics.lineStyle(3, 0xfff3c1, alpha).lineBetween(x + 3, y + 6, x + 13, y - 4);
+      graphics.lineBetween(x + 13, y - 4, x + 7, y - 3).lineBetween(x + 13, y - 4, x + 12, y + 2);
+      return;
+    }
+    if (kind === "lumberyard") {
+      // Planked log cabin, green gable roof, orange log end — matching the map art.
+      graphics.fillStyle(0x9c6a34, alpha).fillRect(x - 10, y - 3, 20, 13);
+      graphics.lineStyle(1.5, 0x6f401f, alpha).lineBetween(x - 9, y + 1, x + 9, y + 1).lineBetween(x - 9, y + 5, x + 9, y + 5);
+      graphics.fillStyle(0x2a1d14, alpha).fillRect(x - 3, y + 1, 6, 9);
+      graphics.lineStyle(4, 0x6fce8b, alpha).lineBetween(x - 12, y - 3, x, y - 14).lineBetween(x, y - 14, x + 12, y - 3).lineBetween(x - 14, y - 3, x + 14, y - 3);
+      graphics.fillStyle(0xc9853d, alpha).fillCircle(x + 15, y + 6, 4);
+      graphics.lineStyle(1.5, 0x6f401f, alpha).strokeCircle(x + 15, y + 6, 2.5);
+      return;
+    }
+    if (kind === "upgrade") {
+      graphics.lineStyle(4, COLORS.success, alpha).lineBetween(x - 8, y + 1, x, y - 9).lineBetween(x, y - 9, x + 8, y + 1);
+      graphics.lineStyle(4, COLORS.success, alpha * 0.5).lineBetween(x - 8, y + 10, x, y).lineBetween(x, y, x + 8, y + 10);
+      return;
+    }
+    if (kind === "transform") {
+      graphics.fillStyle(COLORS.gold, alpha).fillCircle(x, y - 2, 11);
+      graphics.lineStyle(3, 0x714c17, alpha).strokeCircle(x, y - 2, 8);
+      graphics.fillStyle(0xfff0a0, alpha).fillCircle(x, y - 2, 3.5);
+      graphics.fillStyle(0xfff0a0, alpha).fillCircle(x - 13, y + 4, 2).fillCircle(x + 13, y + 4, 2);
+      return;
+    }
+    graphics.lineStyle(6, COLORS.danger, alpha).lineBetween(x - 10, y - 13, x + 10, y + 5).lineBetween(x + 10, y - 13, x - 10, y + 5);
   }
 
   /** Slot bar backing plate drawn under the dynamic layer's redraw cycle. */
@@ -870,6 +948,7 @@ export class GameScene extends Phaser.Scene {
       const iconY = bounds.y + bounds.height / 2;
       icon.clear().fillStyle(color, option.affordable ? 1 : 0.6).fillCircle(iconX, iconY, 24);
       this.drawTowerGlyph(icon, option.targetTowerId, iconX, iconY, color);
+      costIcon.clear();
       this.drawResourceIcon(costIcon, option.resource, bounds.x + 64, iconY + 22, 0.58);
     }
   }
@@ -1145,7 +1224,9 @@ export class GameScene extends Phaser.Scene {
     if (definition.tier === "boss") {
       this.dynamic.fillStyle(dark, 1).fillRect(x - 18, y - 1, 36, 28);
       this.dynamic.fillStyle(color, 1).fillCircle(x, headY, 15);
-      this.dynamic.fillStyle(0x482c25, 1).fillTriangle(x, headY - 19, x - 13, headY - 5, x - 5, headY - 22).fillTriangle(x, headY - 20, x + 13, headY - 5, x + 5, headY - 22);
+      this.dynamic.fillStyle(0x482c25, 1);
+      fillTriangle(this.dynamic, x, headY - 19, x - 13, headY - 5, x - 5, headY - 22);
+      fillTriangle(this.dynamic, x, headY - 20, x + 13, headY - 5, x + 5, headY - 22);
       this.dynamic.fillStyle(light, 1).fillCircle(x - 5, headY - 1, 3).fillCircle(x + 5, headY - 1, 3);
       this.dynamic.lineStyle(5, color, 1).lineBetween(x - 22, y + 2, x - 31, y + 18).lineBetween(x + 22, y + 2, x + 31, y + 18);
       this.dynamic.lineStyle(5, dark, 1).lineBetween(x - 10, y + 26, x - 15, legY + 5).lineBetween(x + 10, y + 26, x + 15, legY + 5);
@@ -1167,7 +1248,9 @@ export class GameScene extends Phaser.Scene {
     this.dynamic.fillStyle(color, 1).fillRect(x - bodyWidth, y - 1, bodyWidth * 2, bodyHeight);
     if (elite) {
       this.dynamic.lineStyle(3, light, 0.9).strokeRect(x - bodyWidth - 3, y - 5, bodyWidth * 2 + 6, bodyHeight + 7);
-      this.dynamic.fillStyle(0xd98b31, 1).fillTriangle(x - 19, y - 5, x - 8, y - 16, x - 5, y + 4).fillTriangle(x + 19, y - 5, x + 8, y - 16, x + 5, y + 4);
+      this.dynamic.fillStyle(0xd98b31, 1);
+      fillTriangle(this.dynamic, x - 19, y - 5, x - 8, y - 16, x - 5, y + 4);
+      fillTriangle(this.dynamic, x + 19, y - 5, x + 8, y - 16, x + 5, y + 4);
     }
     this.dynamic.fillStyle(color, 1).fillCircle(x + (runner ? 4 : 0), headY, runner ? 8 : 9);
     this.dynamic.fillStyle(light, 1).fillCircle(x - 3 + (runner ? 4 : 0), headY - 1, 2).fillCircle(x + 3 + (runner ? 4 : 0), headY - 1, 2);
@@ -1184,7 +1267,8 @@ export class GameScene extends Phaser.Scene {
     if (building.kind === "main_city") {
       this.dynamic.fillStyle(0x344e39, 1).fillCircle(x, y, 28);
       this.dynamic.lineStyle(3, 0x72d6c9, 1).strokeCircle(x, y, 28);
-      this.dynamic.fillStyle(COLORS.gold, 1).fillTriangle(x, y - 40, x - 20, y - 3, x + 20, y - 3);
+      this.dynamic.fillStyle(COLORS.gold, 1);
+      fillTriangle(this.dynamic, x, y - 40, x - 20, y - 3, x + 20, y - 3);
       this.dynamic.fillStyle(0x213524, 1).fillCircle(x, y - 12, 8);
       this.dynamic.lineStyle(3, COLORS.gold, 1).lineBetween(x - 12, y + 8, x + 12, y + 8);
       return;
@@ -1196,7 +1280,8 @@ export class GameScene extends Phaser.Scene {
     this.dynamic.lineStyle(3, 0x202a22, 1).strokeCircle(x, y + 8, 23);
     if (building.kind === "tower") this.drawTowerGlyph(this.dynamic, towerId, x, y, color);
     else if (building.kind === "lumberyard") {
-      this.dynamic.fillStyle(color, 1).fillTriangle(x, y - 28, x - 25, y + 8, x + 25, y + 8);
+      this.dynamic.fillStyle(color, 1);
+      fillTriangle(this.dynamic, x, y - 28, x - 25, y + 8, x + 25, y + 8);
       this.dynamic.fillStyle(0x2a1d14, 1).fillRect(x - 9, y - 1, 18, 18);
       this.dynamic.fillStyle(0xc9853d, 1).fillCircle(x - 23, y + 16, 7).fillCircle(x - 11, y + 19, 7);
     }
@@ -1214,14 +1299,16 @@ export class GameScene extends Phaser.Scene {
       graphics.lineStyle(10, color, 1).lineBetween(x - 2, y - 5, x + 25, y - 18);
       graphics.fillStyle(0x202a22, 1).fillCircle(x + 27, y - 19, 7);
     } else if (towerId === "frost") {
-      graphics.fillStyle(color, 1).fillTriangle(x, y - 31, x - 18, y + 2, x + 18, y + 2);
+      graphics.fillStyle(color, 1);
+      fillTriangle(graphics, x, y - 31, x - 18, y + 2, x + 18, y + 2);
       graphics.lineStyle(2, 0xe6fbff, 0.9).lineBetween(x, y - 27, x, y - 3).lineBetween(x - 14, y - 2, x + 14, y - 2);
     } else if (towerId === "electric") {
       graphics.fillStyle(color, 1).fillRect(x - 14, y - 11, 28, 24);
       graphics.lineStyle(3, 0xf2d8ff, 1).strokeCircle(x, y - 14, 12);
       graphics.lineStyle(3, color, 1).lineBetween(x - 23, y - 20, x - 10, y - 8).lineBetween(x + 23, y - 20, x + 10, y - 8);
     } else {
-      graphics.fillStyle(color, 1).fillTriangle(x, y - 31, x - 18, y + 5, x + 18, y + 5);
+      graphics.fillStyle(color, 1);
+      fillTriangle(graphics, x, y - 31, x - 18, y + 5, x + 18, y + 5);
       graphics.lineStyle(4, 0xfff3c1, 1).lineBetween(x - 3, y - 1, x + 14, y - 11).lineBetween(x - 3, y + 2, x + 14, y + 12);
     }
   }
