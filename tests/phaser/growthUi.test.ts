@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { starterCatalog } from "../../src/core/content";
 import { GameSimulation } from "../../src/core/game";
 import { deriveBuildingDetail, deriveEmptySlotActions, deriveTraitOptions, deriveTransformOptions, decideGrowthAction, decideGrowthPointer, decideGrowthTrait, decideGrowthTransform, deriveGrowthPauseControl, formatGrowthTraitEffect, getGrowthInputPriority, hitGrowthPointer } from "../../src/phaser/growthUi";
-import { GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS } from "../../src/phaser/layout";
+import { CAMP_SLOT_LAYOUTS, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS } from "../../src/phaser/layout";
 
 function build(game: GameSimulation, slotId: string, definitionId: "arrow_tower" | "lumberyard"): string {
   const result = game.dispatch({ type: "build_building", slotId, definitionId });
@@ -153,6 +153,15 @@ describe("growth UI derivation and input", () => {
     expect(decideGrowthPointer("transform", transform).kind).toBe("dispatch");
     expect(decideGrowthPointer("transform", close!).kind).toBe("dispatch");
     expect(decideGrowthPointer("transform", slot).kind).toBe("blocked");
+  });
+
+  it("does not let closed transform-modal hit zones shadow camp slots", () => {
+    // The close-button bounds physically overlap slot r1c3 after the layout shift; the gate keeps the slot clickable.
+    const r1c3 = CAMP_SLOT_LAYOUTS.find((layout) => layout.id === "slot-r1-c3")!;
+    const x = r1c3.x + r1c3.width / 2;
+    const y = r1c3.y + r1c3.height / 2;
+    expect(hitGrowthPointer(x, y, true)).toEqual({ kind: "transform_close" });
+    expect(hitGrowthPointer(x, y, false)).toEqual({ kind: "slot", slotId: "slot-r1-c3" });
   });
 
   it("keeps the tactical pause control visible and enabled during the opening countdown", () => {

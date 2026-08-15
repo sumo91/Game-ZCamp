@@ -2,11 +2,12 @@ import { CAMP_COLUMNS, CAMP_ROWS, CAMP_SLOT_IDS } from "../core/types";
 
 export const LOGICAL_WIDTH = 720;
 export const LOGICAL_HEIGHT = 1280;
-export const ENEMY_ZONE = { x: 24, y: 0, width: 672, height: 724 };
-export const WALL_ZONE = { x: 24, y: 708, width: 672, height: 64 };
-export const GRID_ZONE = { x: 24, y: 772, width: 672, height: 318 };
-export const RESOURCE_RAIL = { x: 24, y: 1090, width: 672, height: 48 };
-export const CONTEXT_PANEL = { x: 24, y: 1138, width: 672, height: 142 };
+// Enemy band targets 58-63% of screen height per the product overview; wall+grid sit below it.
+export const ENEMY_ZONE = { x: 24, y: 0, width: 672, height: 768 };
+export const WALL_ZONE = { x: 24, y: 768, width: 672, height: 64 };
+export const GRID_ZONE = { x: 24, y: 832, width: 672, height: 318 };
+export const RESOURCE_RAIL = { x: 24, y: 1150, width: 672, height: 56 };
+export const CONTEXT_PANEL = { x: 24, y: 1206, width: 672, height: 74 };
 export const LOBBY_ARTIFACT_BOUNDS = { x: 40, y: 790, width: 640, height: 120 };
 
 export interface LogicalBounds {
@@ -29,17 +30,22 @@ export const GROWTH_CONTEXT_ACTION_BOUNDS: readonly LogicalBounds[] = [
   { x: 474, y: 1220, width: 204, height: 56 },
 ];
 
-/** Floating action bar bounds above a selected slot; pinned to the grid so it never covers the slot itself. */
+/** Floating action bar bounds above a selected slot; row 0 floats over the wall strip because the grid has no headroom. */
 export function deriveSlotActionBarBounds(slotId: string): LogicalBounds {
   const slot = CAMP_SLOT_LAYOUTS.find((layout) => layout.id === slotId);
-  const column = slot?.column ?? 2;
   const row = slot?.row ?? 0;
   const width = 316;
-  // Three staggered column positions keep the bar fully on-screen for all five camp columns.
-  const columnAnchors = [GRID_ZONE.x + 6, GRID_ZONE.x + 178, GRID_ZONE.x + 350];
-  const x = columnAnchors[Math.min(2, Math.max(0, column - 1))]!;
-  const y = row === 0 ? GRID_ZONE.y + 8 : GRID_ZONE.y + row * 103 - 66;
-  return { x, y, width, height: 58 };
+  const height = 58;
+  const desiredX = slot ? slot.x + slot.width / 2 - width / 2 : GRID_ZONE.x + (GRID_ZONE.width - width) / 2;
+  const x = Math.max(GRID_ZONE.x + 4, Math.min(GRID_ZONE.x + GRID_ZONE.width - width - 4, desiredX));
+  // Row 0 has no gap above (the wall strip); other rows float in the band between the previous row and their own.
+  const rowTop = GRID_ZONE.y + row * 103;
+  const y = row === 0 ? WALL_ZONE.y + 4 : rowTop - 58 - 5;
+  return { x, y, width, height };
+}
+
+export function pointInLogicalBounds(x: number, y: number, bounds: LogicalBounds): boolean {
+  return x >= bounds.x && x <= bounds.x + bounds.width && y >= bounds.y && y <= bounds.y + bounds.height;
 }
 
 export interface CampSlotLayout {
