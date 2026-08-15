@@ -7,6 +7,7 @@ import { GameSimulation } from "../core/game";
 import { getWoodProductionPerSecond } from "../core/resources";
 import type { HeroDefinition } from "../core/hero";
 import type { BuildingState, EnemyRuntimeState, GameEvent, GamePhase, GameState } from "../core/types";
+import type { LogicalBounds } from "./layout";
 import {
   deriveBuildingDetail,
   deriveEmptySlotActions,
@@ -25,9 +26,14 @@ import {
   type GrowthTraitOptionView,
 } from "./growthUi";
 import { deriveResultActions } from "./lobbyUi";
-import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE } from "./layout";
+import { AMBIENT_NOTICE_MIN_INTERVAL_SECONDS, ThrottleGate, coinFlightLabel, decideResourcePulse, decideWallImpact, deriveWaveBanner, isBossEntrance, mapTowerProjectileStyle, routeBattleNotice, shouldShowDamageNumber } from "./feedback";
+import type { FeedbackNotice, ProjectileStyle } from "./feedback";
+import { FxDirector } from "./fx/FxDirector";
+import { getSoundDirector } from "./fx/SoundDirector";
+import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE, deriveSlotActionBarBounds } from "./layout";
 
-type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number };
+type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number; style?: ProjectileStyle; jitter?: number[] };
+type ShotFeedback = { kind: "shot"; x: number; y: number; targetX: number; targetY: number; ttl: number; style?: ProjectileStyle; jitter?: number[] };
 type PanelAction = { label: string; available: boolean; reason: string; description: string; resource: GrowthResource | null; resourceLabel: string; statusLabel: string; run: () => void };
 
 const COLORS = {
@@ -123,6 +129,27 @@ export class GameScene extends Phaser.Scene {
   private showcaseMode = false;
   private showcaseCapture: "charge" | "inspire" | null = null;
   private showcaseFreeze = false;
+  private fx!: FxDirector;
+  private readonly sfx = getSoundDirector();
+  private readonly noticeGate = new ThrottleGate();
+  private soundButton!: Phaser.GameObjects.Rectangle;
+  private soundButtonLabel!: Phaser.GameObjects.Text;
+  private ambientNoticeText!: Phaser.GameObjects.Text;
+  private ambientNoticeTimer = 0;
+  private lastWallHp: number | null = null;
+  private lastWallShield: number | null = null;
+  private lastWood: number | null = null;
+  private lastGold: number | null = null;
+  private lastPhase: GamePhase | null = null;
+  private modalEntrance = { transform: false, trait: false, system: false, result: false };
+  private wallImpactMarks: Array<{ x: number; ttl: number }> = [];
+  private bossNameText!: Phaser.GameObjects.Text;
+  private resultCounting = false;
+  private pauseDimmer!: Phaser.GameObjects.Rectangle;
+  private pauseBadgeText!: Phaser.GameObjects.Text;
+  private slotBarButtons: Phaser.GameObjects.Rectangle[] = [];
+  private slotBarLabels: Phaser.GameObjects.Text[] = [];
+  private slotBarBounds: LogicalBounds | null = null;
 
   public constructor() {
     super("GameScene");
@@ -145,6 +172,8 @@ export class GameScene extends Phaser.Scene {
   public create(): void {
     this.createBackground();
     this.dynamic = this.add.graphics().setDepth(5);
+    this.fx = new FxDirector(this);
+    this.input.on("pointerdown", () => this.sfx.unlock());
     this.createHud();
     this.createInteractionZones();
     this.createContextPanel();
@@ -161,8 +190,10 @@ export class GameScene extends Phaser.Scene {
       if (this.showcaseMode && this.simulation.getState().phase === "RUNNING") this.simulation.getState().wallHp = this.simulation.getState().wallMaxHp;
       this.processEvents(this.simulation.drainEvents());
       this.feedbacks = this.feedbacks.map((feedback) => ({ ...feedback, ttl: feedback.ttl - step })).filter((feedback) => feedback.ttl > 0);
+      this.wallImpactMarks = this.wallImpactMarks.map((mark) => ({ ...mark, ttl: mark.ttl - step })).filter((mark) => mark.ttl > 0);
       this.messageTimer = Math.max(0, this.messageTimer - step);
       this.battleNoticeTimer = Math.max(0, this.battleNoticeTimer - step);
+      this.ambientNoticeTimer = Math.max(0, this.ambientNoticeTimer - step);
     }
     this.renderState();
   }
@@ -226,7 +257,39 @@ export class GameScene extends Phaser.Scene {
     this.pauseButton = this.add.rectangle(646, 44, 104, 56, COLORS.blue, 1).setDepth(11).setInteractive({ useHandCursor: true });
     this.pauseButtonLabel = this.add.text(646, 44, "暂停", this.textStyle(15, "#ffffff")).setOrigin(0.5).setDepth(12);
     this.pauseButton.on("pointerdown", () => this.toggleTacticalPause());
+    this.bindPressFeedback(this.pauseButton);
+    this.soundButton = this.add.rectangle(646, 100, 104, 40, COLORS.panelDeep, 1).setDepth(11).setInteractive({ useHandCursor: true });
+    this.soundButton.setStrokeStyle(2, COLORS.line, 0.85);
+    this.soundButtonLabel = this.add.text(646, 100, "", this.textStyle(13, "#fff3d2")).setOrigin(0.5).setDepth(12);
+    this.soundButton.on("pointerdown", () => {
+      this.sfx.toggleMuted();
+      this.syncSoundButton();
+      this.fx.pressPulse(this.soundButton);
+    });
+    this.ambientNoticeText = this.add.text(360, 204, "", { ...this.textStyle(13, "#d6d39c"), align: "center", stroke: "#23301f", strokeThickness: 3 }).setOrigin(0.5).setDepth(12);
     this.countdownText = this.add.text(360, 410, "", { ...this.textStyle(76, "#ffe08a"), stroke: "#315c28", strokeThickness: 8 }).setOrigin(0.5).setDepth(20);
+    this.bossNameText = this.add.text(360, 143, "", { ...this.textStyle(13, "#ffc9c9"), align: "center", stroke: "#2a0f12", strokeThickness: 4 }).setOrigin(0.5).setDepth(10).setVisible(false);
+    this.pauseDimmer = this.add.rectangle(360, 640, LOGICAL_WIDTH, LOGICAL_HEIGHT, 0x0c1a10, 1).setDepth(4).setAlpha(0).setInteractive();
+    this.pauseBadgeText = this.add.text(360, 250, "‖ 战术暂停 · 时间冻结", { ...this.textStyle(30, "#bfe8ff"), align: "center", stroke: "#10231c", strokeThickness: 6 }).setOrigin(0.5).setDepth(12).setVisible(false);
+    for (let index = 0; index < 3; index += 1) {
+      const button = this.add.rectangle(0, 0, 100, 46, COLORS.blue, 1).setDepth(18).setVisible(false).setInteractive({ useHandCursor: true });
+      const label = this.add.text(0, 0, "", { ...this.textStyle(13, "#ffffff"), align: "center" }).setOrigin(0.5).setDepth(19).setVisible(false);
+      button.on("pointerdown", () => this.handleActionClick(index));
+      this.bindPressFeedback(button);
+      this.slotBarButtons.push(button);
+      this.slotBarLabels.push(label);
+    }
+  }
+
+  private bindPressFeedback(button: Phaser.GameObjects.Rectangle): void {
+    button.on("pointerdown", () => {
+      this.fx.pressPulse(button);
+      this.sfx.playUi("click");
+    });
+  }
+
+  private syncSoundButton(): void {
+    this.soundButtonLabel.setText(this.sfx.isMuted() ? "🔇 已静音" : "🔊 音效开");
   }
 
   private createInteractionZones(): void {
@@ -262,6 +325,7 @@ export class GameScene extends Phaser.Scene {
       const label = this.add.text(centerX + 18, centerY, "", { ...this.textStyle(14, "#ffffff"), align: "center", wordWrap: { width: bounds.width - 36 } }).setOrigin(0.5).setDepth(17);
       const icon = this.add.graphics().setDepth(17);
       button.on("pointerdown", () => this.handleActionClick(index));
+      this.bindPressFeedback(button);
       this.actionButtons.push(button);
       this.actionLabels.push(label);
       this.actionIcons.push(icon);
@@ -283,12 +347,14 @@ export class GameScene extends Phaser.Scene {
       const icon = this.add.graphics().setDepth(74);
       const costIcon = this.add.graphics().setDepth(74);
       button.on("pointerdown", () => this.handleTransformClick(index));
+      this.bindPressFeedback(button);
       this.transformButtons.push(button);
       this.transformLabels.push(label);
       this.transformIcons.push(icon);
       this.transformCostIcons.push(costIcon);
     }
     this.transformCloseButton = this.add.rectangle(GROWTH_TRANSFORM_CLOSE_BOUNDS.x + GROWTH_TRANSFORM_CLOSE_BOUNDS.width / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.y + GROWTH_TRANSFORM_CLOSE_BOUNDS.height / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.width, GROWTH_TRANSFORM_CLOSE_BOUNDS.height, COLORS.blue, 1).setDepth(72).setInteractive({ useHandCursor: true });
+    this.bindPressFeedback(this.transformCloseButton);
     this.transformCloseLabel = this.add.text(GROWTH_TRANSFORM_CLOSE_BOUNDS.x + GROWTH_TRANSFORM_CLOSE_BOUNDS.width / 2, GROWTH_TRANSFORM_CLOSE_BOUNDS.y + GROWTH_TRANSFORM_CLOSE_BOUNDS.height / 2, "返回建筑详情", this.textStyle(16, "#ffffff")).setOrigin(0.5).setDepth(73);
 
     this.traitOverlay = this.add.rectangle(360, 640, 720, 1280, 0x07101d, 0.66).setDepth(80).setInteractive();
@@ -302,6 +368,7 @@ export class GameScene extends Phaser.Scene {
       const button = this.add.rectangle(360, y, 600, 140, COLORS.panel, 1).setDepth(82).setInteractive({ useHandCursor: true });
       const label = this.add.text(84, y, "", { ...this.textStyle(15, "#fff3d2"), wordWrap: { width: 550 } }).setOrigin(0, 0.5).setDepth(84);
       button.on("pointerdown", () => this.handleTraitClick(index));
+      this.bindPressFeedback(button);
       this.traitButtons.push(button);
       this.traitLabels.push(label);
     }
@@ -317,9 +384,11 @@ export class GameScene extends Phaser.Scene {
     this.resultRestartButton = this.add.rectangle(360, 636, 180, 56, COLORS.blue, 1).setDepth(111).setInteractive({ useHandCursor: true });
     this.resultRestartLabel = this.add.text(360, 636, this.resultActions.rematchLabel, this.textStyle(17, "#ffffff")).setOrigin(0.5).setDepth(112);
     this.resultRestartButton.on("pointerdown", () => this.restartSimulation());
+    this.bindPressFeedback(this.resultRestartButton);
     this.resultLobbyButton = this.add.rectangle(360, 706, 180, 56, COLORS.panel, 1).setDepth(111).setInteractive({ useHandCursor: true });
     this.resultLobbyLabel = this.add.text(360, 706, this.resultActions.lobbyLabel, this.textStyle(17, "#fff3d2")).setOrigin(0.5).setDepth(112);
     this.resultLobbyButton.on("pointerdown", () => this.scene.start("LobbyScene"));
+    this.bindPressFeedback(this.resultLobbyButton);
   }
 
   private bindLifecycle(): void {
@@ -349,6 +418,11 @@ export class GameScene extends Phaser.Scene {
     this.destroyConfirm = false;
     this.transformOpen = false;
     this.traitLocked = false;
+    this.lastWallHp = null;
+    this.lastWallShield = null;
+    this.lastWood = null;
+    this.lastGold = null;
+    this.lastPhase = null;
     this.renderState();
   }
 
@@ -372,7 +446,7 @@ export class GameScene extends Phaser.Scene {
     const action = this.panelActions[index];
     if (!action) return;
     if (!action.available) {
-      this.showMessage(action.reason, false);
+      this.showMessage(action.reason, false, action.resource ?? undefined);
       this.renderState();
       return;
     }
@@ -389,12 +463,12 @@ export class GameScene extends Phaser.Scene {
     if (!option) return;
     const decision = decideGrowthTransform(option);
     if (decision.kind === "blocked") {
-      this.showMessage(decision.reason, false);
+      this.showMessage(decision.reason, false, option.resource);
       this.renderState();
       return;
     }
     const result = this.simulation.dispatch(decision.command);
-    this.showMessage(result.accepted ? "改造完成 · 等级与词条已保留" : (result.reason ?? "改造失败"), result.accepted);
+    this.showMessage(result.accepted ? "改造完成 · 等级与词条已保留" : (result.reason ?? "改造失败"), result.accepted, result.accepted ? undefined : option.resource);
     if (result.accepted) this.transformOpen = false;
     this.renderState();
   }
@@ -427,7 +501,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     const result = this.simulation.dispatch(decision.command);
-    this.showMessage(result.accepted ? "建造完成 · 已选中新建筑" : (result.reason ?? "建造失败"), result.accepted);
+    this.showMessage(result.accepted ? "建造完成 · 已选中新建筑" : (result.reason ?? "建造失败"), result.accepted, result.accepted ? undefined : action.resource);
   }
 
   private performUpgrade(action: GrowthActionView): void {
@@ -437,7 +511,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     const result = this.simulation.dispatch(decision.command);
-    this.showMessage(result.accepted ? "升级完成 · 请选择一个词条" : (result.reason ?? "升级失败"), result.accepted);
+    this.showMessage(result.accepted ? "升级完成 · 请选择一个词条" : (result.reason ?? "升级失败"), result.accepted, result.accepted ? undefined : action.resource);
     if (result.accepted) this.traitLocked = false;
   }
 
@@ -482,6 +556,11 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.phaseText.setText(this.phaseLabel(state.phase));
+    this.observePhase(state);
+    this.observeWall(state);
+    this.observeResources(state);
+    this.trackModalEntrance(state);
+    this.syncSoundButton();
     this.waveText.setText(state.wave > 0 ? "波次  " + state.wave + " / " + state.maxWave : "首波");
     const terminal = state.phase === "VICTORY" || state.phase === "DEFEAT";
     this.timerText.setText(terminal ? "战斗结束" : state.phase === "OPENING_COUNTDOWN" || state.wave === 0 ? "首波准备中" : "下一波  " + this.formatSeconds(state.nextWaveTimeRemainingSeconds));
@@ -509,14 +588,98 @@ export class GameScene extends Phaser.Scene {
     this.pauseButtonLabel.setVisible(pauseControl.visible);
     this.countdownText.setVisible(state.phase === "OPENING_COUNTDOWN");
     if (state.phase === "OPENING_COUNTDOWN") this.countdownText.setText(String(Math.ceil(state.openingCountdownRemainingSeconds)));
+    const pauseTint = state.phase === "TACTICAL_PAUSE";
+    this.pauseDimmer.setAlpha(pauseTint ? 0.38 : 0);
+    this.pauseBadgeText.setVisible(pauseTint);
     this.battleNoticeText.setVisible(this.battleNoticeTimer > 0);
+    this.ambientNoticeText.setVisible(this.ambientNoticeTimer > 0);
 
     this.renderContext(state);
     this.renderDynamic(state);
+    this.renderSlotBarBackdrop();
+    this.renderSlotActionBar();
     this.renderTransformModal(state);
     this.renderTraitModal(state);
     this.renderSystemAndResult(state);
     this.syncInput(state);
+  }
+
+  private observePhase(state: GameState): void {
+    if (this.lastPhase === state.phase) return;
+    this.lastPhase = state.phase;
+    if (state.phase === "VICTORY") {
+      this.sfx.playUi("victory");
+      this.fx.shake(0.3, 0.006);
+      this.beginResultCountUp(state, true);
+    } else if (state.phase === "DEFEAT") {
+      this.sfx.playUi("defeat");
+      this.fx.shake(0.45, 0.01);
+      this.fx.edgeFlash(0xf06a6a, 0.45, 0.5);
+      this.beginResultCountUp(state, false);
+    }
+  }
+
+  private beginResultCountUp(state: GameState, victory: boolean): void {
+    const prefix = victory ? "最终首领已击破 · 波次 " + state.wave + " · 击杀 " : "防线在第 " + state.wave + " 波失守 · 击杀 ";
+    this.resultCounting = true;
+    this.fx.countUp(this.resultHint, 0, state.defeatedEnemies, 1.1, (value) => prefix + value + (victory ? "" : " · 重新部署"), () => { this.resultCounting = false; });
+  }
+
+  private observeWall(state: GameState): void {
+    if (this.lastWallHp === null || this.lastWallShield === null) {
+      this.lastWallHp = state.wallHp;
+      this.lastWallShield = state.wallShield;
+      return;
+    }
+    const wallDrop = this.lastWallHp - state.wallHp;
+    const shieldDrop = this.lastWallShield - state.wallShield;
+    this.lastWallHp = state.wallHp;
+    this.lastWallShield = state.wallShield;
+    if (this.showcaseMode) return;
+    if (wallDrop > 0.5) {
+      const impact = decideWallImpact(wallDrop, state.wallMaxHp);
+      if (!impact) return;
+      this.fx.shake(impact.shakeDurationSeconds, impact.shakeIntensity);
+      this.fx.edgeFlash(0xf06a6a, impact.flashAlpha);
+      this.fx.textPulse(this.wallText, 1.22);
+      this.sfx.playWallImpact(impact.tier);
+      for (const enemy of state.enemies) if (enemy.atWall) this.wallImpactMarks.push({ x: this.enemyX(enemy.id), ttl: 0.3 });
+    } else if (shieldDrop > 0.5) {
+      this.sfx.playWallImpact("light");
+      this.fx.textPulse(this.shieldText, 1.18);
+    }
+  }
+
+  private observeResources(state: GameState): void {
+    const woodPulse = this.lastWood === null ? null : decideResourcePulse(this.lastWood, state.wood);
+    const goldPulse = this.lastGold === null ? null : decideResourcePulse(this.lastGold, state.gold);
+    this.lastWood = state.wood;
+    this.lastGold = state.gold;
+    if (woodPulse !== null) this.fx.textPulse(this.woodText, 1.22);
+    if (goldPulse !== null) this.fx.textPulse(this.goldText, 1.22);
+  }
+
+  private trackModalEntrance(state: GameState): void {
+    const priority = getGrowthInputPriority(state.phase, this.transformOpen);
+    const visibility = {
+      transform: this.transformOpen && priority === "transform",
+      trait: state.phase === "TRAIT_DRAFT" && Boolean(state.pendingTraitDraft) && priority === "trait_draft",
+      system: state.phase === "SYSTEM_PAUSE",
+      result: state.phase === "VICTORY" || state.phase === "DEFEAT",
+    };
+    if (visibility.transform && !this.modalEntrance.transform) {
+      this.fx.modalIn([this.transformOverlay, this.transformPanel, this.transformTitle, this.transformHint]);
+      this.fx.stackIn(this.transformButtons);
+    }
+    if (visibility.trait && !this.modalEntrance.trait) {
+      this.fx.modalIn([this.traitOverlay, this.traitPanel, this.traitTitle, this.traitTarget, this.traitHint]);
+      this.fx.stackIn(this.traitButtons);
+    }
+    if (visibility.system && !this.modalEntrance.system) this.fx.modalIn([this.systemOverlay, this.systemTitle, this.systemHint]);
+    if (visibility.result && !this.modalEntrance.result) {
+      this.fx.modalIn([this.resultOverlay, this.resultTitle, this.resultHint, this.resultRestartButton, this.resultRestartLabel, this.resultLobbyButton, this.resultLobbyLabel]);
+    }
+    this.modalEntrance = visibility;
   }
 
   private renderResourceIcons(): void {
@@ -637,6 +800,35 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  /** Floating near-slot action bar mirroring the first three panel actions; closes with the selection. */
+  private renderSlotActionBar(): void {
+    const show = this.selectedSlotId !== null && this.panelActions.length > 0;
+    this.slotBarBounds = show ? deriveSlotActionBarBounds(this.selectedSlotId!) : null;
+    for (let index = 0; index < this.slotBarButtons.length; index += 1) {
+      const button = this.slotBarButtons[index]!;
+      const label = this.slotBarLabels[index]!;
+      const action = this.panelActions[index];
+      const visible = show && Boolean(action);
+      button.setVisible(visible);
+      if (button.input) button.input.enabled = visible;
+      label.setVisible(visible);
+      if (!visible || !action || !this.slotBarBounds) continue;
+      const centerX = this.slotBarBounds.x + 52 + index * 106;
+      const centerY = this.slotBarBounds.y + this.slotBarBounds.height / 2;
+      button.setPosition(centerX, centerY).setSize(100, 44);
+      button.setFillStyle(action.available ? COLORS.blue : 0x3c4439, 1).setAlpha(action.available ? 1 : 0.75).setStrokeStyle(2, action.available ? COLORS.gold : 0x77796c, 1);
+      const costSuffix = action.resource && action.resourceLabel ? "\n" + action.resourceLabel : "";
+      label.setPosition(centerX, centerY).setText(action.label.split("｜")[0] + costSuffix).setColor(action.available ? "#ffffff" : "#c0c3b5");
+    }
+  }
+
+  /** Slot bar backing plate drawn under the dynamic layer's redraw cycle. */
+  private renderSlotBarBackdrop(): void {
+    if (!this.slotBarBounds) return;
+    this.dynamic.fillStyle(0x1d2b21, 0.94).fillRect(this.slotBarBounds.x, this.slotBarBounds.y, this.slotBarBounds.width, this.slotBarBounds.height);
+    this.dynamic.lineStyle(2, COLORS.gold, 0.9).strokeRect(this.slotBarBounds.x, this.slotBarBounds.y, this.slotBarBounds.width, this.slotBarBounds.height);
+  }
+
   private renderTransformModal(state: GameState): void {
     const visible = this.transformOpen && getGrowthInputPriority(state.phase, true) === "transform";
     this.transformOverlay.setVisible(visible);
@@ -715,7 +907,7 @@ export class GameScene extends Phaser.Scene {
     if (resultVisible) {
       const victory = state.phase === "VICTORY";
       this.resultTitle.setText(victory ? "守住了" : "城墙失守").setColor(victory ? "#62d79b" : "#f06a6a");
-      this.resultHint.setText(victory ? "最终首领已击破 · 波次 " + state.wave + " · 击杀 " + state.defeatedEnemies : "防线在第 " + state.wave + " 波失守 · 重新部署");
+      if (!this.resultCounting) this.resultHint.setText(victory ? "最终首领已击破 · 波次 " + state.wave + " · 击杀 " + state.defeatedEnemies : "防线在第 " + state.wave + " 波失守 · 击杀 " + state.defeatedEnemies + " · 重新部署");
     }
   }
 
@@ -733,6 +925,7 @@ export class GameScene extends Phaser.Scene {
     this.resultRestartButton.input!.enabled = state.phase === "VICTORY" || state.phase === "DEFEAT";
     this.resultLobbyButton.input!.enabled = state.phase === "VICTORY" || state.phase === "DEFEAT";
     this.systemOverlay.input!.enabled = state.phase === "SYSTEM_PAUSE";
+    this.soundButton.input!.enabled = true;
     this.transformOverlay.input!.enabled = transformInput;
     this.traitOverlay.input!.enabled = priority === "trait_draft";
     this.resultOverlay.input!.enabled = state.phase === "VICTORY" || state.phase === "DEFEAT";
@@ -754,6 +947,20 @@ export class GameScene extends Phaser.Scene {
       this.dynamic.lineStyle(3, COLORS.danger, 0.8).lineBetween(178, 731, 205, 752).lineBetween(205, 752, 226, 735);
       this.dynamic.lineBetween(514, 730, 492, 752).lineBetween(492, 752, 470, 739);
     }
+    for (const mark of this.wallImpactMarks) {
+      this.dynamic.fillStyle(0xf06a6a, Math.min(0.5, mark.ttl * 3)).fillRect(mark.x - 16, WALL_ZONE.y + 6, 32, WALL_ZONE.height - 12);
+    }
+
+    const boss = state.enemies.find((enemy) => enemy.hp > 0 && this.enemyDefinition(enemy.definitionId).tier === "boss");
+    this.bossNameText.setVisible(Boolean(boss));
+    if (boss) {
+      const ratio = Math.max(0, boss.hp / boss.maxHp);
+      const definition = this.enemyDefinition(boss.definitionId);
+      this.bossNameText.setText(definition.displayName + "  " + Math.ceil(boss.hp) + " / " + boss.maxHp);
+      this.dynamic.fillStyle(0x1c1512, 0.88).fillRect(110, 133, 500, 20);
+      this.dynamic.lineStyle(2, COLORS.line, 0.9).strokeRect(110, 133, 500, 20);
+      this.dynamic.fillStyle(COLORS.danger, 1).fillRect(112, 135, 496 * ratio, 16);
+    }
 
     for (const layout of CAMP_SLOT_LAYOUTS) {
       const building = state.buildings.find((item) => item.slotId === layout.id);
@@ -762,8 +969,12 @@ export class GameScene extends Phaser.Scene {
       this.dynamic.lineStyle(selected ? 4 : 2, selected ? COLORS.gold : COLORS.line, 1).strokeRect(layout.x, layout.y, layout.width, layout.height);
       if (building) this.drawBuilding(building, layout.x + layout.width / 2, layout.y + layout.height / 2 - (selected ? 6 : 0), this.growthMaxLevel(state, building));
       else {
-        this.dynamic.fillStyle(selected ? COLORS.gold : 0x53644a, selected ? 0.95 : 0.7).fillCircle(layout.x + layout.width / 2, layout.y + layout.height / 2, selected ? 20 : 17);
-        this.dynamic.lineStyle(2, selected ? COLORS.text : 0xa8b18c, 0.8).lineBetween(layout.x + layout.width / 2 - 9, layout.y + layout.height / 2, layout.x + layout.width / 2 + 9, layout.y + layout.height / 2).lineBetween(layout.x + layout.width / 2, layout.y + layout.height / 2 - 9, layout.x + layout.width / 2, layout.y + layout.height / 2 + 9);
+        // Opening guidance: empty slots breathe while the player still has free build time.
+        const guiding = state.phase === "OPENING_COUNTDOWN";
+        const pulse = guiding ? Math.sin(this.time.now / 260) * 0.5 + 0.5 : 0;
+        const radius = selected ? 20 : 17 + pulse * 4;
+        this.dynamic.fillStyle(selected || guiding ? COLORS.gold : 0x53644a, selected ? 0.95 : guiding ? 0.4 + pulse * 0.5 : 0.7).fillCircle(layout.x + layout.width / 2, layout.y + layout.height / 2, radius);
+        this.dynamic.lineStyle(2, selected || guiding ? COLORS.text : 0xa8b18c, selected || guiding ? 0.9 : 0.8).lineBetween(layout.x + layout.width / 2 - 9, layout.y + layout.height / 2, layout.x + layout.width / 2 + 9, layout.y + layout.height / 2).lineBetween(layout.x + layout.width / 2, layout.y + layout.height / 2 - 9, layout.x + layout.width / 2, layout.y + layout.height / 2 + 9);
       }
       const label = this.slotLabels[CAMP_SLOT_LAYOUTS.indexOf(layout)]!;
       label.setPosition(layout.x + layout.width / 2, building ? layout.y + layout.height - 10 : layout.y + layout.height / 2 + 26);
@@ -801,33 +1012,115 @@ export class GameScene extends Phaser.Scene {
     }
     for (const [enemyId, label] of this.enemyLabels) if (!visibleEnemyIds.has(enemyId)) label.setVisible(false);
     for (const feedback of this.feedbacks) {
-      if (feedback.kind === "shot" && feedback.targetX !== undefined && feedback.targetY !== undefined) {
-        this.dynamic.lineStyle(4, COLORS.gold, Math.min(1, feedback.ttl * 7)).beginPath().moveTo(feedback.x, feedback.y).lineTo(feedback.targetX, feedback.targetY).strokePath();
-      } else if (feedback.kind === "hit") this.dynamic.lineStyle(3, 0xffffff, Math.min(1, feedback.ttl * 7)).strokeCircle(feedback.x, feedback.y, 22);
-      else this.dynamic.lineStyle(4, COLORS.orange, Math.min(1, feedback.ttl * 4)).strokeCircle(feedback.x, feedback.y, 26);
+      if (feedback.kind === "shot" && feedback.targetX !== undefined && feedback.targetY !== undefined) this.drawProjectile(feedback as ShotFeedback);
+      else if (feedback.kind === "hit") this.dynamic.lineStyle(3, 0xffffff, Math.min(1, feedback.ttl * 7)).strokeCircle(feedback.x, feedback.y, 22);
+      else this.drawDefeatBurst(feedback.x, feedback.y, feedback.ttl);
     }
   }
 
+  private drawProjectile(feedback: ShotFeedback): void {
+    const alpha = Math.min(1, feedback.ttl * 7);
+    const tx = feedback.targetX;
+    const ty = feedback.targetY;
+    if (feedback.style === "arc") {
+      const peakY = Math.min(feedback.y, ty) - 70;
+      this.dynamic.lineStyle(5, 0xf07b28, alpha).beginPath().moveTo(feedback.x, feedback.y);
+      for (let step = 1; step <= 8; step += 1) {
+        const ratio = step / 8;
+        const lerpY = feedback.y + (ty - feedback.y) * ratio;
+        this.dynamic.lineTo(feedback.x + (tx - feedback.x) * ratio, lerpY + (peakY - lerpY) * 4 * ratio * (1 - ratio));
+      }
+      this.dynamic.strokePath();
+      this.dynamic.lineStyle(3, 0xffd9a0, alpha * 0.8).strokeCircle(tx, ty, 30 + (1 - feedback.ttl / 0.16) * 22);
+      return;
+    }
+    if (feedback.style === "bolt") {
+      const deltaX = tx - feedback.x;
+      const deltaY = ty - feedback.y;
+      const length = Math.hypot(deltaX, deltaY) || 1;
+      const normalX = -deltaY / length;
+      const normalY = deltaX / length;
+      const jitter = feedback.jitter ?? [0, 6, -6, 5, 0];
+      this.dynamic.lineStyle(3, 0xd06cff, alpha).beginPath().moveTo(feedback.x, feedback.y);
+      jitter.forEach((offset, index) => {
+        const ratio = (index + 1) / jitter.length;
+        this.dynamic.lineTo(feedback.x + deltaX * ratio + normalX * offset, feedback.y + deltaY * ratio + normalY * offset);
+      });
+      this.dynamic.strokePath();
+      return;
+    }
+    if (feedback.style === "shard") {
+      this.dynamic.lineStyle(3, 0x9ce7ff, alpha).lineBetween(feedback.x, feedback.y, tx, ty);
+      this.dynamic.lineStyle(2, 0xd9f6ff, alpha).strokeCircle(tx, ty, 9);
+      return;
+    }
+    this.dynamic.lineStyle(4, COLORS.gold, alpha).beginPath().moveTo(feedback.x, feedback.y).lineTo(tx, ty).strokePath();
+  }
+
+  private drawDefeatBurst(x: number, y: number, ttl: number): void {
+    const alpha = Math.min(1, ttl * 4);
+    const progress = 1 - ttl / 0.34;
+    this.dynamic.lineStyle(3, COLORS.orange, alpha).strokeCircle(x, y, 14 + progress * 22);
+    this.dynamic.lineStyle(2, 0xffd9a0, alpha);
+    for (let index = 0; index < 6; index += 1) {
+      const angle = (Math.PI * 2 * index) / 6 + 0.4;
+      const inner = 10 + progress * 26;
+      const outer = inner + 8;
+      this.dynamic.lineBetween(x + Math.cos(angle) * inner, y + Math.sin(angle) * inner, x + Math.cos(angle) * outer, y + Math.sin(angle) * outer);
+    }
+  }
+
+  private boltJitter(enemyId: string): number[] {
+    let hash = 0;
+    for (const char of enemyId) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+    return Array.from({ length: 5 }, (_, index) => ((hash >> (index * 3)) % 17) - 8);
+  }
+
   private processEvents(events: GameEvent[]): void {
+    const bossIds = starterCatalog.enemies.filter((enemy) => enemy.tier === "boss").map((enemy) => enemy.id);
     for (const event of events) {
+      this.sfx.handleEvent(event);
       if (event.type === "tower_attack") {
         const building = this.simulation.getState().buildings.find((item) => item.id === event.buildingId);
         const heroBuilding = this.simulation.getState().buildings.find((item) => item.kind === "main_city");
         const source = building ?? (event.buildingId === this.simulation.getState().hero?.id ? heroBuilding : undefined);
-        if (source) this.feedbacks.push({ kind: "shot", x: this.towerX(source), y: this.towerY(source), targetX: this.enemyX(event.targetId), targetY: this.enemyY(event.targetPosition), ttl: 0.16 });
-      } else if (event.type === "enemy_hit") this.feedbacks.push({ kind: "hit", x: this.enemyX(event.enemyId), y: this.enemyY(event.position), ttl: 0.16 });
-      else if (event.type === "enemy_defeated") this.feedbacks.push({ kind: "defeat", x: this.enemyX(event.enemyId), y: this.enemyY(event.position), ttl: 0.34 });
-      else if (event.type === "enemy_charge_warning") this.showBattleNotice("⚠ 冲锋预警 · " + event.durationSeconds.toFixed(1) + " 秒", "#f06a6a", this.showcaseCapture === "charge" ? 60 : event.durationSeconds + 0.3);
-      else if (event.type === "enemy_charge_started") this.showBattleNotice("冲锋开始 · 直线突进", "#f28b37", 1.2);
-      else if (event.type === "enemy_charge_impact") this.showBattleNotice("冲锋撞墙 · 城墙承受冲击", "#f06a6a", 1.5);
-      else if (event.type === "overlord_inspire") this.showBattleNotice("尸潮君王鼓舞 · 残余尸潮 +" + Math.round((event.multiplier - 1) * 100) + "%", "#f6c453", this.showcaseCapture === "inspire" ? 60 : event.durationSeconds);
-      else if (event.type === "enemy_burned") this.showBattleNotice("燃烧 · " + event.damagePerSecond + "/秒 · " + event.durationSeconds + "秒", "#f28b37", 1.4);
-      else if (event.type === "tower_special") this.showBattleNotice(event.effect + "命中", event.effect === "过载" ? "#d06cff" : "#f6c453", 0.8);
-      else if (event.type === "wave_started") this.showMessage("第 " + event.wave + " 波尸潮已接近", false);
+        if (source) this.feedbacks.push({ kind: "shot", x: this.towerX(source), y: this.towerY(source), targetX: this.enemyX(event.targetId), targetY: this.enemyY(event.targetPosition), ttl: 0.16, style: mapTowerProjectileStyle(event.towerDefinitionId), jitter: this.boltJitter(event.targetId) });
+      } else if (event.type === "enemy_hit") {
+        this.feedbacks.push({ kind: "hit", x: this.enemyX(event.enemyId), y: this.enemyY(event.position), ttl: 0.16 });
+        if (shouldShowDamageNumber(event.damage)) this.fx.floatText(this.enemyX(event.enemyId), this.enemyY(event.position) - 28, String(Math.round(event.damage)), "#ffe9a0", 18);
+      } else if (event.type === "enemy_defeated") {
+        this.feedbacks.push({ kind: "defeat", x: this.enemyX(event.enemyId), y: this.enemyY(event.position), ttl: 0.34 });
+        const reward = this.enemyDefinition(event.enemyId.slice(0, event.enemyId.lastIndexOf("-"))).goldReward;
+        this.fx.flyCoin(this.enemyX(event.enemyId), this.enemyY(event.position), 204, 1097, coinFlightLabel(reward));
+      } else if (event.type === "wave_started") {
+        this.fx.zoomPunch();
+        const banner = deriveWaveBanner(event.wave, this.simulation.getState().maxWave);
+        if (banner) this.fx.waveBanner(banner.text, banner.color, banner.isBossWave);
+      } else if (event.type === "enemy_spawned" && isBossEntrance(event.definitionId, bossIds)) {
+        const definition = this.enemyDefinition(event.definitionId);
+        this.sfx.playUi("boss_roar");
+        this.fx.bossEntrance(definition.displayName + " 登场", definition.role);
+        this.fx.shake(0.35, 0.008);
+        this.fx.edgeFlash(0x2a0f12, 0.5, 0.45);
+      }
+      const notice = routeBattleNotice(event);
+      if (notice && event.type !== "wave_started") this.handleNotice(notice);
       const captureCharge = this.showcaseCapture === "charge" && (event.type === "enemy_charge_warning" || event.type === "enemy_charge_started" || event.type === "enemy_charge_impact");
       const captureInspire = this.showcaseCapture === "inspire" && event.type === "overlord_inspire";
       if ((captureCharge || captureInspire) && this.simulation.getState().phase === "RUNNING") this.showcaseFreeze = true;
     }
+  }
+
+  private handleNotice(notice: FeedbackNotice): void {
+    if (notice.channel === "ambient") {
+      const key = notice.throttleKey ?? notice.text;
+      if (!this.noticeGate.allow(key, this.time.now / 1000, AMBIENT_NOTICE_MIN_INTERVAL_SECONDS)) return;
+      this.ambientNoticeText.setText(notice.text).setColor(notice.color);
+      this.ambientNoticeTimer = Math.max(this.ambientNoticeTimer, notice.durationSeconds);
+      return;
+    }
+    const showcaseHold = (this.showcaseCapture === "charge" && notice.channel === "warning") || (this.showcaseCapture === "inspire" && notice.text.includes("鼓舞"));
+    this.showBattleNotice(notice.text, notice.color, showcaseHold ? 60 : notice.durationSeconds);
   }
 
   private drawEnemy(definition: EnemyDefinition, enemy: EnemyRuntimeState, x: number, y: number, radius: number): void {
@@ -957,10 +1250,15 @@ export class GameScene extends Phaser.Scene {
     return phase === "VICTORY" ? "胜利" : "失守";
   }
 
-  private showMessage(message: string, positive: boolean): void {
+  private showMessage(message: string, positive: boolean, resource?: GrowthResource): void {
     this.messageColor = positive ? "#62d79b" : "#f6c453";
     this.messageText.setColor(this.messageColor).setText(message);
     this.messageTimer = 1.5;
+    if (positive) return;
+    this.sfx.playUi("error");
+    this.fx.edgeFlash(0xf06a6a, 0.08, 0.2);
+    if (resource === "wood") this.fx.errorShake(this.woodText);
+    else if (resource === "gold") this.fx.errorShake(this.goldText);
   }
 
   private showBattleNotice(message: string, color: string, durationSeconds: number): void {

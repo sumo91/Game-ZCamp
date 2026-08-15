@@ -1,12 +1,16 @@
 import Phaser from "phaser";
 import { starterHeroContent } from "../core/hero";
 import { decideLobbyPointer, deriveLobbyView } from "./lobbyUi";
+import { FxDirector } from "./fx/FxDirector";
+import { getSoundDirector } from "./fx/SoundDirector";
 import { LOBBY_ARTIFACT_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH } from "./layout";
 
 const COLORS = { bg: 0x172d20, panel: 0x29442d, panelLight: 0x3f5b3b, line: 0xb89b4c, gold: 0xf6c453, text: "#fff3d2", muted: "#d6d39c", cyan: "#8dd8c3" };
 
 export class LobbyScene extends Phaser.Scene {
   private readonly view = deriveLobbyView(starterHeroContent);
+  private readonly sfx = getSoundDirector();
+  private fx!: FxDirector;
   private infoText!: Phaser.GameObjects.Text;
   private levelCard!: Phaser.GameObjects.Rectangle;
   private heroCard!: Phaser.GameObjects.Rectangle;
@@ -17,6 +21,9 @@ export class LobbyScene extends Phaser.Scene {
   }
 
   public create(): void {
+    this.fx = new FxDirector(this);
+    this.sfx.unlock();
+    this.input.on("pointerdown", () => this.sfx.unlock());
     this.drawBackground();
     this.add.text(42, 46, "ZCAMP", this.textStyle(30, "#f6c453")).setDepth(3);
     this.add.text(44, 87, "尸潮来临前 · 先配置你的防线", this.textStyle(16, COLORS.muted)).setDepth(3);
@@ -50,6 +57,7 @@ export class LobbyScene extends Phaser.Scene {
 
     this.startButton = this.add.rectangle(360, 1010, 640, 88, 0x476d3d, 1).setDepth(3).setInteractive({ useHandCursor: true });
     this.startButton.setStrokeStyle(3, COLORS.gold, 1);
+    this.bindPressFeedback(this.startButton);
     this.add.text(360, 995, this.view.startLabel, this.textStyle(27, COLORS.text)).setOrigin(0.5).setDepth(4);
     this.add.text(360, 1034, "以当前关卡和英雄创建全新十波战斗", this.textStyle(14, COLORS.muted)).setOrigin(0.5).setDepth(4);
     this.startButton.on("pointerdown", () => this.handle("start"));
@@ -68,15 +76,25 @@ export class LobbyScene extends Phaser.Scene {
   private makeCard(x: number, y: number, width: number, height: number, title: string, subtitle: string, hint: string): Phaser.GameObjects.Rectangle {
     const card = this.add.rectangle(x + width / 2, y + height / 2, width, height, COLORS.panel, 1).setDepth(2).setInteractive({ useHandCursor: true });
     card.setStrokeStyle(2, COLORS.line, 0.9);
+    this.bindPressFeedback(card);
     this.add.text(x + 32, y + 32, title, this.textStyle(25, COLORS.text)).setDepth(4);
     this.add.text(x + 34, y + 79, subtitle, { ...this.textStyle(16, COLORS.muted), wordWrap: { width: width - 68 } }).setDepth(4);
     if (hint) this.add.text(x + 34, y + height - 40, hint, this.textStyle(13, COLORS.cyan)).setDepth(4);
     return card;
   }
 
+  private bindPressFeedback(target: Phaser.GameObjects.Rectangle): void {
+    target.on("pointerdown", () => {
+      this.sfx.unlock();
+      this.sfx.playUi("click");
+      this.fx.pressPulse(target);
+    });
+  }
+
   private handle(kind: "level" | "hero" | "start"): void {
     const decision = decideLobbyPointer(kind);
     if (decision === "start_battle") {
+      this.sfx.playUi("battle_start");
       this.scene.start("GameScene", { heroId: this.view.heroId, levelId: this.view.levelId });
       return;
     }

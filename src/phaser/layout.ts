@@ -29,6 +29,19 @@ export const GROWTH_CONTEXT_ACTION_BOUNDS: readonly LogicalBounds[] = [
   { x: 474, y: 1220, width: 204, height: 56 },
 ];
 
+/** Floating action bar bounds above a selected slot; pinned to the grid so it never covers the slot itself. */
+export function deriveSlotActionBarBounds(slotId: string): LogicalBounds {
+  const slot = CAMP_SLOT_LAYOUTS.find((layout) => layout.id === slotId);
+  const column = slot?.column ?? 2;
+  const row = slot?.row ?? 0;
+  const width = 316;
+  // Three staggered column positions keep the bar fully on-screen for all five camp columns.
+  const columnAnchors = [GRID_ZONE.x + 6, GRID_ZONE.x + 178, GRID_ZONE.x + 350];
+  const x = columnAnchors[Math.min(2, Math.max(0, column - 1))]!;
+  const y = row === 0 ? GRID_ZONE.y + 8 : GRID_ZONE.y + row * 103 - 66;
+  return { x, y, width, height: 58 };
+}
+
 export interface CampSlotLayout {
   id: string;
   row: number;
