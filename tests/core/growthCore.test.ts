@@ -33,7 +33,7 @@ function startRunning(game: GameSimulation): void {
 }
 
 function silenceFutureSpawns(game: GameSimulation): void {
-  game.getState().waveSpawnProgress = starterCatalog.waves.map((wave) => wave.spawnEvents.length);
+  game.getState().waveSpawnProgress = starterCatalog.levelWaves.first_defense!.map((wave) => wave.spawnEvents.length);
 }
 
 function runtimeEnemy(definitionId: string, hp: number, atWall = true): EnemyRuntimeState {

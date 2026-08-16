@@ -20,7 +20,7 @@ function movingCatalog(): ContentCatalog {
 }
 
 function silenceFutureSpawns(game: GameSimulation): void {
-  game.getState().waveSpawnProgress = starterCatalog.waves.map((wave) => wave.spawnEvents.length);
+  game.getState().waveSpawnProgress = starterCatalog.levelWaves.first_defense!.map((wave) => wave.spawnEvents.length);
 }
 
 function startRunning(game: GameSimulation): void {
@@ -264,11 +264,11 @@ describe("growth building combat and economy integration", () => {
   it("freezes growth wood and statuses in tactical pause and remains deterministic under tick splitting", () => {
     const first = makeGrowthTower("arrow_tower");
     first.game.getState().enemies = [enemy("target", 1, 1000)];
-    first.game.getState().waveSpawnProgress = starterCatalog.waves.map((wave) => wave.spawnEvents.length);
+    first.game.getState().waveSpawnProgress = starterCatalog.levelWaves.first_defense!.map((wave) => wave.spawnEvents.length);
     first.game.tick(0.25);
     const second = makeGrowthTower("arrow_tower");
     second.game.getState().enemies = [enemy("target", 1, 1000)];
-    second.game.getState().waveSpawnProgress = starterCatalog.waves.map((wave) => wave.spawnEvents.length);
+    second.game.getState().waveSpawnProgress = starterCatalog.levelWaves.first_defense!.map((wave) => wave.spawnEvents.length);
     second.game.tick(0.125);
     second.game.tick(0.125);
     expect(second.game.getState().enemies[0]!.hp).toBeCloseTo(first.game.getState().enemies[0]!.hp, 8);

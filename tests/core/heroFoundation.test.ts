@@ -6,20 +6,29 @@ import { starterHeroContent, validateHeroContent } from "../../src/core/hero";
 import { resolveBattleConfig } from "../../src/core/battleConfig";
 
 describe("camp warden foundation", () => {
-  it("validates one legal level and hero without inventing extra choices", () => {
+  it("validates the three-hero three-level roster against the frozen baseline", () => {
     expect(() => validateHeroContent(starterHeroContent)).not.toThrow();
-    expect(starterHeroContent.levels).toHaveLength(1);
-    expect(starterHeroContent.heroes).toHaveLength(1);
-    expect(starterHeroContent.heroes[0]?.detailLines).toEqual(["基础攻击 · 复用 Lv.1 箭塔档案", "木材总产量 +10%", "开局城墙护盾 +100"]);
-    expect(() => validateHeroContent({ ...starterHeroContent, heroes: [{ ...starterHeroContent.heroes[0]!, woodProductionMultiplier: 1.2 }] })).toThrow();
+    expect(starterHeroContent.levels).toHaveLength(3);
+    expect(starterHeroContent.heroes).toHaveLength(3);
+    expect(starterHeroContent.heroes.map((hero) => hero.id)).toEqual(["camp_warden", "vanguard_gunner", "lumber_baron"]);
+    expect(starterHeroContent.levels.map((level) => level.id)).toEqual(["first_defense", "broken_valley", "kings_march"]);
+    expect(starterHeroContent.heroes[0]!.detailLines).toEqual(["基础攻击 · 复用 Lv.1 箭塔档案", "木材总产量 +10%", "开局城墙护盾 +100"]);
+    expect(() => validateHeroContent({ ...starterHeroContent, heroes: starterHeroContent.heroes.map((hero) => hero.id === "camp_warden" ? { ...hero, woodProductionMultiplier: 1.2 } : hero) })).toThrow();
+    expect(() => validateHeroContent({ ...starterHeroContent, levels: starterHeroContent.levels.map((level) => level.id === "broken_valley" ? { ...level, waveCount: 11 } : level) })).toThrow();
   });
 
-  it("resolves the selected battle config and rejects invalid references", () => {
+  it("resolves the selected battle config and rejects invalid or locked references", () => {
     const config = resolveBattleConfig({ heroId: "camp_warden", levelId: "first_defense" });
     expect(config.hero.displayName).toBe("营地守望者");
     expect(config.level.waveCount).toBe(10);
+    const valley = resolveBattleConfig({ heroId: "vanguard_gunner", levelId: "broken_valley" });
+    expect(valley.level.difficultyStars).toBe(2);
+    expect(valley.level.enemyHint).toContain("精英提前");
     expect(() => resolveBattleConfig({ heroId: "missing_hero", levelId: "first_defense" })).toThrow("Unknown hero");
     expect(() => resolveBattleConfig({ heroId: "camp_warden", levelId: "missing_level" })).toThrow("Unknown level");
+    expect(() => resolveBattleConfig({ heroId: "vanguard_gunner", levelId: "first_defense" }, starterHeroContent, new Set())).toThrow("locked");
+    expect(() => resolveBattleConfig({ heroId: "camp_warden", levelId: "broken_valley" }, starterHeroContent, new Set())).toThrow("locked");
+    expect(() => resolveBattleConfig({ heroId: "vanguard_gunner", levelId: "broken_valley" }, starterHeroContent, new Set(["first_defense"]))).not.toThrow();
   });
 
   it("starts every new battle with an independent hero and shield", () => {

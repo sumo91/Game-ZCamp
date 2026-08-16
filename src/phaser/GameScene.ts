@@ -31,6 +31,10 @@ import type { FeedbackNotice, ProjectileStyle } from "./feedback";
 import { FxDirector } from "./fx/FxDirector";
 import { getSoundDirector } from "./fx/SoundDirector";
 import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, WALL_ZONE, deriveSlotActionBarBounds, slotBarButtonCenterX } from "./layout";
+import { starterHeroContent } from "../core/hero";
+import type { LevelId } from "../core/hero";
+import { deriveVictoryRewards } from "../core/progression";
+import { clearedLevelIdSet, recordLevelClear } from "./progressionStore";
 
 type Feedback = { kind: "shot" | "hit" | "defeat"; x: number; y: number; targetX?: number; targetY?: number; ttl: number; style?: ProjectileStyle; jitter?: number[] };
 type ShotFeedback = { kind: "shot"; x: number; y: number; targetX: number; targetY: number; ttl: number; style?: ProjectileStyle; jitter?: number[] };
@@ -97,6 +101,9 @@ export class GameScene extends Phaser.Scene {
   private resultOverlay!: Phaser.GameObjects.Rectangle;
   private resultTitle!: Phaser.GameObjects.Text;
   private resultHint!: Phaser.GameObjects.Text;
+  private resultRewardText!: Phaser.GameObjects.Text;
+  private clearedLevelIds: Set<LevelId> = new Set();
+  private battleLevelId: LevelId = "first_defense";
   private resultRestartButton!: Phaser.GameObjects.Rectangle;
   private resultRestartLabel!: Phaser.GameObjects.Text;
   private resultLobbyButton!: Phaser.GameObjects.Rectangle;
@@ -160,7 +167,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   public init(data: BattleLaunchData = {}): void {
-    const battleConfig = resolveBattleConfig(data);
+    this.clearedLevelIds = new Set((data.clearedLevelIds ?? []).filter((id): id is LevelId => starterHeroContent.levels.some((level) => level.id === id)));
+    const battleConfig = resolveBattleConfig(data, starterHeroContent, this.clearedLevelIds.size > 0 ? this.clearedLevelIds : undefined);
+    this.battleLevelId = battleConfig.levelId;
     this.heroDefinition = battleConfig.hero;
     this.simulation = new GameSimulation(starterCatalog, 1337, battleConfig);
     if (this.showcaseMode) {
@@ -408,6 +417,7 @@ export class GameScene extends Phaser.Scene {
     this.resultOverlay.setStrokeStyle(3, COLORS.gold, 0.9);
     this.resultTitle = this.add.text(360, 486, "", this.textStyle(42, "#ffffff")).setOrigin(0.5).setDepth(111);
     this.resultHint = this.add.text(360, 548, "", { ...this.textStyle(18, "#dbe6f4"), align: "center", wordWrap: { width: 500 } }).setOrigin(0.5).setDepth(111);
+    this.resultRewardText = this.add.text(360, 588, "", { ...this.textStyle(15, "#ffe9a0"), align: "center", wordWrap: { width: 520 } }).setOrigin(0.5).setDepth(111).setVisible(false);
     this.resultRestartButton = this.add.rectangle(360, 636, 180, 56, COLORS.blue, 1).setDepth(111).setInteractive({ useHandCursor: true });
     this.resultRestartLabel = this.add.text(360, 636, this.resultActions.rematchLabel, this.textStyle(17, "#ffffff")).setOrigin(0.5).setDepth(112);
     this.resultRestartButton.on("pointerdown", () => this.restartSimulation());
@@ -587,6 +597,8 @@ export class GameScene extends Phaser.Scene {
         selectedSlotId: this.selectedSlotId,
         transformOpen: this.transformOpen,
         traitDraft: state.pendingTraitDraft ? [...state.pendingTraitDraft.options] : null,
+        battleLevelId: this.battleLevelId,
+        resultReward: this.resultRewardText?.text ?? "",
       };
       (window as Window & { __zcampDebug?: Record<string, unknown> }).__zcampDebug = debugState;
       (window as Window & { __zcampSlotBar?: unknown }).__zcampSlotBar = {
@@ -655,6 +667,7 @@ export class GameScene extends Phaser.Scene {
       this.sfx.playUi("victory");
       this.fx.shake(0.3, 0.006);
       this.beginResultCountUp(state, true);
+      this.settleVictoryRewards();
     } else if (state.phase === "DEFEAT") {
       this.sfx.playUi("defeat");
       this.fx.shake(0.45, 0.01);
@@ -667,6 +680,17 @@ export class GameScene extends Phaser.Scene {
     const prefix = victory ? "最终首领已击破 · 波次 " + state.wave + " · 击杀 " : "防线在第 " + state.wave + " 波失守 · 击杀 ";
     this.resultCounting = true;
     this.fx.countUp(this.resultHint, 0, state.defeatedEnemies, 1.1, (value) => prefix + value + (victory ? "" : " · 重新部署"), () => { this.resultCounting = false; });
+  }
+
+  /** Merge the clear into persisted progression and surface the unlock rewards once per run. */
+  private settleVictoryRewards(): void {
+    const rewards = deriveVictoryRewards(starterHeroContent, this.battleLevelId, this.clearedLevelIds);
+    const state = recordLevelClear(this.battleLevelId);
+    this.clearedLevelIds = clearedLevelIdSet(state);
+    const unlocked: string[] = [];
+    for (const levelId of rewards.newlyUnlockedLevels) unlocked.push("《" + (starterHeroContent.levels.find((level) => level.id === levelId)?.displayName ?? levelId) + "》");
+    for (const heroId of rewards.newlyUnlockedHeroes) unlocked.push((starterHeroContent.heroes.find((hero) => hero.id === heroId)?.displayName ?? heroId) + " 已加入营地");
+    this.resultRewardText.setText(unlocked.length > 0 ? "通关奖励 · 解锁 " + unlocked.join(" 与 ") : "防线经受住了考验 · 返回营地查看已解锁内容");
   }
 
   private observeWall(state: GameState): void {
@@ -989,6 +1013,7 @@ export class GameScene extends Phaser.Scene {
     this.resultOverlay.setVisible(resultVisible);
     this.resultTitle.setVisible(resultVisible);
     this.resultHint.setVisible(resultVisible);
+    this.resultRewardText.setVisible(state.phase === "VICTORY");
     this.resultRestartButton.setVisible(resultVisible);
     this.resultRestartLabel.setVisible(resultVisible);
     this.resultLobbyButton.setVisible(resultVisible);

@@ -1,6 +1,8 @@
 import type { EnemyTier } from "./types";
 import { starterBuildingGrowthContent, validateBuildingGrowthContent } from "./buildingGrowth";
 import type { BuildingGrowthContent } from "./buildingGrowth";
+import { starterHeroContent } from "./hero";
+import type { LevelId } from "./hero";
 
 export type EnemySignature =
   | { kind: "charger"; warningSeconds: number; chargeDistance: number; chargeDurationSeconds: number; initialCooldownSeconds: number; cooldownSeconds: number }
@@ -46,7 +48,8 @@ export interface WaveDefinition {
 
 export interface ContentCatalog {
   enemies: EnemyDefinition[];
-  waves: WaveDefinition[];
+  /** Wave timelines per level id; the selected level drives spawn progress and victory. */
+  levelWaves: Readonly<Partial<Record<LevelId, readonly WaveDefinition[]>>>;
   buildingGrowth: BuildingGrowthContent;
 }
 
@@ -61,11 +64,12 @@ const enemies: EnemyDefinition[] = [
 ];
 
 export const CROWD_PULSE_COUNT = 16;
-export const EXPECTED_WAVE_PULSE_INTERVAL_SECONDS = [3.2, 3, 2.8, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6] as const;
 export const CROWD_PULSE_WINDOW_SECONDS = 0.4;
+const MID_BOSS_SPAWN_SECONDS = 37;
+const FINAL_BOSS_SPAWN_SECONDS = 39.5;
 const CONTENT_EPSILON = 0.000001;
 
-function createWave(wave: number, composition: Record<string, number>, pulseIntervalSeconds: number, finalBossId?: string): WaveDefinition {
+function createWave(wave: number, composition: Record<string, number>, pulseIntervalSeconds: number, finalBossId?: string, midBossId?: string): WaveDefinition {
   const normalIds = ["walker", "runner", "tank"];
   const eliteIds = ["armored", "brute"];
   const spawnIds: string[] = [];
@@ -94,41 +98,118 @@ function createWave(wave: number, composition: Record<string, number>, pulseInte
       spawnEvents.push({ atSeconds: pulseIndex * pulseIntervalSeconds + microIndex * microInterval, enemyId });
     }
   }
-  if (finalBossId) spawnEvents.push({ atSeconds: 39.5, enemyId: finalBossId });
+  if (midBossId) spawnEvents.push({ atSeconds: MID_BOSS_SPAWN_SECONDS, enemyId: midBossId });
+  if (finalBossId) spawnEvents.push({ atSeconds: FINAL_BOSS_SPAWN_SECONDS, enemyId: finalBossId });
   return { wave, startSeconds: (wave - 1) * 60, pulseIntervalSeconds, spawnEvents };
 }
 
-const waves: WaveDefinition[] = [
-  createWave(1, { walker: 28 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[0]),
-  createWave(2, { walker: 30, runner: 14 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[1]),
-  createWave(3, { walker: 30, runner: 22, tank: 8 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[2]),
-  createWave(4, { walker: 40, runner: 32, tank: 12 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[3]),
-  createWave(5, { walker: 32, runner: 24, tank: 16, armored: 2 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[4], "charger_boss"),
-  createWave(6, { walker: 48, runner: 40, tank: 20 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[5]),
-  createWave(7, { walker: 40, runner: 32, tank: 24, armored: 4 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[6]),
-  createWave(8, { walker: 48, runner: 48, tank: 24, brute: 2 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[7]),
-  createWave(9, { walker: 56, runner: 48, tank: 32, armored: 2, brute: 2 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[8]),
-  createWave(10, { walker: 48, runner: 40, tank: 40, armored: 2, brute: 2 }, EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[9], "overlord_boss"),
+const firstDefenseWaves: WaveDefinition[] = [
+  createWave(1, { walker: 28 }, 3.2),
+  createWave(2, { walker: 30, runner: 14 }, 3),
+  createWave(3, { walker: 30, runner: 22, tank: 8 }, 2.8),
+  createWave(4, { walker: 40, runner: 32, tank: 12 }, 2.6),
+  createWave(5, { walker: 32, runner: 24, tank: 16, armored: 2 }, 2.6, "charger_boss"),
+  createWave(6, { walker: 48, runner: 40, tank: 20 }, 2.6),
+  createWave(7, { walker: 40, runner: 32, tank: 24, armored: 4 }, 2.6),
+  createWave(8, { walker: 48, runner: 48, tank: 24, brute: 2 }, 2.6),
+  createWave(9, { walker: 56, runner: 48, tank: 32, armored: 2, brute: 2 }, 2.6),
+  createWave(10, { walker: 48, runner: 40, tank: 40, armored: 2, brute: 2 }, 2.6, "overlord_boss"),
+];
+
+const brokenValleyWaves: WaveDefinition[] = [
+  createWave(1, { walker: 32 }, 2.8),
+  createWave(2, { walker: 32, runner: 18 }, 2.6),
+  createWave(3, { walker: 34, runner: 26, tank: 10 }, 2.6),
+  createWave(4, { walker: 44, runner: 34, tank: 14 }, 2.4),
+  createWave(5, { walker: 36, runner: 26, tank: 18, armored: 3 }, 2.4),
+  createWave(6, { walker: 52, runner: 42, tank: 22 }, 2.4, undefined, "charger_boss"),
+  createWave(7, { walker: 44, runner: 36, tank: 26, armored: 5 }, 2.4),
+  createWave(8, { walker: 52, runner: 50, tank: 26, brute: 3 }, 2.4),
+  createWave(9, { walker: 60, runner: 52, tank: 34, armored: 3, brute: 3 }, 2.4),
+  createWave(10, { walker: 56, runner: 48, tank: 42, armored: 4, brute: 3 }, 2.4),
+  createWave(11, { walker: 64, runner: 56, tank: 44, armored: 4, brute: 4 }, 2.4),
+  createWave(12, { walker: 56, runner: 52, tank: 48, armored: 4, brute: 4 }, 2.4, "overlord_boss"),
+];
+
+const kingsMarchWaves: WaveDefinition[] = [
+  createWave(1, { walker: 34 }, 2.6),
+  createWave(2, { walker: 34, runner: 20 }, 2.4),
+  createWave(3, { walker: 36, runner: 28, tank: 12 }, 2.4),
+  createWave(4, { walker: 46, runner: 36, tank: 16, armored: 2 }, 2.2),
+  createWave(5, { walker: 38, runner: 28, tank: 20, armored: 4 }, 2.2),
+  createWave(6, { walker: 54, runner: 44, tank: 24 }, 2.2, undefined, "charger_boss"),
+  createWave(7, { walker: 46, runner: 38, tank: 28, armored: 6 }, 2.2),
+  createWave(8, { walker: 54, runner: 52, tank: 28, brute: 4 }, 2.2),
+  createWave(9, { walker: 62, runner: 54, tank: 36, armored: 4, brute: 4 }, 2.2),
+  createWave(10, { walker: 58, runner: 50, tank: 44, armored: 4, brute: 4 }, 2.2, undefined, "charger_boss"),
+  createWave(11, { walker: 66, runner: 58, tank: 46, armored: 6, brute: 4 }, 2.2),
+  createWave(12, { walker: 70, runner: 62, tank: 50, armored: 6, brute: 6 }, 2.2),
+  createWave(13, { walker: 72, runner: 64, tank: 54, armored: 6, brute: 6 }, 2.2),
+  createWave(14, { walker: 76, runner: 68, tank: 58, armored: 8, brute: 6 }, 2.2),
+  createWave(15, { walker: 68, runner: 62, tank: 60, armored: 8, brute: 8 }, 2.2, "overlord_boss", "charger_boss"),
 ];
 
 export const starterCatalog: ContentCatalog = {
   enemies,
-  waves,
+  levelWaves: {
+    first_defense: firstDefenseWaves,
+    broken_valley: brokenValleyWaves,
+    kings_march: kingsMarchWaves,
+  },
   buildingGrowth: starterBuildingGrowthContent,
 };
 
-export const EXPECTED_WAVE_COUNTS: Array<Record<string, number>> = [
-  { walker: 28 },
-  { walker: 30, runner: 14 },
-  { walker: 30, runner: 22, tank: 8 },
-  { walker: 40, runner: 32, tank: 12 },
-  { walker: 32, runner: 24, tank: 16, armored: 2, charger_boss: 1 },
-  { walker: 48, runner: 40, tank: 20 },
-  { walker: 40, runner: 32, tank: 24, armored: 4 },
-  { walker: 48, runner: 48, tank: 24, brute: 2 },
-  { walker: 56, runner: 48, tank: 32, armored: 2, brute: 2 },
-  { walker: 48, runner: 40, tank: 40, armored: 2, brute: 2, overlord_boss: 1 },
-];
+export const EXPECTED_WAVE_COUNTS_BY_LEVEL: Readonly<Record<LevelId, Array<Record<string, number>>>> = {
+  first_defense: [
+    { walker: 28 },
+    { walker: 30, runner: 14 },
+    { walker: 30, runner: 22, tank: 8 },
+    { walker: 40, runner: 32, tank: 12 },
+    { walker: 32, runner: 24, tank: 16, armored: 2, charger_boss: 1 },
+    { walker: 48, runner: 40, tank: 20 },
+    { walker: 40, runner: 32, tank: 24, armored: 4 },
+    { walker: 48, runner: 48, tank: 24, brute: 2 },
+    { walker: 56, runner: 48, tank: 32, armored: 2, brute: 2 },
+    { walker: 48, runner: 40, tank: 40, armored: 2, brute: 2, overlord_boss: 1 },
+  ],
+  broken_valley: [
+    { walker: 32 },
+    { walker: 32, runner: 18 },
+    { walker: 34, runner: 26, tank: 10 },
+    { walker: 44, runner: 34, tank: 14 },
+    { walker: 36, runner: 26, tank: 18, armored: 3 },
+    { walker: 52, runner: 42, tank: 22, charger_boss: 1 },
+    { walker: 44, runner: 36, tank: 26, armored: 5 },
+    { walker: 52, runner: 50, tank: 26, brute: 3 },
+    { walker: 60, runner: 52, tank: 34, armored: 3, brute: 3 },
+    { walker: 56, runner: 48, tank: 42, armored: 4, brute: 3 },
+    { walker: 64, runner: 56, tank: 44, armored: 4, brute: 4 },
+    { walker: 56, runner: 52, tank: 48, armored: 4, brute: 4, overlord_boss: 1 },
+  ],
+  kings_march: [
+    { walker: 34 },
+    { walker: 34, runner: 20 },
+    { walker: 36, runner: 28, tank: 12 },
+    { walker: 46, runner: 36, tank: 16, armored: 2 },
+    { walker: 38, runner: 28, tank: 20, armored: 4 },
+    { walker: 54, runner: 44, tank: 24, charger_boss: 1 },
+    { walker: 46, runner: 38, tank: 28, armored: 6 },
+    { walker: 54, runner: 52, tank: 28, brute: 4 },
+    { walker: 62, runner: 54, tank: 36, armored: 4, brute: 4 },
+    { walker: 58, runner: 50, tank: 44, armored: 4, brute: 4, charger_boss: 1 },
+    { walker: 66, runner: 58, tank: 46, armored: 6, brute: 4 },
+    { walker: 70, runner: 62, tank: 50, armored: 6, brute: 6 },
+    { walker: 72, runner: 64, tank: 54, armored: 6, brute: 6 },
+    { walker: 76, runner: 68, tank: 58, armored: 8, brute: 6 },
+    { walker: 68, runner: 62, tank: 60, armored: 8, brute: 8, charger_boss: 1, overlord_boss: 1 },
+  ],
+};
+
+export const EXPECTED_WAVE_PULSE_INTERVALS_BY_LEVEL: Readonly<Record<LevelId, number[]>> = {
+  first_defense: firstDefenseWaves.map((wave) => wave.pulseIntervalSeconds),
+  broken_valley: brokenValleyWaves.map((wave) => wave.pulseIntervalSeconds),
+  kings_march: kingsMarchWaves.map((wave) => wave.pulseIntervalSeconds),
+};
 
 function assertUniqueIds(ids: string[], label: string): void {
   if (new Set(ids).size !== ids.length) throw new Error(label + " contains duplicate ids.");
@@ -136,11 +217,8 @@ function assertUniqueIds(ids: string[], label: string): void {
 
 export function validateCatalog(catalog: ContentCatalog): void {
   validateBuildingGrowthContent(catalog.buildingGrowth);
-  if (catalog.enemies.length === 0 || catalog.waves.length === 0) throw new Error("Content catalog must contain enemies and waves.");
+  if (catalog.enemies.length === 0) throw new Error("Content catalog must contain enemies.");
   assertUniqueIds(catalog.enemies.map((item) => item.id), "Enemies");
-  assertUniqueIds(catalog.waves.map((item) => String(item.wave)), "Waves");
-
-  if (catalog.waves.length !== 10) throw new Error("Continuous timeline requires exactly 10 waves.");
   const normalEnemies = catalog.enemies.filter((enemy) => enemy.tier === "normal");
   const eliteEnemies = catalog.enemies.filter((enemy) => enemy.tier === "elite");
   const bossEnemies = catalog.enemies.filter((enemy) => enemy.tier === "boss");
@@ -164,39 +242,45 @@ export function validateCatalog(catalog: ContentCatalog): void {
   if (finalBosses.length !== 1) throw new Error("Content catalog must define exactly one final boss.");
   const finalBossId = finalBosses[0]!.id;
 
-  for (const [index, wave] of catalog.waves.entries()) {
-    const expectedWave = index + 1;
-    const expectedPulseInterval = EXPECTED_WAVE_PULSE_INTERVAL_SECONDS[index];
-    if (wave.wave !== expectedWave || wave.startSeconds !== index * 60 || wave.spawnEvents.length === 0) throw new Error("Wave " + expectedWave + " has an invalid fixed-timeline start.");
-    if (wave.pulseIntervalSeconds !== expectedPulseInterval) throw new Error("Wave " + expectedWave + " has an invalid pulse interval.");
-    const expectedCounts = EXPECTED_WAVE_COUNTS[index]!;
-    for (const event of wave.spawnEvents) if (!catalog.enemies.some((enemy) => enemy.id === event.enemyId)) throw new Error("Wave " + wave.wave + " references unknown enemy " + event.enemyId + ".");
-    const actualCounts = wave.spawnEvents.reduce((counts, event) => { counts[event.enemyId] = (counts[event.enemyId] ?? 0) + 1; return counts; }, {} as Record<string, number>);
-    if (Object.keys(expectedCounts).some((id) => actualCounts[id] !== expectedCounts[id]) || Object.keys(actualCounts).some((id) => actualCounts[id] !== expectedCounts[id])) throw new Error("Wave " + wave.wave + " does not match the formal ten-wave composition.");
-    let previousAtSeconds = -Infinity;
-    for (const event of wave.spawnEvents) {
-      const maximumSpawnTime = event.enemyId.endsWith("_boss") ? 40 : wave.pulseIntervalSeconds * (CROWD_PULSE_COUNT - 1) + CROWD_PULSE_WINDOW_SECONDS;
-      if (event.atSeconds < 0 || event.atSeconds > maximumSpawnTime || event.atSeconds < previousAtSeconds) throw new Error("Wave " + wave.wave + " contains an invalid spawn time.");
-      previousAtSeconds = event.atSeconds;
+  for (const level of starterHeroContent.levels) {
+    const waves = catalog.levelWaves[level.id];
+    if (!waves || waves.length === 0) throw new Error("Level " + level.id + " has no wave timeline.");
+    if (waves.length !== level.waveCount) throw new Error("Level " + level.id + " requires exactly " + level.waveCount + " waves.");
+    const expectedPulseIntervals = EXPECTED_WAVE_PULSE_INTERVALS_BY_LEVEL[level.id];
+    const expectedCounts = EXPECTED_WAVE_COUNTS_BY_LEVEL[level.id];
+    for (const [index, wave] of waves.entries()) {
+      const expectedWave = index + 1;
+      if (wave.wave !== expectedWave || wave.startSeconds !== index * 60 || wave.spawnEvents.length === 0) throw new Error("Level " + level.id + " wave " + expectedWave + " has an invalid fixed-timeline start.");
+      if (wave.pulseIntervalSeconds !== expectedPulseIntervals[index]) throw new Error("Level " + level.id + " wave " + expectedWave + " has an invalid pulse interval.");
+      const levelWaveCounts = expectedCounts[index]!;
+      for (const event of wave.spawnEvents) if (!catalog.enemies.some((enemy) => enemy.id === event.enemyId)) throw new Error("Level " + level.id + " wave " + wave.wave + " references unknown enemy " + event.enemyId + ".");
+      const actualCounts = wave.spawnEvents.reduce((counts, event) => { counts[event.enemyId] = (counts[event.enemyId] ?? 0) + 1; return counts; }, {} as Record<string, number>);
+      if (Object.keys(levelWaveCounts).some((id) => actualCounts[id] !== levelWaveCounts[id]) || Object.keys(actualCounts).some((id) => actualCounts[id] !== levelWaveCounts[id])) throw new Error("Level " + level.id + " wave " + wave.wave + " does not match its formal composition.");
+      let previousAtSeconds = -Infinity;
+      for (const event of wave.spawnEvents) {
+        const maximumSpawnTime = event.enemyId.endsWith("_boss") ? 40 : wave.pulseIntervalSeconds * (CROWD_PULSE_COUNT - 1) + CROWD_PULSE_WINDOW_SECONDS;
+        if (event.atSeconds < 0 || event.atSeconds > maximumSpawnTime || event.atSeconds < previousAtSeconds) throw new Error("Level " + level.id + " wave " + wave.wave + " contains an invalid spawn time.");
+        previousAtSeconds = event.atSeconds;
+      }
+      if (index === waves.length - 1 && wave.spawnEvents.at(-1)?.enemyId !== finalBossId) throw new Error("The final boss must be the last spawn event of level " + level.id + "'s final wave.");
+      const crowdEvents = wave.spawnEvents.filter((event) => !event.enemyId.endsWith("_boss"));
+      const pulseGroups = new Map<number, SpawnEvent[]>();
+      for (const event of crowdEvents) {
+        const pulseIndex = Math.round(event.atSeconds / wave.pulseIntervalSeconds);
+        const group = pulseGroups.get(pulseIndex) ?? [];
+        group.push(event);
+        pulseGroups.set(pulseIndex, group);
+      }
+      if (pulseGroups.size !== CROWD_PULSE_COUNT || [...pulseGroups.keys()].some((pulseIndex) => pulseIndex < 0 || pulseIndex >= CROWD_PULSE_COUNT)) throw new Error("Level " + level.id + " wave " + wave.wave + " must use exactly " + CROWD_PULSE_COUNT + " crowd pulses.");
+      for (const [pulseIndex, group] of pulseGroups) {
+        const first = group[0]!.atSeconds;
+        const last = group.at(-1)!.atSeconds;
+        const anchor = pulseIndex * wave.pulseIntervalSeconds;
+        if (first < anchor || last > anchor + CROWD_PULSE_WINDOW_SECONDS + CONTENT_EPSILON) throw new Error("Level " + level.id + " wave " + wave.wave + " contains a crowd pulse outside its micro-window.");
+      }
+      const finalCrowdAnchor = wave.pulseIntervalSeconds * (CROWD_PULSE_COUNT - 1);
+      if (crowdEvents.length === 0 || crowdEvents.at(-1)!.atSeconds < finalCrowdAnchor || crowdEvents.at(-1)!.atSeconds > finalCrowdAnchor + CROWD_PULSE_WINDOW_SECONDS + CONTENT_EPSILON) throw new Error("Level " + level.id + " wave " + wave.wave + " crowd must reach its final pulse.");
     }
-    if (wave.wave === 10 && wave.spawnEvents.at(-1)?.enemyId !== finalBossId) throw new Error("The final boss must be the last spawn event of wave 10.");
-    const crowdEvents = wave.spawnEvents.filter((event) => !event.enemyId.endsWith("_boss"));
-    const pulseGroups = new Map<number, SpawnEvent[]>();
-    for (const event of crowdEvents) {
-      const pulseIndex = Math.round(event.atSeconds / wave.pulseIntervalSeconds);
-      const group = pulseGroups.get(pulseIndex) ?? [];
-      group.push(event);
-      pulseGroups.set(pulseIndex, group);
-    }
-    if (pulseGroups.size !== CROWD_PULSE_COUNT || [...pulseGroups.keys()].some((pulseIndex) => pulseIndex < 0 || pulseIndex >= CROWD_PULSE_COUNT)) throw new Error("Wave " + wave.wave + " must use exactly " + CROWD_PULSE_COUNT + " crowd pulses.");
-    for (const [pulseIndex, group] of pulseGroups) {
-      const first = group[0]!.atSeconds;
-      const last = group.at(-1)!.atSeconds;
-      const anchor = pulseIndex * wave.pulseIntervalSeconds;
-      if (first < anchor || last > anchor + CROWD_PULSE_WINDOW_SECONDS + CONTENT_EPSILON) throw new Error("Wave " + wave.wave + " contains a crowd pulse outside its micro-window.");
-    }
-    const finalCrowdAnchor = wave.pulseIntervalSeconds * (CROWD_PULSE_COUNT - 1);
-    if (crowdEvents.at(-1)!.atSeconds < finalCrowdAnchor || crowdEvents.at(-1)!.atSeconds > finalCrowdAnchor + CROWD_PULSE_WINDOW_SECONDS + CONTENT_EPSILON) throw new Error("Wave " + wave.wave + " crowd must reach its final pulse.");
   }
 }
 

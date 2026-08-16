@@ -1,5 +1,5 @@
 import { starterCatalog, validateCatalog } from "./content";
-import type { ContentCatalog, EnemyDefinition } from "./content";
+import type { ContentCatalog, EnemyDefinition, WaveDefinition } from "./content";
 import { getGrowthBuildingDefinition, getGrowthTraitDefinition, getGrowthTowerDefinition, getGrowthUpgradeCost, selectTraitOptions } from "./buildingGrowth";
 import type { GrowthBuildingId, GrowthSpecialTowerId, GrowthTraitId } from "./buildingGrowth";
 import {
@@ -51,6 +51,7 @@ export class GameSimulation {
   private events: GameEvent[] = [];
   private randomState: number;
   private growthBurnRemainingAtStepStart = new Map<string, number>();
+  private readonly levelWaves: readonly WaveDefinition[];
 
   private readonly battleConfig: { heroId: HeroId; levelId: BattleConfig["levelId"]; hero: HeroDefinition; level: LevelDefinition } | null;
   private readonly heroDefinition: HeroDefinition | null;
@@ -63,6 +64,7 @@ export class GameSimulation {
     this.heroDefinition = this.battleConfig?.hero ?? null;
     this.levelDefinition = this.battleConfig?.level ?? null;
     this.catalog = catalog;
+    this.levelWaves = catalog.levelWaves[this.levelDefinition?.id ?? "first_defense"] ?? [];
     this.initialSeed = seed >>> 0;
     this.randomState = this.initialSeed;
     this.state = this.createInitialState();
@@ -216,7 +218,7 @@ export class GameSimulation {
   private spawnDueEnemies(): void {
     const battleTime = this.state.effectiveBattleTimeSeconds;
     for (let waveIndex = 0; waveIndex < this.state.wave; waveIndex += 1) {
-      const wave = this.catalog.waves[waveIndex];
+      const wave = this.levelWaves[waveIndex];
       if (!wave) continue;
       let progress = this.state.waveSpawnProgress[waveIndex] ?? 0;
       while (progress < wave.spawnEvents.length) {
@@ -232,7 +234,7 @@ export class GameSimulation {
   private getNextSpawnTime(): number | null {
     let nextTime: number | null = null;
     for (let waveIndex = 0; waveIndex < this.state.maxWave; waveIndex += 1) {
-      const wave = this.catalog.waves[waveIndex];
+      const wave = this.levelWaves[waveIndex];
       const progress = this.state.waveSpawnProgress[waveIndex] ?? 0;
       const spawnEvent = wave?.spawnEvents[progress];
       if (!wave || !spawnEvent) continue;
