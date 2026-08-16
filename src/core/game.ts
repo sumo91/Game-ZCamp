@@ -305,7 +305,9 @@ export class GameSimulation {
     if (!options) return { accepted: false, reason: "当前建筑没有足够的词条选项" };
     const currentPhase = this.state.phase;
     if (currentPhase !== "OPENING_COUNTDOWN" && currentPhase !== "RUNNING" && currentPhase !== "TACTICAL_PAUSE") return { accepted: false, reason: "当前状态不可升级" };
-    const returnPhase: PlayPhase = currentPhase === "OPENING_COUNTDOWN" ? "OPENING_COUNTDOWN" : "TACTICAL_PAUSE";
+    // Owner decision 2026-08-16: the choice returns to the phase the upgrade happened in,
+    // so live battles resume immediately instead of lingering in tactical pause.
+    const returnPhase: PlayPhase = currentPhase;
     this.state.wood -= cost;
     building.level += 1;
     const draft = { buildingId, options: [options[0], options[1], options[2]] as [GrowthTraitId, GrowthTraitId, GrowthTraitId], createdAtLevel: building.level, returnPhase };

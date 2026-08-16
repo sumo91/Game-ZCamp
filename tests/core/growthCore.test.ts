@@ -201,16 +201,27 @@ describe("v0.2 growth candidate core regression matrix", () => {
     expect(game.getState()).toEqual(before);
   });
 
-  it("returns upgrade selection to tactical pause from running and to the same opening countdown", () => {
+  it("resumes the original phase after choosing a trait, preserving deliberate pauses", () => {
     const running = new GameSimulation(quietCatalog());
     running.getState().wood = 90;
     startRunning(running);
     const runningBuilding = buildAt(running, "slot-r1-c1", "arrow_tower");
     running.getState().wood = 50;
     expect(running.dispatch({ type: "upgrade_building", buildingId: runningBuilding.id }).accepted).toBe(true);
-    expect(running.getState().pendingTraitDraft?.returnPhase).toBe("TACTICAL_PAUSE");
+    expect(running.getState().pendingTraitDraft?.returnPhase).toBe("RUNNING");
     chooseFirstTrait(running, runningBuilding.id);
-    expect(running.getState().phase).toBe("TACTICAL_PAUSE");
+    expect(running.getState().phase).toBe("RUNNING");
+
+    const paused = new GameSimulation(quietCatalog());
+    paused.getState().wood = 90;
+    startRunning(paused);
+    paused.dispatch({ type: "pause" });
+    const pausedBuilding = buildAt(paused, "slot-r1-c1", "arrow_tower");
+    paused.getState().wood = 50;
+    expect(paused.dispatch({ type: "upgrade_building", buildingId: pausedBuilding.id }).accepted).toBe(true);
+    expect(paused.getState().pendingTraitDraft?.returnPhase).toBe("TACTICAL_PAUSE");
+    chooseFirstTrait(paused, pausedBuilding.id);
+    expect(paused.getState().phase).toBe("TACTICAL_PAUSE");
 
     const opening = new GameSimulation();
     opening.tick(1);
