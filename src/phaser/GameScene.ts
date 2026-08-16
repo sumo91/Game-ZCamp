@@ -167,6 +167,13 @@ export class GameScene extends Phaser.Scene {
   }
 
   public init(data: BattleLaunchData = {}): void {
+    this.launchBattle(data);
+  }
+
+  /** Boots (or re-boots on scene wake) the battle for one launch payload.
+   * The scene itself is only created once per page: Phaser 4.2.1 corrupts Text textures
+   * when scenes are stopped and restarted, so we sleep/wake instead of scene.start. */
+  private launchBattle(data: BattleLaunchData): void {
     this.clearedLevelIds = new Set((data.clearedLevelIds ?? []).filter((id): id is LevelId => starterHeroContent.levels.some((level) => level.id === id)));
     const battleConfig = resolveBattleConfig(data, starterHeroContent, this.clearedLevelIds.size > 0 ? this.clearedLevelIds : undefined);
     this.battleLevelId = battleConfig.levelId;
@@ -177,6 +184,19 @@ export class GameScene extends Phaser.Scene {
       state.wallMaxHp = 1000000;
       state.wallHp = state.wallMaxHp;
     }
+    this.resetBattleUi();
+  }
+
+  private resetBattleUi(): void {
+    this.selectedSlotId = null;
+    this.destroyConfirm = false;
+    this.transformOpen = false;
+    this.traitLocked = false;
+    this.lastWallHp = null;
+    this.lastWallShield = null;
+    this.lastWood = null;
+    this.lastGold = null;
+    this.lastPhase = null;
   }
 
   public create(): void {
@@ -189,6 +209,10 @@ export class GameScene extends Phaser.Scene {
     this.createContextPanel();
     this.createModalPanels();
     this.bindLifecycle();
+    this.events.on(Phaser.Scenes.Events.WAKE, (_systems: unknown, data: BattleLaunchData) => {
+      this.launchBattle(data ?? {});
+      this.renderState();
+    });
     this.renderState();
   }
 
@@ -424,7 +448,7 @@ export class GameScene extends Phaser.Scene {
     this.bindPressFeedback(this.resultRestartButton);
     this.resultLobbyButton = this.add.rectangle(360, 706, 180, 56, COLORS.panel, 1).setDepth(111).setInteractive({ useHandCursor: true });
     this.resultLobbyLabel = this.add.text(360, 706, this.resultActions.lobbyLabel, this.textStyle(17, "#fff3d2")).setOrigin(0.5).setDepth(112);
-    this.resultLobbyButton.on("pointerdown", () => this.scene.start("LobbyScene"));
+    this.resultLobbyButton.on("pointerdown", () => this.scene.switch("LobbyScene"));
     this.bindPressFeedback(this.resultLobbyButton);
   }
 
@@ -435,6 +459,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private setSystemPause(paused: boolean): void {
+    if (!this.scene.isActive()) return;
     const phase = this.simulation.getState().phase;
     if (paused) this.simulation.dispatch({ type: "system_pause" });
     else if (phase === "SYSTEM_PAUSE") this.simulation.dispatch({ type: "system_resume" });
@@ -451,15 +476,7 @@ export class GameScene extends Phaser.Scene {
 
   private restartSimulation(): void {
     this.simulation.dispatch({ type: "restart" });
-    this.selectedSlotId = null;
-    this.destroyConfirm = false;
-    this.transformOpen = false;
-    this.traitLocked = false;
-    this.lastWallHp = null;
-    this.lastWallShield = null;
-    this.lastWood = null;
-    this.lastGold = null;
-    this.lastPhase = null;
+    this.resetBattleUi();
     this.renderState();
   }
 
@@ -1126,7 +1143,14 @@ export class GameScene extends Phaser.Scene {
       const showLabel = definition.tier !== "normal" || warningLabel.length > 0;
       label.setPosition(x, y - radius - 14).setText(definition.displayName + warningLabel).setVisible(showLabel);
     }
-    for (const [enemyId, label] of this.enemyLabels) if (!visibleEnemyIds.has(enemyId)) label.setVisible(false);
+    // Dead enemies' labels are destroyed, not hidden: enemy ids are unique per spawn,
+    // so pooling them forever leaks one Text (and its canvas texture) per spawned enemy.
+    for (const [enemyId, label] of [...this.enemyLabels]) {
+      if (!visibleEnemyIds.has(enemyId)) {
+        label.destroy();
+        this.enemyLabels.delete(enemyId);
+      }
+    }
     for (const feedback of this.feedbacks) {
       if (feedback.kind === "shot" && feedback.targetX !== undefined && feedback.targetY !== undefined) this.drawProjectile(feedback as ShotFeedback);
       else if (feedback.kind === "hit") this.dynamic.lineStyle(3, 0xffffff, Math.min(1, feedback.ttl * 7)).strokeCircle(feedback.x, feedback.y, 22);

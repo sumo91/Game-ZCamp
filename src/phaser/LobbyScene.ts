@@ -82,7 +82,16 @@ export class LobbyScene extends Phaser.Scene {
     this.startButton.on("pointerdown", () => this.handleIntent("start"));
 
     this.infoText = this.add.text(44, 1160, "点击卡片切换出战关卡与英雄；通关后解锁更多内容", { ...this.textStyle(15, COLORS.muted), wordWrap: { width: 632 } }).setDepth(4);
+    this.events.on(Phaser.Scenes.Events.WAKE, () => this.refreshFromProgression());
     this.refresh();
+  }
+
+  /** Re-derives lock/selection state after returning from a battle; the scene itself persists. */
+  private refreshFromProgression(): void {
+    const progression = loadProgression();
+    this.view = deriveLobbyView(starterHeroContent, clearedLevelIdSet(progression), { heroId: progression.lastHeroId ?? undefined, levelId: progression.lastLevelId ?? undefined });
+    this.refresh();
+    this.infoText.setText("点击卡片切换出战关卡与英雄；通关后解锁更多内容");
   }
 
   private drawBackground(): void {
@@ -179,7 +188,7 @@ export class LobbyScene extends Phaser.Scene {
     if (decision.kind === "start_battle") {
       this.sfx.playUi("battle_start");
       const progression = loadProgression();
-      this.scene.start("GameScene", { heroId: decision.heroId, levelId: decision.levelId, clearedLevelIds: progression.clearedLevelIds });
+      this.scene.switch("GameScene", { heroId: decision.heroId, levelId: decision.levelId, clearedLevelIds: progression.clearedLevelIds });
       return;
     }
     const nextSelection = decision.kind === "select_level" ? { ...selection, levelId: decision.levelId } : { ...selection, heroId: decision.heroId };

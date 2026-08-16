@@ -19,4 +19,9 @@ const config: Phaser.Types.Core.GameConfig = {
   scene: [LobbyScene, GameScene],
 };
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+// DEV-only handle for live inspection and evidence tooling.
+if (import.meta.env.DEV) {
+  (window as Window & { __zcampGame?: Phaser.Game }).__zcampGame = game;
+}
