@@ -8,7 +8,6 @@ export const WALL_ZONE = { x: 24, y: 768, width: 672, height: 64 };
 export const GRID_ZONE = { x: 24, y: 832, width: 672, height: 318 };
 export const RESOURCE_RAIL = { x: 24, y: 1150, width: 672, height: 56 };
 export const CONTEXT_PANEL = { x: 24, y: 1206, width: 672, height: 74 };
-export const LOBBY_ARTIFACT_BOUNDS = { x: 40, y: 790, width: 640, height: 120 };
 
 export interface LogicalBounds {
   x: number;
