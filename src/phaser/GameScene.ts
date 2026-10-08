@@ -3,7 +3,7 @@ import { starterCatalog, type EnemyDefinition } from "../core/content";
 import { resolveBattleConfig } from "../core/battleConfig";
 import type { BattleLaunchData } from "../core/battleConfig";
 import { getGrowthBuildingPresentation } from "../core/buildingGrowth";
-import { GameSimulation } from "../core/game";
+import { BattleSession } from "../core/battleSession";
 import { getWoodProductionPerSecond } from "../core/resources";
 import type { HeroDefinition } from "../core/hero";
 import type { BuildingState, EnemyRuntimeState, GameEvent, GamePhase, GameState } from "../core/types";
@@ -64,7 +64,7 @@ const TRANSFORM_COLORS: Record<string, number> = {
 };
 
 export class GameScene extends Phaser.Scene {
-  private simulation!: GameSimulation;
+  private session!: BattleSession;
   private heroDefinition!: HeroDefinition;
   private readonly resultActions = deriveResultActions();
   private dynamic!: Phaser.GameObjects.Graphics;
@@ -178,9 +178,10 @@ export class GameScene extends Phaser.Scene {
     const battleConfig = resolveBattleConfig(data, starterHeroContent, this.clearedLevelIds.size > 0 ? this.clearedLevelIds : undefined);
     this.battleLevelId = battleConfig.levelId;
     this.heroDefinition = battleConfig.hero;
-    this.simulation = new GameSimulation(starterCatalog, 1337, battleConfig);
+    this.session?.dispose();
+    this.session = new BattleSession({ catalog: starterCatalog, seed: 1337, config: battleConfig });
     if (this.showcaseMode) {
-      const state = this.simulation.getState();
+      const state = this.session.getState();
       state.wallMaxHp = 1000000;
       state.wallHp = state.wallMaxHp;
     }
@@ -216,15 +217,22 @@ export class GameScene extends Phaser.Scene {
     this.renderState();
   }
 
-  public update(_time: number, delta: number): void {
+  public update(time: number, delta: number): void {
     const step = Math.min(0.25, Math.max(0, delta / 1000));
+    let simulationSteps = 0;
     if (step > 0) {
-      if (this.showcaseMode) this.simulation.getState().wallHp = this.simulation.getState().wallMaxHp;
-      if (!this.showcaseFreeze) this.simulation.tick(this.showcaseMode ? step * 30 : step);
-      if (this.showcaseMode && this.simulation.getState().phase === "RUNNING") this.simulation.getState().wallHp = this.simulation.getState().wallMaxHp;
-      this.processEvents(this.simulation.drainEvents());
-      this.feedbacks = this.feedbacks.map((feedback) => ({ ...feedback, ttl: feedback.ttl - step })).filter((feedback) => feedback.ttl > 0);
-      this.wallImpactMarks = this.wallImpactMarks.map((mark) => ({ ...mark, ttl: mark.ttl - step })).filter((mark) => mark.ttl > 0);
+      if (this.showcaseMode) this.session.getState().wallHp = this.session.getState().wallMaxHp;
+      if (!this.showcaseFreeze) {
+        if (this.showcaseMode) {
+          // Existing DEV-only accelerated capture; normal play always uses frame timestamps.
+          for (let index = 0; index < 30; index += 1) simulationSteps += this.session.advance(step);
+        } else simulationSteps = this.session.advanceFrame(time);
+      }
+      if (this.showcaseMode && this.session.getState().phase === "RUNNING") this.session.getState().wallHp = this.session.getState().wallMaxHp;
+      this.processEvents(this.session.drainEvents());
+      const animationStep = simulationSteps > 0 ? (this.showcaseMode ? step : simulationSteps / 30) : 0;
+      this.feedbacks = this.feedbacks.map((feedback) => ({ ...feedback, ttl: feedback.ttl - animationStep })).filter((feedback) => feedback.ttl > 0);
+      this.wallImpactMarks = this.wallImpactMarks.map((mark) => ({ ...mark, ttl: mark.ttl - animationStep })).filter((mark) => mark.ttl > 0);
       this.messageTimer = Math.max(0, this.messageTimer - step);
       this.battleNoticeTimer = Math.max(0, this.battleNoticeTimer - step);
       this.ambientNoticeTimer = Math.max(0, this.ambientNoticeTimer - step);
@@ -337,7 +345,7 @@ export class GameScene extends Phaser.Scene {
       const suppress = this.suppressScenePointer;
       this.suppressScenePointer = false;
       if (suppress) return;
-      const state = this.simulation.getState();
+      const state = this.session.getState();
       const priority = getGrowthInputPriority(state.phase, this.transformOpen);
       if (priority === "transform") {
         const decision = decideGrowthPointer(priority, hitGrowthPointer(pointer.x, pointer.y, true));
@@ -453,35 +461,44 @@ export class GameScene extends Phaser.Scene {
   }
 
   private bindLifecycle(): void {
-    document.addEventListener("visibilitychange", () => document.hidden ? this.setSystemPause(true) : this.setSystemPause(false));
-    this.game.events.on(Phaser.Core.Events.BLUR, () => this.setSystemPause(true));
-    this.game.events.on(Phaser.Core.Events.FOCUS, () => this.setSystemPause(false));
+    const visibility = () => this.setSystemPause(document.hidden);
+    const blur = () => this.setSystemPause(true);
+    const focus = () => { if (!document.hidden) this.setSystemPause(false); };
+    document.addEventListener("visibilitychange", visibility);
+    this.game.events.on(Phaser.Core.Events.BLUR, blur);
+    this.game.events.on(Phaser.Core.Events.FOCUS, focus);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      document.removeEventListener("visibilitychange", visibility);
+      this.game.events.off(Phaser.Core.Events.BLUR, blur);
+      this.game.events.off(Phaser.Core.Events.FOCUS, focus);
+      this.session.dispose();
+    });
   }
 
   private setSystemPause(paused: boolean): void {
     if (!this.scene.isActive()) return;
-    const phase = this.simulation.getState().phase;
-    if (paused) this.simulation.dispatch({ type: "system_pause" });
-    else if (phase === "SYSTEM_PAUSE") this.simulation.dispatch({ type: "system_resume" });
+    const phase = this.session.getState().phase;
+    if (paused) this.session.dispatch({ type: "system_pause" });
+    else if (phase === "SYSTEM_PAUSE") this.session.dispatch({ type: "system_resume" });
     this.renderState();
   }
 
   private toggleTacticalPause(): void {
-    const phase = this.simulation.getState().phase;
+    const phase = this.session.getState().phase;
     const pauseControl = deriveGrowthPauseControl(phase);
-    if (pauseControl.label === "暂停" && pauseControl.enabled) this.simulation.dispatch({ type: "pause" });
-    else if (pauseControl.label === "继续" && pauseControl.enabled) this.simulation.dispatch({ type: "resume" });
+    if (pauseControl.label === "暂停" && pauseControl.enabled) this.session.dispatch({ type: "pause" });
+    else if (pauseControl.label === "继续" && pauseControl.enabled) this.session.dispatch({ type: "resume" });
     this.renderState();
   }
 
   private restartSimulation(): void {
-    this.simulation.dispatch({ type: "restart" });
+    this.session.dispatch({ type: "restart" });
     this.resetBattleUi();
     this.renderState();
   }
 
   private handleSlotClick(slotId: string): void {
-    const state = this.simulation.getState();
+    const state = this.session.getState();
     if (getGrowthInputPriority(state.phase, this.transformOpen) !== "building") return;
     if (this.selectedSlotId === slotId) {
       this.showMessage("已取消目标选择", true);
@@ -502,7 +519,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private handleActionClick(index: number): void {
-    if (getGrowthInputPriority(this.simulation.getState().phase, this.transformOpen) !== "building") return;
+    if (getGrowthInputPriority(this.session.getState().phase, this.transformOpen) !== "building") return;
     const action = this.panelActions[index];
     if (!action) return;
     this.suppressScenePointer = true;
@@ -516,7 +533,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private handleTransformClick(index: number): void {
-    const state = this.simulation.getState();
+    const state = this.session.getState();
     if (getGrowthInputPriority(state.phase, this.transformOpen) !== "transform") return;
     const building = this.selectedBuilding(state);
     if (!building) return;
@@ -528,14 +545,14 @@ export class GameScene extends Phaser.Scene {
       this.renderState();
       return;
     }
-    const result = this.simulation.dispatch(decision.command);
+    const result = this.session.dispatch(decision.command);
     this.showMessage(result.accepted ? "改造完成 · 等级与词条已保留" : (result.reason ?? "改造失败"), result.accepted, result.accepted ? undefined : option.resource);
     if (result.accepted) this.transformOpen = false;
     this.renderState();
   }
 
   private handleTraitClick(index: number): void {
-    const state = this.simulation.getState();
+    const state = this.session.getState();
     if (getGrowthInputPriority(state.phase, this.transformOpen) !== "trait_draft" || !state.pendingTraitDraft) return;
     const option = deriveTraitOptions(starterCatalog.buildingGrowth, state, state.pendingTraitDraft)[index];
     if (!option) return;
@@ -545,7 +562,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     this.traitLocked = true;
-    const result = this.simulation.dispatch(decision.command);
+    const result = this.session.dispatch(decision.command);
     if (!result.accepted) {
       this.traitLocked = false;
       this.showMessage(result.reason ?? "词条选择失败", false);
@@ -561,7 +578,7 @@ export class GameScene extends Phaser.Scene {
       this.showMessage(decision.reason, false, action.resource);
       return;
     }
-    const result = this.simulation.dispatch(decision.command);
+    const result = this.session.dispatch(decision.command);
     if (result.accepted) {
       this.showMessage("建造完成", true);
       this.clearSelection();
@@ -576,14 +593,14 @@ export class GameScene extends Phaser.Scene {
       this.showMessage(decision.reason, false);
       return;
     }
-    const result = this.simulation.dispatch(decision.command);
+    const result = this.session.dispatch(decision.command);
     this.showMessage(result.accepted ? "升级完成 · 请选择一个词条" : (result.reason ?? "升级失败"), result.accepted, result.accepted ? undefined : action.resource);
     if (result.accepted) this.traitLocked = false;
   }
 
   private performDestroy(): void {
     if (!this.selectedSlotId) return;
-    const result = this.simulation.dispatch({ type: "destroy_building", slotId: this.selectedSlotId });
+    const result = this.session.dispatch({ type: "destroy_building", slotId: this.selectedSlotId });
     this.showMessage(result.accepted ? "建筑已拆除，木材不返还" : (result.reason ?? "暂不可拆除"), result.accepted);
     if (result.accepted) {
       this.selectedSlotId = null;
@@ -596,7 +613,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private renderState(): void {
-    const state = this.simulation.getState();
+    const state = this.session.getState();
     if (!state.pendingTraitDraft) this.traitLocked = false;
     if (this.selectedSlotId && !CAMP_SLOT_LAYOUTS.some((slot) => slot.id === this.selectedSlotId)) this.selectedSlotId = null;
     if (this.transformOpen && this.selectedBuilding(state)?.growthDefinitionId !== "arrow_tower") this.transformOpen = false;
@@ -1221,9 +1238,9 @@ export class GameScene extends Phaser.Scene {
     for (const event of events) {
       this.sfx.handleEvent(event);
       if (event.type === "tower_attack") {
-        const building = this.simulation.getState().buildings.find((item) => item.id === event.buildingId);
-        const heroBuilding = this.simulation.getState().buildings.find((item) => item.kind === "main_city");
-        const source = building ?? (event.buildingId === this.simulation.getState().hero?.id ? heroBuilding : undefined);
+        const building = this.session.getState().buildings.find((item) => item.id === event.buildingId);
+        const heroBuilding = this.session.getState().buildings.find((item) => item.kind === "main_city");
+        const source = building ?? (event.buildingId === this.session.getState().hero?.id ? heroBuilding : undefined);
         if (source) this.feedbacks.push({ kind: "shot", x: this.towerX(source), y: this.towerY(source), targetX: this.enemyX(event.targetId), targetY: this.enemyY(event.targetPosition), ttl: 0.16, style: mapTowerProjectileStyle(event.towerDefinitionId), jitter: this.boltJitter(event.targetId) });
       } else if (event.type === "enemy_hit") {
         this.feedbacks.push({ kind: "hit", x: this.enemyX(event.enemyId), y: this.enemyY(event.position), ttl: 0.16 });
@@ -1234,7 +1251,7 @@ export class GameScene extends Phaser.Scene {
         this.fx.flyCoin(this.enemyX(event.enemyId), this.enemyY(event.position), 204, RESOURCE_RAIL.y + 7, coinFlightLabel(reward));
       } else if (event.type === "wave_started") {
         this.fx.zoomPunch();
-        const banner = deriveWaveBanner(event.wave, this.simulation.getState().maxWave);
+        const banner = deriveWaveBanner(event.wave, this.session.getState().maxWave);
         if (banner) this.fx.waveBanner(banner.text, banner.color, banner.isBossWave);
       } else if (event.type === "enemy_spawned" && isBossEntrance(event.definitionId, bossIds)) {
         const definition = this.enemyDefinition(event.definitionId);
@@ -1247,7 +1264,7 @@ export class GameScene extends Phaser.Scene {
       if (notice && event.type !== "wave_started") this.handleNotice(notice);
       const captureCharge = this.showcaseCapture === "charge" && (event.type === "enemy_charge_warning" || event.type === "enemy_charge_started" || event.type === "enemy_charge_impact");
       const captureInspire = this.showcaseCapture === "inspire" && event.type === "overlord_inspire";
-      if ((captureCharge || captureInspire) && this.simulation.getState().phase === "RUNNING") this.showcaseFreeze = true;
+      if ((captureCharge || captureInspire) && this.session.getState().phase === "RUNNING") this.showcaseFreeze = true;
     }
   }
 
