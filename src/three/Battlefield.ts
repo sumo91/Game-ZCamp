@@ -7,7 +7,7 @@ import type { BufferGeometry, Material, Object3D } from "three";
 import { starterCatalog } from "../core/content";
 import type { BuildingState, GameEvent, GameState } from "../core/types";
 import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
-import { whiteboxEnemy } from "./whiteboxCatalog";
+import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
 
 type Effect = { object: Object3D; ttl: number };
 
@@ -98,7 +98,7 @@ export class Battlefield {
     if (this.previousWall !== null && wallTotal < this.previousWall) this.wallFlash = 0.24;
     this.previousWall = wallTotal;
     this.wallFlash = Math.max(0, this.wallFlash - deltaSeconds);
-    (this.wall.material as MeshStandardMaterial).color.set(this.wallFlash > 0 ? 0xf67f70 : state.wallHp < 30 ? 0xb47673 : 0xc3c6c8);
+    (this.wall.material as MeshStandardMaterial).color.set(this.wallFlash > 0 ? 0xf67f70 : isWallInDanger(state) ? 0xb47673 : 0xc3c6c8);
     for (const [slotId, tile] of this.tiles) (tile.material as MeshStandardMaterial).color.set(slotId === selectedSlot ? 0xeed58b : 0x899287);
     for (let index = this.effects.length - 1; index >= 0; index -= 1) {
       const effect = this.effects[index]!;

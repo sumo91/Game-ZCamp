@@ -35,7 +35,7 @@ npm run dev -- --host 127.0.0.1 --port 5178 --strictPort
 | 长帧与后台时间戳 | `session.advanceFrame is not a function` | 长帧最多 5 步，每步 1/30 秒；后台恢复首帧推进 0 步，下一正常帧推进 1 步 |
 | 会话生命周期 | `session.dispose is not a function` | 系统暂停返回词条状态，选词条恢复原阶段；重试清空步编号及旧事件；销毁后不推进且拒绝命令 |
 
-最终会话测试 5 项通过；完整 `npm run check`：14 个文件、115 项测试通过。`npm run build` 通过。构建仍提示 Three.js/Phaser chunk 超过 500 kB；正式资源和包体预算属后续样板/生产迁移阶段。
+首次交付会话测试 5 项通过；完整 `npm run check`：14 个文件、115 项测试通过。`npm run build` 通过。构建仍提示 Three.js/Phaser chunk 超过 500 kB；正式资源和包体预算属后续样板/生产迁移阶段。
 
 ## 浏览器记录
 
@@ -64,7 +64,7 @@ Windows，Codex 内置 Chromium 浏览器，UA 为 `Mozilla/5.0 (Windows NT 10.0
 
 查阅 [Vite 官方条件配置](https://vite.dev/config/#conditional-config) 并核对已安装 Vite 的 `ConfigEnv.isPreview` 后，将构建或 `isPreview === true` 的 base 统一为 `/Game-ZCamp/`。重启受管理的预览服务；开发服务仍使用 `/`。
 
-green：构建产物真实渲染 720×1280，第三行第五列双击建造木材 120→80，浏览器控制台 error 为空。最终构建全部 10 个 JS/CSS 文件经 HTTP HEAD 返回 200，类型分别为 `text/javascript` / `text/css`，HTML fallback 为 0；明细留存 `threejs-issue-2-asset-mime.json`。最终入口脚本 `index-B0X8h87E.js` 也返回正确 MIME。
+green：构建产物真实渲染 720×1280，第三行第五列双击建造木材 120→80，浏览器控制台 error 为空。首次交付构建全部 10 个 JS/CSS 文件经 HTTP HEAD 返回 200，类型分别为 `text/javascript` / `text/css`，HTML fallback 为 0；明细留存 `threejs-issue-2-asset-mime.json`。当时入口脚本 `index-B0X8h87E.js` 也返回正确 MIME。
 
 根会话再次独立核对修复后的构建预览，DOM 与 3D 均实际显示，原版链接保持 `/Game-ZCamp/` 子路径，控制台 error 为空。
 
@@ -88,3 +88,11 @@ green：构建产物真实渲染 720×1280，第三行第五列双击建造木�
 ## 已知边界
 
 本次仅白模预览，提供箭塔建造及最小暂停/结果入口。木材厂、升级、词条、改造、拆除和完整 3D 大厅不是 #2 的交付范围。默认 Phaser 仍提供全部既有玩法与存储进度。白模未进行实体手机性能承诺或正式美术验收。
+
+## 双轴审查修正
+
+标准轴 P3 根据 `docs/ui/ZCamp_UI_Bible.md:54` 指出，城墙持续危险色应在耐久低于最大耐久的 35% 时出现，原白模使用固定的 30 点阈值。现由同一个展示层判断 `wallHp < wallMaxHp * 0.35` 驱动 3D 墙体底色与 HTML 墙耐久；HTML 同时保持红色加粗与「· 危险」文字，不依赖受击闪光。核心城墙/护盾数值与规则未变。此低影响显示修正拟用自然无塔战斗观察验证，不新增渲染私有结构镜像测试。实施任务当前浏览器能力返回空列表，根会话使用仍可用的已绑定浏览器进行独立取证；本段提交时尚未收到修正后的截图结果。
+
+规格轴 P3 指出首波准备期间直接进入系统暂停后，时间 HUD 漏读 `systemPausedFromPhase`，会错误显示下一波 60 秒。现同时检查当前阶段、战术暂停来源与系统暂停来源，显示会话真实的冻结首波秒数。公开 `BattleSession` 测试确认直接首波系统暂停保持 `OPENING_COUNTDOWN` 来源及 `4 + 5/6` 秒；嵌套首波战术→系统暂停保留两个来源字段和倒计时，返回时先回战术暂停再回首波准备。此处未改核心暂停实现。实际浏览器切后台仍未模拟，以上是代码修正与公开会话行为证据，不声称实体后台实测通过。
+
+修正后 `npm run check` 通过类型检查与 14 文件 / 116 测试，`npm run build` 通过；Three.js 与 Phaser chunk 体积提示仍保留为后续预算工作。原实施浏览器截图及 MIME 记录对应首次交付产物，继续保留为历史证据。

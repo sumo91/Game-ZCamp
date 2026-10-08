@@ -4,6 +4,7 @@ import { getWoodProductionPerSecond } from "../core/resources";
 import { CAMP_SLOT_IDS } from "../core/types";
 import { deriveEmptySlotActions, deriveGrowthPauseControl, getGrowthInputPriority } from "../phaser/growthUi";
 import { Battlefield } from "./Battlefield";
+import { isWallInDanger } from "./whiteboxCatalog";
 import "./preview.css";
 
 /** Deliberately limited Stage A UI. Full building growth follows in Issue #3. */
@@ -73,10 +74,12 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     battlefield.render(state, session.drainEvents(), deltaSeconds, selected);
     view("wood").textContent = `木材 ${Math.floor(state.wood)} · +${getWoodProductionPerSecond(state).toFixed(1)}/秒`;
     view("gold").textContent = `金币 ${Number(state.gold.toFixed(2))}`;
-    view("wall").textContent = `城墙 ${Math.ceil(state.wallHp)} / ${state.wallMaxHp}`;
+    const wallInDanger = isWallInDanger(state);
+    view("wall").textContent = `城墙 ${Math.ceil(state.wallHp)} / ${state.wallMaxHp}${wallInDanger ? " · 危险" : ""}`;
+    view("wall").classList.toggle("danger", wallInDanger);
     view("shield").textContent = `护盾 ${Math.ceil(state.wallShield)} / ${state.wallShieldMax}`;
     view("wave").textContent = `波次 ${state.wave} / ${state.maxWave} · 敌人 ${state.enemies.length}`;
-    view("time").textContent = state.phase === "OPENING_COUNTDOWN" || state.pausedFromPhase === "OPENING_COUNTDOWN"
+    view("time").textContent = state.phase === "OPENING_COUNTDOWN" || state.pausedFromPhase === "OPENING_COUNTDOWN" || state.systemPausedFromPhase === "OPENING_COUNTDOWN"
       ? `首波 ${Math.ceil(state.openingCountdownRemainingSeconds)} 秒`
       : state.wave < state.maxWave ? `下一波 ${Math.ceil(state.nextWaveTimeRemainingSeconds)} 秒` : "最后一波";
     view("phase").textContent = state.phase === "TACTICAL_PAUSE" ? "战术暂停 · 可建造" : state.phase === "OPENING_COUNTDOWN" ? "准备防线" : `战斗 ${Math.floor(state.effectiveBattleTimeSeconds)} 秒 · 击杀 ${state.defeatedEnemies}`;

@@ -1,3 +1,5 @@
+import type { GameState } from "../core/types";
+
 /** Development geometry only. No rule values or gameplay randomness live here. */
 export const WHITEBOX_ENEMIES = {
   walker: { color: 0xc1bccb, scale: 0.75 },
@@ -13,4 +15,9 @@ export function whiteboxEnemy(id: string): { color: number; scale: number } {
   const definition = WHITEBOX_ENEMIES[id as keyof typeof WHITEBOX_ENEMIES];
   if (!definition) throw new Error("Missing development enemy: " + id);
   return definition;
+}
+
+/** Shared presentation threshold from the UI Bible; never changes wall rules. */
+export function isWallInDanger(state: Pick<GameState, "wallHp" | "wallMaxHp">): boolean {
+  return state.wallHp < state.wallMaxHp * 0.35;
 }

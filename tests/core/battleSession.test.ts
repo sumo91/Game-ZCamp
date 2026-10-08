@@ -73,12 +73,32 @@ describe("BattleSession", () => {
     expect(session.advanceFrame(31000)).toBe(5);
     expect(session.getState().openingCountdownRemainingSeconds).toBeCloseTo(4 + 5 / 6);
     session.dispatch({ type: "system_pause" });
+    expect(session.getState().phase).toBe("SYSTEM_PAUSE");
+    expect(session.getState().systemPausedFromPhase).toBe("OPENING_COUNTDOWN");
     session.advanceFrame(50000);
+    expect(session.getState().openingCountdownRemainingSeconds).toBeCloseTo(4 + 5 / 6);
     session.dispatch({ type: "system_resume" });
     expect(session.advanceFrame(90000)).toBe(0);
     expect(session.getStepIndex()).toBe(5);
     expect(session.advanceFrame(90034)).toBe(1);
     expect(session.getStepIndex()).toBe(6);
+  });
+
+  it("retains the frozen opening countdown through a nested tactical and system pause", () => {
+    const session = new BattleSession();
+    for (let index = 0; index < 30; index += 1) session.advance(1 / 30);
+    const countdown = session.getState().openingCountdownRemainingSeconds;
+    session.dispatch({ type: "pause" });
+    session.dispatch({ type: "system_pause" });
+    expect(session.getState().systemPausedFromPhase).toBe("TACTICAL_PAUSE");
+    expect(session.getState().pausedFromPhase).toBe("OPENING_COUNTDOWN");
+    expect(session.advance(600)).toBe(0);
+    expect(session.getState().openingCountdownRemainingSeconds).toBe(countdown);
+    session.dispatch({ type: "system_resume" });
+    expect(session.getState().phase).toBe("TACTICAL_PAUSE");
+    expect(session.getState().openingCountdownRemainingSeconds).toBe(countdown);
+    session.dispatch({ type: "resume" });
+    expect(session.getState().phase).toBe("OPENING_COUNTDOWN");
   });
 
   it("resumes the trait draft after background return and clears old battle work on restart/dispose", () => {
