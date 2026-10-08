@@ -9,3 +9,4 @@ export * from "./resources";
 export * from "./types";
 export * from "./hero";
 export * from "./battleConfig";
+export * from "./battleSession";
