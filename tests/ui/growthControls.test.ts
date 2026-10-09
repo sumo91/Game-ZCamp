@@ -143,4 +143,3 @@ describe("shared growth controls through the battle session", () => {
     expect(restart.ui).toEqual(initialGrowthUiState());
   });
 });
-
