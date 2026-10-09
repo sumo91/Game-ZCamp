@@ -409,4 +409,3 @@ export function decideGrowthTrait(option: GrowthTraitOptionView, buildingId: str
   if (locked) return { kind: "blocked", reason: "正在处理词条选择" };
   return { kind: "dispatch", command: { type: "choose_building_trait", buildingId, traitDefinitionId: option.id } };
 }
-
