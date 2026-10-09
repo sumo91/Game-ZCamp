@@ -1,0 +1,120 @@
+[
+  {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "1323",
+      "openingCountdown": "0",
+      "phase": "RUNNING",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": ""
+    },
+    "at": "2026-10-09T14:38:10.027Z",
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 141 · +0.6/秒金币 5\n      城墙 100 / 100护盾 84 / 100\n      波次 1 / 10 · 敌人 5下一波 21 秒\n    ",
+    "presentation": {
+      "calls": 44,
+      "effects": 3,
+      "enemies": [
+        {
+          "clip": "death",
+          "dying": true,
+          "id": "walker-19",
+          "time": 10.241457706452666
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-20",
+          "time": 7.459110665329305
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-21",
+          "time": 7.059913072550971
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-22",
+          "time": 4.260715479772647
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-23",
+          "time": 3.8615178869943128
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-24",
+          "time": 1.0623202942159813
+        }
+      ],
+      "geometries": 26,
+      "models": true,
+      "textures": 21,
+      "triangles": 300970
+    }
+  },
+  {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "1332",
+      "openingCountdown": "0",
+      "phase": "RUNNING",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": ""
+    },
+    "at": "2026-10-09T14:38:10.304Z",
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 141 · +0.6/秒金币 5\n      城墙 100 / 100护盾 83 / 100\n      波次 1 / 10 · 敌人 5下一波 21 秒\n    ",
+    "presentation": {
+      "calls": 42,
+      "effects": 1,
+      "enemies": [
+        {
+          "clip": "death",
+          "dying": true,
+          "id": "walker-19",
+          "time": 10.541457706452665
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-20",
+          "time": 7.759110665329304
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-21",
+          "time": 7.35991307255097
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-22",
+          "time": 4.560715479772646
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-23",
+          "time": 4.161517886994312
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-24",
+          "time": 1.3623202942159822
+        }
+      ],
+      "geometries": 24,
+      "models": true,
+      "textures": 21,
+      "triangles": 300950
+    }
+  }
+]

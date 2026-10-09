@@ -1,0 +1,59 @@
+{
+  "state": {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "594",
+      "openingCountdown": "0",
+      "phase": "RUNNING",
+      "renderPixelRatio": "1.0000000298023224",
+      "selectedSlot": ""
+    },
+    "at": "2026-10-09T14:45:02.608Z",
+    "href": "/Game-ZCamp/",
+    "inert": [
+      {
+        "class": "preview-hud",
+        "inert": false
+      },
+      {
+        "class": "preview-field",
+        "inert": false
+      },
+      {
+        "class": "preview-controls",
+        "inert": false
+      }
+    ],
+    "presentation": {
+      "calls": 35,
+      "effects": 0,
+      "enemies": [
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-7",
+          "time": 5.078869943162814
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-8",
+          "time": 2.2796723503844887
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-9",
+          "time": 1.8804747576061545
+        }
+      ],
+      "geometries": 23,
+      "models": true,
+      "textures": 18,
+      "triangles": 259026
+    },
+    "progress": "100% · 12/12 · camp_plot.glb"
+  },
+  "console": []
+}

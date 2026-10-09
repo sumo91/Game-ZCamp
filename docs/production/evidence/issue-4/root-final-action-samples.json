@@ -1,0 +1,463 @@
+{
+  "scope": "Readonly natural battle DOM observations; compacted on clip composition transitions or 15-step spacing; no frame performance inference",
+  "originalObservationCount": 570,
+  "observations": [
+    {
+      "at": "2026-10-09T14:23:55.072Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1882",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 94 · +1.7/秒金币 7\n      城墙 100 / 100护盾 100 / 100\n      波次 1 / 10 · 敌人 0下一波 3 秒\n    ",
+      "presentation": {
+        "calls": 34,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 40,
+        "models": true,
+        "textures": 19,
+        "triangles": 259352
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:55.568Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1897",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 95 · +1.7/秒金币 7\n      城墙 100 / 100护盾 100 / 100\n      波次 1 / 10 · 敌人 0下一波 2 秒\n    ",
+      "presentation": {
+        "calls": 34,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 40,
+        "models": true,
+        "textures": 19,
+        "triangles": 259352
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:56.067Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1912",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 96 · +1.7/秒金币 7\n      城墙 100 / 100护盾 100 / 100\n      波次 1 / 10 · 敌人 0下一波 2 秒\n    ",
+      "presentation": {
+        "calls": 34,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 40,
+        "models": true,
+        "textures": 19,
+        "triangles": 259352
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:56.571Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1927",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 97 · +1.7/秒金币 7\n      城墙 100 / 100护盾 100 / 100\n      波次 1 / 10 · 敌人 0下一波 1 秒\n    ",
+      "presentation": {
+        "calls": 34,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 40,
+        "models": true,
+        "textures": 19,
+        "triangles": 259352
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:57.067Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1942",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 97 · +1.7/秒金币 7\n      城墙 100 / 100护盾 100 / 100\n      波次 1 / 10 · 敌人 0下一波 1 秒\n    ",
+      "presentation": {
+        "calls": 34,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 40,
+        "models": true,
+        "textures": 19,
+        "triangles": 259352
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:57.371Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1951",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 98 · +1.7/秒金币 7\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 1下一波 60 秒\n    ",
+      "presentation": {
+        "calls": 36,
+        "effects": 0,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-28",
+            "time": 0.36552992310264126
+          }
+        ],
+        "geometries": 40,
+        "models": true,
+        "textures": 20,
+        "triangles": 273316
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:57.534Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1956",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 98 · +1.7/秒金币 7\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 2下一波 60 秒\n    ",
+      "presentation": {
+        "calls": 44,
+        "effects": 0,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-28",
+            "time": 0.532196589769308
+          },
+          {
+            "clip": "development",
+            "dying": false,
+            "id": "runner-29",
+            "time": 0
+          }
+        ],
+        "geometries": 44,
+        "models": true,
+        "textures": 20,
+        "triangles": 273412
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:57.738Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1962",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 99 · +1.7/秒金币 7\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 3下一波 60 秒\n    ",
+      "presentation": {
+        "calls": 46,
+        "effects": 0,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-28",
+            "time": 0.7321965897693079
+          },
+          {
+            "clip": "development",
+            "dying": false,
+            "id": "runner-29",
+            "time": 0
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-30",
+            "time": 0.38398528920093616
+          }
+        ],
+        "geometries": 44,
+        "models": true,
+        "textures": 21,
+        "triangles": 287376
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:58.038Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1971",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 99 · +1.7/秒金币 7.25\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 2下一波 60 秒\n    ",
+      "presentation": {
+        "calls": 50,
+        "effects": 4,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-28",
+            "time": 1.032196589769308
+          },
+          {
+            "clip": "development",
+            "dying": true,
+            "id": "runner-29",
+            "time": 0
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-30",
+            "time": 0.6839852892009362
+          }
+        ],
+        "geometries": 48,
+        "models": true,
+        "textures": 21,
+        "triangles": 287464
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:58.341Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1980",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 100 · +1.7/秒金币 7.25\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 2下一波 60 秒\n    ",
+      "presentation": {
+        "calls": 50,
+        "effects": 4,
+        "enemies": [
+          {
+            "clip": "hit",
+            "dying": false,
+            "id": "walker-28",
+            "time": 1.3321965897693089
+          },
+          {
+            "clip": "development",
+            "dying": true,
+            "id": "runner-29",
+            "time": 0
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-30",
+            "time": 0.983985289200936
+          }
+        ],
+        "geometries": 48,
+        "models": true,
+        "textures": 21,
+        "triangles": 287464
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:58.638Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1989",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 100 · +1.7/秒金币 7.25\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 2下一波 59 秒\n    ",
+      "presentation": {
+        "calls": 47,
+        "effects": 1,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-28",
+            "time": 1.6321965897693098
+          },
+          {
+            "clip": "development",
+            "dying": true,
+            "id": "runner-29",
+            "time": 0
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-30",
+            "time": 1.283985289200937
+          }
+        ],
+        "geometries": 45,
+        "models": true,
+        "textures": 21,
+        "triangles": 287408
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:58.975Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1999",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 101 · +1.7/秒金币 7.25\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 2下一波 59 秒\n    ",
+      "presentation": {
+        "calls": 38,
+        "effects": 0,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-28",
+            "time": 1.965529923102644
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-30",
+            "time": 1.6173186225342713
+          }
+        ],
+        "geometries": 40,
+        "models": true,
+        "textures": 21,
+        "triangles": 287280
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:59.038Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "2001",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 101 · +1.7/秒金币 7.5\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 1下一波 59 秒\n    ",
+      "presentation": {
+        "calls": 42,
+        "effects": 4,
+        "enemies": [
+          {
+            "clip": "death",
+            "dying": true,
+            "id": "walker-28",
+            "time": 2.032196589769311
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-30",
+            "time": 1.6839852892009382
+          }
+        ],
+        "geometries": 44,
+        "models": true,
+        "textures": 21,
+        "triangles": 287368
+      }
+    },
+    {
+      "at": "2026-10-09T14:23:59.341Z",
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "2010",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 101 · +1.7/秒金币 7.5\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 1下一波 59 秒\n    ",
+      "presentation": {
+        "calls": 42,
+        "effects": 4,
+        "enemies": [
+          {
+            "clip": "death",
+            "dying": true,
+            "id": "walker-28",
+            "time": 2.33219658976931
+          },
+          {
+            "clip": "hit",
+            "dying": false,
+            "id": "walker-30",
+            "time": 1.983985289200939
+          }
+        ],
+        "geometries": 44,
+        "models": true,
+        "textures": 21,
+        "triangles": 287368
+      }
+    }
+  ]
+}

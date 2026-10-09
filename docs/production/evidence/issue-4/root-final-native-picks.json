@@ -1,0 +1,50 @@
+[
+  {
+    "target": "arrow roof",
+    "pixel": [
+      358,
+      682
+    ],
+    "actual": "slot-r1-c3"
+  },
+  {
+    "target": "archer bow/gold attachment",
+    "pixel": [
+      369,
+      695
+    ],
+    "actual": "slot-r1-c3"
+  },
+  {
+    "target": "lumber roof",
+    "pixel": [
+      245,
+      702
+    ],
+    "actual": "slot-r1-c2"
+  },
+  {
+    "target": "main city roof",
+    "pixel": [
+      361,
+      935
+    ],
+    "actual": "slot-r3-c3"
+  },
+  {
+    "target": "high arrow flag",
+    "pixel": [
+      337,
+      668
+    ],
+    "actual": ""
+  },
+  {
+    "target": "high arrow flag visible blue fabric",
+    "pixel": [
+      327,
+      668
+    ],
+    "actual": "slot-r1-c3"
+  }
+]

@@ -1,0 +1,720 @@
+{
+  "cases": [
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "711",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+        "openingCountdown": "0",
+        "phase": "TACTICAL_PAUSE",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r1-c3"
+      },
+      "overlaps": [],
+      "presentation": {
+        "calls": 40,
+        "effects": 0,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-9",
+            "time": 5.780474757606141
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-10",
+            "time": 3.0342360414577056
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-11",
+            "time": 2.635038448679372
+          }
+        ],
+        "geometries": 27,
+        "models": true,
+        "textures": 22,
+        "triangles": 301244
+      },
+      "slots": [
+        {
+          "h": 44,
+          "label": "1·1",
+          "level": "",
+          "slot": "slot-r1-c1",
+          "w": 44,
+          "x": 66.38542175292969,
+          "y": 333.4895935058594
+        },
+        {
+          "h": 44,
+          "label": "木材厂 Lv.1",
+          "level": "1",
+          "slot": "slot-r1-c2",
+          "w": 44,
+          "x": 112.1875,
+          "y": 333.4895935058594
+        },
+        {
+          "h": 44,
+          "label": "箭塔 Lv.1",
+          "level": "1",
+          "slot": "slot-r1-c3",
+          "w": 44,
+          "x": 158,
+          "y": 333.4895935058594
+        },
+        {
+          "h": 44,
+          "label": "1·4",
+          "level": "",
+          "slot": "slot-r1-c4",
+          "w": 44,
+          "x": 203.80209350585935,
+          "y": 333.4895935058594
+        },
+        {
+          "h": 44,
+          "label": "1·5",
+          "level": "",
+          "slot": "slot-r1-c5",
+          "w": 44,
+          "x": 249.6041717529297,
+          "y": 333.4895935058594
+        },
+        {
+          "h": 44,
+          "label": "2·1",
+          "level": "",
+          "slot": "slot-r2-c1",
+          "w": 44,
+          "x": 66.38542175292969,
+          "y": 378.6041870117187
+        },
+        {
+          "h": 44,
+          "label": "2·2",
+          "level": "",
+          "slot": "slot-r2-c2",
+          "w": 44,
+          "x": 112.1875,
+          "y": 378.6041870117187
+        },
+        {
+          "h": 44,
+          "label": "2·3",
+          "level": "",
+          "slot": "slot-r2-c3",
+          "w": 44,
+          "x": 158,
+          "y": 378.6041870117187
+        },
+        {
+          "h": 44,
+          "label": "2·4",
+          "level": "",
+          "slot": "slot-r2-c4",
+          "w": 44,
+          "x": 203.80209350585935,
+          "y": 378.6041870117187
+        },
+        {
+          "h": 44,
+          "label": "2·5",
+          "level": "",
+          "slot": "slot-r2-c5",
+          "w": 44,
+          "x": 249.6041717529297,
+          "y": 378.6041870117187
+        },
+        {
+          "h": 44,
+          "label": "3·1",
+          "level": "",
+          "slot": "slot-r3-c1",
+          "w": 44,
+          "x": 66.38542175292969,
+          "y": 423.7291870117187
+        },
+        {
+          "h": 44,
+          "label": "3·2",
+          "level": "",
+          "slot": "slot-r3-c2",
+          "w": 44,
+          "x": 112.1875,
+          "y": 423.7291870117187
+        },
+        {
+          "h": 44,
+          "label": "主城",
+          "level": "1",
+          "slot": "slot-r3-c3",
+          "w": 44,
+          "x": 158,
+          "y": 423.7291870117187
+        },
+        {
+          "h": 44,
+          "label": "3·4",
+          "level": "",
+          "slot": "slot-r3-c4",
+          "w": 44,
+          "x": 203.80209350585935,
+          "y": 423.7291870117187
+        },
+        {
+          "h": 44,
+          "label": "3·5",
+          "level": "",
+          "slot": "slot-r3-c5",
+          "w": 44,
+          "x": 249.6041717529297,
+          "y": 423.7291870117187
+        }
+      ],
+      "viewport": [
+        360,
+        640
+      ]
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "711",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+        "openingCountdown": "0",
+        "phase": "TACTICAL_PAUSE",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c5"
+      },
+      "overlaps": [],
+      "presentation": {
+        "calls": 40,
+        "effects": 0,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-9",
+            "time": 5.780474757606141
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-10",
+            "time": 3.0342360414577056
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-11",
+            "time": 2.635038448679372
+          }
+        ],
+        "geometries": 40,
+        "models": true,
+        "textures": 22,
+        "triangles": 301244
+      },
+      "slots": [
+        {
+          "h": 44,
+          "label": "1·1",
+          "level": "",
+          "slot": "slot-r1-c1",
+          "w": 44,
+          "x": 40.79166793823242,
+          "y": 470.4583435058594
+        },
+        {
+          "h": 44,
+          "label": "木材厂 Lv.1",
+          "level": "1",
+          "slot": "slot-r1-c2",
+          "w": 44,
+          "x": 106.89583587646484,
+          "y": 470.4583435058594
+        },
+        {
+          "h": 44,
+          "label": "箭塔 Lv.1",
+          "level": "1",
+          "slot": "slot-r1-c3",
+          "w": 44,
+          "x": 173,
+          "y": 470.4583435058594
+        },
+        {
+          "h": 44,
+          "label": "1·4",
+          "level": "",
+          "slot": "slot-r1-c4",
+          "w": 44,
+          "x": 239.09375,
+          "y": 470.4583435058594
+        },
+        {
+          "h": 44,
+          "label": "1·5",
+          "level": "",
+          "slot": "slot-r1-c5",
+          "w": 44,
+          "x": 305.19793701171875,
+          "y": 470.4583435058594
+        },
+        {
+          "h": 44,
+          "label": "2·1",
+          "level": "",
+          "slot": "slot-r2-c1",
+          "w": 44,
+          "x": 40.79166793823242,
+          "y": 535.5729370117188
+        },
+        {
+          "h": 44,
+          "label": "2·2",
+          "level": "",
+          "slot": "slot-r2-c2",
+          "w": 44,
+          "x": 106.89583587646484,
+          "y": 535.5729370117188
+        },
+        {
+          "h": 44,
+          "label": "2·3",
+          "level": "",
+          "slot": "slot-r2-c3",
+          "w": 44,
+          "x": 173,
+          "y": 535.5729370117188
+        },
+        {
+          "h": 44,
+          "label": "2·4",
+          "level": "",
+          "slot": "slot-r2-c4",
+          "w": 44,
+          "x": 239.09375,
+          "y": 535.5729370117188
+        },
+        {
+          "h": 44,
+          "label": "2·5",
+          "level": "",
+          "slot": "slot-r2-c5",
+          "w": 44,
+          "x": 305.19793701171875,
+          "y": 535.5729370117188
+        },
+        {
+          "h": 44,
+          "label": "3·1",
+          "level": "",
+          "slot": "slot-r3-c1",
+          "w": 44,
+          "x": 40.79166793823242,
+          "y": 600.6979370117188
+        },
+        {
+          "h": 44,
+          "label": "3·2",
+          "level": "",
+          "slot": "slot-r3-c2",
+          "w": 44,
+          "x": 106.89583587646484,
+          "y": 600.6979370117188
+        },
+        {
+          "h": 44,
+          "label": "主城",
+          "level": "1",
+          "slot": "slot-r3-c3",
+          "w": 44,
+          "x": 173,
+          "y": 600.6979370117188
+        },
+        {
+          "h": 44,
+          "label": "3·4",
+          "level": "",
+          "slot": "slot-r3-c4",
+          "w": 44,
+          "x": 239.09375,
+          "y": 600.6979370117188
+        },
+        {
+          "h": 44,
+          "label": "3·5",
+          "level": "",
+          "slot": "slot-r3-c5",
+          "w": 44,
+          "x": 305.19793701171875,
+          "y": 600.6979370117188
+        }
+      ],
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "711",
+        "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+        "openingCountdown": "0",
+        "phase": "TACTICAL_PAUSE",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": "slot-r3-c3"
+      },
+      "overlaps": [],
+      "presentation": {
+        "calls": 40,
+        "effects": 0,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-9",
+            "time": 5.780474757606141
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-10",
+            "time": 3.0342360414577056
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-11",
+            "time": 2.635038448679372
+          }
+        ],
+        "geometries": 40,
+        "models": true,
+        "textures": 22,
+        "triangles": 301244
+      },
+      "slots": [
+        {
+          "h": 44,
+          "label": "1·1",
+          "level": "",
+          "slot": "slot-r1-c1",
+          "w": 44,
+          "x": 538.03125,
+          "y": 423.0625
+        },
+        {
+          "h": 44,
+          "label": "木材厂 Lv.1",
+          "level": "1",
+          "slot": "slot-r1-c2",
+          "w": 44,
+          "x": 599.5104370117188,
+          "y": 423.0625
+        },
+        {
+          "h": 44,
+          "label": "箭塔 Lv.1",
+          "level": "1",
+          "slot": "slot-r1-c3",
+          "w": 44,
+          "x": 661,
+          "y": 423.0625
+        },
+        {
+          "h": 44,
+          "label": "1·4",
+          "level": "",
+          "slot": "slot-r1-c4",
+          "w": 44,
+          "x": 722.4791870117188,
+          "y": 423.0625
+        },
+        {
+          "h": 44,
+          "label": "1·5",
+          "level": "",
+          "slot": "slot-r1-c5",
+          "w": 44,
+          "x": 783.9583740234375,
+          "y": 423.0625
+        },
+        {
+          "h": 44,
+          "label": "2·1",
+          "level": "",
+          "slot": "slot-r2-c1",
+          "w": 44,
+          "x": 538.03125,
+          "y": 483.6354370117187
+        },
+        {
+          "h": 44,
+          "label": "2·2",
+          "level": "",
+          "slot": "slot-r2-c2",
+          "w": 44,
+          "x": 599.5104370117188,
+          "y": 483.6354370117187
+        },
+        {
+          "h": 44,
+          "label": "2·3",
+          "level": "",
+          "slot": "slot-r2-c3",
+          "w": 44,
+          "x": 661,
+          "y": 483.6354370117187
+        },
+        {
+          "h": 44,
+          "label": "2·4",
+          "level": "",
+          "slot": "slot-r2-c4",
+          "w": 44,
+          "x": 722.4791870117188,
+          "y": 483.6354370117187
+        },
+        {
+          "h": 44,
+          "label": "2·5",
+          "level": "",
+          "slot": "slot-r2-c5",
+          "w": 44,
+          "x": 783.9583740234375,
+          "y": 483.6354370117187
+        },
+        {
+          "h": 44,
+          "label": "3·1",
+          "level": "",
+          "slot": "slot-r3-c1",
+          "w": 44,
+          "x": 538.03125,
+          "y": 544.1979370117188
+        },
+        {
+          "h": 44,
+          "label": "3·2",
+          "level": "",
+          "slot": "slot-r3-c2",
+          "w": 44,
+          "x": 599.5104370117188,
+          "y": 544.1979370117188
+        },
+        {
+          "h": 44,
+          "label": "主城",
+          "level": "1",
+          "slot": "slot-r3-c3",
+          "w": 44,
+          "x": 661,
+          "y": 544.1979370117188
+        },
+        {
+          "h": 44,
+          "label": "3·4",
+          "level": "",
+          "slot": "slot-r3-c4",
+          "w": 44,
+          "x": 722.4791870117188,
+          "y": 544.1979370117188
+        },
+        {
+          "h": 44,
+          "label": "3·5",
+          "level": "",
+          "slot": "slot-r3-c5",
+          "w": 44,
+          "x": 783.9583740234375,
+          "y": 544.1979370117188
+        }
+      ],
+      "viewport": [
+        1366,
+        768
+      ]
+    }
+  ],
+  "selections": [
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r1-c1",
+      "actual": "slot-r1-c1"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r1-c2",
+      "actual": "slot-r1-c2"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r1-c3",
+      "actual": "slot-r1-c3"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r1-c4",
+      "actual": "slot-r1-c4"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r1-c5",
+      "actual": "slot-r1-c5"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r2-c1",
+      "actual": "slot-r2-c1"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r2-c2",
+      "actual": "slot-r2-c2"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r2-c3",
+      "actual": "slot-r2-c3"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r2-c4",
+      "actual": "slot-r2-c4"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r2-c5",
+      "actual": "slot-r2-c5"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r3-c1",
+      "actual": "slot-r3-c1"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r3-c2",
+      "actual": "slot-r3-c2"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r3-c3",
+      "actual": "slot-r3-c3"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r3-c4",
+      "actual": "slot-r3-c4"
+    },
+    {
+      "viewport": {
+        "width": 360,
+        "height": 640
+      },
+      "requested": "slot-r3-c5",
+      "actual": "slot-r3-c5"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "requested": "slot-r1-c1",
+      "actual": "slot-r1-c1"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "requested": "slot-r2-c5",
+      "actual": "slot-r2-c5"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "requested": "slot-r3-c3",
+      "actual": "slot-r3-c3"
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "requested": "slot-r1-c1",
+      "actual": "slot-r1-c1"
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "requested": "slot-r2-c5",
+      "actual": "slot-r2-c5"
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "requested": "slot-r3-c3",
+      "actual": "slot-r3-c3"
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "before": {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "3077",
+      "commandHistory": "[{\"step\":2284,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2284,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+      "openingCountdown": "0",
+      "phase": "DEFEAT",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": ""
+    },
+    "at": "2026-10-09T14:40:57.226Z",
+    "buttons": [
+      "重新开始"
+    ],
+    "enabledSlots": 0,
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 173 · +0.6/秒金币 13.25\n      城墙 0 / 100 · 危险护盾 0 / 100\n      波次 2 / 10 · 敌人 13下一波 23 秒\n    ",
+    "inert": [
+      {
+        "class": "preview-hud",
+        "inert": true
+      },
+      {
+        "class": "preview-field",
+        "inert": true
+      },
+      {
+        "class": "preview-controls",
+        "inert": true
+      }
+    ],
+    "presentation": {
+      "calls": 55,
+      "effects": 0,
+      "enemies": [
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-50",
+          "time": 16.80040120361083
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-52",
+          "time": 14.002006018054123
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-54",
+          "time": 13.603610832497456
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-56",
+          "time": 10.805215646940797
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-57",
+          "time": 10.60601805416246
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-58",
+          "time": 8.006820461384136
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-59",
+          "time": 7.8076228686058
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-60",
+          "time": 7.62527582748243
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-61",
+          "time": 5.026078234704105
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-62",
+          "time": 4.82688064192577
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-63",
+          "time": 4.6276830491474366
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-64",
+          "time": 2.0284854563691104
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-65",
+          "time": 1.6292878635907742
+        }
+      ],
+      "geometries": 23,
+      "models": true,
+      "textures": 28,
+      "triangles": 398666
+    }
+  },
+  "after": {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "7",
+      "commandHistory": "[{\"step\":2284,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2284,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":0,\"command\":{\"type\":\"restart\"},\"accepted\":true}]",
+      "openingCountdown": "4.7666666666666675",
+      "phase": "OPENING_COUNTDOWN",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": ""
+    },
+    "at": "2026-10-09T14:41:34.649Z",
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 5 秒\n    ",
+    "inert": [
+      {
+        "class": "preview-hud",
+        "inert": false
+      },
+      {
+        "class": "preview-field",
+        "inert": false
+      },
+      {
+        "class": "preview-controls",
+        "inert": false
+      }
+    ],
+    "overlayHidden": true,
+    "presentation": {
+      "calls": 29,
+      "effects": 0,
+      "enemies": [],
+      "geometries": 23,
+      "models": true,
+      "textures": 15,
+      "triangles": 217134
+    },
+    "slots": [
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r1-c1"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r1-c2"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r1-c3"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r1-c4"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r1-c5"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r2-c1"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r2-c2"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r2-c3"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r2-c4"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r2-c5"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r3-c1"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r3-c2"
+      },
+      {
+        "definition": "main_city",
+        "level": "1",
+        "slot": "slot-r3-c3"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r3-c4"
+      },
+      {
+        "definition": "",
+        "level": "",
+        "slot": "slot-r3-c5"
+      }
+    ]
+  }
+}

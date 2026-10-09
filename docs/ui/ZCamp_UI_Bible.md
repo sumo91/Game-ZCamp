@@ -1,5 +1,7 @@
 # ZCamp UI Bible
 
+> 2026-10-09 Three.js 改造适用说明：当前方向以 [Three.js 规格](../specs/ZCamp-Threejs-3D-lowpoly-spec.md) 和 [交付计划](../production/THREEJS_DELIVERY_PLAN.md) 为准。下文的 Phaser FIT、图元母版、固定像素区块和旧主题描述是保留的候选基线；Three.js 样板使用固定正交镜头、DOM/CSS 中文界面和模型锚点投影。保留十五格可点、真实内容派生、输入优先级、模态隔离与冻结语义。移动浏览器主要热区至少 44 CSS px；样板允许明确标记开发占位，完整迁移不得遗留未标记占位。#4 的运行记录属于样板实施证据，最终布局与实体设备接受在 #5/#13 登记。
+
 > 项目：《尸潮营地》（ZCamp）
 > 文档版本：v0.8 / Phase D candidate
 > 更新日期：2026-08-13

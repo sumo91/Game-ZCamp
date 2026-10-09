@@ -1,0 +1,108 @@
+{
+  "observedClips": [
+    "walk",
+    "development",
+    "hit",
+    "death"
+  ],
+  "samples": [
+    {
+      "elapsedMs": 24,
+      "models": true,
+      "enemies": [],
+      "effects": 0,
+      "calls": 121,
+      "triangles": 50862
+    },
+    {
+      "elapsedMs": 8049,
+      "models": true,
+      "enemies": [
+        {
+          "id": "walker-28",
+          "clip": "walk",
+          "dying": false,
+          "time": 0.03333333333333333
+        }
+      ],
+      "effects": 0,
+      "calls": 139,
+      "triangles": 64788
+    },
+    {
+      "elapsedMs": 8219,
+      "models": true,
+      "enemies": [
+        {
+          "id": "walker-28",
+          "clip": "walk",
+          "dying": false,
+          "time": 0.19999999999999998
+        },
+        {
+          "id": "runner-29",
+          "clip": "development",
+          "dying": false,
+          "time": 0
+        }
+      ],
+      "effects": 0,
+      "calls": 147,
+      "triangles": 64884
+    },
+    {
+      "elapsedMs": 9017,
+      "models": true,
+      "enemies": [
+        {
+          "id": "walker-28",
+          "clip": "hit",
+          "dying": false,
+          "time": 0.9999999999999999
+        },
+        {
+          "id": "runner-29",
+          "clip": "development",
+          "dying": true,
+          "time": 0
+        },
+        {
+          "id": "walker-30",
+          "clip": "walk",
+          "dying": false,
+          "time": 0.8333333333333333
+        }
+      ],
+      "effects": 3,
+      "calls": 168,
+      "triangles": 78898
+    },
+    {
+      "elapsedMs": 9384,
+      "models": true,
+      "enemies": [
+        {
+          "id": "walker-28",
+          "clip": "death",
+          "dying": true,
+          "time": 1.3666666666666676
+        },
+        {
+          "id": "runner-29",
+          "clip": "development",
+          "dying": true,
+          "time": 0
+        },
+        {
+          "id": "walker-30",
+          "clip": "walk",
+          "dying": false,
+          "time": 1.2000000000000004
+        }
+      ],
+      "effects": 4,
+      "calls": 169,
+      "triangles": 78898
+    }
+  ]
+}
