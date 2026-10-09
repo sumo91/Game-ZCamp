@@ -67,6 +67,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
   let lastPriority = "none";
   let previousFocus: HTMLElement | null = null;
   let message = "";
+  let messageExpiresAt = 0;
   let disposed = false;
   let frameId = 0;
 
@@ -122,6 +123,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
         if (type === "restart") battlefield.reset();
       }
     }
+    messageExpiresAt = message ? performance.now() + 1500 : 0;
     render(0);
   };
 
@@ -129,6 +131,11 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     const state = session.getState();
     if (!state.pendingTraitDraft) ui.traitLocked = false;
     const priority = getGrowthInputPriority(state.phase, ui.transformOpen);
+    // Operation feedback expires in real time, including while the battle is frozen.
+    if (message && (priority === "system_pause" || priority === "result" || performance.now() >= messageExpiresAt)) {
+      message = "";
+      messageExpiresAt = 0;
+    }
     const modal = priority !== "building" && priority !== "none";
     battlefield.render(state, session.drainEvents(), deltaSeconds, ui.selectedSlot);
     app.dataset.phase = state.phase;

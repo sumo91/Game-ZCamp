@@ -1,0 +1,14 @@
+{
+  "initial": "还差 10 金币",
+  "expiredAfterActionStartedMs": 1622,
+  "statusAfter": "",
+  "options": [
+    "机枪塔 · 金币 10快速单体输出 · 白模还差 10 金币",
+    "炮塔 · 金币 10范围清怪 · 白模还差 10 金币",
+    "冰冻塔 · 金币 10减速控制 · 白模还差 10 金币",
+    "电磁塔 · 金币 10链式压制 · 白模还差 10 金币",
+    "关闭改造"
+  ],
+  "phase": "TACTICAL_PAUSE",
+  "commands": "[{\"step\":2,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c1\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c1\"},{\"step\":2,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"}]"
+}

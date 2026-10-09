@@ -16,3 +16,12 @@
 04:15:35 最终回归：`npm run check`，15 test files passed / 125 tests passed；`npm run build` 通过。没有提交失败的中间实现。
 
 环境准备：初次新工作树没有安装 node_modules，`vitest is not recognized` 不算 red；先执行 `npm ci`，lockfile 未修改，再观察上表第一条行为失败。
+
+## 审查后提示期限修复
+
+公开浏览器玩家边界继续作为本切片的测试入口，没有为局部 deadline 或私有渲染函数增加镜像测试。实施代理本回合浏览器断开，库存 apps=[] / browsers=[]，根会话恢复浏览器后代跑实际 red；红证据取得后才修改源码。
+
+- Red：固定提交 `800c240` 中，战术暂停、箭塔 40 + 木材厂 60、木材 20；点击箭塔升级得到“还差 30 木材”，等待 21818ms 后仍显示，TACTICAL_PAUSE 未变化。见 `root-red-persistent-notice.json` / `.jpg`。
+- 最小实现：只在 WhiteboxPreview 增加 1.5 秒真实时间 deadline，由既有 RAF 清理；系统暂停与结算清除旧提示，永久费用/差额详情保留。
+- Green：根浏览器同一暂停路径初始差 30 可见，后续 status 为空，详情仍保留差 30、阶段 TACTICAL_PAUSE。`root-green-notice-time.json` 的 1325ms 没有记录点击起点，不能当作完整点击有效期。零金币点击炮塔的初始 modal status 差 10；从 click action 开始 1622ms 后为空，四路永久差额各 10、命令记录仅 pause + 2 build，无付费命令，error=[]。初始/到期截图及两个 `root-green-*-time.json` 保留。根 viewport 已 reset，临时页关闭。
+- 10:54:14 自动回归：`npm run check`，15 files / 125 tests passed；`npm run build` 和 `git diff --check` 通过。构建仍仅有既有 chunk 体积警告。
