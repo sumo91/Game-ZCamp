@@ -1,16 +1,24 @@
 import { BattleSession } from "../core/battleSession";
 import { starterCatalog } from "../core/content";
-import { getWoodProductionPerSecond } from "../core/resources";
-import { CAMP_SLOT_IDS } from "../core/types";
-import { deriveEmptySlotActions, deriveGrowthPauseControl, getGrowthInputPriority } from "../phaser/growthUi";
+import { getGrowthBuildingPresentation, type GrowthSpecialTowerId } from "../core/buildingGrowth";
+import { getWoodProductionPerSecond, MAIN_CITY_WOOD_INCOME } from "../core/resources";
+import { CAMP_SLOT_IDS, type GameCommand } from "../core/types";
+import { decideGrowthControl, initialGrowthUiState, type GrowthControlInput } from "../ui/growthControls";
+import { deriveBuildingDetail, deriveEmptySlotActions, deriveGrowthPauseControl, deriveGrowthWaveTime, deriveTraitOptions, deriveTransformOptions, formatGrowthTraitEffectAtStacks, getGrowthInputPriority, type GrowthStatsView } from "../ui/growthUi";
 import { Battlefield } from "./Battlefield";
 import { isWallInDanger } from "./whiteboxCatalog";
 import "./preview.css";
 
-/** Deliberately limited Stage A UI. Full building growth follows in Issue #3. */
+const content = starterCatalog.buildingGrowth;
+const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
+const number = (value: number | undefined) => Number((value ?? 0).toFixed(2));
+const statsText = (stats: GrowthStatsView) => stats.kind === "lumberyard"
+  ? `产木 ${number(stats.woodPerSecond)}/秒`
+  : `伤害 ${number(stats.damage)} · 间隔 ${number(stats.attackIntervalSeconds)}秒 · 射程 ${number(stats.range)}`;
+
+/** Explicit development whitebox; all growth commands use the same battle session. */
 export function mountWhiteboxPreview(app: HTMLElement): () => void {
   app.classList.add("whitebox-app");
-  // Read-only evidence metadata, confined to this explicitly marked preview.
   app.dataset.browserUserAgent = navigator.userAgent;
   app.dataset.renderPixelRatio = String(Math.min(window.devicePixelRatio, 2));
   app.innerHTML = `
@@ -23,14 +31,16 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     <section class="preview-field" aria-label="白模防线">
       <div class="preview-zone">亡灵推进区 ↓</div>
       <div class="preview-slots" aria-label="5×3 营地格位"></div>
-      <div class="preview-overlay" hidden><div class="preview-dialog"><h2></h2><p></p><button type="button" data-action="restart">重新开始</button></div></div>
     </section>
     <footer class="preview-controls">
-      <div class="preview-status"><span data-view="phase"></span><button type="button" data-action="pause">暂停</button></div>
-      <div class="preview-context" aria-live="polite"><strong data-view="selection">点击营地空格建造</strong><span data-view="detail">固定主城在第三行第三列</span></div>
-      <button class="preview-build" type="button" data-action="build" hidden></button>
-      <div class="preview-notice" role="status"></div>
-    </footer>`;
+      <div class="preview-status"><span data-view="phase"></span><button type="button" data-action="toggle_pause">暂停</button></div>
+      <div class="preview-context preview-scroll" aria-label="所选建筑详情" tabindex="0"></div>
+      <div class="preview-actions"></div>
+      <div class="preview-notice" role="status" aria-live="polite"></div>
+    </footer>
+    <div class="preview-overlay" hidden><section class="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="growth-dialog-title">
+      <div class="preview-dialog-content preview-scroll"></div><div class="preview-modal-notice" role="status" aria-live="polite"></div>
+    </section></div>`;
   const session = new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" } });
   const field = app.querySelector<HTMLElement>(".preview-field")!;
   let battlefield: Battlefield;
@@ -41,13 +51,23 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     return () => { app.replaceChildren(); app.classList.remove("whitebox-app"); };
   }
   const view = (name: string) => app.querySelector<HTMLElement>(`[data-view="${name}"]`)!;
-  const pauseButton = app.querySelector<HTMLButtonElement>("[data-action=pause]")!;
-  const buildButton = app.querySelector<HTMLButtonElement>("[data-action=build]")!;
+  const hud = app.querySelector<HTMLElement>(".preview-hud")!;
+  const controls = app.querySelector<HTMLElement>(".preview-controls")!;
+  const context = app.querySelector<HTMLElement>(".preview-context")!;
+  const actions = app.querySelector<HTMLElement>(".preview-actions")!;
+  const pauseButton = app.querySelector<HTMLButtonElement>("[data-action=toggle_pause]")!;
   const overlay = app.querySelector<HTMLElement>(".preview-overlay")!;
+  const dialog = app.querySelector<HTMLElement>(".preview-dialog-content")!;
   const notice = app.querySelector<HTMLElement>(".preview-notice")!;
+  const modalNotice = app.querySelector<HTMLElement>(".preview-modal-notice")!;
   const slots = app.querySelector<HTMLElement>(".preview-slots")!;
   const slotButtons = new Map<string, HTMLButtonElement>();
-  let selected: string | null = null;
+  const commandHistory: Array<{ step: number; command: GameCommand; accepted: boolean; reason?: string }> = [];
+  let ui = initialGrowthUiState();
+  let lastPriority = "none";
+  let previousFocus: HTMLElement | null = null;
+  let message = "";
+  let messageExpiresAt = 0;
   let disposed = false;
   let frameId = 0;
 
@@ -62,16 +82,64 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     slotButtons.set(slotId, button);
   }
 
-  const selectSlot = (slotId: string) => {
-    if (getGrowthInputPriority(session.getState().phase, false) !== "building") return;
-    selected = slotId;
-    notice.textContent = "";
+  const updateHtml = (element: HTMLElement, html: string) => {
+    if (element.dataset.rendered === html) return;
+    const scrollTop = element.scrollTop;
+    const active = element.contains(document.activeElement) ? (document.activeElement as HTMLElement).dataset : null;
+    element.innerHTML = html;
+    element.dataset.rendered = html;
+    element.scrollTop = scrollTop;
+    if (active?.action) {
+      const replacement = Array.from(element.querySelectorAll<HTMLButtonElement>("[data-action]")).find((button) => button.dataset.action === active.action && button.dataset.option === active.option && button.dataset.definition === active.definition);
+      replacement?.focus({ preventScroll: true });
+    }
+  };
+  const buttonHtml = (action: string, label: string, affordable = true, extra = "") => `<button type="button" data-action="${action}" ${extra} ${affordable ? "" : 'aria-disabled="true" class="unaffordable"'}>${escapeHtml(label)}</button>`;
+  const dispatch = (command: GameCommand) => {
+    const result = session.dispatch(command);
+    commandHistory.push({ step: session.getStepIndex(), command, ...result });
+    if (commandHistory.length > 64) commandHistory.shift();
+    // Read-only command evidence in the explicitly marked preview, never a mutable core handle.
+    app.dataset.commandHistory = JSON.stringify(commandHistory);
+    return result;
+  };
+  const act = (input: GrowthControlInput) => {
+    const decision = decideGrowthControl(content, session.getState(), ui, input);
+    const previousUi = ui;
+    ui = decision.ui;
+    message = decision.reason;
+    if (decision.command) {
+      const result = dispatch(decision.command);
+      if (!result.accepted) {
+        ui = { ...previousUi, traitLocked: false };
+        message = result.reason ?? "操作不可用";
+      } else {
+        const type = decision.command.type;
+        message = type === "build_building" ? "建筑已建造 · 木材扣费一次"
+          : type === "upgrade_building" ? "升级扣费一次 · 请选择当前建筑词条"
+          : type === "choose_building_trait" ? "词条仅对当前建筑生效"
+          : type === "transform_tower" ? "改造完成 · 保留等级与合法词条"
+          : type === "destroy_building" ? "建筑已拆除 · 不返还木材或金币" : "";
+        if (type === "restart") battlefield.reset();
+      }
+    }
+    messageExpiresAt = message ? performance.now() + 1500 : 0;
     render(0);
   };
 
   function render(deltaSeconds: number): void {
     const state = session.getState();
-    battlefield.render(state, session.drainEvents(), deltaSeconds, selected);
+    if (!state.pendingTraitDraft) ui.traitLocked = false;
+    const priority = getGrowthInputPriority(state.phase, ui.transformOpen);
+    // Operation feedback expires in real time, including while the battle is frozen.
+    if (message && (priority === "system_pause" || priority === "result" || performance.now() >= messageExpiresAt)) {
+      message = "";
+      messageExpiresAt = 0;
+    }
+    const modal = priority !== "building" && priority !== "none";
+    battlefield.render(state, session.drainEvents(), deltaSeconds, ui.selectedSlot);
+    app.dataset.phase = state.phase;
+    app.dataset.selectedSlot = ui.selectedSlot ?? "";
     view("wood").textContent = `木材 ${Math.floor(state.wood)} · +${getWoodProductionPerSecond(state).toFixed(1)}/秒`;
     view("gold").textContent = `金币 ${Number(state.gold.toFixed(2))}`;
     const wallInDanger = isWallInDanger(state);
@@ -79,91 +147,130 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     view("wall").classList.toggle("danger", wallInDanger);
     view("shield").textContent = `护盾 ${Math.ceil(state.wallShield)} / ${state.wallShieldMax}`;
     view("wave").textContent = `波次 ${state.wave} / ${state.maxWave} · 敌人 ${state.enemies.length}`;
-    view("time").textContent = state.phase === "OPENING_COUNTDOWN" || state.pausedFromPhase === "OPENING_COUNTDOWN" || state.systemPausedFromPhase === "OPENING_COUNTDOWN"
-      ? `首波 ${Math.ceil(state.openingCountdownRemainingSeconds)} 秒`
-      : state.wave < state.maxWave ? `下一波 ${Math.ceil(state.nextWaveTimeRemainingSeconds)} 秒` : "最后一波";
-    view("phase").textContent = state.phase === "TACTICAL_PAUSE" ? "战术暂停 · 可建造" : state.phase === "OPENING_COUNTDOWN" ? "准备防线" : `战斗 ${Math.floor(state.effectiveBattleTimeSeconds)} 秒 · 击杀 ${state.defeatedEnemies}`;
+    view("time").textContent = deriveGrowthWaveTime(state);
+    view("phase").textContent = state.phase === "TACTICAL_PAUSE" ? "战术暂停 · 可成长" : state.phase === "OPENING_COUNTDOWN" ? "准备防线" : `战斗 ${Math.floor(state.effectiveBattleTimeSeconds)} 秒 · 击杀 ${state.defeatedEnemies}`;
     const pause = deriveGrowthPauseControl(state.phase);
     pauseButton.textContent = pause.label;
-    pauseButton.disabled = !pause.enabled;
+    pauseButton.disabled = !pause.enabled || priority !== "building";
     pauseButton.hidden = !pause.visible;
     for (const [slotId, button] of slotButtons) {
       const building = state.buildings.find((candidate) => candidate.slotId === slotId);
-      const label = building?.kind === "main_city" ? "主城" : building ? `箭塔 Lv.${building.level}` : `${button.dataset.row}·${button.dataset.column}`;
+      const name = building?.kind === "main_city" ? "主城" : building?.growthDefinitionId ? getGrowthBuildingPresentation(content, building.growthDefinitionId)?.displayName : null;
+      const label = building?.kind === "main_city" ? "主城" : building ? `${name ?? "建筑"}\nLv.${building.level}` : `${button.dataset.row}·${button.dataset.column}`;
       button.textContent = label;
-      button.setAttribute("aria-label", `第${button.dataset.row}行第${button.dataset.column}列，${building ? label : "空格"}`);
-      button.setAttribute("aria-pressed", String(slotId === selected));
-      button.disabled = getGrowthInputPriority(state.phase, false) !== "building";
+      button.setAttribute("aria-label", `第${button.dataset.row}行第${button.dataset.column}列，${building ? label.replace("\n", " ") : "空格"}`);
+      button.setAttribute("aria-pressed", String(slotId === ui.selectedSlot));
+      button.disabled = priority !== "building";
       button.classList.toggle("occupied", Boolean(building));
+      button.dataset.definition = building?.growthDefinitionId ?? building?.definitionId ?? "";
+      button.dataset.level = building ? String(building.level) : "";
       const point = battlefield.projectSlot(slotId);
       button.style.left = `${point.x}px`;
       button.style.top = `${point.y}px`;
     }
-    const building = state.buildings.find((candidate) => candidate.slotId === selected);
-    buildButton.hidden = true;
-    if (!selected) {
-      view("selection").textContent = "点击营地空格建造";
-      view("detail").textContent = "固定主城在第三行第三列";
+    const building = state.buildings.find((candidate) => candidate.slotId === ui.selectedSlot);
+    let contextHtml = "<strong>点击营地格位</strong><p>选择空格建造，或查看已有建筑。</p>";
+    let actionHtml = "";
+    if (ui.selectedSlot && !building) {
+      const choices = deriveEmptySlotActions(content, state, ui.selectedSlot);
+      const slotButton = slotButtons.get(ui.selectedSlot)!;
+      contextHtml = `<strong>第 ${slotButton.dataset.row} 行第 ${slotButton.dataset.column} 列 · 空格</strong>${choices.map((choice) => `<p>${escapeHtml(getGrowthBuildingPresentation(content, choice.definitionId)?.displayName ?? choice.definitionId)}：${escapeHtml(choice.description)} · ${escapeHtml(choice.reason)}</p>`).join("")}`;
+      actionHtml = choices.map((choice) => buttonHtml("build", choice.label, choice.affordable && Boolean(choice.command), `data-definition="${choice.definitionId}"`)).join("");
+    } else if (building?.kind === "main_city") {
+      contextHtml = `<strong>固定主城 · Lv.1</strong><p>驻守英雄与城墙防线 · 基础产木 ${MAIN_CITY_WOOD_INCOME}/秒</p><p>固定第 3 行第 3 列 · 不可升级、改造或拆除</p>`;
     } else if (building) {
-      view("selection").textContent = building.kind === "main_city" ? "固定主城" : `箭塔 Lv.${building.level}`;
-      view("detail").textContent = building.kind === "main_city" ? "主城不可建造或拆除 · 持续生产木材" : "单体攻击 · 升级与改造界面在后续阶段接入";
-    } else {
-      const action = deriveEmptySlotActions(starterCatalog.buildingGrowth, state, selected)[0]!;
-      view("selection").textContent = `已选第 ${slotButtons.get(selected)!.dataset.row} 行第 ${slotButtons.get(selected)!.dataset.column} 列`;
-      view("detail").textContent = `${action.description} · ${action.reason || action.statusLabel}`;
-      buildButton.textContent = action.label;
-      buildButton.disabled = !action.affordable || !action.command || getGrowthInputPriority(state.phase, false) !== "building";
-      buildButton.hidden = false;
+      const detail = deriveBuildingDetail(content, state, building);
+      if (detail) {
+        contextHtml = `<strong>${escapeHtml(detail.name)} · Lv.${detail.level}/${detail.maxLevel} · 白模</strong><p>${escapeHtml(detail.role)}</p><p>当前：${statsText(detail.current)}</p><p>${detail.next ? `下级：${statsText(detail.next)}` : "已满级 · 无下级属性"} · ${escapeHtml(detail.upgrade.reason)}</p>`;
+        contextHtml += detail.traits.length ? detail.traits.map((trait) => `<p>${escapeHtml(trait.name)} ×${trait.currentStacks} · ${escapeHtml(formatGrowthTraitEffectAtStacks(content, trait.id, trait.currentStacks))}</p>`).join("") : "<p>尚无词条 · 升级后强制三选一</p>";
+        if (ui.destroyConfirm) {
+          contextHtml = `<strong>确认拆除 ${escapeHtml(detail.name)}？</strong><p>不返还木材或金币，永久失去等级与词条。</p>`;
+          actionHtml = buttonHtml("cancel_destroy", "取消拆除") + buttonHtml("confirm_destroy", "确认拆除 · 零返还", true, 'class="destructive"');
+        } else {
+          actionHtml = buttonHtml("upgrade", detail.upgrade.label, detail.upgrade.affordable);
+          if (detail.canTransform) actionHtml += buttonHtml("open_transform", `改造 · 金币 ${detail.transformCostLabel}`);
+          actionHtml += buttonHtml("request_destroy", "拆除", true, 'class="destructive"');
+        }
+      } else contextHtml = "<strong>建筑内容不可用</strong><p>暂无合法成长操作</p>";
     }
-    const systemPaused = state.phase === "SYSTEM_PAUSE";
-    const ended = state.phase === "VICTORY" || state.phase === "DEFEAT";
-    overlay.hidden = !systemPaused && !ended;
-    overlay.querySelector("h2")!.textContent = systemPaused ? "系统暂停" : state.phase === "VICTORY" ? "防守成功" : "城墙失守";
-    overlay.querySelector("p")!.textContent = systemPaused ? "后台期间停止战斗，返回后从当前时刻继续。" : `击杀 ${state.defeatedEnemies} · 金币 ${Number(state.gold.toFixed(2))}`;
-    overlay.querySelector<HTMLButtonElement>("button")!.hidden = systemPaused;
+    updateHtml(context, contextHtml);
+    updateHtml(actions, actionHtml);
+    actions.querySelectorAll<HTMLButtonElement>("button").forEach((button) => { button.disabled = priority !== "building"; });
+    hud.inert = modal;
+    field.inert = modal;
+    controls.inert = modal;
+    overlay.hidden = !modal;
+    let dialogHtml = "";
+    if (priority === "trait_draft") {
+      const draft = state.pendingTraitDraft;
+      const target = state.buildings.find((candidate) => candidate.id === draft?.buildingId);
+      const targetName = target?.growthDefinitionId ? getGrowthBuildingPresentation(content, target.growthDefinitionId)?.displayName ?? "建筑" : "建筑";
+      const targetButton = target ? slotButtons.get(target.slotId)! : null;
+      dialogHtml = `<h2 id="growth-dialog-title">${escapeHtml(targetName)} · Lv.${target?.level} 词条三选一</h2><p>第 ${targetButton?.dataset.row} 行第 ${targetButton?.dataset.column} 列 · 选择一个以完成升级成长</p><p>仅当前建筑生效 · 选择后恢复原阶段</p><div class="preview-options">${deriveTraitOptions(content, state, draft).map((option, index) => `<button type="button" data-action="choose_trait" data-option="${index}" ${ui.traitLocked ? "disabled" : ""}><strong>${escapeHtml(option.name)} · ${option.currentStacks} → ${option.nextStacks} 层</strong><span>${escapeHtml(option.categoryLabel)}</span><span>${escapeHtml(option.effectText)}</span></button>`).join("")}</div>`;
+    } else if (priority === "transform") {
+      const options = building ? deriveTransformOptions(content, state, building) : [];
+      dialogHtml = `<h2 id="growth-dialog-title">箭塔四路改造 · 开发白模</h2><p>保留当前格位、等级与合法词条 · 不额外暂停战斗</p><div class="preview-options">${options.map((option) => `<button type="button" data-action="transform" data-definition="${option.targetTowerId}" ${option.affordable ? "" : 'aria-disabled="true" class="unaffordable"'}><strong>${escapeHtml(option.name)} · 金币 ${option.goldCost}</strong><span>${escapeHtml(option.role)} · 白模</span><span>${escapeHtml(option.reason)}</span></button>`).join("")}</div>${buttonHtml("close_transform", "关闭改造")}`;
+    } else if (priority === "system_pause") {
+      dialogHtml = '<h2 id="growth-dialog-title" tabindex="-1">系统暂停</h2><p>后台期间停止战斗，返回后保持原阶段与当前操作。</p>';
+    } else if (priority === "result") {
+      dialogHtml = `<h2 id="growth-dialog-title">${state.phase === "VICTORY" ? "防守成功" : "城墙失守"}</h2><p>击杀 ${state.defeatedEnemies} · 金币 ${Number(state.gold.toFixed(2))}</p>${buttonHtml("restart", "重新开始")}`;
+    }
+    updateHtml(dialog, dialogHtml);
+    notice.textContent = modal ? "" : message;
+    modalNotice.textContent = modal ? message : "";
+    if (priority !== lastPriority) {
+      if (modal) {
+        if (lastPriority === "building") previousFocus = document.activeElement as HTMLElement;
+        (dialog.querySelector<HTMLElement>("button:not([disabled])") ?? dialog.querySelector<HTMLElement>("h2"))?.focus({ preventScroll: true });
+      } else if (previousFocus?.isConnected && !previousFocus.closest("[inert]")) previousFocus.focus({ preventScroll: true });
+      lastPriority = priority;
+    }
   }
 
   const click = (event: MouseEvent) => {
+    // A build button becomes an upgrade button at the same screen position.
+    // Treat the follow-up click in a multi-click gesture as the same input.
+    if (event.detail > 1) return;
     const target = event.target as HTMLElement;
-    const slot = target.closest<HTMLElement>("[data-slot]");
-    if (slot) { selectSlot(slot.dataset.slot!); return; }
-    const action = target.closest<HTMLElement>("[data-action]")?.dataset.action;
-    if (action === "pause") {
-      const pause = deriveGrowthPauseControl(session.getState().phase);
-      if (pause.enabled) session.dispatch({ type: pause.label === "暂停" ? "pause" : "resume" });
-    } else if (action === "build" && selected) {
-      const state = session.getState();
-      if (!state.buildings.some((building) => building.slotId === selected) && getGrowthInputPriority(state.phase, false) === "building") {
-        const build = deriveEmptySlotActions(starterCatalog.buildingGrowth, state, selected)[0]!;
-        if (build.command && build.affordable) {
-          const result = session.dispatch(build.command);
-          notice.textContent = result.accepted ? "箭塔已建造 · 木材扣费一次" : result.reason ?? "操作不可用";
-        }
-      }
-    } else if (action === "restart") {
-      session.dispatch({ type: "restart" });
-      battlefield.reset();
-      selected = null;
-      notice.textContent = "";
-    } else if (target.tagName === "CANVAS") {
-      const slotId = battlefield.pick(event.clientX, event.clientY);
-      if (slotId) selectSlot(slotId);
+    const button = target.closest<HTMLButtonElement>("[data-action]");
+    if (button) {
+      event.stopPropagation();
+      const action = button.dataset.action!;
+      if (action === "build") act({ type: "build", definitionId: button.dataset.definition as "arrow_tower" | "lumberyard" });
+      else if (action === "transform") act({ type: "transform", targetTowerId: button.dataset.definition as GrowthSpecialTowerId });
+      else if (action === "choose_trait") act({ type: "choose_trait", index: Number(button.dataset.option) });
+      else act({ type: action as Exclude<GrowthControlInput["type"], "select_slot" | "build" | "transform" | "choose_trait"> });
       return;
     }
-    render(0);
+    if (target.closest(".preview-overlay")) return;
+    const slot = target.closest<HTMLElement>("[data-slot]");
+    if (slot) act({ type: "select_slot", slotId: slot.dataset.slot! });
+    else if (target.tagName === "CANVAS") {
+      const slotId = battlefield.pick(event.clientX, event.clientY);
+      act(slotId ? { type: "select_slot", slotId } : { type: "clear_selection" });
+    }
   };
-  const systemPause = () => { session.dispatch({ type: "system_pause" }); render(0); };
-  const systemResume = () => { if (!document.hidden) { session.dispatch({ type: "system_resume" }); render(0); } };
+  const keydown = (event: KeyboardEvent) => {
+    if (overlay.hidden || event.key !== "Tab") return;
+    const buttons = Array.from(dialog.querySelectorAll<HTMLElement>("button:not([disabled])"));
+    if (!buttons.length) { event.preventDefault(); return; }
+    const index = buttons.indexOf(document.activeElement as HTMLElement);
+    if (event.shiftKey && index <= 0) { event.preventDefault(); buttons.at(-1)!.focus(); }
+    else if (!event.shiftKey && (index === buttons.length - 1 || index === -1)) { event.preventDefault(); buttons[0]!.focus(); }
+  };
+  const systemPause = () => { dispatch({ type: "system_pause" }); render(0); };
+  const systemResume = () => { if (!document.hidden) { dispatch({ type: "system_resume" }); render(0); } };
   const visibility = () => document.hidden ? systemPause() : systemResume();
   const resize = () => { battlefield.resize(); render(0); };
   const observer = new ResizeObserver(resize);
   observer.observe(field);
   app.addEventListener("click", click);
+  app.addEventListener("keydown", keydown);
   document.addEventListener("visibilitychange", visibility);
   window.addEventListener("blur", systemPause);
   window.addEventListener("focus", systemResume);
   battlefield.resize();
-  if (document.hidden) session.dispatch({ type: "system_pause" });
+  if (document.hidden) dispatch({ type: "system_pause" });
   render(0);
   const frame = (timestamp: number) => {
     if (disposed) return;
@@ -177,6 +284,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     cancelAnimationFrame(frameId);
     observer.disconnect();
     app.removeEventListener("click", click);
+    app.removeEventListener("keydown", keydown);
     document.removeEventListener("visibilitychange", visibility);
     window.removeEventListener("blur", systemPause);
     window.removeEventListener("focus", systemResume);
@@ -186,8 +294,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     battlefield.dispose();
     app.replaceChildren();
     app.classList.remove("whitebox-app");
-    delete app.dataset.browserUserAgent;
-    delete app.dataset.renderPixelRatio;
+    for (const key of ["browserUserAgent", "renderPixelRatio", "phase", "selectedSlot", "commandHistory"]) delete app.dataset[key];
   };
   const pageHide = (event: PageTransitionEvent) => { if (event.persisted) systemPause(); else dispose(); };
   const pageShow = (event: PageTransitionEvent) => { if (event.persisted) systemResume(); };

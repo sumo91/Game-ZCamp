@@ -1,50 +1,69 @@
 .whitebox-app {
+  position: relative;
   width: min(100vw, 56.25dvh) !important;
   min-width: 0 !important;
   height: 100dvh !important;
   min-height: 0 !important;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(0, 1fr) 172px;
   background: #242c30;
   font-family: Arial, "Microsoft YaHei", sans-serif;
-  font-size: clamp(12px, 1.8dvh, 20px);
+  font-size: clamp(12px, 1.6dvh, 20px);
+  line-height: 1.25;
   user-select: none;
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
-.preview-hud, .preview-controls { position: relative; z-index: 2; padding: 8px 12px; background: #27343a; }
-.preview-title, .preview-resources, .preview-wall, .preview-wave, .preview-status { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.preview-title { color: #e9dbb0; margin-bottom: 6px; }
-.preview-title a { color: #bdd7f2; font-size: 0.9em; padding: 4px; }
+.preview-hud, .preview-controls { position: relative; z-index: 2; padding: 4px 10px; background: #27343a; }
+.preview-title, .preview-resources, .preview-wall, .preview-wave, .preview-status { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.preview-title { color: #e9dbb0; min-height: 44px; }
+.preview-title a { display: flex; align-items: center; min-height: 44px; color: #bdd7f2; padding: 4px 6px; }
 .preview-resources { color: #f7dda0; }
-.preview-wall { color: #c9d9de; margin-top: 3px; }
+.preview-wall { color: #c9d9de; }
 .preview-wall .danger { color: #ff9487; font-weight: bold; }
-.preview-wave { color: #b9bccb; margin-top: 3px; }
+.preview-wave { color: #b9bccb; }
 .preview-field { position: relative; min-height: 0; overflow: hidden; }
 .preview-field canvas { width: 100%; height: 100%; }
-.preview-zone { position: absolute; top: 12px; left: 0; width: 100%; text-align: center; color: #c5bbc8; pointer-events: none; }
+.preview-zone { position: absolute; top: 10px; left: 0; width: 100%; text-align: center; color: #c5bbc8; pointer-events: none; }
 .preview-slots { position: absolute; inset: 0; pointer-events: none; }
-.preview-slot { position: absolute; transform: translate(-50%, -50%); width: 44px; height: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: #253129; font-weight: bold; font-size: 11px; cursor: pointer; pointer-events: auto; text-shadow: 0 1px #ebefdf; }
+.preview-slot { position: absolute; transform: translate(-50%, -50%); width: 44px; height: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: #253129; font-weight: bold; font-size: 11px; white-space: pre-line; cursor: pointer; pointer-events: auto; text-shadow: 0 1px #ebefdf; }
 .preview-slot.occupied { color: #f8f5de; text-shadow: 0 1px 3px #192533; background: #22303a70; }
 .preview-slot[aria-pressed="true"] { outline: 2px solid #ffde86; }
-.preview-slot:focus-visible { outline: 3px solid white; }
+.whitebox-app :focus-visible { outline: 3px solid white; outline-offset: -3px; }
 .preview-slot:disabled { cursor: default; }
-.preview-controls button:not(.preview-slot), .preview-dialog button { min-height: 44px; border: 1px solid #849b9f; border-radius: 6px; padding: 6px 12px; background: #456576; color: #faf3de; font: inherit; cursor: pointer; }
-.preview-controls button:disabled { opacity: 0.5; cursor: default; }
-.preview-status { margin-bottom: 6px; }
+.preview-controls button, .preview-dialog button { min-width: 44px; min-height: 44px; border: 1px solid #849b9f; border-radius: 6px; padding: 4px 7px; background: #456576; color: #faf3de; font: inherit; cursor: pointer; }
+.preview-controls button:disabled, .preview-dialog button:disabled { opacity: 0.5; cursor: default; }
+.unaffordable { background: #374b56 !important; color: #bbc3bf !important; }
+.destructive { border-color: #b88c80 !important; background: #704f48 !important; }
+.preview-controls { display: grid; grid-template-rows: 44px minmax(0, 1fr) 44px 16px; gap: 2px; padding: 6px 10px; }
 .preview-status button { min-width: 74px; }
-.preview-context { display: flex; flex-direction: column; gap: 3px; min-height: 38px; }
-.preview-context span { color: #c3d0d3; font-size: 0.9em; }
-.preview-build { width: 100%; margin-top: 6px; background: #556f48 !important; }
-.preview-notice { color: #e9d69d; font-size: 0.9em; min-height: 16px; margin-top: 4px; }
-.preview-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: #111827d9; z-index: 5; }
-.preview-dialog { margin: 24px; text-align: center; color: #ece9dc; }
-.preview-dialog h2 { margin: 0 0 16px; }
-.preview-dialog p { line-height: 1.7; }
+.preview-context { color: #c3d0d3; }
+.preview-context strong { color: #f2e5bd; }
+.preview-context p { margin: 2px 0; }
+.preview-scroll { overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; scrollbar-width: thin; }
+.preview-actions { display: flex; gap: 6px; }
+.preview-actions button { flex: 1; min-width: 0; }
+.preview-notice, .preview-modal-notice { color: #f1d78e; font-size: 12px; }
+.preview-notice { white-space: nowrap; overflow-x: auto; touch-action: pan-x; }
+.preview-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: #111827e8; z-index: 5; padding: 12px; }
+.preview-dialog { width: 100%; max-height: 100%; display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 1px solid #879b9b; border-radius: 8px; background: #29363e; color: #ece9dc; }
+.preview-dialog-content { min-height: 0; }
+.preview-dialog h2 { margin: 0 0 8px; font-size: 18px; color: #f2e5bd; }
+.preview-dialog p { margin: 6px 0; line-height: 1.45; }
+.preview-options { display: grid; gap: 8px; margin: 12px 0; }
+.preview-options button { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; text-align: left; padding: 10px; }
+.preview-options strong { font-size: 14px; }
+.preview-options span { line-height: 1.4; }
+.preview-dialog-content > button { width: 100%; }
+.preview-modal-notice { min-height: 16px; }
 .preview-error { align-self: center; padding: 24px; line-height: 1.7; }
 .preview-error a { color: #bdd7f2; }
 [hidden] { display: none !important; }
-@media (min-width: 500px) {
-  .preview-hud, .preview-controls { padding: 14px 22px; }
+@media (min-width: 500px) and (min-height: 1000px) {
+  .whitebox-app { grid-template-rows: auto minmax(0, 1fr) 224px; }
+  .preview-hud, .preview-controls { padding-left: 18px; padding-right: 18px; }
+  .preview-controls { grid-template-rows: 44px minmax(0, 1fr) 56px 20px; gap: 4px; }
   .preview-slot { width: 64px; height: 56px; font-size: 16px; }
+  .preview-dialog { padding: 22px; }
+  .preview-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

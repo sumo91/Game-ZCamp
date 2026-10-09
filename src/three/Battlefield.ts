@@ -1,6 +1,6 @@
 import {
   BoxGeometry, Color, CylinderGeometry, DirectionalLight, Group, HemisphereLight,
-  Mesh, MeshBasicMaterial, MeshStandardMaterial, OrthographicCamera, PlaneGeometry,
+  Mesh, MeshBasicMaterial, MeshStandardMaterial, OctahedronGeometry, OrthographicCamera, PlaneGeometry,
   Raycaster, Scene, SphereGeometry, Vector2, Vector3, WebGLRenderer,
 } from "three";
 import type { BufferGeometry, Material, Object3D } from "three";
@@ -133,21 +133,85 @@ export class Battlefield {
   }
 
   private synchronizeBuildings(buildings: BuildingState[]): void {
+    const active = new Set(buildings.map((building) => building.id));
+    for (const [id, object] of this.buildings) {
+      if (!active.has(id)) { this.scene.remove(object); this.disposeObject(object); this.buildings.delete(id); }
+    }
     for (const building of buildings) {
-      if (this.buildings.has(building.id)) continue;
-      const group = new Group();
-      const city = building.kind === "main_city";
-      group.add(this.meshBox(city ? 1.5 : 0.85, city ? 1.15 : 1.1, city ? 1.2 : 0.85, 0xcbd0d2, new Vector3(0, city ? 0.63 : 0.6, 0)));
-      const roof = new Mesh(this.geometry(new CylinderGeometry(0, city ? 1.03 : 0.65, 0.55, 4)), this.standard(0x7992b5));
-      roof.rotation.y = Math.PI / 4;
-      roof.position.y = city ? 1.48 : 1.4;
-      roof.castShadow = true;
-      group.add(roof);
-      if (!city) group.add(this.meshBox(0.14, 0.14, 0.8, 0xd6bc8a, new Vector3(0, 1.18, -0.25)));
+      const signature = `${building.growthDefinitionId ?? building.kind}:${building.level}`;
+      const previous = this.buildings.get(building.id);
+      if (previous?.userData.signature === signature) continue;
+      if (previous) { this.scene.remove(previous); this.disposeObject(previous); }
+      const group = this.makeWhiteboxBuilding(building);
+      group.userData.signature = signature;
       group.position.copy(CAMP_POSITIONS.get(building.slotId)!);
       this.buildings.set(building.id, group);
       this.scene.add(group);
     }
+  }
+
+  private makeWhiteboxBuilding(building: BuildingState): Group {
+    const group = new Group();
+    const id = building.growthDefinitionId ?? "main_city";
+    const addBox = (w: number, h: number, d: number, color: number, x: number, y: number, z: number) => {
+      const mesh = this.meshBox(w, h, d, color, new Vector3(x, y, z));
+      group.add(mesh);
+      return mesh;
+    };
+    const addCylinder = (top: number, bottom: number, height: number, color: number, x: number, y: number, z: number, sides = 8) => {
+      const mesh = new Mesh(this.geometry(new CylinderGeometry(top, bottom, height, sides)), this.standard(color));
+      mesh.position.set(x, y, z);
+      mesh.castShadow = true;
+      group.add(mesh);
+      return mesh;
+    };
+    const stone = 0xcbd0d2;
+    const blue = 0x7992b5;
+    const gold = 0xd6bc8a;
+    addBox(id === "main_city" ? 1.6 : 1.35, 0.15, id === "main_city" ? 1.35 : 1.1, 0x8a9395, 0, 0.17, 0);
+    if (id === "main_city") {
+      addBox(1.5, 1.15, 1.2, stone, 0, 0.8, 0);
+      const roof = addCylinder(0, 1.03, 0.55, blue, 0, 1.65, 0, 4);
+      roof.rotation.y = Math.PI / 4;
+    } else if (id === "lumberyard") {
+      addBox(1.15, 0.55, 0.8, 0xa1815b, 0, 0.48, 0);
+      const roof = addCylinder(0, 0.82, 0.42, blue, 0, 0.98, 0, 4);
+      roof.rotation.y = Math.PI / 4;
+      for (const x of [-0.35, 0, 0.35]) {
+        const log = addCylinder(0.13, 0.13, 0.62, 0x815e3c, x, 0.36, 0.57);
+        log.rotation.x = Math.PI / 2;
+      }
+    } else {
+      addBox(0.8, 0.95, 0.8, stone, 0, 0.72, 0);
+      if (id === "arrow_tower") {
+        const roof = addCylinder(0, 0.65, 0.55, blue, 0, 1.5, 0, 4);
+        roof.rotation.y = Math.PI / 4;
+        addBox(0.14, 0.14, 0.8, gold, 0, 1.23, -0.25);
+      } else if (id === "machine_gun") {
+        addBox(0.85, 0.3, 0.6, blue, 0, 1.35, 0);
+        for (const x of [-0.2, 0.2]) {
+          const barrel = addCylinder(0.07, 0.07, 0.9, gold, x, 1.4, -0.35);
+          barrel.rotation.x = Math.PI / 2;
+        }
+      } else if (id === "cannon") {
+        const barrel = addCylinder(0.18, 0.24, 0.85, 0x6e717b, 0, 1.35, -0.2);
+        barrel.rotation.x = Math.PI / 2.6;
+        addCylinder(0.4, 0.45, 0.18, gold, 0, 1.17, 0);
+      } else if (id === "frost") {
+        const crystal = new Mesh(this.geometry(new OctahedronGeometry(0.45)), this.standard(0x92d6e2));
+        crystal.position.y = 1.6;
+        crystal.scale.y = 1.35;
+        crystal.castShadow = true;
+        group.add(crystal);
+      } else if (id === "electric") {
+        addCylinder(0.14, 0.35, 0.45, 0x9276bd, 0, 1.38, 0);
+        addBox(0.8, 0.1, 0.12, gold, 0, 1.7, 0);
+        for (const x of [-0.35, 0.35]) addCylinder(0, 0.12, 0.38, 0xc5aedf, x, 1.87, 0, 4);
+      }
+    }
+    // Gold bands make each real level visible without changing the picking footprint.
+    for (let level = 2; level <= building.level; level += 1) addBox(1.02, 0.07, 0.92, gold, 0, 0.3 + (level - 2) * 0.17, 0);
+    return group;
   }
 
   private synchronizeEnemies(state: GameState): void {
