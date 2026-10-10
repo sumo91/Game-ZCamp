@@ -4,7 +4,8 @@ const entryParams = new URLSearchParams(window.location.search);
 const preview = entryParams.get("preview");
 if (entryParams.get("dev") === "pressure") {
   const { mountBattlePressure } = await import("./three/BattlePressure");
-  import.meta.hot?.dispose(mountBattlePressure(document.querySelector<HTMLElement>("#app")!));
+  const dispose = mountBattlePressure(document.querySelector<HTMLElement>("#app")!);
+  import.meta.hot?.dispose(dispose);
 } else if (preview === "asset-pressure" || entryParams.get("phone") === "iqoo-z10-turbo") {
   const { mountAssetPressure } = await import("./three/AssetPressure");
   const dispose = mountAssetPressure(document.querySelector<HTMLElement>("#app")!);
@@ -15,7 +16,8 @@ if (entryParams.get("dev") === "pressure") {
   import.meta.hot?.dispose(dispose);
 } else if (entryParams.get("dev") === "demo") {
   const { mountBattlePresentation } = await import("./three/WhiteboxPreview");
-  import.meta.hot?.dispose(mountBattlePresentation(document.querySelector<HTMLElement>("#app")!));
+  const dispose = mountBattlePresentation(document.querySelector<HTMLElement>("#app")!);
+  import.meta.hot?.dispose(dispose);
 } else {
   const { mountThreeGame } = await import("./three/ThreeGame");
   const dispose = mountThreeGame(document.querySelector<HTMLElement>("#app")!, { developmentReplay: entryParams.get("dev") === "campaign" });
