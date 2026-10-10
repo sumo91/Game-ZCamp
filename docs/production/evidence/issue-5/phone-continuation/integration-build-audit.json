@@ -1,0 +1,149 @@
+{
+  "fixedBase": "62f628ca80277c761c97e63a8f0a381c7b0aa5f5",
+  "fixedSource": "02e26aa4814b3424b3063a6c7e91e5a09d052ee2",
+  "mergeCommit": "69cc1ae46f15b6abaf675bcf46568e27fa3a7edf",
+  "buildOutputName": "phone-continuation-integration-dist",
+  "outputExistedBeforeBuild": false,
+  "rootDistUnchanged": true,
+  "sourceOriginalDistUnchanged": true,
+  "preservedRootDistFiles": 27,
+  "preservedSourceDistFiles": 27,
+  "formalBuiltGlbsMatchingFixedManifest": 12,
+  "files": [
+    {
+      "file": "assets/AssetPressure-BjX3sOZg.js",
+      "bytes": 29536,
+      "sha256": "22362a99e27000391dc1d8c9544f79628024496f9295feabf916d96b39d18e53"
+    },
+    {
+      "file": "assets/AssetPressure-DEuy7wmV.css",
+      "bytes": 2986,
+      "sha256": "75d4d1667e82ba1e462bde4c54a7f4e920ef580af4df3fea71f403e45d3bbc03"
+    },
+    {
+      "file": "assets/coordinates-CpX4Hw7q.js",
+      "bytes": 643988,
+      "sha256": "3731c15cf7de7fb0e346e0af15ccf0326890d6ceb34daa5fcb56128fc64d7e5e"
+    },
+    {
+      "file": "assets/GameScene-CcENi7S2.js",
+      "bytes": 51887,
+      "sha256": "f14710e60ba5dbea01c5b3d9d6803c19a5288216399aef7a2904bb19c29c2ed7"
+    },
+    {
+      "file": "assets/growthUi-DxBAL2A9.js",
+      "bytes": 35617,
+      "sha256": "88154d307b586ff3cd9e7f785b5017a066c3ec9befbbffd9cceb2b9e229a4aa2"
+    },
+    {
+      "file": "assets/index-AdjDRJkg.js",
+      "bytes": 3501,
+      "sha256": "d53558a32c69249fed260af07c73346c3fbd0c9e970c5b8602ee4a6b22f025a8"
+    },
+    {
+      "file": "assets/index-C_5SfW8O.css",
+      "bytes": 395,
+      "sha256": "e7dadb9ce92058f042e513c7327c30262a6cbd353be90f74b434f05c3cbf8702"
+    },
+    {
+      "file": "assets/LobbyScene-BwSMb2vq.js",
+      "bytes": 21598,
+      "sha256": "cac34b635c2379b64e1de0ea709af7993eea938fedd1162ba7267181cbaa668e"
+    },
+    {
+      "file": "assets/phaser.esm-BFUbuVck.js",
+      "bytes": 1387447,
+      "sha256": "fee9b6027235f19245169132107054e6f80cfec3b7aa54144e5988489cc0887c"
+    },
+    {
+      "file": "assets/progression-qw-1uR0D.js",
+      "bytes": 603,
+      "sha256": "b16f593722f1f4a47393d823f2330e431e947d5bc82f75924e660c1307ce8e4e"
+    },
+    {
+      "file": "assets/progressionStore-CPFnLx9A.js",
+      "bytes": 17834,
+      "sha256": "67ae262704769c58f98573b868a448aec97c0ef8eb68fb15a7d5e00d4db73817"
+    },
+    {
+      "file": "assets/threejs/arrow_tower_high.glb",
+      "bytes": 1241992,
+      "sha256": "74336c1643589bfc9c1a39eef812add181a186dabb398765755d8ea2107ddf7c"
+    },
+    {
+      "file": "assets/threejs/arrow_tower_low.glb",
+      "bytes": 1169432,
+      "sha256": "2b9c24c822ad9dc7eade18ff3a76cdfc817bee92f7bdd3387a433572c7357c18"
+    },
+    {
+      "file": "assets/threejs/arrow_tower_medium.glb",
+      "bytes": 1204952,
+      "sha256": "9603271e10dc50228b3fb20c935a107b9453ffd71f02157f6fc8aa1de2d43adb"
+    },
+    {
+      "file": "assets/threejs/camp_plot.glb",
+      "bytes": 317424,
+      "sha256": "4096bfc6bc09577341f3f46eab11a78e79719e7b282f21a6a204b7ae005fe10a"
+    },
+    {
+      "file": "assets/threejs/lumberyard_high.glb",
+      "bytes": 1121796,
+      "sha256": "32612d9b5c46a5b846b60891dc1b69323c8d52418bdea652825d7a48ca2f213c"
+    },
+    {
+      "file": "assets/threejs/lumberyard_low.glb",
+      "bytes": 800392,
+      "sha256": "4e74b6ceb7485327ddc77ab044b822b984c296bce93e634c303e720635ae89e5"
+    },
+    {
+      "file": "assets/threejs/lumberyard_medium.glb",
+      "bytes": 965724,
+      "sha256": "6e25732c9ebb171da717c5c2ac56c78661793345b0a8150b4734b6e8b6e696ef"
+    },
+    {
+      "file": "assets/threejs/main_city.glb",
+      "bytes": 1839060,
+      "sha256": "7e0cb2bf737d60992a12706e8355ec2a92307f3f009cc3dacec7fa25ab19f476"
+    },
+    {
+      "file": "assets/threejs/pine_tree.glb",
+      "bytes": 320432,
+      "sha256": "18081c36910c9b014fc02c4b253a4eb8156b3d4ebb66b799ba02cd0232f9e591"
+    },
+    {
+      "file": "assets/threejs/rock_cluster.glb",
+      "bytes": 290636,
+      "sha256": "4b2ddcc9cf82d449f580b62ee0f756dc840069b4d4bd0f9cba5cf9239bf5168c"
+    },
+    {
+      "file": "assets/threejs/skeleton_infantry.glb",
+      "bytes": 1034236,
+      "sha256": "518e833012d99a105770f7377b18ac16f884d3fa6ed8997535dd5a2f0deb3ddb"
+    },
+    {
+      "file": "assets/threejs/wall_segment.glb",
+      "bytes": 898288,
+      "sha256": "54ea6e5f9f902c124f5df9e95afe505b50b736e24d91a7d1a2d96c6eed383834"
+    },
+    {
+      "file": "assets/types-YXiY5pmw.js",
+      "bytes": 24803,
+      "sha256": "f815aad1afc8a7708c3ff774b01112600368444e68d6ce4886b56d06f32f512d"
+    },
+    {
+      "file": "assets/WhiteboxPreview-BrQ6UHie.css",
+      "bytes": 4560,
+      "sha256": "cf4229bcf251605dc4c99b8359a3ac01f424905a93f1da630b13f124692a4c12"
+    },
+    {
+      "file": "assets/WhiteboxPreview-DWftnH_W.js",
+      "bytes": 29851,
+      "sha256": "e55afd9d76f416a5b9ff53190f76628fa351ad4ae0e9a0d808c9564cd53f20cd"
+    },
+    {
+      "file": "index.html",
+      "bytes": 560,
+      "sha256": "4ed240b7fb669dc98ce4815db2882d34f67b059007021de15fcb2801afddebb8"
+    }
+  ]
+}
