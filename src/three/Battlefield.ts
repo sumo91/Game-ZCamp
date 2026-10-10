@@ -14,6 +14,7 @@ import type { ModelLibrary } from "./ModelLibrary";
 import { SiegeFeedback } from "./siegeFeedback";
 import { ArcaneFeedback } from "./arcaneFeedback";
 import { GRAPHICS_QUALITY, type GraphicsQuality } from "./graphicsQuality";
+import { BattleScenery } from "./BattleScenery";
 
 type Effect = { object: Object3D; ttl: number; duration: number; from?: Vector3; to?: Vector3 };
 type EnemyView = { object: Object3D; definitionId: string; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean; slowMultiplier?: number; animationPending: number };
@@ -38,6 +39,7 @@ export class Battlefield {
   private wall: Object3D;
   private readonly environment = new Group();
   private readonly decorations = new Group();
+  private readonly scenery = new BattleScenery();
   private readonly sun = new DirectionalLight(0xffe8c4, 3.2);
   private readonly contactShadows = new InstancedMesh(new CircleGeometry(.34, 10), new MeshBasicMaterial({ color: 0x202328, transparent: true, opacity: .22, depthWrite: false }), 512);
   private quality: GraphicsQuality;
@@ -83,8 +85,7 @@ export class Battlefield {
     this.contactShadows.renderOrder = 1;
     this.scene.add(this.contactShadows);
     this.setQuality(quality);
-    this.box(12, 0.12, 12, 0x605c73, new Vector3(0, -0.12, -6));
-    this.box(12, 0.12, 8.2, 0x749051, new Vector3(0, -0.12, 4.1));
+    this.scene.add(this.scenery.object);
     this.wall = new Group();
     this.wall.add(this.box(11.4, 0.9, 0.55, 0xc3c6c8, new Vector3(0, 0.45, 0)));
     for (let index = 0; index < 12; index += 1) this.wall.add(this.box(0.48, 0.3, 0.65, 0xd3d6d6, new Vector3(-5.25 + index * 0.95, 1.02, 0)));
@@ -123,8 +124,16 @@ export class Battlefield {
       this.tiles.set(slotId, selection);
       this.scene.add(selection);
     }
-    const trees = [[-5.35, 2.8], [5.35, 3.3], [-5.3, -2.7], [5.3, -5.7]].map(([x, z]) => new Matrix4().makeTranslation(x!, 0, z!).scale(new Vector3(.85, .85, .85)));
-    const rocks = [[-5.35, .8], [5.35, -.9], [-5.2, -5.1], [5.25, -8.3]].map(([x, z]) => new Matrix4().makeTranslation(x!, 0, z!));
+    // Keep all silhouettes outside the units' lanes and the outer plot edges.
+    const trees = [[-5.5, 2.8], [5.55, 3.3], [-5.55, 6.4], [5.65, 7.6], [-5.65, -2.7], [5.6, -5.7], [-5.7, -8.7], [5.7, -10.8]]
+      .map(([x, z], index) => new Matrix4().makeRotationY(index * 1.7).scale(new Vector3(.72, .72 + index % 3 * .08, .72)).setPosition(x!, 0, z!));
+    const rocks = Array.from({ length: 22 }, (_, index) => {
+      const side = index % 2 ? 1 : -1;
+      const x = side * (5.55 + .13 * Math.sin(index * 2.7));
+      const z = -10.5 + Math.floor(index / 2) * 1.7;
+      const scale = .65 + index % 4 * .15;
+      return new Matrix4().makeRotationY(index * 1.3).scale(new Vector3(scale, scale, scale)).setPosition(x, 0, z);
+    });
     this.decorations.clear();
     this.decorations.userData.sharedAsset = true;
     this.decorations.add(library.createStaticBatch("tree", trees), library.createStaticBatch("rocks", rocks));
@@ -164,7 +173,11 @@ export class Battlefield {
     const settings = GRAPHICS_QUALITY[quality];
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, settings.maxDpr));
     this.renderer.shadowMap.enabled = settings.shadowSize > 0;
+    // Removing the shadow caster changes Three.js' light shader configuration.
+    // Disabling map updates alone leaves the cached standard-quality shadows.
+    this.sun.castShadow = settings.shadowSize > 0;
     this.decorations.visible = settings.decorations;
+    this.scenery.setDecorations(settings.decorations);
     this.host.dataset.quality = quality;
     this.host.dataset.renderPixelRatio = String(this.renderer.getPixelRatio());
     this.resize();
@@ -309,6 +322,7 @@ export class Battlefield {
     this.reset();
     this.siege.dispose();
     this.arcane.dispose();
+    this.scenery.dispose();
     this.disposeObject(this.wall);
     this.disposeObject(this.environment);
     this.contactShadows.dispose();
