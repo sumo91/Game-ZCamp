@@ -103,7 +103,7 @@ export interface GameState {
 
 export type GameEvent =
   | { type: "tower_attack"; buildingId: string; towerDefinitionId: string; targetId: string; targetPosition: number }
-  | { type: "tower_special"; buildingId: string; effect: string; targetId: string }
+  | { type: "tower_special"; buildingId: string; effect: string; targetId: string; targetPosition?: number }
   | { type: "enemy_hit"; enemyId: string; position: number; damage: number; remainingHp: number }
   | { type: "enemy_defeated"; enemyId: string; position: number }
   | { type: "wave_started"; wave: number }
