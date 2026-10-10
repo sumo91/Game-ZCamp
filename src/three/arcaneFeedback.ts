@@ -1,7 +1,7 @@
 import { CylinderGeometry, Group, Mesh, MeshBasicMaterial, OctahedronGeometry, TorusGeometry, Vector3 } from "three";
 import type { Object3D, Scene } from "three";
 import type { GameState } from "../core/types";
-import { enemyPosition } from "./coordinates";
+import { enemyDisplayPosition } from "./coordinates";
 
 type ArcaneEffect = { object: Object3D; remaining: number; duration: number; from?: Vector3; to?: Vector3 };
 
@@ -71,7 +71,7 @@ export class ArcaneFeedback {
         this.scene.add(group);
         this.slowed.set(enemy.id, group);
       }
-      group.position.copy(enemyPosition(enemy.id, enemy.position));
+      group.position.copy(enemyDisplayPosition(enemy.id, enemy.position, enemy.definitionId));
     }
     for (const [id, group] of this.slowed) if (!active.has(id)) {
       this.scene.remove(group);

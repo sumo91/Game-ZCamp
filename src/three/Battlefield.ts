@@ -7,9 +7,9 @@ import {
 import type { AnimationAction, BufferGeometry, Material, Object3D } from "three";
 import { starterCatalog } from "../core/content";
 import type { BuildingState, GameEvent, GameState } from "../core/types";
-import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
+import { CAMP_POSITIONS, enemyDisplayPosition } from "./coordinates";
 import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
-import { buildingAsset, enemyAsset, enemyWallInset, type AnimationSemantic } from "./assetCatalog";
+import { buildingAsset, enemyAsset, type AnimationSemantic } from "./assetCatalog";
 import type { ModelLibrary } from "./ModelLibrary";
 import { SiegeFeedback } from "./siegeFeedback";
 import { ArcaneFeedback } from "./arcaneFeedback";
@@ -326,7 +326,7 @@ export class Battlefield {
         view = this.makeEnemy(enemy.id, enemy.definitionId);
       }
       const group = view.object;
-      group.position.copy(this.undeadPosition(enemy.id, enemy.position, enemy.definitionId));
+      group.position.copy(enemyDisplayPosition(enemy.id, enemy.position, enemy.definitionId));
       view.atWall = enemy.atWall;
       view.slowMultiplier = Math.min(1, ...(enemy.growthSlowStates ?? []).filter((slow) => slow.remainingSeconds > .000001).map((slow) => slow.multiplier));
       // Driven by effective simulation time; all battle motion stops in frozen phases.
@@ -390,7 +390,7 @@ export class Battlefield {
         this.play(view, "attack", true);
         view.actions?.get("attack")?.setEffectiveTimeScale(.8 / view.interrupt);
       }
-      const position = this.undeadPosition(event.enemyId, 1, event.definitionId);
+      const position = enemyDisplayPosition(event.enemyId, 1, event.definitionId);
       position.set(position.x, .68, -.38);
       const heavy = event.definitionId === "brute";
       const strike = new Mesh(this.geometry(new SphereGeometry(heavy ? .23 : .10, 6, 4)), this.material(new MeshBasicMaterial({ color: heavy ? 0xf29d6a : 0xf7d6b0, wireframe: true })));
@@ -404,7 +404,7 @@ export class Battlefield {
       if (cached) cached.position = event.position;
       const death = event.type === "enemy_defeated";
       const position = this.enemyHitPosition(event.enemyId, event.position);
-      if (death && view) view.object.position.copy(this.undeadPosition(event.enemyId, event.position, view.definitionId));
+      if (death && view) view.object.position.copy(enemyDisplayPosition(event.enemyId, event.position, view.definitionId));
       const object = new Mesh(this.geometry(new SphereGeometry(death ? 0.32 : 0.18, 6, 4)), this.material(new MeshBasicMaterial({ color: death ? 0xd6bd77 : 0xfff0d2, wireframe: death })));
       object.position.copy(position);
       this.addEffect(object, death ? 0.4 : 0.12);
@@ -431,7 +431,7 @@ export class Battlefield {
 
   private enemyHitPosition(id: string, progress: number): Vector3 {
     const object = this.enemies.get(id)?.object;
-    const eventPosition = this.undeadPosition(id, progress, this.enemyAnchors.get(id)?.definitionId ?? "walker");
+    const eventPosition = enemyDisplayPosition(id, progress, this.enemyAnchors.get(id)?.definitionId ?? "walker");
     if (!object) return eventPosition.add(new Vector3(0, .65, 0));
     // A fixed-step batch may contain an earlier hit and a later final position.
     // Sample the event anchor without moving a living actor back along its path.
@@ -440,12 +440,6 @@ export class Battlefield {
     const anchor = this.anchorPosition(object, "hit_anchor", eventPosition.add(new Vector3(0, .65, 0)));
     object.position.copy(currentPosition);
     return anchor;
-  }
-
-  private undeadPosition(id: string, progress: number, definitionId: string): Vector3 {
-    const position = enemyPosition(id, progress);
-    position.z -= enemyWallInset(definitionId);
-    return position;
   }
 
   private play(view: EnemyView, semantic: AnimationSemantic, restart = false): void {

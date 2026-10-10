@@ -10,7 +10,7 @@ import { isWallInDanger } from "./whiteboxCatalog";
 import { ModelLibrary } from "./ModelLibrary";
 import { buildingAsset, SAMPLE_COVERAGE } from "./assetCatalog";
 import { withFantasySiegePresentation } from "./fantasySiegePresentation";
-import { createSiegeDemoSession, SIEGE_DEMO_LABEL } from "./siegeDemo";
+import { createSiegeDemoSession, prepareSiegeDemo, SIEGE_DEMO_LABEL } from "./siegeDemo";
 import { fantasyArcanePresentation } from "./fantasyArcanePresentation";
 import { ARCANE_DEMO_CATALOG, ARCANE_DEMO_RESOURCES, prepareArcaneDemo } from "./arcaneDemo";
 import { prepareUndeadDemo } from "./undeadDemo";
@@ -142,6 +142,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
           : type === "destroy_building" ? "建筑已拆除 · 不返还木材或金币" : "";
         if (type === "restart") {
           battlefield.reset();
+          if (siegeDemo) prepareSiegeDemo(session);
           if (arcaneDemo) prepareArcaneDemo(session);
           if (undeadDemo) prepareUndeadDemo(session);
         }
