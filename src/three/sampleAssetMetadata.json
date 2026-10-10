@@ -1,31 +1,31 @@
 {
-  "source": "docs/production/evidence/issue-4/asset-manifest.json at 0bf8227a4979f84d5dc23e71bddabbdfeb7a8ce2",
-  "manifestSha256": "899efef17cdf7d05f561d8b56926a3f7a088be7ac84cdcdff679a26dbeb481dd",
+  "source": "docs/production/evidence/product-source-refinement/asset-manifest.json (eight revised samples; preserved samples covered by unchanged GLB SHA records)",
+  "manifestSha256": "9351e9d14226d55f7be707ead297a3cfbe48b4a3fd147d110c37910aa4d74ce5",
   "identityBoundary": "构建时导入固定清单，客户端未重新哈希GLB",
   "assets": [
     {
       "asset": "arrow_tower_high.glb",
-      "sha256": "74336c1643589bfc9c1a39eef812add181a186dabb398765755d8ea2107ddf7c",
-      "bytes": 1241992,
-      "triangles": 13408,
+      "sha256": "cd3a906caa502dfe76cf25db7a1a393c51e7dc3bb542cb019c8e0b83fc304854",
+      "bytes": 1416848,
+      "triangles": 13624,
       "materials": 1,
       "joints": 0,
       "clips": []
     },
     {
       "asset": "arrow_tower_low.glb",
-      "sha256": "2b9c24c822ad9dc7eade18ff3a76cdfc817bee92f7bdd3387a433572c7357c18",
-      "bytes": 1169432,
-      "triangles": 12512,
+      "sha256": "41a136a637198d9b2dd7f02026338e2a9641f24dff3fe807ad5842bc17d6654d",
+      "bytes": 1333528,
+      "triangles": 12728,
       "materials": 1,
       "joints": 0,
       "clips": []
     },
     {
       "asset": "arrow_tower_medium.glb",
-      "sha256": "9603271e10dc50228b3fb20c935a107b9453ffd71f02157f6fc8aa1de2d43adb",
-      "bytes": 1204952,
-      "triangles": 13052,
+      "sha256": "6cc9afefb60f5cc4b1c6271a92c2f6806f5da228cce136021394b7541185aa6e",
+      "bytes": 1369360,
+      "triangles": 13268,
       "materials": 1,
       "joints": 0,
       "clips": []
@@ -41,36 +41,36 @@
     },
     {
       "asset": "lumberyard_high.glb",
-      "sha256": "32612d9b5c46a5b846b60891dc1b69323c8d52418bdea652825d7a48ca2f213c",
-      "bytes": 1121796,
-      "triangles": 14832,
+      "sha256": "460593660a0bac02209e991e3d70b7233944f07264eda4b230499ea1155e5ff8",
+      "bytes": 1378332,
+      "triangles": 15584,
       "materials": 1,
       "joints": 0,
       "clips": []
     },
     {
       "asset": "lumberyard_low.glb",
-      "sha256": "4e74b6ceb7485327ddc77ab044b822b984c296bce93e634c303e720635ae89e5",
-      "bytes": 800392,
-      "triangles": 8596,
+      "sha256": "6439b72c87b91f69197c8824ec203fbb69e020779bfd996b3bfc7e43db314963",
+      "bytes": 981420,
+      "triangles": 9316,
       "materials": 1,
       "joints": 0,
       "clips": []
     },
     {
       "asset": "lumberyard_medium.glb",
-      "sha256": "6e25732c9ebb171da717c5c2ac56c78661793345b0a8150b4734b6e8b6e696ef",
-      "bytes": 965724,
-      "triangles": 12016,
+      "sha256": "7d7fb376098e1d4e41b78fa408e5a4ce8aec9244a199a133e078441504f615b3",
+      "bytes": 1205952,
+      "triangles": 12736,
       "materials": 1,
       "joints": 0,
       "clips": []
     },
     {
       "asset": "main_city.glb",
-      "sha256": "7e0cb2bf737d60992a12706e8355ec2a92307f3f009cc3dacec7fa25ab19f476",
-      "bytes": 1839060,
-      "triangles": 18508,
+      "sha256": "5e511f7a7534bfecfe986641cf5ed79fb8dded2d2444aae8a266b30fb9fe81e9",
+      "bytes": 1872624,
+      "triangles": 18724,
       "materials": 1,
       "joints": 0,
       "clips": []
@@ -95,31 +95,31 @@
     },
     {
       "asset": "skeleton_infantry.glb",
-      "sha256": "518e833012d99a105770f7377b18ac16f884d3fa6ed8997535dd5a2f0deb3ddb",
-      "bytes": 1034236,
-      "triangles": 6982,
+      "sha256": "ae07d7f02d88b8bd4eb2712cc08875ec0b81119fe77f0d5ab3f149b48d4a2934",
+      "bytes": 1151112,
+      "triangles": 7414,
       "materials": 1,
       "joints": 14,
       "clips": [
         {
           "name": "walk",
-          "seconds": 0.8,
-          "channels": 42
+          "channels": 42,
+          "seconds": 0.8
         },
         {
           "name": "attack",
-          "seconds": 0.8,
-          "channels": 42
+          "channels": 42,
+          "seconds": 0.8
         },
         {
           "name": "hit",
-          "seconds": 0.3,
-          "channels": 42
+          "channels": 42,
+          "seconds": 0.3
         },
         {
           "name": "death",
-          "seconds": 0.9,
-          "channels": 42
+          "channels": 42,
+          "seconds": 0.9
         }
       ]
     },

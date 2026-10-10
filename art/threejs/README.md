@@ -44,3 +44,6 @@ Blender 默认保留的 `.blend1` 等备份不进入交付，修改源文件时�
 十二个来源与 GLB 已完整接入当前样板，最终资产 SHA、运行步骤及检查结果见 [Issue #4 实施证据](../../docs/production/THREEJS_ISSUE_4_EVIDENCE.md)。首对历史审阅图保留为比例、标签和材质修订的记录，不作为最终资产清单。实体手机、100/200/300 活动实例与项目所有者接受属于 #5/#13 后续门，当前没有相应通过声明。
 
 后续普通与精英亡灵来源、四语义与实际制作统计见 [Issue #8 亡灵说明](README_UNDEAD.md)；原十二件样板来源及清单保留。
+## 固定游戏镜头下的正式来源精修
+
+`refine_product_sources.py` 只读取箭塔三档、木材厂三档、主城、基础骷髅八件已保存来源，执行 `product_shape_revision=1` 的局部体积、遮挡和材质修订。重复运行跳过已应用来源；不调用创建工厂、不修改其他二十五件、不导出 GLB。精修后用 `export_assets.py -- 明确八个 stem` 导出。它保留原语义、建筑底座、骷髅十四关节和四动作，更新 runtime 面/UV、packed PBR 与结构 AO。真实成本与验证见 [正式来源精修记录](../../docs/production/THREEJS_PRODUCT_SOURCE_REFINEMENT.md)。
