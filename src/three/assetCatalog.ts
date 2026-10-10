@@ -47,7 +47,7 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
   { id: "plot", file: "camp_plot.glb", maximumSize: [1.9, .1, 1.65], anchors: ["label_anchor"], clips: [] },
 ];
 
-export const SAMPLE_COVERAGE = "精修：箭塔/连弩/火炮/寒霜塔/雷电塔/木材厂三档、主城、城墙、五种普通及精英亡灵、树岩；英雄及双 Boss 是开发占位";
+export const SAMPLE_COVERAGE = "正式模型：三英雄、箭塔/连弩/火炮/寒霜/雷电/木材厂三档、主城、城墙、五类亡灵、树岩；两类 Boss 待后续内容接入";
 
 type BuildingContentId = GrowthBuildingId | "main_city";
 const BUILDING_ASSETS: Readonly<Partial<Record<BuildingContentId, readonly [AssetId, AssetId, AssetId]>>> = {

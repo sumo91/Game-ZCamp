@@ -21,6 +21,25 @@ describe("campaign session ownership", () => {
     expect(campaign.start()).not.toBe(first);
     campaign.dispose();
   });
+  it("keeps a real defeat unrewarded and launches each selected level with its formal wave count", () => {
+    const progress = new ProgressionStore(null);
+    const campaign = new Campaign(progress);
+    const battle = campaign.start()!;
+    expect(campaign.retry()).toBe(false);
+    for (let step=0; step<30*180 && !campaign.result(); step+=1) { battle.advance(1/30); battle.drainEvents(); }
+    expect(campaign.result()).toEqual({ victory: false, rewards: { newlyUnlockedHeroes: [], newlyUnlockedLevels: [] } });
+    expect(progress.load().clearedLevelIds).toEqual([]);
+    campaign.returnToLobby();
+    progress.recordLevelClear('first_defense'); progress.recordLevelClear('broken_valley');
+    for (const [levelId, waves] of [['first_defense',10],['broken_valley',12],['kings_march',15]] as const) {
+      expect(campaign.choose({ kind:'level', id:levelId })).toBe('');
+      const session = campaign.start()!;
+      expect(session.getState().maxWave).toBe(waves);
+      campaign.returnToLobby();
+      expect(session.dispatch({type:'restart'}).accepted).toBe(false);
+    }
+    campaign.dispose();
+  });
   it("records a real final-boss victory once, freezes the result and restarts the same selected battle", () => {
     const progress = new ProgressionStore(null);
     const catalog = { ...starterCatalog, enemies: starterCatalog.enemies.map((enemy) => ({ ...enemy, maxHp: 1, wallDamage: 0 })) };

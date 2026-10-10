@@ -1,5 +1,4 @@
 import { SoundDirector } from "../audio/SoundDirector";
-import { starterHeroContent } from "../core/hero";
 import { Campaign } from "../ui/campaign";
 import { HeroGallery } from "./HeroGallery";
 import { ModelLibrary } from "./ModelLibrary";

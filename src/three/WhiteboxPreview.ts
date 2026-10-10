@@ -8,7 +8,7 @@ import { deriveBuildingDetail, deriveEmptySlotActions, deriveGrowthPauseControl,
 import { Battlefield } from "./Battlefield";
 import { isWallInDanger } from "./whiteboxCatalog";
 import { ModelLibrary } from "./ModelLibrary";
-import { buildingAsset, SAMPLE_COVERAGE } from "./assetCatalog";
+import { SAMPLE_COVERAGE } from "./assetCatalog";
 import { withFantasySiegePresentation } from "./fantasySiegePresentation";
 
 import type { SoundDirector } from "../audio/SoundDirector";
@@ -27,7 +27,7 @@ const statsText = (stats: GrowthStatsView) => stats.kind === "lumberyard"
   ? `产木 ${number(stats.woodPerSecond)}/秒`
   : `伤害 ${number(stats.damage)} · 间隔 ${number(stats.attackIntervalSeconds)}秒 · 射程 ${number(stats.range)}`;
 
-/** Partial art sample; loading and presentation never write simulation state. */
+/** Shared battle presentation; loading and animation never write simulation state. */
 export interface BattlePresentationOptions {
   session?: BattleSession;
   library?: ModelLibrary;
@@ -80,9 +80,12 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
   let battlefield: Battlefield;
   try { battlefield = new Battlefield(field); }
   catch {
-    app.innerHTML = `<div class="preview-error"><h1>美术样板暂时无法显示</h1><p>请使用支持 WebGL 2 的浏览器，或重新加载后重试。</p><a href="${import.meta.env.BASE_URL}">返回原版入口</a></div>`;
+    app.innerHTML = `<div class="preview-error"><h1>战场暂时无法显示</h1><p>请使用支持 WebGL 2 的浏览器，或重新加载后重试。</p>${options.returnToLobby ? '<button type="button" data-return-error>返回营地</button>' : `<a href="${import.meta.env.BASE_URL}?preview=threejs">返回营地</a>`}</div>`;
     session.dispose();
-    return () => { app.replaceChildren(); app.classList.remove("whitebox-app"); };
+    const back = app.querySelector<HTMLButtonElement>("[data-return-error]");
+    const returnToLobby = () => options.returnToLobby?.();
+    back?.addEventListener("click", returnToLobby);
+    return () => { back?.removeEventListener("click", returnToLobby); app.replaceChildren(); app.classList.remove("whitebox-app"); };
   }
   const view = (name: string) => app.querySelector<HTMLElement>(`[data-view="${name}"]`)!;
   const hud = app.querySelector<HTMLElement>(".preview-hud")!;
@@ -224,11 +227,10 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
       button.style.top = `${point.y}px`;
     }
     const building = state.buildings.find((candidate) => candidate.slotId === ui.selectedSlot);
-    let contextHtml = "<strong>点击营地格位</strong><p>选择空格建造，或查看已有建筑。</p>";
+    let contextHtml = "<strong>部署你的防线</strong><p>选择空地建造，或查看已有建筑。</p>";
     let actionHtml = "";
     if (ui.selectedSlot && !building) {
       const choices = deriveEmptySlotActions(content, state, ui.selectedSlot);
-      const slotButton = slotButtons.get(ui.selectedSlot)!;
       contextHtml = `<strong>空地 · 建造防线</strong>${choices.map((choice) => `<p>${escapeHtml(getGrowthBuildingPresentation(content, choice.definitionId)?.displayName ?? choice.definitionId)}：${escapeHtml(choice.description)} · ${escapeHtml(choice.reason)}</p>`).join("")}`;
       actionHtml = choices.map((choice) => buttonHtml("build", choice.label, choice.affordable && Boolean(choice.command), `data-definition="${choice.definitionId}"`)).join("");
     } else if (building?.kind === "main_city") {
