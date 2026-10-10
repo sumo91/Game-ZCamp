@@ -3,7 +3,7 @@ import { ModelLibrary } from "./ModelLibrary";
 import { AssetPressureField, type PressureQuality } from "./AssetPressureField";
 import metadata from "./sampleAssetMetadata.json";
 import { SAMPLE_ASSETS } from "./assetCatalog";
-import { PhoneTestSequence, phoneEntry, connectPhoneCollector, sendPhoneResult, type CollectorSession, type PhoneRound } from "./phoneTest";
+import { PhoneTestSequence, phoneEntry, phoneStartRound, connectPhoneCollector, sendPhoneResult, type CollectorSession, type PhoneRound } from "./phoneTest";
 
 type RunPhase = "warming" | "measuring";
 type Run = {
@@ -42,12 +42,16 @@ function frameSummary(frames: number[]) {
 }
 
 export function mountAssetPressure(app: HTMLElement): () => void {
-  const preset = phoneEntry(new URLSearchParams(window.location.search));
+  const params = new URLSearchParams(window.location.search);
+  const preset = phoneEntry(params);
   const quick = preset !== null;
+  const firstRound = quick ? phoneStartRound(params) : 1;
+  const plan = firstRound === 2 ? "补测第二、三轮 · 约6分10秒" : firstRound === 3 ? "补测第三轮 · 约1分5秒" : "三轮约7分15秒";
+  const startLabel = firstRound === 2 ? "开始剩余两轮" : firstRound === 3 ? "开始剩余一轮" : "开始手机测试";
   app.classList.add("pressure-app");
   app.classList.toggle("phone-quick", quick);
-  app.innerHTML = `<header><h1>${quick ? "手机快速测试" : "表现资产压力实验 · #5 候选"}</h1>${quick ? '<p data-device-summary></p><p>三轮约7分15秒 · 请保持前台，期间可随时触摸响应按钮。</p><ol data-phone-rounds aria-label="三轮测试进度"><li>100单位 · 60秒 · 未开始</li><li>200单位 · 300秒 · 未开始</li><li>300单位 · 60秒 · 未开始</li></ol><p data-delivery-status role="status">正在连接电脑…</p>' : '<p>只展示已完成模型，不运行核心战斗。初期单骷髅结果不能替代完整混编验收或实体手机接受。</p>'}</header>
-    <div class="pressure-sticky"><button type="button" data-action="start" disabled>${quick ? "开始手机测试" : "开始测量"}</button><button type="button" data-action="stop" disabled ${quick ? "hidden" : ""}>停止测试</button><button type="button" data-action="response">${quick ? "触摸响应检查" : "响应检查"}</button><span data-response role="status">响应 0 次</span><span data-run-status role="status">尚未测量</span></div>
+  app.innerHTML = `<header><h1>${quick ? "手机快速测试" : "表现资产压力实验 · #5 候选"}</h1>${quick ? `<p data-device-summary></p><p>${plan} · 请保持前台，期间可随时触摸响应按钮。</p><ol data-phone-rounds aria-label="三轮测试进度"><li>100单位 · 60秒 · 未开始</li><li>200单位 · 300秒 · 未开始</li><li>300单位 · 60秒 · 未开始</li></ol><p data-delivery-status role="status">正在连接电脑…</p>` : '<p>只展示已完成模型，不运行核心战斗。初期单骷髅结果不能替代完整混编验收或实体手机接受。</p>'}</header>
+    <div class="pressure-sticky"><button type="button" data-action="start" disabled>${quick ? startLabel : "开始测量"}</button>${quick ? '<button type="button" data-action="continue" hidden disabled>继续未完成测试</button>' : ""}<button type="button" data-action="stop" disabled ${quick ? "hidden" : ""}>停止测试</button><button type="button" data-action="response">${quick ? "触摸响应检查" : "响应检查"}</button><span data-response role="status">响应 0 次</span><span data-run-status role="status">尚未测量</span></div>
     <p data-status role="status" aria-live="polite">准备加载…</p><button type="button" data-action="retry" hidden>重试加载</button>
     <div class="pressure-layout"><section class="pressure-field" aria-label="固定游戏镜头"></section><section class="pressure-panel">
     ${quick ? '<section data-phone-recovery hidden><p data-phone-recovery-status role="status"></p><button type="button" data-action="retry-send">重试发送</button><button type="button" data-action="backup">导出全部备援JSON</button></section><details data-advanced><summary>高级设置与原始结果</summary>' : ""}
@@ -74,12 +78,13 @@ export function mountAssetPressure(app: HTMLElement): () => void {
   const sequence = quick ? new PhoneTestSequence(json => {
     if (!collector || !preset.sessionToken) return Promise.reject(new Error("电脑收件服务未连接，请使用电脑提供的扫码入口"));
     return sendPhoneResult(import.meta.env.BASE_URL, preset.sessionToken, collector, json);
-  }) : null;
+  }, firstRound) : null;
   if (preset) {
     app.querySelector<HTMLSelectElement>("[data-device]")!.value = preset.deviceCategory;
     app.querySelector<HTMLInputElement>("[data-model]")!.value = preset.model;
     app.querySelector<HTMLInputElement>("[data-os]")!.value = preset.os;
     app.querySelector<HTMLInputElement>("[data-notes]")!.value = preset.notes;
+    count.value = String(firstRound * 100); duration.value = firstRound === 2 ? "300" : "60";
   }
   let field: AssetPressureField | null = null, library: ModelLibrary | null = null;
   let disposed = false, loading = false, frame = 0, previous = 0, lastPublish = 0, responses = 0;
@@ -94,27 +99,34 @@ export function mountAssetPressure(app: HTMLElement): () => void {
     const rows = app.querySelectorAll<HTMLElement>("[data-phone-rounds] li");
     const labels = ["100单位 · 60秒", "200单位 · 300秒", "300单位 · 60秒"];
     rows.forEach((row, index) => {
-      const record = sequence.records[index];
-      const state = record ? record.delivery === "received" ? `${record.outcome === "interrupted" ? "已中断 · " : ""}电脑已收到` : record.delivery === "failed" ? "发送失败 · 结果已保留" : "正在发送" : run && index === sequence.records.length ? run.phase === "warming" ? "预热中" : "测量中" : "未开始";
-      row.textContent = `第${index + 1}轮 · ${labels[index]} · ${state}`;
+      const attempts = sequence.records.filter(record => record.round === index + 1);
+      const record = attempts.at(-1);
+      const completed = attempts.some(attempt => attempt.outcome === "completed" && attempt.delivery === "received");
+      const savedInterruptions = attempts.filter(attempt => attempt.outcome === "interrupted" && attempt.delivery === "received").length;
+      const state = index + 1 < firstRound ? "本入口不测，使用电脑已保存记录" : completed ? "完整完成 · 电脑已收到" : run && index + 1 === sequence.round ? `第${sequence.attempt}次 · ${run.phase === "warming" ? "预热中" : "测量中"}` : record ? record.delivery === "received" ? "未完整完成" : record.delivery === "failed" ? "发送失败 · 结果已保留" : "正在发送" : "未开始";
+      row.textContent = `第${index + 1}轮 · ${labels[index]} · ${state}${savedInterruptions ? ` · 已中断记录已保存${savedInterruptions}次` : ""}`;
     });
     const delivery = app.querySelector<HTMLElement>("[data-delivery-status]")!;
-    delivery.textContent = collectorError ?? (sequence.phase === "completed" ? "三轮完成 · 电脑已收到全部结果；设备与表现仍待人工核实" : sequence.phase === "stopped" ? `测试已停止 · 已保留${sequence.records.length}轮结果${sequence.haltReason ? ` · ${sequence.haltReason}` : ""}` : sequence.phase === "sending" ? "本轮完成，正在发送到电脑…" : collector ? "电脑已连接 · 每轮结束后自动保存" : "正在连接电脑…");
+    delivery.textContent = collectorError ?? (sequence.phase === "completed" ? `${firstRound > 1 ? "本入口补测完成" : "三轮完成"} · 电脑已收到本入口完整结果；设备与表现仍待人工核实` : sequence.phase === "stopped" ? `测试已停止 · 已保留${sequence.records.length}次记录${sequence.haltReason ? ` · ${sequence.haltReason}` : ""}` : sequence.phase === "sending" ? "本轮完成，正在发送到电脑…" : collector ? "电脑已连接 · 每轮结束后自动保存" : "正在连接电脑…");
     const recovery = app.querySelector<HTMLElement>("[data-phone-recovery]")!;
     recovery.hidden = sequence.phase !== "stopped" || sequence.records.length === 0;
     if (!recovery.hidden) {
-      app.querySelector<HTMLElement>("[data-phone-recovery-status]")!.textContent = sequence.records.find(record => record.error)?.error ?? "已完成与中断结果均已保留，未开始的轮次不会自动继续。";
+      app.querySelector<HTMLElement>("[data-phone-recovery-status]")!.textContent = sequence.records.find(record => record.error)?.error ?? "已完成与中断记录均已保留。继续将重新预热并完整测量未完成轮次。";
       button("retry-send").hidden = !sequence.records.some(record => record.delivery === "failed");
       button("retry-send").disabled = sequence.records.some(record => record.delivery === "sending");
     }
   };
   const updateControls = () => {
     const ready = !!field && !loading && !contextLost;
-    const busy = !!run || sequence?.phase === "sending";
+    const busy = !!run || !!sequence?.records.some(record => record.delivery === "sending");
     configuration.disabled = !ready || busy || !!sequence && sequence.phase !== "idle";
     button("start").disabled = !ready || busy || !!sequence && (sequence.phase !== "idle" || !collector);
     button("stop").disabled = !busy;
-    if (quick) { button("stop").hidden = !busy; button("start").hidden = sequence?.phase !== "idle"; }
+    if (quick && sequence) {
+      button("stop").hidden = !busy; button("start").hidden = sequence.phase !== "idle";
+      button("continue").hidden = sequence.phase !== "stopped" || sequence.round > 3;
+      button("continue").disabled = !ready || document.hidden || !sequence.canContinue;
+    }
     if (advanced) { advanced.hidden = busy; if (busy) advanced.open = false; }
     button("restart").disabled = !ready || busy || quick;
     button("export").disabled = button("copy").disabled = !result || !!run;
@@ -144,7 +156,7 @@ export function mountAssetPressure(app: HTMLElement): () => void {
       scope: { coreBattleRunning: false, mixedEnemies: false, sustainedCoreAttacks: false, ownerAccepted: false, physicalDeviceAccepted: false,
         boundary: "只测已交付单骷髅与样板建筑/环境表现；不构成#13混编核心持续攻击或#5人工接受" },
       configuration: endedRun.configuration, environmentAtStart: endedRun.environment, environmentAtEnd: environment(),
-      ...(sequence ? { phoneTest: { round: sequence.records.length + 1, totalRounds: 3, protocol: "standard 100/60s, 200/300s, 300/60s; each 5s warmup; advance only after durable receipt" }, collectorSession: collector } : {}),
+      ...(sequence ? { phoneTest: { round: sequence.round, attempt: sequence.attempt, entryFromRound: firstRound, totalRounds: 3, protocol: "standard 100/60s, 200/300s, 300/60s; each 5s warmup; independent attempts; advance only after durable receipt" }, collectorSession: collector } : {}),
       timing: {
         warmupSecondsRequested: WARMUP_SECONDS, durationSecondsRequested: endedRun.requestedSeconds,
         warmupStartedAt: new Date(performance.timeOrigin + endedRun.warmupStarted).toISOString(),
@@ -194,7 +206,7 @@ export function mountAssetPressure(app: HTMLElement): () => void {
     if (!sequence) { result = null; resultText.value = ""; }
     app.dataset.measurementOutcome = "warming";
     app.querySelector<HTMLElement>("[data-copy-status]")!.textContent = "";
-    app.querySelector<HTMLElement>("[data-summary]")!.textContent = sequence ? `第${sequence.records.length + 1}/3轮测量中；已收到的轮次完整保留。` : "本轮测量中；重新测量已清空上一轮样本，请先导出要保留的结果。";
+    app.querySelector<HTMLElement>("[data-summary]")!.textContent = sequence ? `第${sequence.round}/3轮 · 第${sequence.attempt}次测量中；所有旧记录完整保留。` : "本轮测量中；重新测量已清空上一轮样本，请先导出要保留的结果。";
     run = { phase: "warming", requestedSeconds: Number(duration.value), warmupStarted: performance.now(), started: null, lastFrame: null,
       frames: [], configuration: { count: Number(count.value), quality: quality.value, deviceCategory: app.querySelector<HTMLSelectElement>("[data-device]")!.value,
         declaredModel: model || "未填写", declaredOs: os || "未填写", deviceDeclarationIncomplete: !model || !os || os.includes("待核实"), notes: app.querySelector<HTMLInputElement>("[data-notes]")!.value.trim(),
@@ -238,6 +250,10 @@ export function mountAssetPressure(app: HTMLElement): () => void {
     const action = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-action]")?.dataset.action;
     if (action === "retry") void load();
     if (action === "start" || action === "restart") start();
+    if (action === "continue" && sequence && field && !loading && !contextLost && !run && !document.hidden) {
+      const next = sequence.continue();
+      if (next) start(next);
+    }
     if (action === "stop") interrupt("manual-stop");
     if (action === "export") exportResult();
     if (action === "backup") exportResult(true);
@@ -261,7 +277,7 @@ export function mountAssetPressure(app: HTMLElement): () => void {
   };
   const interrupt = (reason: string) => { finish("interrupted", reason); sequence?.halt(reason); updateControls(); };
   const resize = () => { interrupt("viewport-resized"); field?.resize(); };
-  const visibility = () => { if (document.hidden) interrupt("page-hidden"); previous = 0; };
+  const visibility = () => { if (document.hidden) interrupt("page-hidden"); else updateControls(); previous = 0; };
   const pagehide = () => interrupt("page-hidden");
   const animate = (time: number) => {
     if (disposed) return;
