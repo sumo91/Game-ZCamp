@@ -118,7 +118,7 @@ export class Battlefield {
     if (!this.width || !this.height) return;
     this.renderer.setSize(this.width, this.height);
     const aspect = this.width / this.height;
-    const halfHeight = Math.max(9.25, 5.9 / aspect);
+    const halfHeight = Math.max(8.1, 5.9 / aspect);
     this.camera.left = -halfHeight * aspect;
     this.camera.right = halfHeight * aspect;
     this.camera.top = halfHeight;
@@ -329,7 +329,7 @@ export class Battlefield {
         view = this.makeEnemy(enemy.id, enemy.definitionId);
       }
       const group = view.object;
-      group.position.copy(enemyPosition(enemy.id, enemy.position));
+      group.position.copy(this.enemyDisplayPosition(enemy.id, enemy.position));
       view.atWall = enemy.atWall;
       // Driven by effective simulation time; all battle motion stops in frozen phases.
       const phase = state.effectiveBattleTimeSeconds * (enemy.atWall ? 9 : 6) + Number(enemy.id.slice(enemy.id.lastIndexOf("-") + 1));
@@ -386,7 +386,7 @@ export class Battlefield {
       if (cached) cached.position = event.position;
       const death = event.type === "enemy_defeated";
       const position = this.enemyHitPosition(event.enemyId, event.position);
-      if (death && view) view.object.position.copy(enemyPosition(event.enemyId, event.position));
+      if (death && view) view.object.position.copy(this.enemyDisplayPosition(event.enemyId, event.position));
       const object = new Mesh(this.geometry(new SphereGeometry(death ? 0.32 : 0.18, 6, 4)), this.material(new MeshBasicMaterial({ color: death ? 0xd6bd77 : 0xfff0d2, wireframe: death })));
       object.position.copy(position);
       this.addEffect(object, death ? 0.4 : 0.12);
@@ -440,7 +440,7 @@ export class Battlefield {
         if (event.damage <= 0) return true;
         this.wallFlash = .4;
       }
-      const position = enemyPosition(event.enemyId, event.position).add(new Vector3(0, .35, event.type === "enemy_wall_attack" ? .65 : 0));
+      const position = this.enemyDisplayPosition(event.enemyId, event.position).add(new Vector3(0, .35, event.type === "enemy_wall_attack" ? .65 : 0));
       const shock = new Mesh(this.geometry(new RingGeometry(.25, .5, 12)), this.material(new MeshBasicMaterial({ color: event.type === "enemy_charge_impact" ? 0xffa251 : 0xff715b, side: 2 })));
       shock.rotation.x = -Math.PI / 2;
       shock.position.copy(position);
@@ -455,8 +455,8 @@ export class Battlefield {
     for (const enemy of state.enemies) {
       if (enemy.chargeWarningRemainingSeconds <= 0 && enemy.chargeRemainingSeconds <= 0) continue;
       const target = this.chargeTargets.get(enemy.id) ?? enemy.chargeTargetPosition;
-      const from = enemyPosition(enemy.id, enemy.position);
-      const to = enemyPosition(enemy.id, target);
+      const from = this.enemyDisplayPosition(enemy.id, enemy.position);
+      const to = this.enemyDisplayPosition(enemy.id, target);
       let group = this.bossWarnings.get(enemy.id);
       if (!group) {
         group = new Group();
@@ -495,7 +495,7 @@ export class Battlefield {
         this.inspireMarks.set(id, ring); this.scene.add(ring);
       }
       const unit = units.get(id)!;
-      ring.position.copy(enemyPosition(id, unit.position)); ring.position.y = .055;
+      ring.position.copy(this.enemyDisplayPosition(id, unit.position)); ring.position.y = .055;
       ring.scale.setScalar(id === this.inspireSource ? 1.9 : 1);
     }
     for (const [id, ring] of this.inspireMarks) if (!marked.has(id)) { this.scene.remove(ring); this.disposeObject(ring); this.inspireMarks.delete(id); }
@@ -510,7 +510,7 @@ export class Battlefield {
 
   private enemyHitPosition(id: string, progress: number): Vector3 {
     const object = this.enemies.get(id)?.object;
-    const eventPosition = enemyPosition(id, progress);
+    const eventPosition = this.enemyDisplayPosition(id, progress);
     if (!object) return eventPosition.add(new Vector3(0, .65, 0));
     // A fixed-step batch may contain an earlier hit and a later final position.
     // Sample the event anchor without moving a living actor back along its path.
@@ -519,6 +519,17 @@ export class Battlefield {
     const anchor = this.anchorPosition(object, "hit_anchor", eventPosition.add(new Vector3(0, .65, 0)));
     object.position.copy(currentPosition);
     return anchor;
+  }
+
+  private enemyDisplayPosition(id: string, progress: number): Vector3 {
+    const point = enemyPosition(id, progress);
+    const definitionId = this.enemyAnchors.get(id)?.definitionId;
+    if (definitionId === "charger_boss" || definitionId === "overlord_boss") {
+      // Tall silhouettes start inside the top safe edge, ending at the same wall.
+      // Every model, hit anchor, warning target and status ring uses this mapping.
+      point.z = -9.1 + Math.max(0, Math.min(1, progress)) * 8.45;
+    }
+    return point;
   }
 
   private play(view: EnemyView, semantic: AnimationSemantic): void {
