@@ -8,7 +8,7 @@ describe("routeBattleNotice", () => {
   });
 
   it("routes charge events to the warning channel", () => {
-    expect(routeBattleNotice({ type: "enemy_charge_warning", enemyId: "charger_boss-1", position: 0.4, durationSeconds: 2 })).toMatchObject({ channel: "warning" });
+    expect(routeBattleNotice({ type: "enemy_charge_warning", enemyId: "charger_boss-1", position: 0.4, durationSeconds: 2, targetPosition: .95 })).toMatchObject({ channel: "warning" });
     expect(routeBattleNotice({ type: "enemy_charge_impact", enemyId: "charger_boss-1", position: 1 })).toMatchObject({ channel: "warning" });
   });
 
