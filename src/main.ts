@@ -1,6 +1,11 @@
 import "./styles.css";
 
-if (new URLSearchParams(window.location.search).get("preview") === "threejs") {
+const preview = new URLSearchParams(window.location.search).get("preview");
+if (preview === "asset-pressure") {
+  const { mountAssetPressure } = await import("./three/AssetPressure");
+  const dispose = mountAssetPressure(document.querySelector<HTMLElement>("#app")!);
+  import.meta.hot?.dispose(dispose);
+} else if (preview === "threejs") {
   const { mountWhiteboxPreview } = await import("./three/WhiteboxPreview");
   const dispose = mountWhiteboxPreview(document.querySelector<HTMLElement>("#app")!);
   import.meta.hot?.dispose(dispose);

@@ -1,0 +1,74 @@
+[
+  {
+    "asset": "arrow_tower_high.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "arrow_tower_low.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "arrow_tower_medium.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "camp_plot.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "lumberyard_high.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "lumberyard_low.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "lumberyard_medium.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "main_city.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "pine_tree.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "rock_cluster.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "skeleton_infantry.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  },
+  {
+    "asset": "wall_segment.glb",
+    "sourceMatch": true,
+    "publicMatch": true,
+    "distMatch": true
+  }
+]
