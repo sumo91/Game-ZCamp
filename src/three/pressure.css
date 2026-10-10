@@ -20,4 +20,17 @@
 .pressure-result-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .pressure-sticky [data-run-status] { flex-basis: 100%; min-height: 23px; }
 .pressure-app textarea { resize: vertical; font-family: monospace; font-size: 12px; touch-action: pan-y; }
+.pressure-app [hidden] { display: none !important; }
+.phone-quick header { max-width: 720px; }
+.phone-quick [data-device-summary] { color: #f0dfad; font-weight: 600; }
+.phone-quick [data-phone-rounds] { padding-left: 24px; margin: 8px 0; font-size: 14px; }
+.phone-quick [data-delivery-status] { font-size: 14px; }
+.phone-quick [data-action=start] { width: 100%; min-height: 56px; font-size: 20px; font-weight: 700; background: #a07832; }
+.phone-quick [data-action=response] { flex: 1; min-height: 52px; background: #446f55; touch-action: manipulation; }
+.phone-quick [data-action=stop] { background: #764548; }
+.phone-quick .pressure-field { height: clamp(240px, calc(100dvh - 390px), 620px); }
+.phone-quick details { border: 1px solid #587076; border-radius: 6px; padding: 10px; }
+.phone-quick summary { cursor: pointer; display: flex; align-items: center; min-height: 44px; color: #bdd7f2; }
+.phone-quick [data-phone-recovery] { padding: 12px; border: 1px solid #d29b65; margin-bottom: 12px; }
 @media (min-width: 760px) { .pressure-layout { grid-template-columns: minmax(300px, 440px) minmax(280px, 1fr); } .pressure-app { max-width: 1160px; } }
+@media (min-width: 760px) { .phone-quick .pressure-layout { grid-template-columns: minmax(300px, 600px); } }
