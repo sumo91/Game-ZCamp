@@ -567,6 +567,7 @@ export class Battlefield {
     this.feedback.advance(events, deltaSeconds, state.phase);
     const view = this.feedback.view();
     const active = new Set<string>();
+    const floating: Array<{ id: number; entry: { element: HTMLElement; position?: Vector3 }; rise: number }> = [];
     const node = (key: string, text: string, className: string, position?: () => Vector3) => {
       active.add(key);
       let entry = this.feedbackNodes.get(key);
@@ -579,29 +580,62 @@ export class Battlefield {
       }
       return entry;
     };
-    const place = (entry: { element: HTMLElement; position?: Vector3 }, rise: number) => {
-      if (!entry.position) return;
-      const point = entry.position.clone().project(this.camera);
-      const wallY = this.projectWall().y;
-      entry.element.style.left = `${Math.max(24, Math.min(this.width - 24, (point.x + 1) * this.width / 2))}px`;
-      entry.element.style.top = `${Math.max(116, Math.min(wallY - 30, (1 - point.y) * this.height / 2 - rise))}px`;
-    };
     for (const number of view.numbers) {
       const entry = node(`damage:${number.id}`, `${Number(number.damage.toFixed(1))}`, "battle-feedback-damage", () => this.enemyHitPosition(number.enemyId, number.position));
-      place(entry, 12 + number.ageSeconds * 35);
+      floating.push({ id: number.id, entry, rise: 12 + number.ageSeconds * 35 });
       entry.element.style.opacity = String(1 - number.ageSeconds / .8);
     }
-    const ambientRows = new Map<string, number>();
     for (const notice of view.notices) {
       const target = notice.target;
       const position = target ? () => this.enemyHitPosition(target.enemyId, target.position ?? this.enemyAnchors.get(target.enemyId)?.position ?? 0) : undefined;
       const entry = node(`notice:${notice.id}`, notice.text, `battle-feedback-${notice.channel}`, position);
       entry.element.style.color = notice.color;
-      const row = target ? ambientRows.get(target.enemyId) ?? 0 : 0;
-      if (target) ambientRows.set(target.enemyId, row + 1);
-      place(entry, 50 + row * 18);
+      if (target) floating.push({ id: notice.id, entry, rise: 50 });
     }
     for (const [key, { element }] of this.feedbackNodes) if (!active.has(key)) { element.remove(); this.feedbackNodes.delete(key); }
+    if (!active.size) return;
+
+    // Measure once before placing anything. The safe band excludes real HUD/demo rectangles
+    // and the wall/plots; the same packing space prevents ambient and damage text collisions.
+    const hostRect = this.host.getBoundingClientRect();
+    let reservedBottom = 8;
+    for (const panel of Array.from(this.host.parentElement!.querySelectorAll<HTMLElement>(".preview-wave-card, .preview-top-actions, .preview-boss, .preview-zone, .preview-replay"))) {
+      const rect = panel.getBoundingClientRect();
+      if (rect.width && rect.height) reservedBottom = Math.max(reservedBottom, rect.bottom - hostRect.top + 8);
+    }
+    const top = reservedBottom + (this.announcements.offsetHeight ? this.announcements.offsetHeight + 6 : 0);
+    const bottom = this.projectWall().y - 30;
+    const measured = floating.sort((a, b) => b.id - a.id).map((item) => ({ ...item, width: item.entry.element.offsetWidth, height: item.entry.element.offsetHeight }));
+    this.announcements.style.top = `${reservedBottom}px`;
+    const occupied: Array<{ left: number; top: number; right: number; bottom: number }> = [];
+    for (const item of measured) {
+      const { element, position } = item.entry;
+      if (!position) continue;
+      const halfWidth = item.width / 2, halfHeight = item.height / 2;
+      const minX = 8 + halfWidth, maxX = this.width - 8 - halfWidth;
+      const minY = top + halfHeight, maxY = bottom - halfHeight;
+      element.style.visibility = "hidden";
+      if (minX > maxX || minY > maxY) continue;
+      const point = position.clone().project(this.camera);
+      const x = Math.max(minX, Math.min(maxX, (point.x + 1) * this.width / 2));
+      const y = Math.max(minY, Math.min(maxY, (1 - point.y) * this.height / 2 - item.rise));
+      const rows = Math.ceil((maxY - minY) / (item.height + 6));
+      const columns = Math.ceil((maxX - minX) / (item.width + 6));
+      let placed = false;
+      for (let row = 0; row <= rows * 2 && !placed; row += 1) {
+        const candidateY = y + (row % 2 ? 1 : -1) * Math.ceil(row / 2) * (item.height + 6);
+        if (candidateY < minY || candidateY > maxY) continue;
+        for (let column = 0; column <= columns * 2; column += 1) {
+          const candidateX = x + (column % 2 ? 1 : -1) * Math.ceil(column / 2) * (item.width + 6);
+          if (candidateX < minX || candidateX > maxX) continue;
+          const rect = { left: candidateX - halfWidth, top: candidateY - halfHeight, right: candidateX + halfWidth, bottom: candidateY + halfHeight };
+          if (occupied.some((other) => rect.left < other.right + 4 && rect.right + 4 > other.left && rect.top < other.bottom + 4 && rect.bottom + 4 > other.top)) continue;
+          occupied.push(rect);
+          element.style.left = `${candidateX}px`; element.style.top = `${candidateY}px`; element.style.visibility = "visible";
+          placed = true; break;
+        }
+      }
+    }
   }
 
   /** Critical ability feedback reads core timers, never wall-clock time or clip completion. */
