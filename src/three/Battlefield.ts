@@ -188,7 +188,7 @@ export class Battlefield {
       }
     }
     const wallTotal = state.wallHp + state.wallShield;
-    if (this.previousWall !== null && wallTotal < this.previousWall) this.wallFlash = 0.24;
+    if (this.previousWall !== null && wallTotal < this.previousWall) this.wallFlash = Math.max(this.wallFlash, .24);
     this.previousWall = wallTotal;
     this.wallFlash = Math.max(0, this.wallFlash - deltaSeconds);
     const wallTint = this.wallFlash > 0 ? 0xff9b87 : isWallInDanger(state) ? 0xd3847f : this.library ? 0xffffff : 0xc3c6c8;
