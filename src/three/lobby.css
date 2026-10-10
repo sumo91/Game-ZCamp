@@ -1,0 +1,42 @@
+.lobby-app { position: relative; width: min(100vw, 62dvh) !important; min-width: 0 !important; height: 100dvh !important; min-height: 0 !important; display: grid; grid-template-rows: auto minmax(0,1fr) auto; color: #f4e6c3; background: radial-gradient(ellipse at 45% 8%,#2f5485,#172941 58%,#101c2d); font: 14px/1.4 Arial,"Microsoft YaHei",sans-serif; padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+.lobby-header { display: flex; align-items: center; gap: 12px; padding: 18px 18px 14px; border-bottom: 1px solid #697c98; background: linear-gradient(#263d60,#1a2c46); box-shadow: 0 3px 10px #0005; }
+.lobby-header h1 { margin: 0; font-size: clamp(24px,3.6dvh,36px); letter-spacing: 3px; }
+.lobby-header small { color: #abc2da; font-size: 11px; }
+.lobby-crest { display:grid; place-items:center; width:45px; height:54px; border:3px solid #c9a14f; border-radius: 8px 8px 20px 20px; background:#2d5d9f; color:#edcd7e; font-size:26px; font-weight:bold; box-shadow:inset 0 0 0 3px #17355c; }
+.lobby-header button { margin-left:auto; background:#172d48; color:#dfc990; border:1px solid #8795a8; border-radius:6px; font:inherit; min-height:44px; padding:4px 8px; }
+.lobby-scroll { overflow-y:auto; overscroll-behavior:contain; touch-action:pan-y; scrollbar-width:thin; padding: 0 14px 14px; }
+.lobby-intro { text-align:center; padding:18px 0 10px; color:#ecd38e; }
+.lobby-intro p { margin:6px 0; color:#b2c6da; font-size:12px; }
+.lobby-section h2 { font-size:17px; margin:14px 0 8px; letter-spacing:2px; }
+.lobby-heroes { position:relative; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.lobby-hero-canvas { position:absolute; inset:0; width:100%; height:100%; z-index:2; pointer-events:none; }
+.lobby-hero-card { position:relative; min-width:0; padding:0 5px 8px; display:flex; flex-direction:column; align-items:center; color:#f3e7c5; border:1px solid #77879e; border-radius:10px; background:linear-gradient(160deg,#335783,#192e49); cursor:pointer; font:inherit; }
+.lobby-portrait { display:block; height:clamp(110px,17dvh,210px); width:100%; background:radial-gradient(ellipse at 50% 74%,#6d839b70,transparent 67%); }
+.lobby-hero-card strong { position:relative; z-index:3; font-size:12px; white-space:nowrap; }
+.lobby-role { color:#bacbdd; font-size:10px; margin:4px 0; }
+.lobby-hero-card small { min-height:30px; font-size:10px; color:#baa976; }
+.lobby-hero-card.selected, .lobby-level-card.selected { border:2px solid #efc55f; background:linear-gradient(150deg,#3c638b,#1d3552); box-shadow:0 0 12px #e7ba5030,inset 0 0 12px #e7ba5020; }
+.lobby-hero-card.locked { background:linear-gradient(160deg,#2e3c50,#1c293b); }
+.lobby-hero-card.locked::after { content:"锁定"; position:absolute; top:8px; right:6px; z-index:3; font-size:10px; color:#e0bc82; background:#16263bba; border-radius:3px; padding:2px 4px; }
+.lobby-detail { margin:10px 0; padding:9px 12px; border-left:3px solid #b99548; background:#0e1b2d66; color:#b8cbdc; font-size:12px; }
+.lobby-detail h3 { margin:0 0 4px; color:#eed9a1; font-size:14px; }
+.lobby-detail p { margin:3px 0; }
+.lobby-levels { display:grid; gap:8px; }
+.lobby-level-card { display:flex; gap:12px; align-items:center; width:100%; min-height:72px; padding:10px; color:#f0e2bd; border:1px solid #697c93; border-radius:8px; background:linear-gradient(110deg,#263e5b,#182b43); text-align:left; cursor:pointer; font:inherit; }
+.lobby-level-number { font-size:28px; color:#e1bd67; font-weight:bold; border-right:1px solid #6e7f94; padding-right:12px; }
+.lobby-level-card > span:nth-child(2) { display:flex; flex-direction:column; min-width:0; }
+.lobby-level-card strong { font-size:15px; }
+.lobby-level-card span span { color:#b9c8d8; font-size:11px; }
+.lobby-level-card small { font-size:10px; color:#b7a473; }
+.lobby-difficulty { margin-left:auto; color:#dfb953; font-size:10px; white-space:nowrap; }
+.lobby-difficulty small { display:block; text-align:right; }
+.lobby-footer { padding:4px 14px 12px; border-top:1px solid #60738d; background:#17283f; box-shadow:0 -5px 14px #0003; }
+.lobby-footer p { min-height:18px; margin:3px 0; color:#f3c975; font-size:12px; }
+.lobby-start { display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; min-height:60px; border:2px solid #efcf77; border-radius:9px; background:linear-gradient(#c69a3d,#967125); color:#fff4d2; text-shadow:0 1px 2px #594019; cursor:pointer; box-shadow:inset 0 1px #ffedac,0 3px #091321; font:inherit; }
+.lobby-start strong { font-size:19px; letter-spacing:3px; }
+.lobby-start span { font-size:11px; }
+.lobby-start:disabled { opacity:.5; }
+.lobby-app :focus-visible { outline:3px solid white; outline-offset:2px; }
+.lobby-loading { position:absolute; inset:0; z-index:5; display:grid; align-content:center; justify-items:center; padding:24px; text-align:center; background:#132136f5; }
+.lobby-loading button { min-height:44px; border:1px solid #d7b566; background:#315382; color:#fff0cb; border-radius:6px; padding:8px 24px; font:inherit; }
+.preview-title > button { min-height:44px; border:1px solid #8394a5; background:#23415d; color:#ead6a3; border-radius:6px; font:inherit; padding:4px 8px; }

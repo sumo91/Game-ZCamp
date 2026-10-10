@@ -7,8 +7,8 @@ if (preview === "asset-pressure" || entryParams.get("phone") === "iqoo-z10-turbo
   const dispose = mountAssetPressure(document.querySelector<HTMLElement>("#app")!);
   import.meta.hot?.dispose(dispose);
 } else if (preview === "threejs") {
-  const { mountWhiteboxPreview } = await import("./three/WhiteboxPreview");
-  const dispose = mountWhiteboxPreview(document.querySelector<HTMLElement>("#app")!);
+  const mount = entryParams.has("demo") ? (await import("./three/WhiteboxPreview")).mountWhiteboxPreview : (await import("./three/ThreeGame")).mountThreeGame;
+  const dispose = mount(document.querySelector<HTMLElement>("#app")!);
   import.meta.hot?.dispose(dispose);
 } else {
   const { default: Phaser } = await import("phaser");

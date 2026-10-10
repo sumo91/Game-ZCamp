@@ -1,8 +1,9 @@
 import type { GrowthBuildingId } from "../core/buildingGrowth";
 import { starterCatalog, type EnemyDefinition } from "../core/content";
+import type { HeroId } from "../core/hero";
 
-export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "ballista_low" | "ballista_medium" | "ballista_high" | "cannon_low" | "cannon_medium" | "cannon_high" | "frost_low" | "frost_medium" | "frost_high" | "electric_low" | "electric_medium" | "electric_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton" | "undead_runner" | "undead_tank" | "undead_armored" | "undead_brute" | "charger_lord" | "undead_king";
-export type AnimationSemantic = "walk" | "attack" | "hit" | "death" | "warning" | "charge" | "inspire";
+export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "ballista_low" | "ballista_medium" | "ballista_high" | "cannon_low" | "cannon_medium" | "cannon_high" | "frost_low" | "frost_medium" | "frost_high" | "electric_low" | "electric_medium" | "electric_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton" | "undead_runner" | "undead_tank" | "undead_armored" | "undead_brute" | "charger_lord" | "undead_king" | HeroId;
+export type AnimationSemantic = "walk" | "attack" | "hit" | "death" | "warning" | "charge" | "inspire" | "idle";
 export interface PresentationAsset {
   id: AssetId;
   file: string;
@@ -15,6 +16,7 @@ export interface PresentationAsset {
 }
 
 export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
+  ...(["camp_warden", "vanguard_gunner", "lumber_baron"] as const).map((id): PresentationAsset => ({ id, file: `hero_${id}.glb`, maximumSize: [1.7, 1.7, 1.1], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["idle", "attack"] })),
   { id: "ballista_low", file: "ballista_tower_low.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "ballista_medium", file: "ballista_tower_medium.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "ballista_high", file: "ballista_tower_high.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
@@ -47,7 +49,7 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
   { id: "plot", file: "camp_plot.glb", maximumSize: [1.9, .1, 1.65], anchors: ["label_anchor"], clips: [] },
 ];
 
-export const SAMPLE_COVERAGE = "精修：箭塔/连弩/火炮/寒霜塔/雷电塔/木材厂三档、主城、城墙、七种亡灵含双 Boss、树岩；英雄是开发占位";
+export const SAMPLE_COVERAGE = "正式模型：三英雄、箭塔/连弩/火炮/寒霜/雷电/木材厂三档、主城、城墙、七类亡灵含双 Boss、树岩";
 
 type BuildingContentId = GrowthBuildingId | "main_city";
 const BUILDING_ASSETS: Readonly<Partial<Record<BuildingContentId, readonly [AssetId, AssetId, AssetId]>>> = {
@@ -80,6 +82,8 @@ export function validateSampleCatalog(): void {
 export function enemyAsset(id: EnemyDefinition["id"]): AssetId | null {
   return ENEMY_ASSETS.get(id) ?? null;
 }
+
+export function heroAsset(id: HeroId): AssetId { return id; }
 
 /** The tier is a display mapping of the real level, not another growth rule. */
 export function buildingAsset(id: BuildingContentId, level: number): AssetId | null {
