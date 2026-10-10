@@ -131,7 +131,10 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
           : type === "choose_building_trait" ? "词条仅对当前建筑生效"
           : type === "transform_tower" ? "改造完成 · 保留等级与合法词条"
           : type === "destroy_building" ? "建筑已拆除 · 不返还木材或金币" : "";
-        if (type === "restart") battlefield.reset();
+        if (type === "restart") {
+          battlefield.reset();
+          if (undeadDemo) prepareUndeadDemo(session);
+        }
       }
     }
     messageExpiresAt = message ? performance.now() + 1500 : 0;

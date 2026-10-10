@@ -11,6 +11,7 @@ it("replays ordinary construction into a paused formal mixed-undead wave without
   expect(new Set(state.enemies.map((enemy) => enemy.definitionId))).toEqual(new Set(["walker", "runner", "tank", "armored", "brute"]));
   expect(state.enemies.some((enemy) => enemy.atWall)).toBe(true);
   expect(state.wallHp).toBeGreaterThan(0);
+  const prepared = structuredClone(state);
   session.dispatch({ type: "resume" });
   const events = [];
   for (let step = 0; step < 180; step += 1) {
@@ -20,4 +21,9 @@ it("replays ordinary construction into a paused formal mixed-undead wave without
   expect(events.some((event) => event.type === "enemy_wall_attack")).toBe(true);
   expect(events.some((event) => event.type === "enemy_hit")).toBe(true);
   expect(events.some((event) => event.type === "enemy_defeated")).toBe(true);
+  expect(session.dispatch({ type: "restart" }).accepted).toBe(true);
+  expect(session.getState().phase).toBe("OPENING_COUNTDOWN");
+  expect(session.getState().enemies).toEqual([]);
+  prepareUndeadDemo(session);
+  expect(session.getState()).toEqual(prepared);
 });
