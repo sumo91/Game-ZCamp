@@ -1,7 +1,8 @@
 import "./styles.css";
 
-const preview = new URLSearchParams(window.location.search).get("preview");
-if (preview === "asset-pressure") {
+const entryParams = new URLSearchParams(window.location.search);
+const preview = entryParams.get("preview");
+if (preview === "asset-pressure" || entryParams.get("phone") === "iqoo-z10-turbo") {
   const { mountAssetPressure } = await import("./three/AssetPressure");
   const dispose = mountAssetPressure(document.querySelector<HTMLElement>("#app")!);
   import.meta.hot?.dispose(dispose);

@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check": "npm run typecheck && npm test"
+    "test:collector": "node --test tests/phoneCollector.test.mjs",
+    "phone:serve": "node scripts/phone-collector.mjs",
+    "check": "npm run typecheck && npm test && npm run test:collector"
   },
   "dependencies": {
     "phaser": "4.2.1",
