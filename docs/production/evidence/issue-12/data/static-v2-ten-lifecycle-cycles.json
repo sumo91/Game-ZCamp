@@ -1,0 +1,444 @@
+{
+  "source": "b7465c3af6e2725a133317ba06bbe14fa0b2feb3",
+  "boundary": "Actual CUA lobby → battle, one ordinary build, legal unchanged-catalog defeat/victory replay, actual retry, second terminal replay, actual return to lobby. First return frame measurements; WebAudio stopped sources may still await onended callbacks. One shared library and sound director are intentional.",
+  "cycles": [
+    {
+      "cycle": 1,
+      "buildHistory": [
+        {
+          "step": 679,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "returned": "lobby"
+    },
+    {
+      "cycle": 2,
+      "buildHistory": [
+        {
+          "step": 17,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "loss": true,
+      "retryLoss": true,
+      "returned": "lobby"
+    },
+    {
+      "cycle": 3,
+      "buildHistory": [
+        {
+          "step": 17,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "loss": true,
+      "retryLoss": true,
+      "returned": "lobby"
+    },
+    {
+      "cycle": 4,
+      "buildHistory": [
+        {
+          "step": 16,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "loss": true,
+      "retryLoss": true,
+      "returned": "lobby"
+    },
+    {
+      "cycle": 5,
+      "buildHistory": [
+        {
+          "step": 17,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "loss": true,
+      "retryLoss": true,
+      "returned": "lobby"
+    },
+    {
+      "cycle": 6,
+      "buildHistory": [
+        {
+          "step": 16,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "outcome": "防守成功",
+      "ended": true,
+      "retryEnded": true,
+      "returned": "lobby"
+    },
+    {
+      "cycle": 7,
+      "buildHistory": [
+        {
+          "step": 17,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "outcome": "城墙失守",
+      "ended": true,
+      "retryEnded": true,
+      "returned": "lobby"
+    },
+    {
+      "cycle": 8,
+      "buildHistory": [
+        {
+          "step": 16,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "outcome": "防守成功",
+      "ended": true,
+      "retryEnded": true,
+      "returned": "lobby"
+    },
+    {
+      "cycle": 9,
+      "buildHistory": [
+        {
+          "step": 17,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "outcome": "城墙失守",
+      "ended": true,
+      "retryEnded": true,
+      "returned": "lobby"
+    },
+    {
+      "cycle": 10,
+      "buildHistory": [
+        {
+          "step": 17,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          },
+          "accepted": true,
+          "buildingId": "growth-slot-r1-c1"
+        }
+      ],
+      "outcome": "防守成功",
+      "ended": true,
+      "retryEnded": true,
+      "returned": "lobby"
+    }
+  ],
+  "resources": [
+    {
+      "index": 0,
+      "jsHeapBytes": {
+        "used": 82736404,
+        "allocated": 99263988
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 0,
+        "activeSources": 0,
+        "state": "closed",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 1,
+      "jsHeapBytes": {
+        "used": 77514331,
+        "allocated": 94375271
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 2,
+      "jsHeapBytes": {
+        "used": 75997484,
+        "allocated": 85082040
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 3,
+      "jsHeapBytes": {
+        "used": 77200896,
+        "allocated": 92965196
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 4,
+      "jsHeapBytes": {
+        "used": 80658320,
+        "allocated": 95305656
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 5,
+      "jsHeapBytes": {
+        "used": 88508135,
+        "allocated": 112608011
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 6,
+      "jsHeapBytes": {
+        "used": 74289910,
+        "allocated": 87088158
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 7,
+      "jsHeapBytes": {
+        "used": 80062498,
+        "allocated": 96493162
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 8,
+      "jsHeapBytes": {
+        "used": 84173253,
+        "allocated": 96528445
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 9,
+      "jsHeapBytes": {
+        "used": 90433229,
+        "allocated": 116802421
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 10,
+      "jsHeapBytes": {
+        "used": 84600853,
+        "allocated": 116860641
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    }
+  ]
+}

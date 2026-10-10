@@ -1,11 +1,11 @@
 # 尸潮营地
 
-Phaser 4 + TypeScript + Vite 的竖屏塔防生存 MVP。
+TypeScript + Vite 的竖屏塔防生存 MVP。默认入口使用 Phaser 4，共享战斗会话同时支持 Three.js 开发白模预览。
 
 ## 开始
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
@@ -14,21 +14,28 @@ npm run dev
 ## 检查
 
 ```bash
-npm run check   # 类型检查 + 110 项单元测试
+npm run check   # 类型检查 + 核心、会话及显示数据测试
 npm run build
 ```
 
 ## 结构
 
 - `src/core` — 确定性核心模拟（平台无关，同一输入同一结果）
+- `src/core/battleSession.ts` — 两个入口共用的命令、固定步推进、事件交付及会话生命周期
 - `src/phaser` — 表现层：场景、布局契约、图元化美术、程序化音效与反馈特效
+- `src/three` — 独立 Three.js 白模预览：正交战场、格位选取、事件表现与 HTML/CSS 界面
 - 建筑成长内容走数据定义（typed catalog + validation），不在场景逻辑中散落
 - 协作规范见 `docs/production/TEAM_PROTOCOL.md`，设计事实源与验收证据见 `docs/`
 
 ## 调试
 
+- `?preview=threejs` 进入明确标记的 Three.js 开发白模，固定种子 1337、营地守望者与第一防线。空格可建造箭塔，支持战术/系统暂停；完整成长 UI 和精修资产分别由 #3/#4 交付。
 - `?seed=123` 固定随机种子
 - `?stage4-demo=1` 演示模式（30 倍速 + 无敌城墙，用于快速取证后期波次）
+
+PR 与 master/codex 分支 push 运行 `.github/workflows/check.yml` 的检查和构建。GitHub Pages 仅由 `deploy-pages.yml` 的手动 `workflow_dispatch` 发布，合入不会自动发布网站。
+
+白模复现与截图见 [Issue #2 验收记录](docs/evidence/Threejs-Issue-2-验收-2026-10-09.md)。
 
 ## 已知引擎问题
 

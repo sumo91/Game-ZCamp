@@ -1,0 +1,45 @@
+{
+  "canvasTouchAction": "pan-y",
+  "configuration": {
+    "count": 300,
+    "declaredModel": "未填写",
+    "declaredOs": "未填写",
+    "deviceCategory": "desktop",
+    "deviceDeclarationIncomplete": true,
+    "notes": "",
+    "quality": "reduced"
+  },
+  "interruptionReason": "manual-stop",
+  "outcome": "interrupted",
+  "overflowY": "auto",
+  "responseChecks": [
+    {
+      "at": "2026-10-10T05:14:56.302Z",
+      "boundary": "输入事件时间戳到处理器的近似延迟，非端到端视觉延迟",
+      "elapsedSeconds": 14.87539999999106,
+      "eventToHandlerMs": 0.20000000298023224,
+      "phase": "measuring"
+    }
+  ],
+  "sceneSummary": null,
+  "timingKeys": [
+    "warmupSecondsRequested",
+    "durationSecondsRequested",
+    "warmupStartedAt",
+    "measurementStartedAt",
+    "samplingEndedAt",
+    "endedAt",
+    "totalWallSeconds",
+    "actualSampleDurationSeconds",
+    "measurementWallSeconds",
+    "sampleCount",
+    "medianMs",
+    "p95Ms",
+    "maxMs",
+    "rawFrameIntervalsMs",
+    "method",
+    "boundary",
+    "cpuTimeMs",
+    "gpuTimeMs"
+  ]
+}

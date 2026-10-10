@@ -1,0 +1,197 @@
+{
+  "woodBeforeDraft": "木材 80 · +1.7/秒",
+  "frozenDraft": {
+    "buttons": [
+      {
+        "height": 82.41667175292969,
+        "text": "远射 · 0 → 1 层通用 · 本塔生效该塔射程累计 +10%",
+        "width": 306.66668701171875
+      },
+      {
+        "height": 82.41667175292969,
+        "text": "急射 · 0 → 1 层通用 · 本塔生效该塔攻击速度累计 +15%",
+        "width": 306.66668701171875
+      },
+      {
+        "height": 82.41667175292969,
+        "text": "守线 · 0 → 1 层通用 · 本塔生效敌人贴墙时，该塔伤害累计 +20%",
+        "width": 306.66668701171875
+      }
+    ],
+    "gold": "金币 5.75",
+    "inert": [
+      true,
+      true,
+      true
+    ],
+    "journal": [
+      {
+        "accepted": true,
+        "command": {
+          "type": "pause"
+        },
+        "step": 3
+      },
+      {
+        "accepted": true,
+        "buildingId": "growth-slot-r1-c1",
+        "command": {
+          "definitionId": "arrow_tower",
+          "slotId": "slot-r1-c1",
+          "type": "build_building"
+        },
+        "step": 3
+      },
+      {
+        "accepted": true,
+        "buildingId": "growth-slot-r1-c2",
+        "command": {
+          "definitionId": "lumberyard",
+          "slotId": "slot-r1-c2",
+          "type": "build_building"
+        },
+        "step": 3
+      },
+      {
+        "accepted": true,
+        "command": {
+          "type": "resume"
+        },
+        "step": 3
+      },
+      {
+        "accepted": true,
+        "command": {
+          "type": "pause"
+        },
+        "step": 1252
+      },
+      {
+        "accepted": true,
+        "buildingId": "growth-slot-r1-c1",
+        "command": {
+          "buildingId": "growth-slot-r1-c1",
+          "type": "upgrade_building"
+        },
+        "step": 1252
+      }
+    ],
+    "phase": "TRAIT_DRAFT",
+    "selected": "slot-r1-c1",
+    "time": "战斗 36 秒 · 击杀 23",
+    "wave": "波次 1 / 10 · 敌人 1",
+    "wood": "木材 30 · +1.7/秒"
+  },
+  "frozenAfter": {
+    "gold": "金币 5.75",
+    "journal": [
+      {
+        "accepted": true,
+        "command": {
+          "type": "pause"
+        },
+        "step": 3
+      },
+      {
+        "accepted": true,
+        "buildingId": "growth-slot-r1-c1",
+        "command": {
+          "definitionId": "arrow_tower",
+          "slotId": "slot-r1-c1",
+          "type": "build_building"
+        },
+        "step": 3
+      },
+      {
+        "accepted": true,
+        "buildingId": "growth-slot-r1-c2",
+        "command": {
+          "definitionId": "lumberyard",
+          "slotId": "slot-r1-c2",
+          "type": "build_building"
+        },
+        "step": 3
+      },
+      {
+        "accepted": true,
+        "command": {
+          "type": "resume"
+        },
+        "step": 3
+      },
+      {
+        "accepted": true,
+        "command": {
+          "type": "pause"
+        },
+        "step": 1252
+      },
+      {
+        "accepted": true,
+        "buildingId": "growth-slot-r1-c1",
+        "command": {
+          "buildingId": "growth-slot-r1-c1",
+          "type": "upgrade_building"
+        },
+        "step": 1252
+      }
+    ],
+    "phase": "TRAIT_DRAFT",
+    "selected": "slot-r1-c1",
+    "time": "战斗 36 秒 · 击杀 23",
+    "wave": "波次 1 / 10 · 敌人 1",
+    "wood": "木材 30 · +1.7/秒"
+  },
+  "modal360": {
+    "buttons": [
+      {
+        "action": "transform",
+        "bottom": 215.53126525878903,
+        "height": 82.41667175292969,
+        "width": 306.66668701171875,
+        "y": 133.11459350585938
+      },
+      {
+        "action": "transform",
+        "bottom": 305.9479217529297,
+        "height": 82.41667175292969,
+        "width": 306.66668701171875,
+        "y": 223.53125
+      },
+      {
+        "action": "transform",
+        "bottom": 396.3646087646485,
+        "height": 82.41667175292969,
+        "width": 306.66668701171875,
+        "y": 313.94793701171875
+      },
+      {
+        "action": "transform",
+        "bottom": 486.78126525878906,
+        "height": 82.41667175292969,
+        "width": 306.66668701171875,
+        "y": 404.3645935058594
+      },
+      {
+        "action": "close_transform",
+        "bottom": 542.78125,
+        "height": 44,
+        "width": 306.66668701171875,
+        "y": 498.78125
+      }
+    ],
+    "inert": [
+      true,
+      true,
+      true
+    ],
+    "overlay": {
+      "height": 640,
+      "width": 360,
+      "x": 0,
+      "y": 0
+    },
+    "phase": "TACTICAL_PAUSE",
+    "selected": "slot-r1-c1"
+  }
+}

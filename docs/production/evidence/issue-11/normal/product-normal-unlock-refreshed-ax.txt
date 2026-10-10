@@ -1,0 +1,61 @@
+Browser tab: 1, Title: "尸潮营地", URL: "http://127.0.0.1:5331/Game-ZCamp/".
+1 AXWebArea 尸潮营地, URL: 127.0.0.1:5331/Game-ZCamp/
+	2 container Description: 尸潮营地游戏画布, ID: app
+		3 container
+			4 text 人类堡垒 · 亡灵围城
+			5 heading 尸潮营地, Value: 1
+				6 text 尸潮营地
+			7 button 声音已开启
+		8 container
+			9 text 守住黎明前的最后一道城墙
+			10 text 选择你的驻守英雄，建造并强化防线。
+			11 heading 驻守英雄, Value: 2
+				12 text 驻守英雄
+			13 container
+				14 checkbox 堡垒守望者 均衡驻守英雄 已选择, Value: 1
+					15 text 堡垒守望者
+					16 text 均衡驻守英雄
+					17 text 已选择
+				18 checkbox 连弩卫士 战斗驻守英雄 可出战, Value: 0
+					19 text 连弩卫士
+					20 text 战斗驻守英雄
+					21 text 可出战
+				22 checkbox (disabled) 采伐领主 经济驻守英雄 通关《裂谷尸潮》解锁 锁定, Value: 0
+					23 text 采伐领主
+					24 text 经济驻守英雄
+					25 text 通关《裂谷尸潮》解锁
+					26 text 锁定
+			27 heading 堡垒守望者, Value: 3
+				28 text 堡垒守望者
+			29 text 弩箭攻击 · 自动驻守主城
+			30 text 木材总产量 +10%
+			31 text 开局城墙护盾 +100
+			32 heading 前线战役, Value: 2
+				33 text 前线战役
+			34 checkbox 第一防线 十波连续尸潮 已选择 ◆ 新手, Value: 1
+				35 text 第一防线
+				36 text 十波连续尸潮
+				37 text 已选择
+				38 text ◆
+				39 text 新手
+			40 checkbox 裂谷尸潮 十二波连续尸潮 可出战 ◆◆ 进阶, Value: 0
+				41 text 裂谷尸潮
+				42 text 十二波连续尸潮
+				43 text 可出战
+				44 text ◆◆
+				45 text 进阶
+			46 checkbox (disabled) 君王亲征 十五波连续尸潮 · 双 Boss 终局 通关《裂谷尸潮》解锁 ◆◆◆ 困难, Value: 0
+				47 text 君王亲征
+				48 text 十五波连续尸潮 · 双 Boss 终局
+				49 text 通关《裂谷尸潮》解锁
+				50 text ◆◆◆
+				51 text 困难
+			52 heading 第一防线 · 已通关, Value: 3
+				53 text 第一防线 · 已通关
+			54 text 敌情 · 标准密度 · 第 5 波冲锋领主 · 终局尸潮君王 · 共 10 波
+		55 container
+			56 button 开始战斗 《第一防线》 · 堡垒守望者
+				57 text 开始战斗
+				58 text 《第一防线》 · 堡垒守望者
+
+The focused UI element is 1 AXWebArea 尸潮营地, URL: 127.0.0.1:5331/Game-ZCamp/

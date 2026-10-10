@@ -1,0 +1,16 @@
+{
+  "collectedDate": "2026-10-10",
+  "method": "Read-only Windows CIM; no benchmark run yet",
+  "category": "desktop",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700KF",
+  "cpuPhysicalCores": 12,
+  "cpuLogicalProcessors": 20,
+  "gpu": "NVIDIA GeForce RTX 4060 Ti",
+  "gpuDriverVersion": "32.0.16.1692",
+  "os": "Microsoft Windows 11 家庭版 中文版",
+  "osVersion": "10.0.26300",
+  "osBuild": "26300",
+  "observedPhysicalMemoryBytes": 68523835392,
+  "browser": "Must be recorded from the actual benchmark page, not inferred from earlier QA",
+  "physicalPhoneEvidence": false
+}

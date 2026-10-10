@@ -1,0 +1,210 @@
+{
+  "schema": 1,
+  "scope": "Owner-identified iQOO Z10 Turbo incoming phone records; presentation-only sample, no owner or physical-device acceptance inferred",
+  "sourceBuildSha": "6d1a168d86fe2ff0b19dc448917e236309a6739e",
+  "auditedAtUtc": "2026-10-10T23:04:17.089841+08:00",
+  "rawOriginalsRemainExternal": true,
+  "originalAudit": {
+    "bytes": 6713,
+    "sha256": "3f3d39ba56eae89d228932d972c9c201e5e64821829d29c7fcb4c21d175bbee7"
+  },
+  "originalReview": {
+    "bytes": 2461,
+    "sha256": "ff31a303499b4903913adccdff95469d69f3250a498a5f808cf744c7a20b2898"
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "count": 100,
+      "quality": "standard",
+      "outcome": "completed",
+      "interruptionReason": null,
+      "requestedSeconds": 60,
+      "warmupSeconds": 5,
+      "original": {
+        "bytes": 223701,
+        "sha256": "005b00e67bf4fb057c04e6f821f2d90b96475d2fc03d635470d3e0426f493039"
+      },
+      "recomputed": {
+        "sampleCount": 3616,
+        "actualSampleDurationSeconds": 60.0119,
+        "medianMs": 16.599999999998545,
+        "p95Ms": 16.700000000004366,
+        "maxMs": 16.80000000000291
+      },
+      "checks": {
+        "rawAllFinitePositive": true,
+        "rawStatisticsMatch": true,
+        "sessionMatches": true,
+        "renderSamplesMatch": true,
+        "fullDuration": true,
+        "allUnitSnapshotsActiveVisibleInView": true,
+        "mixerTimeAdvanced": true
+      },
+      "rendering": {
+        "samples": 3616,
+        "callsMin": 239,
+        "callsMax": 239,
+        "trianglesMin": 1955010,
+        "trianglesMax": 1955010,
+        "boundary": "每个测量帧读取实际renderer.info；calls/triangles包含实时阴影绘制，非模型清单推算"
+      },
+      "response": {
+        "count": 261,
+        "trustedTouchCount": 261,
+        "duringMeasurementCount": 261,
+        "eventToHandlerMs": {
+          "min": 4.099999999627471,
+          "median": 7.200000001117587,
+          "max": 15.400000000372529
+        },
+        "boundary": "event timestamp to handler approximation; not end-to-end visual latency"
+      },
+      "viewportStart": {
+        "width": 360,
+        "height": 703
+      },
+      "viewportEnd": {
+        "width": 360,
+        "height": 703
+      },
+      "nativeDpr": 3.5,
+      "rendererDpr": 2,
+      "visibilityEnd": "visible",
+      "scene": {
+        "activeUnits": 100,
+        "independentMixers": 100,
+        "centersInView": 100,
+        "canvasCss": {
+          "width": 336,
+          "height": 313
+        },
+        "composition": {
+          "wall": 6,
+          "plot": 15,
+          "tree": 4,
+          "rocks": 4,
+          "arrow_low": 2,
+          "lumber_medium": 3,
+          "arrow_high": 3,
+          "lumber_low": 2,
+          "arrow_medium": 2,
+          "lumber_high": 2,
+          "main_city": 1,
+          "skeleton": 100
+        },
+        "shadow": {
+          "enabled": true,
+          "type": "PCFShadowMap",
+          "resolution": [
+            1024,
+            1024
+          ],
+          "groundProjection": true
+        }
+      }
+    },
+    {
+      "round": 2,
+      "count": 200,
+      "quality": "standard",
+      "outcome": "interrupted",
+      "interruptionReason": "page-hidden",
+      "requestedSeconds": 300,
+      "warmupSeconds": 5,
+      "original": {
+        "bytes": 437547,
+        "sha256": "ab5583db5a1ad2b01d6374a490571e52c98bdf54d4895be3e863b0a9d3fdb47e"
+      },
+      "recomputed": {
+        "sampleCount": 8091,
+        "actualSampleDurationSeconds": 134.36270000000002,
+        "medianMs": 16.60000000000582,
+        "p95Ms": 16.70000000001164,
+        "maxMs": 50
+      },
+      "checks": {
+        "rawAllFinitePositive": true,
+        "rawStatisticsMatch": true,
+        "sessionMatches": true,
+        "renderSamplesMatch": true,
+        "fullDuration": false,
+        "allUnitSnapshotsActiveVisibleInView": true,
+        "mixerTimeAdvanced": true
+      },
+      "rendering": {
+        "samples": 8091,
+        "callsMin": 439,
+        "callsMax": 439,
+        "trianglesMin": 3351410,
+        "trianglesMax": 3351410,
+        "boundary": "每个测量帧读取实际renderer.info；calls/triangles包含实时阴影绘制，非模型清单推算"
+      },
+      "response": {
+        "count": 451,
+        "trustedTouchCount": 451,
+        "duringMeasurementCount": 451,
+        "eventToHandlerMs": {
+          "min": 3.900000000372529,
+          "median": 9.800000000745058,
+          "max": 23.09999999962747
+        },
+        "boundary": "event timestamp to handler approximation; not end-to-end visual latency"
+      },
+      "viewportStart": {
+        "width": 360,
+        "height": 703
+      },
+      "viewportEnd": {
+        "width": 360,
+        "height": 703
+      },
+      "nativeDpr": 3.5,
+      "rendererDpr": 2,
+      "visibilityEnd": "hidden",
+      "scene": {
+        "activeUnits": 200,
+        "independentMixers": 200,
+        "centersInView": 200,
+        "canvasCss": {
+          "width": 336,
+          "height": 313
+        },
+        "composition": {
+          "wall": 6,
+          "plot": 15,
+          "tree": 4,
+          "rocks": 4,
+          "arrow_low": 2,
+          "lumber_medium": 3,
+          "arrow_high": 3,
+          "lumber_low": 2,
+          "arrow_medium": 2,
+          "lumber_high": 2,
+          "main_city": 1,
+          "skeleton": 200
+        },
+        "shadow": {
+          "enabled": true,
+          "type": "PCFShadowMap",
+          "resolution": [
+            1024,
+            1024
+          ],
+          "groundProjection": true
+        }
+      }
+    }
+  ],
+  "completedRounds": [
+    1
+  ],
+  "missingFullRounds": [
+    2,
+    3
+  ],
+  "ownerAccepted": false,
+  "physicalDeviceAccepted": false,
+  "issue5Closed": false,
+  "redaction": "No LAN address, session token, collector session identity, or private session file copied"
+}

@@ -1,0 +1,92 @@
+import type { GrowthBuildingId } from "../core/buildingGrowth";
+import { starterCatalog, type EnemyDefinition } from "../core/content";
+import { starterHeroContent, type HeroId } from "../core/hero";
+
+export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "ballista_low" | "ballista_medium" | "ballista_high" | "cannon_low" | "cannon_medium" | "cannon_high" | "frost_low" | "frost_medium" | "frost_high" | "electric_low" | "electric_medium" | "electric_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton" | "undead_runner" | "undead_tank" | "undead_armored" | "undead_brute" | "charger_lord" | "undead_king" | HeroId;
+export type AnimationSemantic = "walk" | "attack" | "hit" | "death" | "warning" | "charge" | "inspire" | "idle";
+export interface PresentationAsset {
+  id: AssetId;
+  file: string;
+  /** Visual metres only; never a simulation radius or range. */
+  maximumSize: readonly [number, number, number];
+  anchors: readonly string[];
+  clips: readonly AnimationSemantic[];
+  /** Display-only setback so large equipment remains outside the wall. */
+  wallInset?: number;
+}
+
+export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
+  ...(["camp_warden", "vanguard_gunner", "lumber_baron"] as const).map((id): PresentationAsset => ({ id, file: `hero_${id}.glb`, maximumSize: [1.7, 1.7, 1.1], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["idle", "attack"] })),
+  { id: "ballista_low", file: "ballista_tower_low.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "ballista_medium", file: "ballista_tower_medium.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "ballista_high", file: "ballista_tower_high.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "cannon_low", file: "cannon_tower_low.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "cannon_medium", file: "cannon_tower_medium.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "cannon_high", file: "cannon_tower_high.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "arrow_low", file: "arrow_tower_low.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "arrow_medium", file: "arrow_tower_medium.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "arrow_high", file: "arrow_tower_high.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "frost_low", file: "frost_tower_low.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "frost_medium", file: "frost_tower_medium.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "frost_high", file: "frost_tower_high.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "electric_low", file: "electric_tower_low.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "electric_medium", file: "electric_tower_medium.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "electric_high", file: "electric_tower_high.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "skeleton", file: "skeleton_infantry.glb", maximumSize: [1.15, 1.6, .65], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"] },
+  { id: "charger_lord", file: "charger_lord.glb", maximumSize: [2.8, 3.4, 1.5], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death", "warning", "charge"], wallInset: .24 },
+  { id: "undead_king", file: "undead_king.glb", maximumSize: [2.4, 3.4, 1.5], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death", "inspire"], wallInset: .24 },
+  { id: "undead_runner", file: "undead_runner.glb", maximumSize: [1.2, 1.55, .9], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"], wallInset: .08 },
+  { id: "undead_tank", file: "undead_tank.glb", maximumSize: [1.45, 1.7, .95], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"], wallInset: .12 },
+  { id: "undead_armored", file: "undead_armored.glb", maximumSize: [1.55, 1.9, .95], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"], wallInset: .12 },
+  { id: "undead_brute", file: "undead_brute.glb", maximumSize: [2, 2.15, 1.15], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"], wallInset: .25 },
+  { id: "lumber_low", file: "lumberyard_low.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "lumber_medium", file: "lumberyard_medium.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "lumber_high", file: "lumberyard_high.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "main_city", file: "main_city.glb", maximumSize: [1.85, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "wall", file: "wall_segment.glb", maximumSize: [1.95, 1.3, .8], anchors: ["hit_anchor", "label_anchor"], clips: [] },
+  { id: "tree", file: "pine_tree.glb", maximumSize: [1.4, 2.3, 1.4], anchors: ["label_anchor"], clips: [] },
+  { id: "rocks", file: "rock_cluster.glb", maximumSize: [1, .5, .9], anchors: ["label_anchor"], clips: [] },
+  { id: "plot", file: "camp_plot.glb", maximumSize: [1.9, .1, 1.65], anchors: ["label_anchor"], clips: [] },
+];
+
+export const SAMPLE_COVERAGE = "正式模型：三英雄、箭塔/连弩/火炮/寒霜/雷电/木材厂三档、主城、城墙、七类亡灵含双 Boss、树岩";
+
+type BuildingContentId = GrowthBuildingId | "main_city";
+const BUILDING_ASSETS: Readonly<Record<BuildingContentId, readonly [AssetId, AssetId, AssetId]>> = {
+  machine_gun: ["ballista_low", "ballista_medium", "ballista_high"],
+  cannon: ["cannon_low", "cannon_medium", "cannon_high"],
+  arrow_tower: ["arrow_low", "arrow_medium", "arrow_high"],
+  frost: ["frost_low", "frost_medium", "frost_high"],
+  electric: ["electric_low", "electric_medium", "electric_high"],
+  lumberyard: ["lumber_low", "lumber_medium", "lumber_high"],
+  main_city: ["main_city", "main_city", "main_city"],
+};
+
+const ENEMY_ASSETS: ReadonlyMap<EnemyDefinition["id"], AssetId> = new Map([["walker", "skeleton"], ["runner", "undead_runner"], ["tank", "undead_tank"], ["armored", "undead_armored"], ["brute", "undead_brute"], ["charger_boss", "charger_lord"], ["overlord_boss", "undead_king"]]);
+
+export function enemyWallInset(id: string): number {
+  const assetId = enemyAsset(id);
+  return SAMPLE_ASSETS.find((asset) => asset.id === assetId)?.wallInset ?? 0;
+}
+
+/** Formal content must have complete presentation coverage before loading any models. */
+export function validateSampleCatalog(): void {
+  const assets = new Set(SAMPLE_ASSETS.map((asset) => asset.id));
+  const references = [...Object.values(BUILDING_ASSETS).flat(), ...ENEMY_ASSETS.values(), ...starterHeroContent.heroes.map((hero) => hero.id)];
+  for (const id of references) if (!assets.has(id)) throw new Error(`样板目录引用未登记的模型：${id}`);
+  for (const enemy of starterCatalog.enemies) if (!ENEMY_ASSETS.has(enemy.id)) throw new Error(`正式敌人缺少模型：${enemy.id}`);
+  for (const id of ENEMY_ASSETS.keys()) {
+    if (!starterCatalog.enemies.some((enemy) => enemy.id === id)) throw new Error(`样板目录引用未知敌人：${id}`);
+  }
+}
+
+export function enemyAsset(id: EnemyDefinition["id"]): AssetId | null {
+  return ENEMY_ASSETS.get(id) ?? null;
+}
+
+export function heroAsset(id: HeroId): AssetId { return id; }
+
+/** The tier is a display mapping of the real level, not another growth rule. */
+export function buildingAsset(id: BuildingContentId, level: number): AssetId | null {
+  return BUILDING_ASSETS[id]?.[level <= 2 ? 0 : level <= 4 ? 1 : 2] ?? null;
+}

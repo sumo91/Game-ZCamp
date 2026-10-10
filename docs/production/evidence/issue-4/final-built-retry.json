@@ -1,0 +1,399 @@
+{
+  "retryStart": "2026-10-09T14:37:25.704Z",
+  "originalObservedSampleCount": 666,
+  "samplingNote": "Read-only DOM samples retained at first/last observation, phase or asset state changes, and at least 15 real fixed steps since the previous retained sample; no synthetic samples.",
+  "samples": [
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "3",
+        "openingCountdown": "4.9",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:26.034Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 5 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "18",
+        "openingCountdown": "4.400000000000002",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:26.504Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 5 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "33",
+        "openingCountdown": "3.900000000000004",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:27.005Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 4 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "48",
+        "openingCountdown": "3.4000000000000057",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:27.508Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 4 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "63",
+        "openingCountdown": "2.9000000000000075",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:28.003Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 3 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "78",
+        "openingCountdown": "2.4000000000000092",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:28.508Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 3 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "93",
+        "openingCountdown": "1.9000000000000103",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:29.006Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 2 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "108",
+        "openingCountdown": "1.4000000000000088",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:29.508Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 2 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "123",
+        "openingCountdown": "0.9000000000000076",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:30.007Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 1 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "138",
+        "openingCountdown": "0.4000000000000077",
+        "phase": "OPENING_COUNTDOWN",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:30.507Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 0 / 10 · 敌人 0首波 1 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 29,
+        "effects": 0,
+        "enemies": [],
+        "geometries": 22,
+        "models": true,
+        "textures": 13,
+        "triangles": 217134
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    },
+    {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "150",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:37:30.92Z",
+      "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 120 · +0.6/秒金币 0\n      城墙 100 / 100护盾 100 / 100\n      波次 1 / 10 · 敌人 1下一波 60 秒\n    ",
+      "inert": [
+        {
+          "class": "preview-hud"
+        },
+        {
+          "class": "preview-field"
+        },
+        {
+          "class": "preview-controls"
+        }
+      ],
+      "loadingHidden": true,
+      "presentation": {
+        "calls": 31,
+        "effects": 0,
+        "enemies": [
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-0",
+            "time": 0.2732530926111668
+          }
+        ],
+        "geometries": 23,
+        "models": true,
+        "textures": 16,
+        "triangles": 231098
+      },
+      "progress": "100% · 12/12 · camp_plot.glb"
+    }
+  ]
+}

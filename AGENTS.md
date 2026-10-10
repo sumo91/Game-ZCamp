@@ -7,3 +7,19 @@
 - Keep gameplay content data-first. Add or change enemies, towers, waves, and upgrades through typed content definitions and validation rather than scattered scene logic.
 
 - Treat player-visible changes as incomplete until relevant checks pass. Changes to gameplay, layout, input, pause, or results should include a reproducible test or visual verification when appropriate.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs use GitHub Issues for sumo91/Game-ZCamp.
+Before tracker operations, read docs/agents/issue-tracker.md.
+
+### Triage labels
+
+Before applying triage labels, read docs/agents/triage-labels.md.
+
+### Domain docs
+
+This is a single-context project.
+Before exploring domain concepts, read docs/agents/domain.md.

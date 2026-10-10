@@ -1,0 +1,195 @@
+{
+  "firstObserved": {
+    "sample": {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1260",
+        "commandHistory": "[{\"step\":2284,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2284,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":0,\"command\":{\"type\":\"restart\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:42:16.413Z",
+      "presentation": {
+        "calls": 45,
+        "effects": 4,
+        "enemies": [
+          {
+            "clip": "death",
+            "dying": true,
+            "id": "walker-18",
+            "time": 8.540655299231007
+          },
+          {
+            "clip": "attack",
+            "dying": false,
+            "id": "walker-19",
+            "time": 8.141457706452673
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-20",
+            "time": 5.359110665329313
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-21",
+            "time": 4.959913072550979
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-22",
+            "time": 2.1607154797726538
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-23",
+            "time": 1.7615178869943184
+          }
+        ],
+        "geometries": 27,
+        "models": true,
+        "textures": 21,
+        "triangles": 301006
+      }
+    },
+    "death": {
+      "clip": "death",
+      "dying": true,
+      "id": "walker-18",
+      "time": 8.540655299231007
+    }
+  },
+  "later": {
+    "sample": {
+      "app": {
+        "assetState": "ready",
+        "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "clockStep": "1279",
+        "commandHistory": "[{\"step\":2284,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2284,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":0,\"command\":{\"type\":\"restart\"},\"accepted\":true}]",
+        "openingCountdown": "0",
+        "phase": "RUNNING",
+        "renderPixelRatio": "1.5",
+        "selectedSlot": ""
+      },
+      "at": "2026-10-09T14:42:17.042Z",
+      "presentation": {
+        "calls": 42,
+        "effects": 1,
+        "enemies": [
+          {
+            "clip": "death",
+            "dying": true,
+            "id": "walker-18",
+            "time": 9.173988632564338
+          },
+          {
+            "clip": "attack",
+            "dying": false,
+            "id": "walker-19",
+            "time": 8.774791039786004
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-20",
+            "time": 5.992443998662644
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-21",
+            "time": 5.59324640588431
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-22",
+            "time": 2.794048813105985
+          },
+          {
+            "clip": "walk",
+            "dying": false,
+            "id": "walker-23",
+            "time": 2.3948512203276513
+          }
+        ],
+        "geometries": 24,
+        "models": true,
+        "textures": 21,
+        "triangles": 300950
+      }
+    },
+    "death": {
+      "clip": "death",
+      "dying": true,
+      "id": "walker-18",
+      "time": 9.173988632564338
+    }
+  },
+  "frozen": {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "1280",
+      "commandHistory": "[{\"step\":2284,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2284,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":0,\"command\":{\"type\":\"restart\"},\"accepted\":true},{\"step\":1280,\"command\":{\"type\":\"pause\"},\"accepted\":true}]",
+      "openingCountdown": "0",
+      "phase": "TACTICAL_PAUSE",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": ""
+    },
+    "at": "2026-10-09T14:42:17.348Z",
+    "presentation": {
+      "calls": 42,
+      "effects": 1,
+      "enemies": [
+        {
+          "clip": "death",
+          "dying": true,
+          "id": "walker-18",
+          "time": 9.207321965897671
+        },
+        {
+          "clip": "attack",
+          "dying": false,
+          "id": "walker-19",
+          "time": 8.808124373119337
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-20",
+          "time": 6.025777331995977
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-21",
+          "time": 5.626579739217643
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-22",
+          "time": 2.827382146439318
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-23",
+          "time": 2.4281845536609845
+        }
+      ],
+      "geometries": 24,
+      "models": true,
+      "textures": 21,
+      "triangles": 300950
+    }
+  }
+}

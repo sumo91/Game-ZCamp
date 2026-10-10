@@ -1,0 +1,141 @@
+{
+  "controls": [
+    {
+      "height": 44,
+      "label": "可玩美术样板",
+      "width": 96
+    },
+    {
+      "height": 44,
+      "label": "原版游戏",
+      "width": 64
+    },
+    {
+      "height": 44,
+      "label": "开始测量",
+      "width": 79.33333587646484
+    },
+    {
+      "height": 44,
+      "label": "停止",
+      "width": 47.33333587646485
+    },
+    {
+      "height": 44,
+      "label": "响应检查",
+      "width": 79.33333587646484
+    },
+    {
+      "height": 44,
+      "label": "100200300",
+      "width": 314.66668701171875
+    },
+    {
+      "height": 44,
+      "label": "标准 · DPR上限2降低像素密度 · DPR上限1",
+      "width": 314.66668701171875
+    },
+    {
+      "height": 44,
+      "label": "60秒 · 初期取证300秒 · 连续取证15秒 · 操作冒烟",
+      "width": 314.66668701171875
+    },
+    {
+      "height": 44,
+      "label": "桌面电脑实体手机模拟器",
+      "width": 314.66668701171875
+    },
+    {
+      "height": 44,
+      "label": "请填写真实型号；模拟器请写名称",
+      "width": 314.66668701171875
+    },
+    {
+      "height": 44,
+      "label": "请填写实际系统和版本",
+      "width": 314.66668701171875
+    },
+    {
+      "height": 44,
+      "label": "缓存/网络、其他负载、操作观察",
+      "width": 314.66668701171875
+    },
+    {
+      "height": 44,
+      "label": "重新测量",
+      "width": 79.33333587646484
+    },
+    {
+      "height": 44,
+      "label": "导出JSON",
+      "width": 90.01042175292969
+    },
+    {
+      "height": 44,
+      "label": "复制结果",
+      "width": 79.33333587646484
+    },
+    {
+      "height": 154.5,
+      "label": "完成或中断后显示完整原始结果",
+      "width": 336
+    }
+  ],
+  "fieldRect": {
+    "bottom": 618.15625,
+    "height": 364,
+    "left": 12,
+    "right": 348,
+    "top": 254.15625,
+    "width": 336,
+    "x": 12,
+    "y": 254.15625
+  },
+  "pageWidth": 360,
+  "scene": {
+    "activeUnits": 100,
+    "animation": "SkeletonUtils.clone + 每实例 AnimationMixer；四动作每4秒轮换并循环；所有 mixer 每个显示帧更新",
+    "animationTimeSeconds": 9.7918,
+    "calls": 239,
+    "canvasCss": {
+      "height": 364,
+      "width": 336
+    },
+    "centersInView": 100,
+    "composition": {
+      "arrow_high": 3,
+      "arrow_low": 2,
+      "arrow_medium": 2,
+      "lumber_high": 2,
+      "lumber_low": 2,
+      "lumber_medium": 3,
+      "main_city": 1,
+      "plot": 15,
+      "rocks": 4,
+      "skeleton": 100,
+      "tree": 4,
+      "wall": 6
+    },
+    "geometries": 14,
+    "independentMixers": 100,
+    "quality": "standard",
+    "rendererDpr": 1.0000000298023224,
+    "semantics": {
+      "attack": 25,
+      "death": 25,
+      "hit": 25,
+      "walk": 25
+    },
+    "shadow": {
+      "enabled": true,
+      "groundProjection": true,
+      "resolution": [
+        1024,
+        1024
+      ],
+      "type": "PCFShadowMap"
+    },
+    "textures": 127,
+    "triangles": 1955010
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "countEnabled": false,
+  "qualityEnabled": false,
+  "stopEnabled": true,
+  "dom": {
+    "fieldsetDisabled": true,
+    "resultLength": 0,
+    "selectMatchesDisabled": true
+  }
+}
