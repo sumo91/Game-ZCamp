@@ -10,9 +10,13 @@ import { isWallInDanger } from "./whiteboxCatalog";
 import { ModelLibrary } from "./ModelLibrary";
 import { buildingAsset, SAMPLE_COVERAGE } from "./assetCatalog";
 import { createBossDemo } from "./bossDemo";
+import { withFantasySiegePresentation } from "./fantasySiegePresentation";
+import { createSiegeDemoSession, SIEGE_DEMO_LABEL } from "./siegeDemo";
+import { fantasyArcanePresentation } from "./fantasyArcanePresentation";
+import { ARCANE_DEMO_CATALOG, ARCANE_DEMO_RESOURCES, prepareArcaneDemo } from "./arcaneDemo";
 import "./preview.css";
 
-const content = starterCatalog.buildingGrowth;
+const content = fantasyArcanePresentation(withFantasySiegePresentation(starterCatalog.buildingGrowth));
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
 const number = (value: number | undefined) => Number((value ?? 0).toFixed(2));
 const statsText = (stats: GrowthStatsView) => stats.kind === "lumberyard"
@@ -21,19 +25,22 @@ const statsText = (stats: GrowthStatsView) => stats.kind === "lumberyard"
 
 /** Partial art sample; loading and presentation never write simulation state. */
 export function mountWhiteboxPreview(app: HTMLElement): () => void {
+  const demo = new URLSearchParams(window.location.search).get("demo");
+  const siegeDemo = demo === "siege";
+  const arcaneDemo = demo === "arcane";
   app.classList.add("whitebox-app");
   app.dataset.browserUserAgent = navigator.userAgent;
   app.dataset.renderPixelRatio = String(Math.min(window.devicePixelRatio, 2));
   app.innerHTML = `
     <header class="preview-hud">
-      <div class="preview-title"><strong>精修美术样板 · 部分覆盖</strong><a href="${import.meta.env.BASE_URL}">原版入口</a></div>
+      <div class="preview-title"><strong>${arcaneDemo ? "开发演示 · 寒霜与雷电三档" : "精修美术样板 · 部分覆盖"}</strong><a href="${import.meta.env.BASE_URL}">原版入口</a></div>
       <div class="preview-resources"><span data-view="wood"></span><span data-view="gold"></span></div>
       <div class="preview-wall"><span data-view="wall"></span><span data-view="shield"></span></div>
       <div class="preview-wave"><span data-view="wave"></span><span data-view="time"></span></div>
       <div class="preview-boss" data-view="boss" aria-live="polite"></div>
     </header>
     <section class="preview-field" aria-label="人类堡垒与亡灵防线">
-      <div class="preview-zone">亡灵推进区 ↓<small>英雄 / 特殊塔 / 其余敌人：开发占位</small></div>
+      <div class="preview-zone">亡灵推进区 ↓<small>${arcaneDemo ? "开发配置：600生命目标、无攻墙伤害、授予资源。正式入口不使用此预设。" : SAMPLE_COVERAGE}</small></div>
       <div class="preview-slots" aria-label="5×3 营地格位"></div>
     </section>
     <footer class="preview-controls">
@@ -46,12 +53,14 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
       <div class="preview-dialog-content preview-scroll"></div><div class="preview-modal-notice" role="status" aria-live="polite"></div>
     </section></div>
     <div class="preview-loading" data-loading role="status" aria-live="polite"><section><h2>准备营地资产</h2><p data-loading-progress>加载模型…</p><p>${SAMPLE_COVERAGE}</p><button type="button" data-action="retry_assets" hidden>重试加载</button></section></div>`;
-  const bossDemo = new URLSearchParams(location.search).get("demo") === "boss";
-  const session = bossDemo ? createBossDemo() : new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" } });
+  const bossDemo = demo === "boss";
+  const session = bossDemo ? createBossDemo() : siegeDemo ? createSiegeDemoSession() : new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" }, ...(arcaneDemo ? { catalog: ARCANE_DEMO_CATALOG, initialResources: ARCANE_DEMO_RESOURCES } : {}) });
   if (bossDemo) {
     app.querySelector(".preview-title strong")!.textContent = "双 Boss 开发演示 · 点继续观察冲锋";
     app.querySelector(".preview-zone small")!.textContent = "演示：普通/精英 HP 1，所有攻墙伤害 0 · Boss 原生命与技能";
   }
+  if (siegeDemo) app.querySelector<HTMLElement>(".preview-title strong")!.textContent = SIEGE_DEMO_LABEL;
+  if (arcaneDemo) prepareArcaneDemo(session);
   const field = app.querySelector<HTMLElement>(".preview-field")!;
   let battlefield: Battlefield;
   try { battlefield = new Battlefield(field); }
@@ -135,7 +144,10 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
           : type === "choose_building_trait" ? "词条仅对当前建筑生效"
           : type === "transform_tower" ? "改造完成 · 保留等级与合法词条"
           : type === "destroy_building" ? "建筑已拆除 · 不返还木材或金币" : "";
-        if (type === "restart") battlefield.reset();
+        if (type === "restart") {
+          if (arcaneDemo) prepareArcaneDemo(session);
+          battlefield.reset();
+        }
       }
     }
     messageExpiresAt = message ? performance.now() + 1500 : 0;
@@ -235,7 +247,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
       dialogHtml = `<h2 id="growth-dialog-title">${escapeHtml(targetName)} · Lv.${target?.level} 词条三选一</h2><p>第 ${targetButton?.dataset.row} 行第 ${targetButton?.dataset.column} 列 · 选择一个以完成升级成长</p><p>仅当前建筑生效 · 选择后恢复原阶段</p><div class="preview-options">${deriveTraitOptions(content, state, draft).map((option, index) => `<button type="button" data-action="choose_trait" data-option="${index}" ${ui.traitLocked ? "disabled" : ""}><strong>${escapeHtml(option.name)} · ${option.currentStacks} → ${option.nextStacks} 层</strong><span>${escapeHtml(option.categoryLabel)}</span><span>${escapeHtml(option.effectText)}</span></button>`).join("")}</div>`;
     } else if (priority === "transform") {
       const options = building ? deriveTransformOptions(content, state, building) : [];
-      dialogHtml = `<h2 id="growth-dialog-title">箭塔四路改造 · 开发白模</h2><p>保留当前格位、等级与合法词条 · 不额外暂停战斗</p><div class="preview-options">${options.map((option) => `<button type="button" data-action="transform" data-definition="${option.targetTowerId}" ${option.affordable ? "" : 'aria-disabled="true" class="unaffordable"'}><strong>${escapeHtml(option.name)} · 金币 ${option.goldCost}</strong><span>${escapeHtml(option.role)} · 白模</span><span>${escapeHtml(option.reason)}</span></button>`).join("")}</div>${buttonHtml("close_transform", "关闭改造")}`;
+      dialogHtml = `<h2 id="growth-dialog-title">箭塔四路改造</h2><p>保留当前格位、等级与合法词条 · 不额外暂停战斗</p><div class="preview-options">${options.map((option) => `<button type="button" data-action="transform" data-definition="${option.targetTowerId}" ${option.affordable ? "" : 'aria-disabled="true" class="unaffordable"'}><strong>${escapeHtml(option.name)} · 金币 ${option.goldCost}</strong><span>${escapeHtml(option.role)} · ${buildingAsset(option.targetTowerId, building?.level ?? 1) ? "正式 GLB" : "开发占位"}</span><span>${escapeHtml(option.reason)}</span></button>`).join("")}</div>${buttonHtml("close_transform", "关闭改造")}`;
     } else if (priority === "system_pause") {
       dialogHtml = '<h2 id="growth-dialog-title" tabindex="-1">系统暂停</h2><p>后台期间停止战斗，返回后保持原阶段与当前操作。</p>';
     } else if (priority === "result") {

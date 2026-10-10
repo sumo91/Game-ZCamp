@@ -1,4 +1,5 @@
 import { GameSimulation } from "./game";
+import type { GameInitialResources } from "./game";
 import { FixedStepClock } from "./clock";
 import { starterCatalog } from "./content";
 import type { ContentCatalog } from "./content";
@@ -9,6 +10,8 @@ export interface BattleSessionOptions {
   catalog?: ContentCatalog;
   seed?: number;
   config?: BattleConfig;
+  /** Explicit development setup only; omitted by the normal player entry. */
+  initialResources?: GameInitialResources;
 }
 
 /** Shared battle ownership. Renderers read state and send commands here. */
@@ -20,7 +23,7 @@ export class BattleSession {
   private disposed = false;
 
   public constructor(options: BattleSessionOptions = {}) {
-    this.simulation = new GameSimulation(options.catalog ?? starterCatalog, options.seed ?? 1337, options.config);
+    this.simulation = new GameSimulation(options.catalog ?? starterCatalog, options.seed ?? 1337, options.config, options.initialResources);
   }
 
   public getState(): GameState {

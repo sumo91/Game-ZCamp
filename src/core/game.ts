@@ -44,6 +44,9 @@ export const MAIN_CITY_ID = "main-city";
 
 const EPSILON = 0.000001;
 
+/** Explicit development scenarios may provide resources; ordinary games use the frozen defaults. */
+export interface GameInitialResources { wood: number; gold: number }
+
 export class GameSimulation {
   private readonly catalog: ContentCatalog;
   private readonly initialSeed: number;
@@ -52,12 +55,13 @@ export class GameSimulation {
   private randomState: number;
   private growthBurnRemainingAtStepStart = new Map<string, number>();
   private readonly levelWaves: readonly WaveDefinition[];
+  private readonly initialResources: GameInitialResources;
 
   private readonly battleConfig: { heroId: HeroId; levelId: BattleConfig["levelId"]; hero: HeroDefinition; level: LevelDefinition } | null;
   private readonly heroDefinition: HeroDefinition | null;
   private readonly levelDefinition: LevelDefinition | null;
 
-  public constructor(catalog: ContentCatalog = starterCatalog, seed = 1337, heroOrConfig?: HeroId | BattleConfig) {
+  public constructor(catalog: ContentCatalog = starterCatalog, seed = 1337, heroOrConfig?: HeroId | BattleConfig, initialResources?: GameInitialResources) {
     validateCatalog(catalog);
     const requestedConfig = typeof heroOrConfig === "string" ? { heroId: heroOrConfig, levelId: "first_defense" } : heroOrConfig;
     this.battleConfig = requestedConfig ? resolveBattleConfig(requestedConfig) : null;
@@ -66,6 +70,8 @@ export class GameSimulation {
     this.catalog = catalog;
     this.levelWaves = catalog.levelWaves[this.levelDefinition?.id ?? "first_defense"] ?? [];
     this.initialSeed = seed >>> 0;
+    this.initialResources = { ...(initialResources ?? { wood: INITIAL_WOOD, gold: INITIAL_GOLD }) };
+    if (Object.values(this.initialResources).some((value) => !Number.isFinite(value) || value < 0)) throw new Error("Initial resources must be finite and nonnegative.");
     this.randomState = this.initialSeed;
     this.state = this.createInitialState();
   }
@@ -148,8 +154,8 @@ export class GameSimulation {
       waveSpawnProgress: Array.from({ length: maxWave }, () => 0),
       spawnedEnemies: 0,
       defeatedEnemies: 0,
-      wood: INITIAL_WOOD,
-      gold: INITIAL_GOLD,
+      wood: this.initialResources.wood,
+      gold: this.initialResources.gold,
       wallHp: WALL_MAX_HP,
       wallMaxHp: WALL_MAX_HP,
       wallShield: this.heroDefinition?.startingWallShield ?? 0,
@@ -544,7 +550,7 @@ export class GameSimulation {
     if (profile.tower.id === "cannon") {
       for (const enemy of splashTargets) {
         this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * getGrowthSecondaryDamageMultiplier(profile), building.id);
-        this.events.push({ type: "tower_special", buildingId: building.id, effect: "溅射", targetId: enemy.id });
+        this.events.push({ type: "tower_special", buildingId: building.id, effect: "溅射", targetId: enemy.id, targetPosition: enemy.position });
       }
       const burn = getGrowthCannonBurn(this.catalog.buildingGrowth, building);
       if (burn) {
@@ -569,7 +575,7 @@ export class GameSimulation {
         .slice(0, Math.max(0, (profile.tower.chainTargets ?? 1) - 1 + getGrowthElectricChainExtraTargets(this.catalog.buildingGrowth, building)));
       for (const enemy of chainTargets) {
         this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * getGrowthSecondaryDamageMultiplier(profile), building.id);
-        this.events.push({ type: "tower_special", buildingId: building.id, effect: "弹射", targetId: enemy.id });
+        this.events.push({ type: "tower_special", buildingId: building.id, effect: "弹射", targetId: enemy.id, targetPosition: enemy.position });
       }
     }
 
@@ -581,7 +587,7 @@ export class GameSimulation {
       const carryMultiplier = getGrowthMachinePenetrationMultiplier(this.catalog.buildingGrowth);
       for (const enemy of penetrationTargets) {
         this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * carryMultiplier, building.id);
-        this.events.push({ type: "tower_special", buildingId: building.id, effect: "穿透", targetId: enemy.id });
+        this.events.push({ type: "tower_special", buildingId: building.id, effect: "穿透", targetId: enemy.id, targetPosition: enemy.position });
       }
     }
   }

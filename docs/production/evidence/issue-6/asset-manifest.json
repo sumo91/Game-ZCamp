@@ -1,0 +1,174 @@
+{
+  "schema": 1,
+  "scope": "six new siege assets only; historical issue-4 manifest unchanged",
+  "assets": [
+    {
+      "asset": "ballista_tower_low.glb",
+      "bytes": 775972,
+      "sha256": "4d584adad657689bfab4fafedd4e7d4b7bbbac4cb0f943917be80c64a8ee22a2",
+      "triangles": 7034,
+      "materials": 1,
+      "primitives": 1,
+      "embeddedImages": 2,
+      "anchors": {
+        "attack_anchor": [
+          0,
+          1.3550000190734863,
+          -0.5600000023841858
+        ],
+        "hit_anchor": [
+          0,
+          0.699999988079071,
+          0
+        ],
+        "label_anchor": [
+          0,
+          0.02500000037252903,
+          0.5
+        ]
+      },
+      "sourceSha256": "b91fcb2b0d4093f990deee83ef3d77ed65f1a268a9980e66c917f1ceb2d0448b",
+      "sourceBytes": 709236
+    },
+    {
+      "asset": "ballista_tower_medium.glb",
+      "bytes": 824404,
+      "sha256": "a7b54e4d73151129fe9a9b17f289bc686e7c1ef1cfe6a43b0ff21025e613e566",
+      "triangles": 7646,
+      "materials": 1,
+      "primitives": 1,
+      "embeddedImages": 2,
+      "anchors": {
+        "attack_anchor": [
+          0,
+          1.3550000190734863,
+          -0.5600000023841858
+        ],
+        "hit_anchor": [
+          0,
+          0.699999988079071,
+          0
+        ],
+        "label_anchor": [
+          0,
+          0.02500000037252903,
+          0.5
+        ]
+      },
+      "sourceSha256": "30ee8903d74ed2908639735beac35f5999d90a144a744024867f8dfb09b59478",
+      "sourceBytes": 734147
+    },
+    {
+      "asset": "ballista_tower_high.glb",
+      "bytes": 875160,
+      "sha256": "5f541a154eb3b4e5703fd83ccbce648c9db1be080ae994b15ab702b9b583e1e4",
+      "triangles": 8342,
+      "materials": 1,
+      "primitives": 1,
+      "embeddedImages": 2,
+      "anchors": {
+        "attack_anchor": [
+          0,
+          1.3550000190734863,
+          -0.5600000023841858
+        ],
+        "hit_anchor": [
+          0,
+          0.699999988079071,
+          0
+        ],
+        "label_anchor": [
+          0,
+          0.02500000037252903,
+          0.5
+        ]
+      },
+      "sourceSha256": "e3811bc72efb1baa92fdda3e39acf48f6ad5880aee79db7922886192e3888218",
+      "sourceBytes": 752241
+    },
+    {
+      "asset": "cannon_tower_low.glb",
+      "bytes": 744992,
+      "sha256": "4a6f337c91e85b36e504e11b58fb04da097ce578c586c8fdfbffe774e4c181f0",
+      "triangles": 6988,
+      "materials": 1,
+      "primitives": 1,
+      "embeddedImages": 2,
+      "anchors": {
+        "attack_anchor": [
+          0,
+          1.590000033378601,
+          -0.6100000143051147
+        ],
+        "hit_anchor": [
+          0,
+          0.699999988079071,
+          0
+        ],
+        "label_anchor": [
+          0,
+          0.02500000037252903,
+          0.5
+        ]
+      },
+      "sourceSha256": "c2609eda39fda2e76c53adfe5b308a84f5d573e4ee50ed3ec55d878dbf50b987",
+      "sourceBytes": 672083
+    },
+    {
+      "asset": "cannon_tower_medium.glb",
+      "bytes": 810076,
+      "sha256": "48bb5a3384e0a1d57891c128cff4f813e6c29cde4c89946825587fe0bed4a5f8",
+      "triangles": 7844,
+      "materials": 1,
+      "primitives": 1,
+      "embeddedImages": 2,
+      "anchors": {
+        "attack_anchor": [
+          0,
+          1.590000033378601,
+          -0.6100000143051147
+        ],
+        "hit_anchor": [
+          0,
+          0.699999988079071,
+          0
+        ],
+        "label_anchor": [
+          0,
+          0.02500000037252903,
+          0.5
+        ]
+      },
+      "sourceSha256": "a3982b6380ec96962e3ab4e941bb90bb9a5fafad4bb44b6bae7921d82e261712",
+      "sourceBytes": 699158
+    },
+    {
+      "asset": "cannon_tower_high.glb",
+      "bytes": 854868,
+      "sha256": "133845f871a3d3254bf778780ebe322650c5ac45e7c250141a4d4349e1e735a5",
+      "triangles": 8392,
+      "materials": 1,
+      "primitives": 1,
+      "embeddedImages": 2,
+      "anchors": {
+        "attack_anchor": [
+          0,
+          1.590000033378601,
+          -0.6100000143051147
+        ],
+        "hit_anchor": [
+          0,
+          0.699999988079071,
+          0
+        ],
+        "label_anchor": [
+          0,
+          0.02500000037252903,
+          0.5
+        ]
+      },
+      "sourceSha256": "a05e5643d95c0ccb925dcb5fc38b6a68e5721bdd4695335ed133bf34b6b2910c",
+      "sourceBytes": 730063
+    }
+  ]
+}
