@@ -108,9 +108,10 @@ export type GameEvent =
   | { type: "enemy_defeated"; enemyId: string; position: number }
   | { type: "wave_started"; wave: number }
   | { type: "enemy_spawned"; enemyId: string; definitionId: string; wave: number }
-  | { type: "enemy_charge_warning"; enemyId: string; position: number; durationSeconds: number }
-  | { type: "enemy_charge_started"; enemyId: string; position: number; targetPosition: number }
+  | { type: "enemy_charge_warning"; enemyId: string; position: number; durationSeconds: number; targetPosition: number }
+  | { type: "enemy_charge_started"; enemyId: string; position: number; targetPosition: number; durationSeconds: number }
   | { type: "enemy_charge_impact"; enemyId: string; position: number }
+  | { type: "enemy_wall_attack"; enemyId: string; position: number; damage: number }
   | { type: "enemy_burned"; enemyId: string; position: number; damagePerSecond: number; durationSeconds: number; areaRadius: number; sourceBuildingId?: string }
   | { type: "overlord_inspire"; enemyId: string; targetIds: string[]; durationSeconds: number; multiplier: number }
   | { type: "building_built"; buildingId: string; slotId: string; definitionId: string }

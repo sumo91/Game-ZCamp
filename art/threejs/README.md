@@ -1,5 +1,7 @@
 # 原创 Three.js 美术样板来源
 
+Issue #9 新增 `create_boss_sources.py`：只创建缺失的 `charger_lord` 与 `undead_king` 来源，拒绝覆盖保存来源。保留同一 14 关节与锚点协议、512 PBR 图集；新增独立剪影与 warning/charge/inspire Actions。正式导出仍只读取保存来源。双 Boss 的资产清单和接入边界见 `docs/production/THREEJS_ISSUE_9_EVIDENCE.md`。
+
 此目录只承载 Issue #4 的原创样板。人物、结构、纹理、分段骨架与动作由本任务在 Blender 5.2.1 制作；没有导入 Warcraft、第三方游戏模型或付费素材。参考图只用于色彩、比例、材质与镜头对照。其他敌人、特殊塔和英雄由后续任务制作，当前运行仍明确标记其开发占位。
 
 ## 可编辑来源与运行产物

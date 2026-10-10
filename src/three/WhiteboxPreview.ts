@@ -9,6 +9,7 @@ import { Battlefield } from "./Battlefield";
 import { isWallInDanger } from "./whiteboxCatalog";
 import { ModelLibrary } from "./ModelLibrary";
 import { buildingAsset, SAMPLE_COVERAGE } from "./assetCatalog";
+import { createBossDemo } from "./bossDemo";
 import "./preview.css";
 
 const content = starterCatalog.buildingGrowth;
@@ -29,6 +30,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
       <div class="preview-resources"><span data-view="wood"></span><span data-view="gold"></span></div>
       <div class="preview-wall"><span data-view="wall"></span><span data-view="shield"></span></div>
       <div class="preview-wave"><span data-view="wave"></span><span data-view="time"></span></div>
+      <div class="preview-boss" data-view="boss" aria-live="polite"></div>
     </header>
     <section class="preview-field" aria-label="人类堡垒与亡灵防线">
       <div class="preview-zone">亡灵推进区 ↓<small>英雄 / 特殊塔 / 其余敌人：开发占位</small></div>
@@ -44,7 +46,12 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
       <div class="preview-dialog-content preview-scroll"></div><div class="preview-modal-notice" role="status" aria-live="polite"></div>
     </section></div>
     <div class="preview-loading" data-loading role="status" aria-live="polite"><section><h2>准备营地资产</h2><p data-loading-progress>加载模型…</p><p>${SAMPLE_COVERAGE}</p><button type="button" data-action="retry_assets" hidden>重试加载</button></section></div>`;
-  const session = new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" } });
+  const bossDemo = new URLSearchParams(location.search).get("demo") === "boss";
+  const session = bossDemo ? createBossDemo() : new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" } });
+  if (bossDemo) {
+    app.querySelector(".preview-title strong")!.textContent = "双 Boss 开发演示 · 点继续观察冲锋";
+    app.querySelector(".preview-zone small")!.textContent = "演示：普通/精英 HP 1，所有攻墙伤害 0 · Boss 原生命与技能";
+  }
   const field = app.querySelector<HTMLElement>(".preview-field")!;
   let battlefield: Battlefield;
   try { battlefield = new Battlefield(field); }
@@ -164,6 +171,8 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     view("shield").textContent = `护盾 ${Math.ceil(state.wallShield)} / ${state.wallShieldMax}`;
     view("wave").textContent = `波次 ${state.wave} / ${state.maxWave} · 敌人 ${state.enemies.length}`;
     view("time").textContent = deriveGrowthWaveTime(state);
+    const charging = state.enemies.find((enemy) => enemy.chargeWarningRemainingSeconds > 0 || enemy.chargeRemainingSeconds > 0);
+    view("boss").textContent = [charging ? charging.chargeWarningRemainingSeconds > 0 ? `冲锋领主蓄力 ${charging.chargeWarningRemainingSeconds.toFixed(1)}秒 · 地面箭头为推进目标` : "冲锋领主冲锋中" : "", state.overlordInspireRemainingSeconds > 0 ? `君王鼓舞 ${state.overlordInspireRemainingSeconds.toFixed(1)}秒 · 绿色足环为选中对象` : ""].filter(Boolean).join(" · ");
     view("phase").textContent = state.phase === "TACTICAL_PAUSE" ? "战术暂停 · 可成长" : state.phase === "OPENING_COUNTDOWN" ? "准备防线" : `战斗 ${Math.floor(state.effectiveBattleTimeSeconds)} 秒 · 击杀 ${state.defeatedEnemies}`;
     const pause = deriveGrowthPauseControl(state.phase);
     pauseButton.textContent = pause.label;

@@ -14,6 +14,8 @@
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
+.preview-boss { font-size: 11px; line-height: 1.4; color: #ffdb95; }
+.preview-boss:empty { display: none; }
 .preview-hud, .preview-controls { position: relative; z-index: 2; padding: 4px 10px; background: #27343a; }
 .preview-title, .preview-resources, .preview-wall, .preview-wave, .preview-status { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .preview-title { color: #e9dbb0; min-height: 44px; }

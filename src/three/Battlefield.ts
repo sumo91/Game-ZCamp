@@ -2,11 +2,11 @@ import {
   BoxGeometry, Color, CylinderGeometry, DirectionalLight, Group, HemisphereLight,
   Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, OctahedronGeometry, OrthographicCamera, PlaneGeometry,
   Raycaster, Scene, SphereGeometry, Vector2, Vector3, WebGLRenderer,
-  AnimationMixer, LoopOnce, LoopRepeat, PCFShadowMap, ACESFilmicToneMapping,
+  AnimationMixer, LoopOnce, LoopRepeat, PCFShadowMap, ACESFilmicToneMapping, RingGeometry,
 } from "three";
 import type { AnimationAction, BufferGeometry, Material, Object3D } from "three";
 import { starterCatalog } from "../core/content";
-import type { BuildingState, GameEvent, GameState } from "../core/types";
+import type { BuildingState, EnemyRuntimeState, GameEvent, GameState } from "../core/types";
 import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
 import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
 import { buildingAsset, enemyAsset, type AnimationSemantic } from "./assetCatalog";
@@ -36,6 +36,12 @@ export class Battlefield {
   private height = 1;
   private previousWall: number | null = null;
   private wallFlash = 0;
+  private readonly chargeTargets = new Map<string, number>();
+  private readonly bossDurations = new Map<string, number>();
+  private readonly bossWarnings = new Map<string, Group>();
+  private readonly inspireMarks = new Map<string, Mesh>();
+  private inspiredTargets = new Set<string>();
+  private inspireSource: string | null = null;
 
   public constructor(private readonly host: HTMLElement) {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -144,7 +150,8 @@ export class Battlefield {
     this.synchronizeBuildings(state.buildings);
     this.synchronizeEnemies(state);
     for (const event of events) this.presentEvent(state, event);
-    const active = new Set(state.enemies.map((enemy) => enemy.id));
+    this.synchronizeBossFeedback(state);
+    const active = new Map(state.enemies.map((enemy) => [enemy.id, enemy]));
     for (const [id, view] of this.enemies) {
       if (view.dying !== null) view.dying -= deltaSeconds;
       else if (!active.has(id)) view.dying = 0;
@@ -157,8 +164,18 @@ export class Battlefield {
         this.enemyAnchors.delete(id);
       } else {
         view.interrupt = Math.max(0, view.interrupt - deltaSeconds);
-        if (view.dying === null && view.interrupt === 0) this.play(view, view.atWall ? "attack" : "walk");
-        view.mixer?.update(deltaSeconds);
+        const bossAction = this.bossAnimation(state, active.get(id));
+        if (view.dying === null && (bossAction || view.interrupt === 0)) this.play(view, bossAction ?? (view.atWall ? "attack" : "walk"));
+        if (bossAction) {
+          const enemy = active.get(id)!;
+          const remaining = bossAction === "warning" ? enemy.chargeWarningRemainingSeconds : bossAction === "charge" ? enemy.chargeRemainingSeconds : state.overlordInspireRemainingSeconds;
+          const action = view.actions?.get(bossAction);
+          if (action) {
+            const duration = this.bossDurations.get(`${id}:${bossAction}`) ?? action.getClip().duration;
+            action.time = action.getClip().duration * Math.max(0, Math.min(1, 1 - remaining / duration));
+          }
+          view.mixer?.update(0);
+        } else view.mixer?.update(deltaSeconds);
       }
     }
     const wallTotal = state.wallHp + state.wallShield;
@@ -200,6 +217,13 @@ export class Battlefield {
     this.effects.length = 0;
     this.previousWall = null;
     this.wallFlash = 0;
+    for (const object of [...this.bossWarnings.values(), ...this.inspireMarks.values()]) { this.scene.remove(object); this.disposeObject(object); }
+    this.bossWarnings.clear();
+    this.inspireMarks.clear();
+    this.chargeTargets.clear();
+    this.bossDurations.clear();
+    this.inspiredTargets.clear();
+    this.inspireSource = null;
   }
 
   public dispose(): void {
@@ -343,6 +367,7 @@ export class Battlefield {
   }
 
   private presentEvent(state: GameState, event: GameEvent): void {
+    if (this.presentBossEvent(state, event)) return;
     if (event.type === "tower_attack") {
       const source = state.buildings.find((building) => building.id === event.buildingId) ?? (event.buildingId === state.hero?.id ? state.buildings.find((building) => building.kind === "main_city") : undefined);
       if (!source) return;
@@ -375,8 +400,105 @@ export class Battlefield {
           coin.userData.reward = reward;
           this.addEffect(coin, 0.7);
         }
-      } else if (view?.dying === null) { view.interrupt = .3; this.play(view, "hit"); }
+      } else if (view?.dying === null && !this.bossAnimation(state, state.enemies.find((enemy) => enemy.id === event.enemyId))) { view.interrupt = .3; this.play(view, "hit"); }
     }
+  }
+
+  /** Critical ability feedback reads core timers, never wall-clock time or clip completion. */
+  private bossAnimation(state: GameState, enemy: EnemyRuntimeState | undefined): AnimationSemantic | null {
+    if (!enemy) return null;
+    if (enemy.chargeWarningRemainingSeconds > 0) return "warning";
+    if (enemy.chargeRemainingSeconds > 0) return "charge";
+    if (enemy.id === this.inspireSource && state.overlordInspireRemainingSeconds > 0) return "inspire";
+    return null;
+  }
+
+  private presentBossEvent(state: GameState, event: GameEvent): boolean {
+    if (event.type === "enemy_charge_warning" || event.type === "enemy_charge_started") {
+      this.chargeTargets.set(event.enemyId, event.targetPosition);
+      this.bossDurations.set(`${event.enemyId}:${event.type === "enemy_charge_warning" ? "warning" : "charge"}`, event.durationSeconds);
+      return true;
+    }
+    if (event.type === "overlord_inspire") {
+      this.inspireSource = event.enemyId;
+      this.inspiredTargets = new Set(event.targetIds);
+      this.bossDurations.set(`${event.enemyId}:inspire`, event.durationSeconds);
+      return true;
+    }
+    if (event.type === "enemy_charge_impact" || event.type === "enemy_wall_attack") {
+      const enemy = state.enemies.find((unit) => unit.id === event.enemyId);
+      const definition = this.enemyAnchors.get(event.enemyId)?.definitionId;
+      if (definition !== "charger_boss" && definition !== "overlord_boss") return event.type === "enemy_wall_attack";
+      if (event.type === "enemy_wall_attack") {
+        // Restart the strike on actual core damage; idle attack loops do not create hits.
+        const view = this.enemies.get(event.enemyId);
+        if (view && !this.bossAnimation(state, enemy)) {
+          view.current = undefined; this.play(view, "attack"); view.interrupt = .8;
+          const strike = view.actions?.get("attack");
+          if (strike) { strike.setLoop(LoopOnce, 1); strike.clampWhenFinished = true; }
+        }
+        if (event.damage <= 0) return true;
+        this.wallFlash = .4;
+      }
+      const position = enemyPosition(event.enemyId, event.position).add(new Vector3(0, .35, event.type === "enemy_wall_attack" ? .65 : 0));
+      const shock = new Mesh(this.geometry(new RingGeometry(.25, .5, 12)), this.material(new MeshBasicMaterial({ color: event.type === "enemy_charge_impact" ? 0xffa251 : 0xff715b, side: 2 })));
+      shock.rotation.x = -Math.PI / 2;
+      shock.position.copy(position);
+      this.addEffect(shock, .35);
+      return true;
+    }
+    return false;
+  }
+
+  private synchronizeBossFeedback(state: GameState): void {
+    const units = new Map(state.enemies.map((enemy) => [enemy.id, enemy]));
+    for (const enemy of state.enemies) {
+      if (enemy.chargeWarningRemainingSeconds <= 0 && enemy.chargeRemainingSeconds <= 0) continue;
+      const target = this.chargeTargets.get(enemy.id) ?? enemy.chargeTargetPosition;
+      const from = enemyPosition(enemy.id, enemy.position);
+      const to = enemyPosition(enemy.id, target);
+      let group = this.bossWarnings.get(enemy.id);
+      if (!group) {
+        group = new Group();
+        const lane = new Mesh(this.geometry(new PlaneGeometry(.62, 1)), this.material(new MeshBasicMaterial({ color: 0xffa638, transparent: true, opacity: .48, depthWrite: false, side: 2 })));
+        lane.rotation.x = -Math.PI / 2;
+        group.add(lane);
+        for (const sign of [-1, 1]) {
+          const arrow = new Mesh(this.geometry(new BoxGeometry(.11, .025, .45)), this.material(new MeshBasicMaterial({ color: 0xffd069 })));
+          arrow.position.x = sign * .14;
+          arrow.rotation.y = sign * -Math.PI / 4;
+          group.add(arrow);
+        }
+        this.bossWarnings.set(enemy.id, group);
+        this.scene.add(group);
+      }
+      const length = Math.max(.05, to.z - from.z);
+      group.position.set(from.x, .045, to.z - .25);
+      const lane = group.children[0] as Mesh<PlaneGeometry, MeshBasicMaterial>;
+      lane.scale.y = length;
+      lane.position.z = -length / 2 + .25;
+      lane.material.color.set(enemy.chargeWarningRemainingSeconds > 0 ? 0xffa638 : 0xff654c);
+    }
+    for (const [id, group] of this.bossWarnings) {
+      const enemy = units.get(id);
+      if (enemy && (enemy.chargeWarningRemainingSeconds > 0 || enemy.chargeRemainingSeconds > 0)) continue;
+      this.scene.remove(group); this.disposeObject(group); this.bossWarnings.delete(id); this.chargeTargets.delete(id);
+    }
+    if (state.overlordInspireRemainingSeconds <= 0) { this.inspiredTargets.clear(); this.inspireSource = null; }
+    const marked = new Set([...this.inspiredTargets].filter((id) => units.has(id)));
+    if (this.inspireSource && units.has(this.inspireSource)) marked.add(this.inspireSource);
+    for (const id of marked) {
+      let ring = this.inspireMarks.get(id);
+      if (!ring) {
+        ring = new Mesh(this.geometry(new RingGeometry(.31, .42, 6)), this.material(new MeshBasicMaterial({ color: id === this.inspireSource ? 0xaf73ea : 0xa5dd73, side: 2 })));
+        ring.rotation.x = -Math.PI / 2;
+        this.inspireMarks.set(id, ring); this.scene.add(ring);
+      }
+      const unit = units.get(id)!;
+      ring.position.copy(enemyPosition(id, unit.position)); ring.position.y = .055;
+      ring.scale.setScalar(id === this.inspireSource ? 1.9 : 1);
+    }
+    for (const [id, ring] of this.inspireMarks) if (!marked.has(id)) { this.scene.remove(ring); this.disposeObject(ring); this.inspireMarks.delete(id); }
   }
 
   private anchorPosition(object: Object3D | undefined, name: string, fallback: Vector3): Vector3 {
@@ -405,8 +527,9 @@ export class Battlefield {
     if (!next) return;
     const previous = view.current ? view.actions?.get(view.current) : undefined;
     previous?.fadeOut(.08);
-    next.reset().setLoop(semantic === "walk" || semantic === "attack" ? LoopRepeat : LoopOnce, semantic === "walk" || semantic === "attack" ? Infinity : 1);
-    next.clampWhenFinished = semantic === "death";
+    const looping = semantic === "walk" || semantic === "attack" || semantic === "charge";
+    next.reset().setLoop(looping ? LoopRepeat : LoopOnce, looping ? Infinity : 1);
+    next.clampWhenFinished = semantic === "death" || semantic === "warning" || semantic === "inspire";
     next.fadeIn(.08).play();
     view.current = semantic;
   }

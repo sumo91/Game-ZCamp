@@ -1,8 +1,8 @@
 import type { GrowthBuildingId } from "../core/buildingGrowth";
 import { starterCatalog, type EnemyDefinition } from "../core/content";
 
-export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton";
-export type AnimationSemantic = "walk" | "attack" | "hit" | "death";
+export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton" | "charger_lord" | "undead_king";
+export type AnimationSemantic = "walk" | "attack" | "hit" | "death" | "warning" | "charge" | "inspire";
 export interface PresentationAsset {
   id: AssetId;
   file: string;
@@ -17,6 +17,8 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
   { id: "arrow_medium", file: "arrow_tower_medium.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "arrow_high", file: "arrow_tower_high.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "skeleton", file: "skeleton_infantry.glb", maximumSize: [1.15, 1.6, .65], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"] },
+  { id: "charger_lord", file: "charger_lord.glb", maximumSize: [2.8, 3.4, 1.5], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death", "warning", "charge"] },
+  { id: "undead_king", file: "undead_king.glb", maximumSize: [2.4, 3.4, 1.5], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death", "inspire"] },
   { id: "lumber_low", file: "lumberyard_low.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "lumber_medium", file: "lumberyard_medium.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "lumber_high", file: "lumberyard_high.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
@@ -36,8 +38,8 @@ const BUILDING_ASSETS: Readonly<Partial<Record<BuildingContentId, readonly [Asse
   main_city: ["main_city", "main_city", "main_city"],
 };
 
-/** Only walker has a finished enemy model in this sample. Other IDs use development geometry. */
-const ENEMY_ASSETS: ReadonlyMap<EnemyDefinition["id"], AssetId> = new Map([["walker", "skeleton"]]);
+/** Finished assets keyed by stable gameplay identity. */
+const ENEMY_ASSETS: ReadonlyMap<EnemyDefinition["id"], AssetId> = new Map([["walker", "skeleton"], ["charger_boss", "charger_lord"], ["overlord_boss", "undead_king"]]);
 
 /** Validate the declared sample coverage before requesting any model files. */
 export function validateSampleCatalog(): void {
