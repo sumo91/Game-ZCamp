@@ -2,22 +2,24 @@ import { ConeGeometry, CylinderGeometry, Group, Mesh, MeshBasicMaterial, RingGeo
 import type { GameEvent, GameState } from "../core/types";
 import type { Object3D, Scene } from "three";
 
-type SiegeShot = { object: Object3D; age: number; duration: number; from?: Vector3; to?: Vector3; arc?: number; expand?: boolean; fadeMaterial?: MeshBasicMaterial };
+type SiegeShot = { object: Object3D; age: number; duration: number; from?: Vector3; to?: Vector3; arc?: number; expand?: boolean; fadeMaterial?: MeshBasicMaterial; fadeOpacity?: number; fadeDelay?: number };
 type AnchorLookup = (id: string, position: number) => Vector3;
 
 /** Visual-only siege feedback. Every endpoint is a core event snapshot; no hit is calculated here. */
 export class SiegeFeedback {
   private readonly boltGeometry = new CylinderGeometry(.04, .055, .58, 5);
-  private readonly ballGeometry = new SphereGeometry(.16, 8, 6);
+  private readonly ballGeometry = new SphereGeometry(.175, 8, 6);
+  private readonly ballRimGeometry = new CylinderGeometry(.19, .19, .045, 8);
   private readonly trailGeometry = new CylinderGeometry(.025, .055, .8, 5);
   private readonly flashGeometry = new ConeGeometry(.12, .32, 5);
-  private readonly ringGeometry = new RingGeometry(.22, .32, 16);
+  private readonly ringGeometry = new RingGeometry(.42, .58, 16);
   private readonly flameGeometry = new ConeGeometry(.11, .42, 5);
-  private readonly boltMaterial = new MeshBasicMaterial({ color: 0xffefba });
-  private readonly ballMaterial = new MeshBasicMaterial({ color: 0xffbc64 });
+  private readonly boltMaterial = new MeshBasicMaterial({ color: 0xffba23, toneMapped: false });
+  private readonly ballMaterial = new MeshBasicMaterial({ color: 0x25323e });
+  private readonly ballRimMaterial = new MeshBasicMaterial({ color: 0xff921f, toneMapped: false });
   private readonly flashMaterial = new MeshBasicMaterial({ color: 0xffbd51 });
-  private readonly trailMaterial = new MeshBasicMaterial({ color: 0xffbe59, transparent: true, opacity: .55, depthWrite: false });
-  private readonly ringMaterial = new MeshBasicMaterial({ color: 0xff8f38, transparent: true, opacity: .8, depthWrite: false });
+  private readonly trailMaterial = new MeshBasicMaterial({ color: 0xff821b, transparent: true, opacity: .55, depthWrite: false, toneMapped: false });
+  private readonly ringMaterial = new MeshBasicMaterial({ color: 0xff681c, transparent: true, opacity: 1, depthWrite: false, toneMapped: false });
   private readonly flameMaterial = new MeshBasicMaterial({ color: 0xfda43e });
   private readonly shots: SiegeShot[] = [];
   private readonly lastHits = new Map<string, { kind: string; position: Vector3 }>();
@@ -93,8 +95,12 @@ export class SiegeFeedback {
         this.direction.y += 4*(shot.arc ?? 0)*(1-2*progress);
         if (this.direction.lengthSq() > .0001) shot.object.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), this.direction.normalize());
       }
-      if (shot.expand) shot.object.scale.setScalar(.75+progress*2.25);
-      if (shot.fadeMaterial) shot.fadeMaterial.opacity = (shot.expand ? .8 : .55)*(1-progress);
+      if (shot.expand) shot.object.scale.setScalar(1+progress*1.2);
+      if (shot.fadeMaterial) {
+        const fadeDelay = shot.fadeDelay ?? 0;
+        const fadeProgress = Math.max(0, (progress-fadeDelay)/(1-fadeDelay));
+        shot.fadeMaterial.opacity = (shot.fadeOpacity ?? .55)*(1-fadeProgress);
+      }
     }
   }
 
@@ -108,16 +114,18 @@ export class SiegeFeedback {
 
   public dispose(): void {
     this.reset();
-    for (const geometry of [this.boltGeometry, this.ballGeometry, this.trailGeometry, this.flashGeometry, this.ringGeometry, this.flameGeometry]) geometry.dispose();
-    for (const material of [this.boltMaterial, this.ballMaterial, this.trailMaterial, this.flashMaterial, this.ringMaterial, this.flameMaterial]) material.dispose();
+    for (const geometry of [this.boltGeometry, this.ballGeometry, this.ballRimGeometry, this.trailGeometry, this.flashGeometry, this.ringGeometry, this.flameGeometry]) geometry.dispose();
+    for (const material of [this.boltMaterial, this.ballMaterial, this.ballRimMaterial, this.trailMaterial, this.flashMaterial, this.ringMaterial, this.flameMaterial]) material.dispose();
   }
 
   private projectile(from: Vector3, to: Vector3, duration: number, cannon: boolean): void {
     const object = new Group();
     object.add(new Mesh(cannon ? this.ballGeometry : this.boltGeometry, cannon ? this.ballMaterial : this.boltMaterial));
+    if (cannon) object.add(new Mesh(this.ballRimGeometry, this.ballRimMaterial));
     const fadeMaterial = this.trailMaterial.clone();
     const trail = new Mesh(this.trailGeometry, fadeMaterial);
-    trail.position.y = cannon ? -.52 : -.68;
+    if (cannon) trail.scale.set(2, .6, 2);
+    trail.position.y = cannon ? -.38 : -.68;
     object.add(trail);
     object.position.copy(from);
     this.add({ object, age: 0, duration, from: from.clone(), to: to.clone(), arc: cannon ? .95 : undefined, fadeMaterial });
@@ -134,10 +142,24 @@ export class SiegeFeedback {
     const ring = new Mesh(this.ringGeometry, fadeMaterial);
     ring.rotation.x = -Math.PI/2;
     ring.position.copy(position); ring.position.y = .12;
-    this.add({ object: ring, age: 0, duration: .42, expand: true, fadeMaterial });
-    // Lift the compact burst above the hit anchor so the living skin does not
-    // hide it. The ground ring still marks the exact cached impact location.
-    this.flash(position.clone().add(new Vector3(0, .25, 0)), .24);
+    // Hold the first part of the orange pulse before it expands and fades.
+    // This is a brief impact cue, not a representation of the core blast radius.
+    this.add({ object: ring, age: 0, duration: .46, expand: true, fadeMaterial, fadeOpacity: 1, fadeDelay: .4 });
+    const burst = new Group();
+    const burstMaterial = this.ballRimMaterial.clone();
+    burstMaterial.transparent = true;
+    burstMaterial.opacity = .95;
+    burstMaterial.depthWrite = false;
+    for (const x of [-.23, 0, .23]) {
+      const spark = new Mesh(this.flashGeometry, burstMaterial);
+      spark.position.set(x, Math.abs(x) ? .05 : .16, 0);
+      spark.rotation.z = -x*2;
+      spark.scale.set(1.1, 1.3, 1.1);
+      burst.add(spark);
+    }
+    // Keep a small burst above the hit anchor, clear of the living skin.
+    burst.position.copy(position).y += .5;
+    this.add({ object: burst, age: 0, duration: .28, fadeMaterial: burstMaterial, fadeOpacity: .95, fadeDelay: .25 });
   }
 
   private add(shot: SiegeShot): void { this.scene.add(shot.object); this.shots.push(shot); }
