@@ -537,11 +537,14 @@ export class Battlefield {
     const next = view.actions?.get(semantic);
     if (!next) return;
     const previous = view.current ? view.actions?.get(view.current) : undefined;
-    previous?.fadeOut(.08);
+    const ability = semantic === "warning" || semantic === "charge" || semantic === "inspire";
+    if (ability) previous?.stop();
+    else previous?.fadeOut(.08);
     const looping = semantic === "walk" || semantic === "attack" || semantic === "charge";
     next.reset().setLoop(looping ? LoopRepeat : LoopOnce, looping ? Infinity : 1);
     next.clampWhenFinished = semantic === "death" || semantic === "warning" || semantic === "inspire";
-    next.fadeIn(.08).play();
+    if (ability) next.stopFading().setEffectiveWeight(1).play();
+    else next.fadeIn(.08).play();
     view.current = semantic;
   }
 
