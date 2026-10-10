@@ -8,7 +8,7 @@
 
 八件 GLB 合计从 9,377,584 增至 10,709,176 bytes（+1,331,592，约 14.20%），从 99,906 增至 103,394 三角（+3,488，约 3.49%）。几何增量来自箭塔冠饰/金檐、木材厂锯齿的侧面与倒角及支座、主城檐带/门槛、骷髅胸甲/骨板/眉骨，没有统一细分。PNG 仍为原尺寸，文件增量同时包含重新展开、重新烘焙后的图集编码。文件大小与单件三角数不代表场景 GPU 时间或手机预算。
 
-验证：既有 `npm run check` 的 169 个玩家行为/会话/坐标测试与 4 个 HTTP 收件测试通过；新目录 build 通过。官方 Khronos 校验八件均 0 errors、0 warnings（[原报告](./evidence/product-source-refinement/khronos-validation.json)）。重复执行 revision 工具跳过全部八件，来源 SHA 不变。纯几何变更未增加私有镜像测试。根制作人的真实固定镜头玩测、前后截图与最终集成记录后续附于本批证据；以上格式检查不替代美术接受。
+验证：既有 `npm run check` 的 169 个玩家行为/会话/坐标测试与 4 个 HTTP 收件测试通过；新目录 build 通过。官方 Khronos 校验八件均 0 errors、0 warnings（[原报告](./evidence/product-source-refinement/khronos-validation.json)）。重复执行 revision 工具跳过全部八件，来源 SHA 不变。纯几何变更未增加私有镜像测试。总制作人在真实固定游戏镜头下接受本批产品画面：缩收顶棚后弓手与弓可见，锯轮、粗梁、主城层次改善，骷髅头胸与衣甲更清楚。[基线图](./evidence/product-source-refinement/product-source-before.jpg)、[三档建造升级图](./evidence/product-source-refinement/product-source-after-tiers.jpg)、[运行演员图](./evidence/product-source-refinement/product-source-after-actors.jpg)及操作记录已附。该运行图来自明确标注的 arcane 演示配置：600 生命、无攻墙伤害、授予资源；实际第二波 15 活单位与 1 个短暂死亡模型，不能宣称 25 混编或正式战役性能通过。暂停标准→流畅→标准时，公开 actor/arcane 状态逐项相同、无 warn/error，原记录和[流畅图](./evidence/product-source-refinement/product-source-after-low.jpg)随附。v1/v2 模型同 SHA；完整集成候选仍须短复验。以上格式和制作人观察不替代所有者与实体手机接受。
 
 ```powershell
 & 'D:/Apps/Blender/blender.exe' --background --python-exit-code 1 --python art/threejs/refine_product_sources.py -- arrow_tower_low arrow_tower_medium arrow_tower_high lumberyard_low lumberyard_medium lumberyard_high main_city skeleton_infantry
