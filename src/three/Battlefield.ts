@@ -11,14 +11,16 @@ import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
 import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
 import { buildingAsset, enemyAsset, type AnimationSemantic } from "./assetCatalog";
 import type { ModelLibrary } from "./ModelLibrary";
+import { ArcaneFeedback } from "./arcaneFeedback";
 
 type Effect = { object: Object3D; ttl: number; duration: number; from?: Vector3; to?: Vector3 };
-type EnemyView = { object: Object3D; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean };
+type EnemyView = { object: Object3D; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean; slowMultiplier?: number };
 
 /** Owns all preview GPU resources, picking and event-driven presentation. */
 export class Battlefield {
   private readonly renderer = new WebGLRenderer({ antialias: true, alpha: false });
   private readonly scene = new Scene();
+  private readonly arcane = new ArcaneFeedback(this.scene);
   private readonly camera = new OrthographicCamera(-6, 6, 8, -8, 0.1, 100);
   private readonly raycaster = new Raycaster();
   private readonly pickers: Mesh[] = [];
@@ -143,6 +145,7 @@ export class Battlefield {
     for (const enemy of state.enemies) this.enemyAnchors.set(enemy.id, { definitionId: enemy.definitionId, position: enemy.position });
     this.synchronizeBuildings(state.buildings);
     this.synchronizeEnemies(state);
+    this.arcane.synchronize(state);
     for (const event of events) this.presentEvent(state, event);
     const active = new Set(state.enemies.map((enemy) => enemy.id));
     for (const [id, view] of this.enemies) {
@@ -158,7 +161,10 @@ export class Battlefield {
       } else {
         view.interrupt = Math.max(0, view.interrupt - deltaSeconds);
         if (view.dying === null && view.interrupt === 0) this.play(view, view.atWall ? "attack" : "walk");
-        view.mixer?.update(deltaSeconds);
+        if (view.mixer) {
+          view.mixer.timeScale = view.current === "walk" ? view.slowMultiplier ?? 1 : 1;
+          view.mixer.update(deltaSeconds);
+        }
       }
     }
     const wallTotal = state.wallHp + state.wallShield;
@@ -183,12 +189,14 @@ export class Battlefield {
         effect.object.position.lerpVectors(effect.from, effect.to, progress);
       } else if (effect.object.userData.reward) effect.object.position.y += deltaSeconds * 1.6;
     }
+    this.arcane.advance(deltaSeconds);
     this.renderer.render(this.scene, this.camera);
     // Read-only presentation evidence in the development sample, never a core handle.
-    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), effects: this.effects.length, calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
+    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), effects: this.effects.length, arcane: this.arcane.describe(), calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
   }
 
   public reset(): void {
+    this.arcane.reset();
     for (const view of this.enemies.values()) { view.mixer?.stopAllAction(); view.mixer?.uncacheRoot(view.object); }
     for (const object of [...this.buildings.values(), ...[...this.enemies.values()].map((view) => view.object), ...this.effects.map((effect) => effect.object)]) {
       this.scene.remove(object);
@@ -204,6 +212,7 @@ export class Battlefield {
 
   public dispose(): void {
     this.reset();
+    this.arcane.dispose();
     this.disposeObject(this.wall);
     this.disposeObject(this.environment);
     for (const geometry of this.geometries) geometry.dispose();
@@ -307,6 +316,7 @@ export class Battlefield {
       const group = view.object;
       group.position.copy(enemyPosition(enemy.id, enemy.position));
       view.atWall = enemy.atWall;
+      view.slowMultiplier = Math.min(1, ...(enemy.growthSlowStates ?? []).filter((slow) => slow.remainingSeconds > .000001).map((slow) => slow.multiplier));
       // Driven by effective simulation time; all battle motion stops in frozen phases.
       const phase = state.effectiveBattleTimeSeconds * (enemy.atWall ? 9 : 6) + Number(enemy.id.slice(enemy.id.lastIndexOf("-") + 1));
       if (!view.mixer) {
@@ -348,11 +358,15 @@ export class Battlefield {
       if (!source) return;
       const from = this.anchorPosition(this.buildings.get(source.id), "attack_anchor", CAMP_POSITIONS.get(source.slotId)!.clone().add(new Vector3(0, 1.25, 0)));
       const to = this.enemyHitPosition(event.targetId, event.targetPosition);
+      if (this.arcane.attack(event.towerDefinitionId, event.buildingId, event.targetId, from, to)) return;
       const direction = to.clone().sub(from);
       const shot = new Mesh(this.geometry(new CylinderGeometry(0.018, 0.025, .4, 5)), this.material(new MeshBasicMaterial({ color: 0xffdd90 })));
       shot.position.copy(from);
       shot.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), direction.normalize());
       this.addEffect(shot, 0.15, from, to);
+    } else if (event.type === "tower_special" && event.effect === "弹射") {
+      const position = event.targetPosition ?? this.enemyAnchors.get(event.targetId)?.position;
+      if (position !== undefined) this.arcane.chain(event.buildingId, event.targetId, this.enemyHitPosition(event.targetId, position));
     } else if (event.type === "enemy_hit" || event.type === "enemy_defeated") {
       // Event carries the last anchor even if the simulation removed this enemy.
       const cached = this.enemyAnchors.get(event.enemyId);

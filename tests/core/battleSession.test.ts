@@ -3,6 +3,15 @@ import { BattleSession } from "../../src/core/battleSession";
 import { GameSimulation } from "../../src/core/game";
 
 describe("BattleSession", () => {
+  it("initializes explicit development resources through configuration and preserves them on restart", () => {
+    const session = new BattleSession({ initialResources: { wood: 6000, gold: 100 } });
+    expect(session.getState()).toMatchObject({ wood: 6000, gold: 100, enemies: [] });
+    expect(session.dispatch({ type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" }).accepted).toBe(true);
+    expect(session.getState().wood).toBe(5960);
+    session.dispatch({ type: "restart" });
+    expect(session.getState()).toMatchObject({ wood: 6000, gold: 100, enemies: [] });
+  });
+
   it("charges one arrow tower once when a build click is repeated", () => {
     const session = new BattleSession({ seed: 1337 });
     const command = { type: "build_building", slotId: "slot-r1-c1", definitionId: "arrow_tower" } as const;

@@ -1,7 +1,7 @@
 import type { GrowthBuildingId } from "../core/buildingGrowth";
 import { starterCatalog, type EnemyDefinition } from "../core/content";
 
-export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton";
+export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton" | "frost_low" | "frost_medium" | "frost_high" | "electric_low" | "electric_medium" | "electric_high";
 export type AnimationSemantic = "walk" | "attack" | "hit" | "death";
 export interface PresentationAsset {
   id: AssetId;
@@ -16,6 +16,12 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
   { id: "arrow_low", file: "arrow_tower_low.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "arrow_medium", file: "arrow_tower_medium.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "arrow_high", file: "arrow_tower_high.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "frost_low", file: "frost_tower_low.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "frost_medium", file: "frost_tower_medium.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "frost_high", file: "frost_tower_high.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "electric_low", file: "electric_tower_low.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "electric_medium", file: "electric_tower_medium.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
+  { id: "electric_high", file: "electric_tower_high.glb", maximumSize: [1.8, 2.2, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "skeleton", file: "skeleton_infantry.glb", maximumSize: [1.15, 1.6, .65], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"] },
   { id: "lumber_low", file: "lumberyard_low.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "lumber_medium", file: "lumberyard_medium.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
@@ -27,11 +33,13 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
   { id: "plot", file: "camp_plot.glb", maximumSize: [1.9, .1, 1.65], anchors: ["label_anchor"], clips: [] },
 ];
 
-export const SAMPLE_COVERAGE = "精修：箭塔/木材厂三档、主城、城墙、骷髅、树岩；英雄、特殊塔及其余敌人是开发占位";
+export const SAMPLE_COVERAGE = "精修：箭塔/寒霜塔/雷电塔/木材厂三档、主城、城墙、骷髅、树岩；英雄、连弩/火炮及其余敌人是开发占位";
 
 type BuildingContentId = GrowthBuildingId | "main_city";
 const BUILDING_ASSETS: Readonly<Partial<Record<BuildingContentId, readonly [AssetId, AssetId, AssetId]>>> = {
   arrow_tower: ["arrow_low", "arrow_medium", "arrow_high"],
+  frost: ["frost_low", "frost_medium", "frost_high"],
+  electric: ["electric_low", "electric_medium", "electric_high"],
   lumberyard: ["lumber_low", "lumber_medium", "lumber_high"],
   main_city: ["main_city", "main_city", "main_city"],
 };

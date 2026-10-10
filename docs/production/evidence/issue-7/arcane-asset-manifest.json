@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "assets": [
+    {
+      "asset": "electric_tower_high.glb",
+      "sha256": "c3aa7007b45fa2e40634da7d2def5a7571cb9354ddf6add12e9618db73a8688c",
+      "bytes": 830428,
+      "source": "art/threejs/sources/electric_tower_high.blend",
+      "sourceSha256": "9a260dbac992d7f444b9e97b654d3a4f5b7e874e5bfcd3188a0de6807557cf9a",
+      "sourceBytes": 738902,
+      "triangles": 7848,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [],
+      "skins": 0,
+      "joints": 0,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    },
+    {
+      "asset": "electric_tower_low.glb",
+      "sha256": "f83dbe1e210e640ea8f4d83d977c40765a0bf0f74bdbc35487c62cddb670bf76",
+      "bytes": 690612,
+      "source": "art/threejs/sources/electric_tower_low.blend",
+      "sourceSha256": "8b0d5ae48a13ca8a56074be572ae781fb72acd236715d983d301f8508a52054f",
+      "sourceBytes": 671354,
+      "triangles": 6196,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [],
+      "skins": 0,
+      "joints": 0,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    },
+    {
+      "asset": "electric_tower_medium.glb",
+      "sha256": "fdab43e82a0bd81972e17f1073d613f3079001e471c5669bb10e65bcd71202a5",
+      "bytes": 753400,
+      "source": "art/threejs/sources/electric_tower_medium.blend",
+      "sourceSha256": "d1c682b85fc55f091359d1e928bd5bce0a8dbe4fd3f4e471e304361a1cdc482e",
+      "sourceBytes": 705033,
+      "triangles": 6928,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [],
+      "skins": 0,
+      "joints": 0,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    },
+    {
+      "asset": "frost_tower_high.glb",
+      "sha256": "f3d8339d94dd62a984072360526f3bc57ed371211cc285ffebd3c49c590c909d",
+      "bytes": 866528,
+      "source": "art/threejs/sources/frost_tower_high.blend",
+      "sourceSha256": "66119de6c943e58a1f653516111fb38b6a95a52330798be437aebe22e8a43ce0",
+      "sourceBytes": 728980,
+      "triangles": 8280,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [],
+      "skins": 0,
+      "joints": 0,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    },
+    {
+      "asset": "frost_tower_low.glb",
+      "sha256": "5a97aad26da9a0ae0494d7d408f87572ba8ed2de740019df272f048cd29ee501",
+      "bytes": 677280,
+      "source": "art/threejs/sources/frost_tower_low.blend",
+      "sourceSha256": "60edbab1e60219af31f1558c5cb456f5499a5b3bf4b8fbd49833b0f6fa16edd9",
+      "sourceBytes": 644421,
+      "triangles": 6044,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [],
+      "skins": 0,
+      "joints": 0,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    },
+    {
+      "asset": "frost_tower_medium.glb",
+      "sha256": "4b257ae6adf868e73d86fb5e00b0180aba02d8933727ed22e273a53ffde78a48",
+      "bytes": 764240,
+      "source": "art/threejs/sources/frost_tower_medium.blend",
+      "sourceSha256": "7c2c5d62856efd483450fc6edf4f266edbc3bd902a9ebc82f4ec784e977c6999",
+      "sourceBytes": 682126,
+      "triangles": 7052,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [],
+      "skins": 0,
+      "joints": 0,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    }
+  ]
+}
