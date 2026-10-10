@@ -2,7 +2,7 @@ import { BattleSession } from "../core/battleSession";
 import { starterCatalog } from "../core/content";
 import { getGrowthBuildingPresentation, type GrowthSpecialTowerId } from "../core/buildingGrowth";
 import { getWoodProductionPerSecond, MAIN_CITY_WOOD_INCOME } from "../core/resources";
-import { CAMP_SLOT_IDS, type GameCommand } from "../core/types";
+import { CAMP_SLOT_IDS, type GameCommand, type GameEvent, type GameState } from "../core/types";
 import { decideGrowthControl, initialGrowthUiState, type GrowthControlInput } from "../ui/growthControls";
 import { deriveBuildingDetail, deriveEmptySlotActions, deriveGrowthPauseControl, deriveGrowthWaveTime, deriveTraitOptions, deriveTransformOptions, formatGrowthTraitEffectAtStacks, getGrowthInputPriority, type GrowthStatsView } from "../ui/growthUi";
 import { Battlefield } from "./Battlefield";
@@ -21,6 +21,7 @@ import { ARCANE_DEMO_CATALOG, ARCANE_DEMO_RESOURCES, prepareArcaneDemo } from ".
 import { prepareUndeadDemo } from "./undeadDemo";
 import { replayCampaignBattle } from "./campaignReplay";
 import "./preview.css";
+import { GRAPHICS_QUALITY, readGraphicsQuality, saveGraphicsQuality, type GraphicsQuality } from "./graphicsQuality";
 
 const content = fantasyArcanePresentation(withFantasySiegePresentation(starterCatalog.buildingGrowth));
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
@@ -41,6 +42,9 @@ export interface BattlePresentationOptions {
   retry?: () => boolean;
   returnToLobby?: () => void;
   developmentReplay?: boolean;
+  quality?: GraphicsQuality;
+  qualityChanged?: (quality: GraphicsQuality) => void;
+  observeFrame?: (timestamp: number, state: GameState, events: readonly GameEvent[], metrics: ReturnType<Battlefield["snapshot"]>) => void;
 }
 export function mountBattlePresentation(app: HTMLElement, options: BattlePresentationOptions = {}): () => void {
   const demo = options.session ? null : new URLSearchParams(window.location.search).get("demo");
@@ -48,13 +52,14 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
   const arcaneDemo = demo === "arcane";
   const undeadDemo = demo === "undead";
   const bossDemo = demo === "boss";
+  let quality = options.quality ?? readGraphicsQuality();
   app.classList.add("battle-app");
   app.dataset.browserUserAgent = navigator.userAgent;
   app.dataset.renderPixelRatio = String(Math.min(window.devicePixelRatio, 2));
   app.innerHTML = `
     <header class="preview-hud">
       <div class="preview-wave-card"><div class="preview-wave">${skullIcon}<strong data-view="wave"></strong></div><div class="preview-time" data-view="time"></div><div class="preview-phase"><span data-view="phase"></span><span data-view="threat"></span></div></div>
-      <div class="preview-top-actions"><button type="button" data-action="toggle_pause" aria-label="暂停战斗">暂停</button><button type="button" data-action="mute" aria-label="切换声音">声音</button></div>
+      <div class="preview-top-actions"><button type="button" data-action="toggle_pause" aria-label="暂停战斗">暂停</button><button type="button" data-action="quality" aria-label="切换画质">画质</button><button type="button" data-action="mute" aria-label="切换声音">声音</button></div>
       <div class="preview-boss" data-view="boss" aria-live="polite"></div>
     </header>
     <section class="preview-field" aria-label="人类堡垒与亡灵防线">
@@ -96,7 +101,7 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
   updateMute();
   const field = app.querySelector<HTMLElement>(".preview-field")!;
   let battlefield: Battlefield;
-  try { battlefield = new Battlefield(field); }
+  try { battlefield = new Battlefield(field, quality); }
   catch {
     app.innerHTML = `<div class="preview-error"><h1>战场暂时无法显示</h1><p>请使用支持 WebGL 2 的浏览器，或重新加载后重试。</p>${options.returnToLobby ? '<button type="button" data-return-error>返回营地</button>' : `<a href="${import.meta.env.BASE_URL}">返回营地</a>`}</div>`;
     session.dispose();
@@ -112,6 +117,9 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
   const context = app.querySelector<HTMLElement>(".preview-context")!;
   const actions = app.querySelector<HTMLElement>(".preview-actions")!;
   const pauseButton = app.querySelector<HTMLButtonElement>("[data-action=toggle_pause]")!;
+  const qualityButton = app.querySelector<HTMLButtonElement>("[data-action=quality]")!;
+  const updateQuality = () => { qualityButton.textContent = `画质·${GRAPHICS_QUALITY[quality].label}`; app.dataset.renderPixelRatio = field.dataset.renderPixelRatio; };
+  updateQuality();
   const overlay = app.querySelector<HTMLElement>(".preview-overlay")!;
   const dialog = app.querySelector<HTMLElement>(".preview-dialog-content")!;
   const notice = app.querySelector<HTMLElement>(".preview-notice")!;
@@ -194,7 +202,7 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
     render(0);
   };
 
-  function render(deltaSeconds: number): void {
+  function render(deltaSeconds: number, timestamp?: number): void {
     app.dataset.phase = session.getState().phase;
     app.dataset.clockStep = String(session.getStepIndex());
     app.dataset.openingCountdown = String(session.getState().openingCountdownRemainingSeconds);
@@ -215,6 +223,7 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
     const events = session.drainEvents();
     for (const event of events) options.sound?.handleEvent(event);
     battlefield.render(state, events, deltaSeconds, ui.selectedSlot);
+    if (timestamp !== undefined) options.observeFrame?.(timestamp, state, events, battlefield.snapshot());
     app.dataset.phase = state.phase;
     app.dataset.selectedSlot = ui.selectedSlot ?? "";
     view("wood").innerHTML = `<strong>${Math.floor(state.wood)}</strong><small>+${getWoodProductionPerSecond(state).toFixed(1)}/秒</small>`;
@@ -325,13 +334,17 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
     if (button?.dataset.action === "mute") { options.sound?.toggleMuted(); updateMute(); return; }
     if (button?.dataset.action === "retry_assets") { void loadAssets(); return; }
     if (!library) return;
+    if (button?.dataset.action === "quality") {
+      if (!overlay.hidden) return;
+      quality = quality === "standard" ? "low" : "standard"; battlefield.setQuality(quality); saveGraphicsQuality(quality); options.qualityChanged?.(quality); updateQuality(); render(0); return;
+    }
     if (button) {
       event.stopPropagation();
       const action = button.dataset.action!;
       if (action === "replay_victory" || action === "replay_defeat") {
         if (options.developmentReplay && getGrowthInputPriority(session.getState().phase, ui.transformOpen) === "building") {
           battlefield.reset(); options.sound?.resetBattle();
-          replayCampaignBattle(session, action === "replay_victory" ? "victory" : "defeat");
+          app.dataset.replayEvidence = JSON.stringify(replayCampaignBattle(session, action === "replay_victory" ? "victory" : "defeat"));
           ui = initialGrowthUiState(); render(0);
         }
         return;
@@ -403,7 +416,7 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
   const frame = (timestamp: number) => {
     if (disposed) return;
     // The session sees its first timestamp only after all required assets are ready.
-    if (library) render(session.advanceFrame(timestamp) / 30);
+    if (library) render(session.advanceFrame(timestamp) / 30, timestamp);
     frameId = requestAnimationFrame(frame);
   };
   frameId = requestAnimationFrame(frame);

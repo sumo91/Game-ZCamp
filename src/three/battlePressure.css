@@ -1,0 +1,7 @@
+.battle-pressure-panel { position:absolute; top:145px; left:10px; right:10px; z-index:3; max-height:47%; overflow:auto; color:#d6e7ec; background:#112335ed; border:1px solid #819db9; border-radius:6px; padding:6px; font-size:11px; }
+.battle-pressure-panel summary { min-height:44px; display:flex; align-items:center; cursor:pointer; }
+.battle-pressure-panel nav { display:flex; gap:8px; flex-wrap:wrap; }
+.battle-pressure-panel a, .battle-pressure-panel button { display:inline-flex; align-items:center; min-height:44px; min-width:44px; color:#ffe3a4; background:#284464; border:1px solid #8ca0b1; border-radius:4px; padding:5px 8px; font:inherit; margin:2px; }
+.battle-pressure-panel textarea { display:block; width:100%; user-select:text; font:10px monospace; }
+.preview-top-actions { flex-wrap:wrap; justify-content:flex-end; max-width:185px; }
+.preview-top-actions [data-action="quality"] { font-size:10px; }

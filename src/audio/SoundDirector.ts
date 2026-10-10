@@ -36,6 +36,7 @@ export class SoundDirector {
   private gates = new ThrottleGate();
   private readonly enemyTiers = new Map<string, EnemyTier>();
   private readonly enemyGoldRewards = new Map<string, number>();
+  private readonly activeSources = new Set<AudioScheduledSourceNode>();
 
   public constructor() {
     for (const enemy of starterCatalog.enemies) {
@@ -75,10 +76,12 @@ export class SoundDirector {
     return this.muted;
   }
 
-  public resetBattle(): void { this.gates.reset(); }
+  public resetBattle(): void { this.gates.reset(); for (const source of this.activeSources) { try { source.stop(); } catch { /* Already ended. */ } } }
+  public snapshot() { return { contexts: Number(this.context !== null), activeSources: this.activeSources.size, state: this.context?.state ?? "closed", muted: this.muted }; }
   public suspend(): void { if (this.context?.state === "running") void this.context.suspend(); }
   public resume(): void { if (this.context?.state === "suspended") void this.context.resume(); }
   public dispose(): void {
+    this.resetBattle();
     if (this.context) void this.context.close();
     this.context = null; this.master = null; this.noiseBuffer = null; this.gates.reset();
   }
@@ -252,6 +255,8 @@ export class SoundDirector {
     gain.gain.linearRampToValueAtTime(options.gain, startAt + 0.008);
     gain.gain.exponentialRampToValueAtTime(0.0001, startAt + options.durationSeconds);
     oscillator.connect(gain).connect(this.master);
+    this.activeSources.add(oscillator);
+    oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); this.activeSources.delete(oscillator); };
     oscillator.start(startAt);
     oscillator.stop(startAt + options.durationSeconds + 0.02);
   }
@@ -283,6 +288,8 @@ export class SoundDirector {
     }
     source.connect(gain);
     output.connect(this.master);
+    this.activeSources.add(source);
+    source.onended = () => { source.disconnect(); gain.disconnect(); if (output !== gain) output.disconnect(); this.activeSources.delete(source); };
     source.start(startAt);
     source.stop(startAt + options.durationSeconds + 0.02);
   }

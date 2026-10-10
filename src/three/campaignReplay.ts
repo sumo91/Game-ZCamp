@@ -3,8 +3,14 @@ import type { GameCommand } from "../core/types";
 
 /** Explicit development demonstration: unchanged catalog, earned resources, legal commands.
  * No synthetic win, imported save, injected enemies, or presentation-side state writes. */
-export function replayCampaignBattle(session: BattleSession, outcome: "victory" | "defeat"): void {
-  const send = (command: GameCommand) => session.dispatch(command).accepted;
+export function replayCampaignBattle(session: BattleSession, outcome: "victory" | "defeat") {
+  const commands: Array<{ step: number; command: GameCommand }> = [];
+  let peakLiveUnits = 0, peakStep = 0, peakEffectiveSeconds = 0;
+  const send = (command: GameCommand) => {
+    const accepted = session.dispatch(command).accepted;
+    if (accepted) commands.push({ step: session.getStepIndex(), command });
+    return accepted;
+  };
   send({ type: "restart" });
   const yards = ["slot-r3-c1", "slot-r3-c2", "slot-r3-c4", "slot-r3-c5"];
   const towers = Array.from({ length: 10 }, (_, index) => `slot-r${Math.floor(index / 5) + 1}-c${index % 5 + 1}`);
@@ -14,7 +20,8 @@ export function replayCampaignBattle(session: BattleSession, outcome: "victory" 
   }
   for (let step = 0; step < 30 * 1200; step += 1) {
     const state = session.getState();
-    if (state.phase === "VICTORY" || state.phase === "DEFEAT") return;
+    if (state.enemies.length > peakLiveUnits) { peakLiveUnits = state.enemies.length; peakStep = session.getStepIndex(); peakEffectiveSeconds = state.effectiveBattleTimeSeconds; }
+    if (state.phase === "VICTORY" || state.phase === "DEFEAT") return { outcome, seed: state.seed, maxWave: state.maxWave, finalWave: state.wave, peakLiveUnits, peakStep, peakEffectiveSeconds, commands };
     const draft = state.pendingTraitDraft;
     if (draft) {
       const owner = state.buildings.find((building) => building.id === draft.buildingId)!;

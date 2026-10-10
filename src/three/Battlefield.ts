@@ -1,6 +1,6 @@
 import {
   BoxGeometry, Color, CylinderGeometry, DirectionalLight, Group, HemisphereLight,
-  Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, OctahedronGeometry, OrthographicCamera, PlaneGeometry,
+  Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, OctahedronGeometry, OrthographicCamera, PlaneGeometry, InstancedMesh, CircleGeometry,
   Raycaster, Scene, SphereGeometry, Vector2, Vector3, WebGLRenderer,
   AnimationMixer, LoopOnce, LoopRepeat, PCFShadowMap, ACESFilmicToneMapping, RingGeometry,
 } from "three";
@@ -13,9 +13,10 @@ import { buildingAsset, enemyAsset, heroAsset, type AnimationSemantic } from "./
 import type { ModelLibrary } from "./ModelLibrary";
 import { SiegeFeedback } from "./siegeFeedback";
 import { ArcaneFeedback } from "./arcaneFeedback";
+import { GRAPHICS_QUALITY, type GraphicsQuality } from "./graphicsQuality";
 
 type Effect = { object: Object3D; ttl: number; duration: number; from?: Vector3; to?: Vector3 };
-type EnemyView = { object: Object3D; definitionId: string; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean; slowMultiplier?: number };
+type EnemyView = { object: Object3D; definitionId: string; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean; slowMultiplier?: number; animationPending: number };
 
 /** Owns all preview GPU resources, picking and event-driven presentation. */
 export class Battlefield {
@@ -36,6 +37,11 @@ export class Battlefield {
   private readonly materials = new Set<Material>();
   private wall: Object3D;
   private readonly environment = new Group();
+  private readonly decorations = new Group();
+  private readonly sun = new DirectionalLight(0xffe8c4, 3.2);
+  private readonly contactShadows = new InstancedMesh(new CircleGeometry(.34, 10), new MeshBasicMaterial({ color: 0x202328, transparent: true, opacity: .22, depthWrite: false }), 512);
+  private quality: GraphicsQuality;
+  private lastEvidenceAt = 0;
   private width = 1;
   private height = 1;
   private previousWall: number | null = null;
@@ -48,8 +54,9 @@ export class Battlefield {
   private inspireSource: string | null = null;
   private hero: { object: Object3D; mixer: AnimationMixer; idle: AnimationAction; attack: AnimationAction; definitionId: string; attackRemaining: number } | null = null;
 
-  public constructor(private readonly host: HTMLElement) {
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  public constructor(private readonly host: HTMLElement, quality: GraphicsQuality = "standard") {
+    this.quality = quality;
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, GRAPHICS_QUALITY[quality].maxDpr));
     this.renderer.setClearColor(0x222330);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = PCFShadowMap;
@@ -60,7 +67,7 @@ export class Battlefield {
     this.camera.position.set(0, 23, 14);
     this.camera.lookAt(0, 0, -2);
     this.scene.add(new HemisphereLight(0xd2ddf0, 0x5b5649, 1.7));
-    const sun = new DirectionalLight(0xffe8c4, 3.2);
+    const sun = this.sun;
     sun.position.set(-5, 14, 6);
     sun.castShadow = true;
     sun.shadow.mapSize.set(1024, 1024);
@@ -71,6 +78,11 @@ export class Battlefield {
     sun.shadow.bias = -0.0003;
     sun.shadow.normalBias = 0.025;
     this.scene.add(sun);
+    this.contactShadows.count = 0;
+    this.contactShadows.frustumCulled = false;
+    this.contactShadows.renderOrder = 1;
+    this.scene.add(this.contactShadows);
+    this.setQuality(quality);
     this.box(12, 0.12, 12, 0x605c73, new Vector3(0, -0.12, -6));
     this.box(12, 0.12, 8.2, 0x749051, new Vector3(0, -0.12, 4.1));
     this.wall = new Group();
@@ -113,7 +125,11 @@ export class Battlefield {
     }
     const trees = [[-5.35, 2.8], [5.35, 3.3], [-5.3, -2.7], [5.3, -5.7]].map(([x, z]) => new Matrix4().makeTranslation(x!, 0, z!).scale(new Vector3(.85, .85, .85)));
     const rocks = [[-5.35, .8], [5.35, -.9], [-5.2, -5.1], [5.25, -8.3]].map(([x, z]) => new Matrix4().makeTranslation(x!, 0, z!));
-    this.environment.add(library.createStaticBatch("tree", trees), library.createStaticBatch("rocks", rocks));
+    this.decorations.clear();
+    this.decorations.userData.sharedAsset = true;
+    this.decorations.add(library.createStaticBatch("tree", trees), library.createStaticBatch("rocks", rocks));
+    this.environment.add(this.decorations);
+    this.decorations.visible = GRAPHICS_QUALITY[this.quality].decorations;
     this.renderer.domElement.setAttribute("aria-label", "人类堡垒与亡灵战场");
   }
 
@@ -143,6 +159,23 @@ export class Battlefield {
     return null;
   }
 
+  public setQuality(quality: GraphicsQuality): void {
+    this.quality = quality;
+    const settings = GRAPHICS_QUALITY[quality];
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, settings.maxDpr));
+    this.renderer.shadowMap.enabled = settings.shadowSize > 0;
+    this.decorations.visible = settings.decorations;
+    this.host.dataset.quality = quality;
+    this.host.dataset.renderPixelRatio = String(this.renderer.getPixelRatio());
+    this.resize();
+  }
+
+  public snapshot() {
+    return { quality: this.quality, renderPixelRatio: this.renderer.getPixelRatio(), calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles,
+      geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures, activeModels: [...this.enemies.values()].filter((view) => view.dying === null).length,
+      animationMixers: this.enemies.size + Number(this.hero !== null), effects: this.effects.length + this.siege.count + this.arcane.describe().effects };
+  }
+
   public projectSlot(slotId: string): { x: number; y: number } {
     const model = [...this.buildings.values()].find((building) => building.userData.slotId === slotId);
     const projected = this.anchorPosition(model, "label_anchor", CAMP_POSITIONS.get(slotId)!.clone().add(new Vector3(0, .025, .5))).project(this.camera);
@@ -170,7 +203,14 @@ export class Battlefield {
     }
     this.siege.advance(state, deltaSeconds, (id, position) => this.enemyHitPosition(id, position));
     const active = new Map(state.enemies.map((enemy) => [enemy.id, enemy]));
+    let shadowIndex = 0;
     for (const [id, view] of this.enemies) {
+      if (shadowIndex < this.contactShadows.instanceMatrix.count) {
+        const boss = view.definitionId.endsWith("_boss");
+        const matrix = new Matrix4().makeRotationX(-Math.PI / 2).scale(new Vector3(boss ? 2 : 1, boss ? 2 : 1, 1));
+        matrix.setPosition(view.object.position.x, .025, view.object.position.z);
+        this.contactShadows.setMatrixAt(shadowIndex++, matrix);
+      }
       if (view.dying !== null) view.dying -= deltaSeconds;
       else if (!active.has(id)) view.dying = 0;
       if (view.dying !== null && view.dying <= 0) {
@@ -199,11 +239,17 @@ export class Battlefield {
           view.mixer?.update(0);
         } else if (view.mixer) {
           view.mixer.timeScale = view.current === "walk" ? view.slowMultiplier ?? 1 : 1;
-          view.mixer.update(deltaSeconds);
+          view.animationPending += deltaSeconds;
+          if (view.animationPending + .000001 >= 1 / GRAPHICS_QUALITY[this.quality].animationHz) {
+            view.mixer.update(view.animationPending);
+            view.animationPending = 0;
+          }
         }
       }
     }
     const wallTotal = state.wallHp + state.wallShield;
+    this.contactShadows.count = shadowIndex;
+    this.contactShadows.instanceMatrix.needsUpdate = true;
     if (this.previousWall !== null && wallTotal < this.previousWall) this.wallFlash = Math.max(this.wallFlash, .24);
     this.previousWall = wallTotal;
     this.wallFlash = Math.max(0, this.wallFlash - deltaSeconds);
@@ -228,10 +274,14 @@ export class Battlefield {
     this.arcane.advance(deltaSeconds);
     this.renderer.render(this.scene, this.camera);
     // Read-only presentation evidence in the development sample, never a core handle.
-    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, definitionId: view.definitionId, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), bossWarnings: [...this.bossWarnings.keys()], inspired: [...this.inspireMarks.keys()].filter((id) => id !== this.inspireSource), inspireSource: this.inspireSource, effects: this.effects.length, arcane: this.arcane.describe(), calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
+    if (performance.now() - this.lastEvidenceAt >= 250) {
+      this.lastEvidenceAt = performance.now();
+      this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, definitionId: view.definitionId, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), bossWarnings: [...this.bossWarnings.keys()], inspired: [...this.inspireMarks.keys()].filter((id) => id !== this.inspireSource), inspireSource: this.inspireSource, arcane: this.arcane.describe(), ...this.snapshot() });
+    }
   }
 
   public reset(): void {
+    this.contactShadows.count = 0;
     if (this.hero) { this.hero.mixer.stopAllAction(); this.hero.mixer.uncacheRoot(this.hero.object); this.scene.remove(this.hero.object); this.disposeObject(this.hero.object); this.hero = null; }
     this.siege.reset();
     this.arcane.reset();
@@ -261,6 +311,9 @@ export class Battlefield {
     this.arcane.dispose();
     this.disposeObject(this.wall);
     this.disposeObject(this.environment);
+    this.contactShadows.dispose();
+    this.contactShadows.geometry.dispose();
+    (this.contactShadows.material as Material).dispose();
     for (const geometry of this.geometries) geometry.dispose();
     for (const material of this.materials) material.dispose();
     this.scene.traverse((object) => { if (object instanceof DirectionalLight) object.shadow.dispose(); });
@@ -390,7 +443,7 @@ export class Battlefield {
     if (asset && this.library) {
       const instance = this.library.create(asset);
       const mixer = new AnimationMixer(instance.object);
-      view = { object: instance.object, definitionId, mixer, actions: new Map(instance.clips.map((clip) => [clip.name as AnimationSemantic, mixer.clipAction(clip)])), interrupt: 0, dying: null, atWall: false };
+      view = { object: instance.object, definitionId, mixer, actions: new Map(instance.clips.map((clip) => [clip.name as AnimationSemantic, mixer.clipAction(clip)])), interrupt: 0, dying: null, atWall: false, animationPending: 0 };
       this.play(view, "walk");
       let phase = 0;
       for (const character of id) phase = (phase * 31 + character.charCodeAt(0)) % 997;
@@ -403,7 +456,7 @@ export class Battlefield {
       group.add(this.meshBox(0.13, 0.3, 0.16, style.color, new Vector3(-0.12, 0.16, 0)));
       group.add(this.meshBox(0.13, 0.3, 0.16, style.color, new Vector3(0.12, 0.16, 0)));
       group.scale.setScalar(style.scale);
-      view = { object: group, definitionId, interrupt: 0, dying: null, atWall: false };
+      view = { object: group, definitionId, interrupt: 0, dying: null, atWall: false, animationPending: 0 };
     }
     this.enemies.set(id, view);
     this.scene.add(view.object);
