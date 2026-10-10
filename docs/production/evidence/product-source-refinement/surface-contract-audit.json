@@ -1,0 +1,354 @@
+[
+  {
+    "asset": "arrow_tower_low",
+    "rootBefore": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "rootAfter": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "sharedOrmAoTexture": 0,
+    "baseColorTexture": 1,
+    "backfaceCulling": true
+  },
+  {
+    "asset": "arrow_tower_medium",
+    "rootBefore": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "rootAfter": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "sharedOrmAoTexture": 0,
+    "baseColorTexture": 1,
+    "backfaceCulling": true
+  },
+  {
+    "asset": "arrow_tower_high",
+    "rootBefore": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "rootAfter": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "sharedOrmAoTexture": 0,
+    "baseColorTexture": 1,
+    "backfaceCulling": true
+  },
+  {
+    "asset": "lumberyard_low",
+    "rootBefore": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "rootAfter": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "sharedOrmAoTexture": 0,
+    "baseColorTexture": 1,
+    "backfaceCulling": true
+  },
+  {
+    "asset": "lumberyard_medium",
+    "rootBefore": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "rootAfter": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "sharedOrmAoTexture": 0,
+    "baseColorTexture": 1,
+    "backfaceCulling": true
+  },
+  {
+    "asset": "lumberyard_high",
+    "rootBefore": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "rootAfter": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "sharedOrmAoTexture": 0,
+    "baseColorTexture": 1,
+    "backfaceCulling": true
+  },
+  {
+    "asset": "main_city",
+    "rootBefore": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "rootAfter": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "sharedOrmAoTexture": 0,
+    "baseColorTexture": 1,
+    "backfaceCulling": true
+  },
+  {
+    "asset": "skeleton_infantry",
+    "rootBefore": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "rootAfter": {
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "matrix": null
+    },
+    "sharedOrmAoTexture": 0,
+    "baseColorTexture": 1,
+    "backfaceCulling": true
+  }
+]
