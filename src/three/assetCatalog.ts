@@ -1,8 +1,9 @@
 import type { GrowthBuildingId } from "../core/buildingGrowth";
 import { starterCatalog, type EnemyDefinition } from "../core/content";
+import type { HeroId } from "../core/hero";
 
-export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "ballista_low" | "ballista_medium" | "ballista_high" | "cannon_low" | "cannon_medium" | "cannon_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton";
-export type AnimationSemantic = "walk" | "attack" | "hit" | "death";
+export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "ballista_low" | "ballista_medium" | "ballista_high" | "cannon_low" | "cannon_medium" | "cannon_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton" | HeroId;
+export type AnimationSemantic = "walk" | "attack" | "hit" | "death" | "idle";
 export interface PresentationAsset {
   id: AssetId;
   file: string;
@@ -13,6 +14,7 @@ export interface PresentationAsset {
 }
 
 export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
+  ...(["camp_warden", "vanguard_gunner", "lumber_baron"] as const).map((id): PresentationAsset => ({ id, file: `hero_${id}.glb`, maximumSize: [1.7, 1.7, 1.1], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["idle", "attack"] })),
   { id: "ballista_low", file: "ballista_tower_low.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "ballista_medium", file: "ballista_tower_medium.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "ballista_high", file: "ballista_tower_high.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
@@ -60,6 +62,8 @@ export function validateSampleCatalog(): void {
 export function enemyAsset(id: EnemyDefinition["id"]): AssetId | null {
   return ENEMY_ASSETS.get(id) ?? null;
 }
+
+export function heroAsset(id: HeroId): AssetId { return id; }
 
 /** The tier is a display mapping of the real level, not another growth rule. */
 export function buildingAsset(id: BuildingContentId, level: number): AssetId | null {

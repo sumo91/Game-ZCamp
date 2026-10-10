@@ -9,7 +9,7 @@ import { starterCatalog } from "../core/content";
 import type { BuildingState, GameEvent, GameState } from "../core/types";
 import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
 import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
-import { buildingAsset, enemyAsset, type AnimationSemantic } from "./assetCatalog";
+import { buildingAsset, enemyAsset, heroAsset, type AnimationSemantic } from "./assetCatalog";
 import type { ModelLibrary } from "./ModelLibrary";
 import { SiegeFeedback } from "./siegeFeedback";
 
@@ -38,6 +38,7 @@ export class Battlefield {
   private height = 1;
   private previousWall: number | null = null;
   private wallFlash = 0;
+  private hero: { object: Object3D; mixer: AnimationMixer; idle: AnimationAction; attack: AnimationAction; definitionId: string; attackRemaining: number } | null = null;
 
   public constructor(private readonly host: HTMLElement) {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -145,7 +146,13 @@ export class Battlefield {
     for (const enemy of state.enemies) this.enemyAnchors.set(enemy.id, { definitionId: enemy.definitionId, position: enemy.position });
     this.synchronizeBuildings(state.buildings);
     this.synchronizeEnemies(state);
+    this.synchronizeHero(state);
     for (const event of events) this.presentEvent(state, event);
+    if (this.hero) {
+      this.hero.attackRemaining = Math.max(0, this.hero.attackRemaining - deltaSeconds);
+      if (!this.hero.attackRemaining && !this.hero.idle.isRunning()) { this.hero.attack.fadeOut(.06); this.hero.idle.reset().fadeIn(.06).play(); }
+      this.hero.mixer.update(deltaSeconds);
+    }
     this.siege.advance(state, deltaSeconds, (id, position) => this.enemyHitPosition(id, position));
     const active = new Set(state.enemies.map((enemy) => enemy.id));
     for (const [id, view] of this.enemies) {
@@ -192,6 +199,7 @@ export class Battlefield {
   }
 
   public reset(): void {
+    if (this.hero) { this.hero.mixer.stopAllAction(); this.hero.mixer.uncacheRoot(this.hero.object); this.scene.remove(this.hero.object); this.disposeObject(this.hero.object); this.hero = null; }
     this.siege.reset();
     for (const view of this.enemies.values()) { view.mixer?.stopAllAction(); view.mixer?.uncacheRoot(view.object); }
     for (const object of [...this.buildings.values(), ...[...this.enemies.values()].map((view) => view.object), ...this.effects.map((effect) => effect.object)]) {
@@ -321,6 +329,18 @@ export class Battlefield {
     }
   }
 
+  private synchronizeHero(state: GameState): void {
+    if (!state.hero || !this.library || this.hero?.definitionId === state.hero.definitionId) return;
+    if (this.hero) { this.hero.mixer.stopAllAction(); this.hero.mixer.uncacheRoot(this.hero.object); this.scene.remove(this.hero.object); this.disposeObject(this.hero.object); }
+    const instance = this.library.create(heroAsset(state.hero.definitionId));
+    instance.object.position.set(.78, 0, 6.85); instance.object.scale.setScalar(.82); instance.object.rotation.y = Math.PI;
+    const mixer = new AnimationMixer(instance.object);
+    const idle = mixer.clipAction(instance.clips.find((clip) => clip.name === "idle")!).setLoop(LoopRepeat, Infinity).play();
+    const attack = mixer.clipAction(instance.clips.find((clip) => clip.name === "attack")!).setLoop(LoopOnce, 1);
+    this.hero = { object: instance.object, mixer, idle, attack, definitionId: state.hero.definitionId, attackRemaining: 0 };
+    this.scene.add(instance.object);
+  }
+
   private makeEnemy(id: string, definitionId: string): EnemyView {
     let view: EnemyView;
     const asset = enemyAsset(definitionId);
@@ -351,7 +371,9 @@ export class Battlefield {
     if (event.type === "tower_attack") {
       const source = state.buildings.find((building) => building.id === event.buildingId) ?? (event.buildingId === state.hero?.id ? state.buildings.find((building) => building.kind === "main_city") : undefined);
       if (!source) return;
-      const from = this.anchorPosition(this.buildings.get(source.id), "attack_anchor", CAMP_POSITIONS.get(source.slotId)!.clone().add(new Vector3(0, 1.25, 0)));
+      const heroAttack = event.buildingId === state.hero?.id && this.hero;
+      if (heroAttack) { heroAttack.idle.stop(); heroAttack.attack.reset().play(); heroAttack.attackRemaining = .4; }
+      const from = this.anchorPosition(heroAttack ? heroAttack.object : this.buildings.get(source.id), "attack_anchor", CAMP_POSITIONS.get(source.slotId)!.clone().add(new Vector3(0, 1.25, 0)));
       if (this.siege.present(event, from, (id, position) => this.enemyHitPosition(id, position))) return;
       const to = this.enemyHitPosition(event.targetId, event.targetPosition);
       const direction = to.clone().sub(from);
