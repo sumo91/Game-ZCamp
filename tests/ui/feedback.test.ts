@@ -106,4 +106,3 @@ describe("isBossEntrance", () => {
     expect(isBossEntrance("walker", ["charger_boss", "overlord_boss"])).toBe(false);
   });
 });
-

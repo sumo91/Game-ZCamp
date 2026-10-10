@@ -1,0 +1,42 @@
+[
+  {
+    "disabled": false,
+    "name": "声音已开启",
+    "selected": null
+  },
+  {
+    "disabled": false,
+    "name": "堡垒守望者均衡驻守英雄可出战",
+    "selected": "false"
+  },
+  {
+    "disabled": false,
+    "name": "连弩卫士战斗驻守英雄可出战",
+    "selected": "false"
+  },
+  {
+    "disabled": false,
+    "name": "采伐领主经济驻守英雄已选择",
+    "selected": "true"
+  },
+  {
+    "disabled": false,
+    "name": "01第一防线十波连续尸潮可出战◆新手",
+    "selected": "false"
+  },
+  {
+    "disabled": false,
+    "name": "02裂谷尸潮十二波连续尸潮可出战◆◆进阶",
+    "selected": "false"
+  },
+  {
+    "disabled": false,
+    "name": "03君王亲征十五波连续尸潮 · 双 Boss 终局已选择◆◆◆困难",
+    "selected": "true"
+  },
+  {
+    "disabled": false,
+    "name": "开始战斗《君王亲征》 · 采伐领主",
+    "selected": null
+  }
+]

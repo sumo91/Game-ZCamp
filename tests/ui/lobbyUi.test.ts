@@ -56,4 +56,3 @@ describe("camp lobby view", () => {
     expect(deriveResultActions()).toEqual({ rematchLabel: "再战", lobbyLabel: "返回营地", terminalOnly: true });
   });
 });
-

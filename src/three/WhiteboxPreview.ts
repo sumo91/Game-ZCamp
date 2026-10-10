@@ -448,4 +448,3 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
 
 /** Compatibility for explicitly marked historical development entries. */
 export const mountWhiteboxPreview = mountBattlePresentation;
-

@@ -70,4 +70,3 @@ describe("pointInLogicalBounds", () => {
     expect(pointInLogicalBounds(125, 261, bounds)).toBe(false);
   });
 });
-
