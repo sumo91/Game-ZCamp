@@ -114,18 +114,15 @@ export class BattleScenery {
     const cupGeometry = this.geometry(new CylinderGeometry(.23, .14, .14, 7));
     const flameGeometry = this.geometry(new ConeGeometry(.13, .47, 5));
     const coreGeometry = this.geometry(new ConeGeometry(.07, .29, 5));
-    for (const x of [-5.28, 5.28]) {
-      const brazier = new Group();
-      for (const [geometry, material, y] of [
-        [stemGeometry, iron, 1.07], [cupGeometry, rim, 1.34],
-        [flameGeometry, flame, 1.6], [coreGeometry, core, 1.51],
-      ] as const) {
-        const mesh = new Mesh(geometry, material);
-        mesh.position.y = y;
-        brazier.add(mesh);
-      }
-      brazier.position.set(x, 0, .07);
-      this.decorations.add(brazier);
+    for (const [geometry, material, y] of [
+      [stemGeometry, iron, 1.07], [cupGeometry, rim, 1.34],
+      [flameGeometry, flame, 1.6], [coreGeometry, core, 1.51],
+    ] as const) {
+      const batch = new InstancedMesh(geometry, material, 2);
+      [-5.28, 5.28].forEach((x, index) => batch.setMatrixAt(index, new Matrix4().makeTranslation(x, y, .07)));
+      batch.instanceMatrix.needsUpdate = true;
+      batch.computeBoundingSphere();
+      this.decorations.add(batch);
     }
   }
 
