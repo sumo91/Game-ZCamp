@@ -1,0 +1,55 @@
+{
+  "baseline": "3584504",
+  "seam": "BattleSession commands/state/events",
+  "scope": "same development catalog in baseline and current to reach every formal wave; no state writes",
+  "levels": [
+    {
+      "levelId": "first_defense",
+      "stateSnapshots": 626,
+      "hash": "409fb802976824b040384e68153f199f87b52469f3d9bbf4a7a8b567a6a0363c",
+      "equal": true,
+      "bosses": [
+        "charger_boss",
+        "overlord_boss"
+      ],
+      "warning": 1,
+      "inspire": 5,
+      "phase": "VICTORY",
+      "wood": 381.54999999985677,
+      "gold": 331,
+      "t": 620.9999999999012
+    },
+    {
+      "levelId": "broken_valley",
+      "stateSnapshots": 753,
+      "hash": "72a408483dcd3ddaced8e7e64d1cca935a98c894512c95dfa516395c114062d9",
+      "equal": true,
+      "bosses": [
+        "charger_boss",
+        "overlord_boss"
+      ],
+      "warning": 1,
+      "inspire": 6,
+      "phase": "VICTORY",
+      "wood": 451.39999999979653,
+      "gold": 531.5,
+      "t": 747.9999999997857
+    },
+    {
+      "levelId": "kings_march",
+      "stateSnapshots": 940,
+      "hash": "f87b4313e852c899f360bb698717069af14f2820ecef46d330d5d193d6dcfb01",
+      "equal": true,
+      "bosses": [
+        "charger_boss",
+        "overlord_boss"
+      ],
+      "warning": 3,
+      "inspire": 7,
+      "phase": "VICTORY",
+      "wood": 554.2499999997065,
+      "gold": 874,
+      "t": 934.9999999996159
+    }
+  ]
+}
