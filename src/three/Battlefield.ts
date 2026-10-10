@@ -538,7 +538,7 @@ export class Battlefield {
     if (!next) return;
     const previous = view.current ? view.actions?.get(view.current) : undefined;
     const ability = semantic === "warning" || semantic === "charge" || semantic === "inspire";
-    if (ability) previous?.stop();
+    if (ability) view.mixer?.stopAllAction();
     else previous?.fadeOut(.08);
     const looping = semantic === "walk" || semantic === "attack" || semantic === "charge";
     next.reset().setLoop(looping ? LoopRepeat : LoopOnce, looping ? Infinity : 1);
