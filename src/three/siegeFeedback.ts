@@ -7,13 +7,13 @@ type AnchorLookup = (id: string, position: number) => Vector3;
 
 /** Visual-only siege feedback. Every endpoint is a core event snapshot; no hit is calculated here. */
 export class SiegeFeedback {
-  private readonly boltGeometry = new CylinderGeometry(.021, .035, .38, 5);
+  private readonly boltGeometry = new CylinderGeometry(.035, .05, .44, 5);
   private readonly ballGeometry = new SphereGeometry(.12, 8, 6);
   private readonly flashGeometry = new ConeGeometry(.12, .32, 5);
   private readonly ringGeometry = new RingGeometry(.15, .21, 12);
-  private readonly flameGeometry = new ConeGeometry(.09, .31, 5);
+  private readonly flameGeometry = new ConeGeometry(.11, .42, 5);
   private readonly boltMaterial = new MeshBasicMaterial({ color: 0xffda84 });
-  private readonly ballMaterial = new MeshBasicMaterial({ color: 0x454657 });
+  private readonly ballMaterial = new MeshBasicMaterial({ color: 0xffbc64 });
   private readonly flashMaterial = new MeshBasicMaterial({ color: 0xffbd51 });
   private readonly ringMaterial = new MeshBasicMaterial({ color: 0xff8f38, transparent: true, opacity: .68, depthWrite: false });
   private readonly flameMaterial = new MeshBasicMaterial({ color: 0xfda43e });
@@ -69,9 +69,11 @@ export class SiegeFeedback {
       let flames = this.burns.get(enemy.id);
       if (!flames) {
         flames = new Group();
-        for (const x of [-.10, .10]) {
+        for (const x of [-.18, .18]) {
           const flame = new Mesh(this.flameGeometry, this.flameMaterial);
-          flame.position.set(x, .10, 0);
+          // +Z faces the game camera: the flame must sit in front of the skin,
+          // rather than being hidden inside the chest at the hit anchor.
+          flame.position.set(x, .10, .4);
           flames.add(flame);
         }
         this.scene.add(flames);

@@ -9,9 +9,9 @@ type ArcaneEffect = { object: Object3D; remaining: number; duration: number; fro
 export class ArcaneFeedback {
   private readonly crystalGeometry = new OctahedronGeometry(.12, 0);
   private readonly ringGeometry = new TorusGeometry(.32, .023, 4, 12);
-  private readonly boltGeometry = new CylinderGeometry(.018, .018, 1, 4);
+  private readonly boltGeometry = new CylinderGeometry(.032, .032, 1, 4);
   private readonly iceMaterial = new MeshBasicMaterial({ color: 0x74d0ef });
-  private readonly runeMaterial = new MeshBasicMaterial({ color: 0xae91ef });
+  private readonly runeMaterial = new MeshBasicMaterial({ color: 0xc9afff });
   private readonly runeCoreMaterial = new MeshBasicMaterial({ color: 0xe8daff });
   private readonly slowed = new Map<string, Group>();
   private readonly chainAnchors = new Map<string, Vector3>();

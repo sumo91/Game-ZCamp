@@ -507,9 +507,12 @@ export class Battlefield {
       const death = event.type === "enemy_defeated";
       const position = this.enemyHitPosition(event.enemyId, event.position);
       if (death && view) view.object.position.copy(enemyDisplayPosition(event.enemyId, event.position, view.definitionId));
-      const object = new Mesh(this.geometry(new SphereGeometry(death ? 0.32 : 0.18, 6, 4)), this.material(new MeshBasicMaterial({ color: death ? 0xd6bd77 : 0xfff0d2, wireframe: death })));
+      const object = death
+        ? new Mesh(this.geometry(new SphereGeometry(.32, 6, 4)), this.material(new MeshBasicMaterial({ color: 0xd6bd77, wireframe: true })))
+        : new Mesh(this.geometry(new RingGeometry(.055, .115, 8)), this.material(new MeshBasicMaterial({ color: 0xffb76a, transparent: true, opacity: .75, depthWrite: false })));
       object.position.copy(position);
-      this.addEffect(object, death ? 0.4 : 0.12);
+      if (!death) object.quaternion.copy(this.camera.quaternion);
+      this.addEffect(object, death ? 0.4 : 0.09);
       if (death) {
         if (view) { view.dying = .95; this.play(view, "death"); }
         const reward = starterCatalog.enemies.find((enemy) => enemy.id === cached?.definitionId)?.goldReward ?? 0;
@@ -634,11 +637,10 @@ export class Battlefield {
     if (!object) return eventPosition.add(new Vector3(0, .65, 0));
     // A fixed-step batch may contain an earlier hit and a later final position.
     // Sample the event anchor without moving a living actor back along its path.
-    const currentPosition = object.position.clone();
-    object.position.copy(eventPosition);
-    const anchor = this.anchorPosition(object, "hit_anchor", eventPosition.add(new Vector3(0, .65, 0)));
-    object.position.copy(currentPosition);
-    return anchor;
+    const anchor = this.anchorPosition(object, "hit_anchor", object.position.clone().add(new Vector3(0, .65, 0)));
+    // Translate the sampled pose to the event's display position without
+    // temporarily moving the actor or rewriting its skin world matrices.
+    return anchor.add(eventPosition.sub(object.position));
   }
 
   private play(view: EnemyView, semantic: AnimationSemantic, restart = false): void {
