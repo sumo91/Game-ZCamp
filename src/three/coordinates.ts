@@ -15,6 +15,10 @@ export function enemyPosition(id: string, progress: number): Vector3 {
 /** Shared model/effect projection; equipment clearance never changes core progress. */
 export function enemyDisplayPosition(id: string, progress: number, definitionId: string): Vector3 {
   const position = enemyPosition(id, progress);
+  if (definitionId === "charger_boss" || definitionId === "overlord_boss") {
+    // A tall crown/helmet starts inside the fixed camera's top safe boundary.
+    position.z = -9.1 + Math.max(0, Math.min(1, progress)) * 8.45;
+  }
   position.z -= enemyWallInset(definitionId);
   return position;
 }

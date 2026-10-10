@@ -464,7 +464,7 @@ export class GameSimulation {
           if (enemy.chargeWarningRemainingSeconds <= EPSILON) {
             enemy.chargeRemainingSeconds = signature.chargeDurationSeconds;
             enemy.chargeTargetPosition = Math.min(1, enemy.position + signature.chargeDistance);
-            this.events.push({ type: "enemy_charge_started", enemyId: enemy.id, position: enemy.position, targetPosition: enemy.chargeTargetPosition });
+            this.events.push({ type: "enemy_charge_started", enemyId: enemy.id, position: enemy.position, targetPosition: enemy.chargeTargetPosition, durationSeconds: signature.chargeDurationSeconds });
           }
           continue;
         }
@@ -482,7 +482,7 @@ export class GameSimulation {
         if (enemy.abilityCooldownSeconds <= EPSILON) {
           enemy.chargeWarningRemainingSeconds = signature.warningSeconds;
           enemy.abilityCooldownSeconds = signature.cooldownSeconds;
-          this.events.push({ type: "enemy_charge_warning", enemyId: enemy.id, position: enemy.position, durationSeconds: signature.warningSeconds });
+          this.events.push({ type: "enemy_charge_warning", enemyId: enemy.id, position: enemy.position, durationSeconds: signature.warningSeconds, targetPosition: Math.min(1, enemy.position + signature.chargeDistance) });
           continue;
         }
       }

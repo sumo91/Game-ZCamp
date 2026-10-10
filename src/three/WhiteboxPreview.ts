@@ -9,6 +9,7 @@ import { Battlefield } from "./Battlefield";
 import { isWallInDanger } from "./whiteboxCatalog";
 import { ModelLibrary } from "./ModelLibrary";
 import { SAMPLE_COVERAGE } from "./assetCatalog";
+import { createBossDemo } from "./bossDemo";
 import { withFantasySiegePresentation } from "./fantasySiegePresentation";
 
 import type { SoundDirector } from "../audio/SoundDirector";
@@ -42,10 +43,11 @@ export interface BattlePresentationOptions {
   developmentReplay?: boolean;
 }
 export function mountBattlePresentation(app: HTMLElement, options: BattlePresentationOptions = {}): () => void {
-  const demo = new URLSearchParams(window.location.search).get("demo");
+  const demo = options.session ? null : new URLSearchParams(window.location.search).get("demo");
   const siegeDemo = demo === "siege";
   const arcaneDemo = demo === "arcane";
   const undeadDemo = demo === "undead";
+  const bossDemo = demo === "boss";
   app.classList.add("battle-app");
   app.dataset.browserUserAgent = navigator.userAgent;
   app.dataset.renderPixelRatio = String(Math.min(window.devicePixelRatio, 2));
@@ -53,6 +55,7 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
     <header class="preview-hud">
       <div class="preview-wave-card"><div class="preview-wave">${skullIcon}<strong data-view="wave"></strong></div><div class="preview-time" data-view="time"></div><div class="preview-phase"><span data-view="phase"></span><span data-view="threat"></span></div></div>
       <div class="preview-top-actions"><button type="button" data-action="toggle_pause" aria-label="暂停战斗">暂停</button><button type="button" data-action="mute" aria-label="切换声音">声音</button></div>
+      <div class="preview-boss" data-view="boss" aria-live="polite"></div>
     </header>
     <section class="preview-field" aria-label="人类堡垒与亡灵防线">
       <div class="preview-zone" hidden></div>
@@ -70,10 +73,14 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
       <div class="preview-dialog-content preview-scroll"></div><div class="preview-modal-notice" role="status" aria-live="polite"></div>
     </section></div>
     <div class="preview-loading" data-loading role="status" aria-live="polite"><section><h2>准备营地</h2><p data-loading-progress>准备英雄与防线…</p>${siegeDemo ? `<p>${SAMPLE_COVERAGE}</p>` : ""}<button type="button" data-action="retry_assets" hidden>重试加载</button></section></div>`;
-  const session = options.session ?? (siegeDemo ? createSiegeDemoSession() : new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" }, ...(arcaneDemo ? { catalog: ARCANE_DEMO_CATALOG, initialResources: ARCANE_DEMO_RESOURCES } : {}) }));
+  const session = options.session ?? (bossDemo ? createBossDemo() : siegeDemo ? createSiegeDemoSession() : new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" }, ...(arcaneDemo ? { catalog: ARCANE_DEMO_CATALOG, initialResources: ARCANE_DEMO_RESOURCES } : {}) }));
   const showDemoLabel = (label: string) => { const zone = app.querySelector<HTMLElement>(".preview-zone")!; zone.hidden = false; zone.textContent = label; };
   if (siegeDemo) showDemoLabel(SIEGE_DEMO_LABEL);
   if (arcaneDemo) prepareArcaneDemo(session);
+  if (bossDemo) {
+    showDemoLabel("双 Boss 开发演示");
+    app.querySelector(".preview-zone")!.innerHTML = "双 Boss<small>演示：普通/精英 HP 1，所有攻墙伤害 0 · Boss 原生命与技能</small>";
+  }
   if (arcaneDemo || undeadDemo) {
     showDemoLabel(arcaneDemo ? "开发演示 · 寒霜与雷电三档" : "开发演示 · 五种亡灵");
     app.querySelector<HTMLElement>(".preview-zone")!.innerHTML = arcaneDemo ? "寒霜与雷电<small>演示配置：600生命目标、无攻墙伤害、授予资源。正式战役不使用此配置。</small>" : "亡灵混编<small>真实第一关第10波 · 点继续观察攻墙</small>";
@@ -225,6 +232,8 @@ export function mountBattlePresentation(app: HTMLElement, options: BattlePresent
     view("wave").textContent = `第 ${state.wave} 波 / ${state.maxWave}`;
     view("threat").textContent = `亡灵 ${state.enemies.length}`;
     view("time").textContent = deriveGrowthWaveTime(state);
+    const charging = state.enemies.find((enemy) => enemy.chargeWarningRemainingSeconds > 0 || enemy.chargeRemainingSeconds > 0);
+    view("boss").textContent = [charging ? charging.chargeWarningRemainingSeconds > 0 ? `领主蓄力 ${charging.chargeWarningRemainingSeconds.toFixed(1)}秒 · 即将冲锋` : "领主冲锋中" : "", state.overlordInspireRemainingSeconds > 0 ? `君王鼓舞 ${state.overlordInspireRemainingSeconds.toFixed(1)}秒 · 亡灵强化` : ""].filter(Boolean).join(" · ");
     view("phase").textContent = state.phase === "TACTICAL_PAUSE" ? "战术暂停" : state.phase === "OPENING_COUNTDOWN" ? "准备防线" : `击退 ${state.defeatedEnemies}`;
     const pause = deriveGrowthPauseControl(state.phase);
     pauseButton.textContent = pause.label;

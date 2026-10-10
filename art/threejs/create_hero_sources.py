@@ -152,4 +152,3 @@ if __name__=='__main__':
         hero(name)
         bake_atlas(a.ROOT,bpy.data.objects[a.ROOT['export_mesh']],name)
         bpy.ops.wm.save_as_mainfile(filepath=str(HERE/'sources'/f'{name}.blend'))
-
