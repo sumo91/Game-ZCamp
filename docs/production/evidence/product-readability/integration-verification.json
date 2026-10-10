@@ -1,0 +1,9 @@
+{
+  "codeHead": "cc7b6fd460ad9df599da896bcf0ab7ba5340d483",
+  "check": "typecheck + 169 Vitest + 4 HTTP passed",
+  "build": "59 modules",
+  "frozenFileCount": 46,
+  "protectedCode": "src/core, public, art, tests, package files unchanged",
+  "diffCheck": "passed",
+  "clean": true
+}
