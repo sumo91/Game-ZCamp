@@ -10,8 +10,14 @@ export function phoneEntry(params: URLSearchParams) {
   };
 }
 
+/** This selects work for this page; it makes no claim about earlier evidence. */
+export function phoneStartRound(params: URLSearchParams): number {
+  const from = params.get("from");
+  return from === "2" ? 2 : from === "3" ? 3 : 1;
+}
+
 export type PhoneRound = { count: number; seconds: number; quality: "standard"; warmupSeconds: number };
-export type PhoneRecord = { round: number; outcome: "completed" | "interrupted"; json: string; delivery: "sending" | "received" | "failed"; receipt: string | null; error: string | null };
+export type PhoneRecord = { round: number; attempt: number; outcome: "completed" | "interrupted"; json: string; delivery: "sending" | "received" | "failed"; receipt: string | null; error: string | null };
 const ROUNDS: readonly PhoneRound[] = [
   { count: 100, seconds: 60, quality: "standard", warmupSeconds: 5 },
   { count: 200, seconds: 300, quality: "standard", warmupSeconds: 5 },
@@ -23,24 +29,40 @@ export class PhoneTestSequence {
   public phase: "idle" | "running" | "sending" | "stopped" | "completed" = "idle";
   public readonly records: PhoneRecord[] = [];
   public haltReason: string | null = null;
+  private currentRound: number;
 
-  public constructor(private readonly persist: (json: string) => Promise<string>) {}
+  public constructor(private readonly persist: (json: string) => Promise<string>, fromRound = 1) {
+    this.currentRound = fromRound === 2 || fromRound === 3 ? fromRound : 1;
+  }
+
+  public get round(): number { return this.currentRound; }
+  public get attempt(): number { return this.records.filter(record => record.round === this.round).length + 1; }
+  public get canContinue(): boolean { return this.phase === "stopped" && this.round <= 3 && this.records.every(record => record.delivery === "received"); }
 
   public begin(): PhoneRound | null {
     if (this.phase !== "idle") return null;
     this.phase = "running";
-    return { ...ROUNDS[0] };
+    return { ...ROUNDS[this.round - 1] };
+  }
+
+  public continue(): PhoneRound | null {
+    if (!this.canContinue) return null;
+    this.haltReason = null; this.phase = "running";
+    return { ...ROUNDS[this.round - 1] };
   }
 
   public async complete(json: string, outcome: "completed" | "interrupted"): Promise<PhoneRound | null> {
     if (this.phase !== "running") return null;
-    const record: PhoneRecord = { round: this.records.length + 1, outcome, json, delivery: "sending", receipt: null, error: null };
+    const record: PhoneRecord = { round: this.round, attempt: this.attempt, outcome, json, delivery: "sending", receipt: null, error: null };
     this.records.push(record);
     this.phase = "sending";
     await this.deliver(record);
-    if (record.delivery === "failed" || this.haltReason) { this.phase = "stopped"; return null; }
+    if (record.delivery === "failed") { this.phase = "stopped"; return null; }
+    if (outcome === "completed") this.currentRound++;
+    if (this.round > 3) { this.phase = "completed"; return null; }
+    if (this.haltReason) { this.phase = "stopped"; return null; }
     if (outcome === "interrupted") { this.phase = "stopped"; return null; }
-    const next = ROUNDS[this.records.length];
+    const next = ROUNDS[this.round - 1];
     this.phase = next ? "running" : "completed";
     return next ? { ...next } : null;
   }
@@ -51,7 +73,11 @@ export class PhoneTestSequence {
 
   public async retryFailed(): Promise<void> {
     if (this.phase !== "stopped" || this.records.some(record => record.delivery === "sending")) return;
-    for (const record of this.records.filter(record => record.delivery === "failed")) await this.deliver(record);
+    for (const record of this.records.filter(record => record.delivery === "failed")) {
+      await this.deliver(record);
+      if (record.delivery === "received" && record.outcome === "completed" && this.round === record.round) this.currentRound++;
+    }
+    if (this.round > 3) this.phase = "completed";
   }
 
   private async deliver(record: PhoneRecord): Promise<void> {

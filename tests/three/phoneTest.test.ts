@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { PhoneTestSequence, phoneEntry } from "../../src/three/phoneTest";
+import { PhoneTestSequence, phoneEntry, phoneStartRound } from "../../src/three/phoneTest";
 
 describe("phone quick entry", () => {
+  it.each([["1", 1], ["2", 2], ["3", 3], ["0", 1], ["4", 1], ["2.5", 1], ["02", 1], ["", 1], ["other", 1]])("limits the explicit starting round %s to %s", (from, expected) => {
+    expect(phoneStartRound(new URLSearchParams({ from }))).toBe(expected);
+  });
   it("prefills the known phone without inventing a system version or phone acceptance", () => {
     expect(phoneEntry(new URLSearchParams("phone=iqoo-z10-turbo&session=sample-session"))).toEqual({
       model: "iQOO Z10 Turbo", deviceCategory: "physical-phone", os: "Android（具体版本待核实）",
@@ -15,6 +18,83 @@ describe("phone quick entry", () => {
 });
 
 describe("one-click phone sequence", () => {
+  it("keeps stopped pending rounds continuable only after receipt and prevents stop/delivery races from skipping work", async () => {
+    let receive!: (receipt: string) => void;
+    const sequence = new PhoneTestSequence(() => new Promise(resolve => { receive = resolve; }), 2);
+    sequence.begin();
+    const pending = sequence.complete('{"round":2,"outcome":"completed"}', "completed");
+    sequence.halt("page-hidden");
+    expect(sequence.canContinue).toBe(false);
+    expect(sequence.continue()).toBeNull();
+    receive("received.json"); await pending;
+    expect(sequence.phase).toBe("stopped");
+    expect(sequence.round).toBe(3);
+    expect(sequence.continue()?.count).toBe(300);
+    sequence.halt("page-hidden");
+    expect(sequence.records.map(record => record.round)).toEqual([2]);
+    expect(sequence.canContinue).toBe(true);
+    expect(sequence.continue()?.seconds).toBe(60);
+  });
+
+  it("retries an interrupted failed delivery before continuing the same round and ends after a received final completion", async () => {
+    let fail = true;
+    const sequence = new PhoneTestSequence(async () => { if (fail) throw new Error("offline"); return "received.json"; }, 3);
+    sequence.begin();
+    await sequence.complete('{"round":3,"outcome":"interrupted"}', "interrupted");
+    expect(sequence.continue()).toBeNull();
+    fail = false; await sequence.retryFailed();
+    expect(sequence.continue()?.count).toBe(300);
+    fail = true; await sequence.complete('{"round":3,"outcome":"completed"}', "completed");
+    expect(sequence.canContinue).toBe(false);
+    fail = false; await sequence.retryFailed();
+    expect(sequence.phase).toBe("completed");
+    expect(sequence.canContinue).toBe(false);
+    expect(sequence.continue()).toBeNull();
+    expect(sequence.records.map(record => [record.round, record.attempt])).toEqual([[3, 1], [3, 2]]);
+  });
+
+  it("blocks continuation until a failed completed attempt has a receipt, then resumes the next round", async () => {
+    let fail = true;
+    const sent: string[] = [];
+    const sequence = new PhoneTestSequence(async json => { sent.push(json); if (fail) throw new Error("offline"); return "received.json"; }, 2);
+    sequence.begin();
+    const raw = '{"round":2,"outcome":"completed","frames":[16,1600]}';
+    await sequence.complete(raw, "completed");
+    expect(sequence.canContinue).toBe(false);
+    expect(sequence.continue()).toBeNull();
+    fail = false; await sequence.retryFailed();
+    expect(sequence.canContinue).toBe(true);
+    expect(sequence.continue()).toEqual({ count: 300, seconds: 60, quality: "standard", warmupSeconds: 5 });
+    expect(sent).toEqual([raw, raw]);
+    expect(sequence.records.map(record => [record.round, record.attempt, record.json])).toEqual([[2, 1, raw]]);
+  });
+
+  it("explicitly retries an interrupted round with fresh full sampling and keeps each attempt intact", async () => {
+    const sequence = new PhoneTestSequence(async () => "received.json", 2);
+    sequence.begin();
+    const interrupted = '{"round":2,"outcome":"interrupted","frames":[16,800]}';
+    await sequence.complete(interrupted, "interrupted");
+    expect(sequence.canContinue).toBe(true);
+    expect(sequence.continue()).toEqual({ count: 200, seconds: 300, quality: "standard", warmupSeconds: 5 });
+    expect(sequence.attempt).toBe(2);
+    const completed = '{"round":2,"outcome":"completed","frames":[17,18]}';
+    await sequence.complete(completed, "completed");
+    expect(sequence.records.map(record => [record.round, record.attempt, record.json])).toEqual([[2, 1, interrupted], [2, 2, completed]]);
+    expect(sequence.round).toBe(3);
+  });
+
+  it("starts the restricted remainder at round two and never creates a completed first-round record", async () => {
+    const sequence = new PhoneTestSequence(async () => "received.json", 2);
+    expect(sequence.begin()).toEqual({ count: 200, seconds: 300, quality: "standard", warmupSeconds: 5 });
+    expect(sequence.records).toEqual([]);
+    expect(sequence.round).toBe(2);
+    expect(await sequence.complete('{"round":2,"outcome":"completed"}', "completed")).toEqual({ count: 300, seconds: 60, quality: "standard", warmupSeconds: 5 });
+    await sequence.complete('{"round":3,"outcome":"completed"}', "completed");
+    expect(sequence.records.map(record => record.round)).toEqual([2, 3]);
+    expect(sequence.phase).toBe("completed");
+    expect(sequence.canContinue).toBe(false);
+  });
+
   it.each(["page-hidden", "viewport-resized", "webgl-context-lost", "manual-stop"])("keeps prior received rounds and the interrupted round after %s", async reason => {
     const sequence = new PhoneTestSequence(async () => "received.json");
     sequence.begin();
