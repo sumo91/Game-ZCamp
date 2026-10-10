@@ -118,7 +118,7 @@ export class Battlefield {
     if (!this.width || !this.height) return;
     this.renderer.setSize(this.width, this.height);
     const aspect = this.width / this.height;
-    const halfHeight = Math.max(8.1, 5.9 / aspect);
+    const halfHeight = Math.max(9.25, 5.9 / aspect);
     this.camera.left = -halfHeight * aspect;
     this.camera.right = halfHeight * aspect;
     this.camera.top = halfHeight;
@@ -202,7 +202,7 @@ export class Battlefield {
     }
     this.renderer.render(this.scene, this.camera);
     // Read-only presentation evidence in the development sample, never a core handle.
-    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), effects: this.effects.length, calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
+    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), bossWarnings: [...this.bossWarnings.keys()], inspired: [...this.inspireMarks.keys()].filter((id) => id !== this.inspireSource), inspireSource: this.inspireSource, effects: this.effects.length, calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
   }
 
   public reset(): void {
