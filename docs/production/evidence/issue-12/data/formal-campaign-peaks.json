@@ -1,0 +1,3812 @@
+{
+  "source": "7b3afd1e620279c5b1979b567a1bd97981ed0047",
+  "boundary": "Formal catalog, normal five-second opening and 10/12/15 waves; seed1337, actual earned resources, legal commands. Core peaks, not device rendering benchmark.",
+  "reports": [
+    {
+      "levelId": "first_defense",
+      "heroId": "camp_warden",
+      "outcome": "victory",
+      "seed": 1337,
+      "maxWave": 10,
+      "finalWave": 10,
+      "peakLiveUnits": 8,
+      "peakStep": 14639,
+      "peakEffectiveSeconds": 482.9666666666667,
+      "commands": [
+        {
+          "step": 0,
+          "command": {
+            "type": "restart"
+          }
+        },
+        {
+          "step": 0,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 0,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c1",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 540,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c2",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 1260,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c3",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 2250,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c1",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 2340,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c2",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 3000,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c4",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 3480,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c5",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 3870,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c2",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 3900,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c1"
+          }
+        },
+        {
+          "step": 3900,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c1",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 4409,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c1"
+          }
+        },
+        {
+          "step": 4409,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c1",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 4558,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c3",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 4678,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c2"
+          }
+        },
+        {
+          "step": 4678,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c2",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5007,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c2"
+          }
+        },
+        {
+          "step": 5007,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c2",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5216,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c4"
+          }
+        },
+        {
+          "step": 5216,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c4",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5455,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c4"
+          }
+        },
+        {
+          "step": 5455,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c4",
+            "traitDefinitionId": "lumber_flat"
+          }
+        },
+        {
+          "step": 5634,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c5"
+          }
+        },
+        {
+          "step": 5634,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c5",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5843,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c5"
+          }
+        },
+        {
+          "step": 5843,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c5",
+            "traitDefinitionId": "lumber_flat"
+          }
+        },
+        {
+          "step": 5902,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c4",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 5932,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c4",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 5992,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c5",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6052,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c1",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6142,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c2",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6202,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c3",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6202,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c5",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 6292,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c4",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6352,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c5",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6442,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 6442,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 6531,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 6531,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 6620,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 6620,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 6739,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 6739,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 6828,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 6828,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 6917,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 6917,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "tower_finisher"
+          }
+        },
+        {
+          "step": 7006,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 7006,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 7095,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 7095,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "tower_attack_speed"
+          }
+        },
+        {
+          "step": 7184,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 7184,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 7273,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 7273,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "tower_attack_speed"
+          }
+        },
+        {
+          "step": 7392,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c1",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 7422,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 7422,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 7541,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 7541,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 7660,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 7660,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 7809,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 7809,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 7838,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c2",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 7928,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 7928,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 8077,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 8077,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 8196,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 8196,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 8315,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 8315,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 8464,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c3",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 8464,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 8464,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 8583,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 8583,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "tower_attack_speed"
+          }
+        },
+        {
+          "step": 8612,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c4",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 8612,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c5",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 8762,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 8762,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 8941,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 8941,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9150,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 9150,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 9329,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 9329,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9508,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 9508,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 9687,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 9687,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9896,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 9896,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 10075,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 10075,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 10254,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 10254,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 10433,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 10433,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 10702,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 10702,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 10971,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 10971,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 11210,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 11210,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 11479,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 11479,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 11748,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 11748,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 11987,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 11987,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 12256,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 12256,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 12525,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 12525,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 12764,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 12764,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 13033,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 13033,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "cannon_burn"
+          }
+        }
+      ],
+      "finalStep": 17593,
+      "equalFinalStateFromLegalCommands": true,
+      "victory": true,
+      "finalState": {
+        "phase": "VICTORY",
+        "pausedFromPhase": null,
+        "systemPausedFromPhase": null,
+        "wave": 10,
+        "maxWave": 10,
+        "effectiveBattleTimeSeconds": 581.4333333332705,
+        "nextWaveTimeRemainingSeconds": 0,
+        "openingCountdownRemainingSeconds": 0,
+        "waveSpawnProgress": [
+          28,
+          44,
+          60,
+          84,
+          75,
+          108,
+          100,
+          122,
+          140,
+          133
+        ],
+        "spawnedEnemies": 894,
+        "defeatedEnemies": 894,
+        "wood": 2464.821666663816,
+        "gold": 231,
+        "wallHp": 100,
+        "wallMaxHp": 100,
+        "wallShield": 100,
+        "wallShieldMax": 100,
+        "overlordInspireRemainingSeconds": 0,
+        "overlordInspireMultiplier": 1,
+        "seed": 1337,
+        "hero": {
+          "id": "hero-camp_warden",
+          "definitionId": "camp_warden",
+          "attackCooldownSeconds": 0.5666666666666668
+        },
+        "buildings": [
+          {
+            "id": "main-city",
+            "slotId": "slot-r3-c3",
+            "kind": "main_city",
+            "definitionId": "main_city",
+            "level": 1,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 0
+          },
+          {
+            "id": "growth-slot-r1-c1",
+            "slotId": "slot-r1-c1",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 0.586596736779652,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c1",
+            "slotId": "slot-r3-c1",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c2",
+            "slotId": "slot-r1-c2",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 1.476456876639857,
+            "traits": [
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c3",
+            "slotId": "slot-r1-c3",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 0.8264568766398814,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 3,
+                "acquiredAtLevel": 5
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c2",
+            "slotId": "slot-r3-c2",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c4",
+            "slotId": "slot-r3-c4",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "lumber_flat",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c5",
+            "slotId": "slot-r3-c5",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "lumber_flat",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c4",
+            "slotId": "slot-r1-c4",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 1.405944056127116,
+            "traits": [
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c5",
+            "slotId": "slot-r1-c5",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0.3804195806026486,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c1",
+            "slotId": "slot-r2-c1",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 1.2458041959873125,
+            "traits": [
+              {
+                "definitionId": "tower_finisher",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 3,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c2",
+            "slotId": "slot-r2-c2",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 0.7248251750083105,
+            "traits": [
+              {
+                "definitionId": "tower_damage",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              },
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 2,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c3",
+            "slotId": "slot-r2-c3",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 0.26959562195281817,
+            "traits": [
+              {
+                "definitionId": "tower_attack_speed",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "tower_damage",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 2,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c4",
+            "slotId": "slot-r2-c4",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 1.4118881120696167,
+            "traits": [
+              {
+                "definitionId": "tower_damage",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              },
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 2,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c5",
+            "slotId": "slot-r2-c5",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0.9271760571252817,
+            "traits": [
+              {
+                "definitionId": "tower_attack_speed",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 2,
+                "acquiredAtLevel": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [],
+        "pendingTraitDraft": null
+      }
+    },
+    {
+      "levelId": "broken_valley",
+      "heroId": "vanguard_gunner",
+      "outcome": "victory",
+      "seed": 1337,
+      "maxWave": 12,
+      "finalWave": 12,
+      "peakLiveUnits": 11,
+      "peakStep": 18234,
+      "peakEffectiveSeconds": 602.7999999999178,
+      "commands": [
+        {
+          "step": 0,
+          "command": {
+            "type": "restart"
+          }
+        },
+        {
+          "step": 0,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 0,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c1",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 570,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c2",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 1380,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c3",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 2070,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c1",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 2580,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c2",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 3150,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c2",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 3300,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c4",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 3810,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c5",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 4200,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c3",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 4290,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c1"
+          }
+        },
+        {
+          "step": 4290,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c1",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 4829,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c1"
+          }
+        },
+        {
+          "step": 4829,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c1",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5128,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c2"
+          }
+        },
+        {
+          "step": 5128,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c2",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5517,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c2"
+          }
+        },
+        {
+          "step": 5517,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c2",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5726,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c4"
+          }
+        },
+        {
+          "step": 5726,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c4",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5995,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c4"
+          }
+        },
+        {
+          "step": 5995,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c4",
+            "traitDefinitionId": "lumber_flat"
+          }
+        },
+        {
+          "step": 6174,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c5"
+          }
+        },
+        {
+          "step": 6174,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c5",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 6413,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c5"
+          }
+        },
+        {
+          "step": 6413,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c5",
+            "traitDefinitionId": "lumber_flat"
+          }
+        },
+        {
+          "step": 6502,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c4",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6532,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c4",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 6562,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c5",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6592,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c5",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 6652,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c1",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6682,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c1",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 6742,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c2",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6832,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c3",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6892,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c4",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 6982,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c5",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 7072,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 7072,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 7191,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 7191,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 7280,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 7280,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 7399,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 7399,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 7458,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c2",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 7488,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 7488,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 7607,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 7607,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 7696,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 7696,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 7785,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 7785,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "tower_attack_speed"
+          }
+        },
+        {
+          "step": 7874,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c3",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 7904,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 7904,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 7993,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 7993,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "tower_attack_speed"
+          }
+        },
+        {
+          "step": 8142,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 8142,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 8291,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 8291,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 8380,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c4",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 8440,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 8440,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 8469,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c5",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 8559,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 8559,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 8708,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 8708,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 8857,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 8857,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9006,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 9006,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9155,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 9155,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9274,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 9274,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 9423,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 9423,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9632,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 9632,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 9841,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 9841,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 10050,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 10050,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 10259,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 10259,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 10438,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 10438,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 10647,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 10647,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 10856,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 10856,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 11065,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 11065,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 11274,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 11274,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 11483,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 11483,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 11752,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 11752,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 12051,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 12051,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 12320,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 12320,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 12619,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 12619,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 12888,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 12888,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 13187,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 13187,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 13456,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 13456,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 13755,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 13755,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 14054,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 14054,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 14323,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 14323,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "cannon_burn"
+          }
+        }
+      ],
+      "finalStep": 21185,
+      "equalFinalStateFromLegalCommands": true,
+      "victory": true,
+      "finalState": {
+        "phase": "VICTORY",
+        "pausedFromPhase": null,
+        "systemPausedFromPhase": null,
+        "wave": 12,
+        "maxWave": 12,
+        "effectiveBattleTimeSeconds": 701.166666666495,
+        "nextWaveTimeRemainingSeconds": 0,
+        "openingCountdownRemainingSeconds": 0,
+        "waveSpawnProgress": [
+          32,
+          50,
+          70,
+          92,
+          83,
+          117,
+          111,
+          131,
+          152,
+          153,
+          172,
+          165
+        ],
+        "spawnedEnemies": 1328,
+        "defeatedEnemies": 1328,
+        "wood": 3367.3633333301195,
+        "gold": 432.5,
+        "wallHp": 100,
+        "wallMaxHp": 100,
+        "wallShield": 50,
+        "wallShieldMax": 50,
+        "overlordInspireRemainingSeconds": 0,
+        "overlordInspireMultiplier": 1,
+        "seed": 1337,
+        "hero": {
+          "id": "hero-vanguard_gunner",
+          "definitionId": "vanguard_gunner",
+          "attackCooldownSeconds": 0.08333333333333348
+        },
+        "buildings": [
+          {
+            "id": "main-city",
+            "slotId": "slot-r3-c3",
+            "kind": "main_city",
+            "definitionId": "main_city",
+            "level": 1,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 0
+          },
+          {
+            "id": "growth-slot-r1-c1",
+            "slotId": "slot-r1-c1",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 1.0829836831657476,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c1",
+            "slotId": "slot-r3-c1",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c2",
+            "slotId": "slot-r1-c2",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 0.19836829855040594,
+            "traits": [
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c3",
+            "slotId": "slot-r1-c3",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 0.0882284384105847,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 3,
+                "acquiredAtLevel": 5
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c2",
+            "slotId": "slot-r3-c2",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c4",
+            "slotId": "slot-r3-c4",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "lumber_flat",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c5",
+            "slotId": "slot-r3-c5",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "lumber_flat",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c4",
+            "slotId": "slot-r1-c4",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 0.30233100251324296,
+            "traits": [
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c5",
+            "slotId": "slot-r1-c5",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0.3512820513707313,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c1",
+            "slotId": "slot-r2-c1",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 1.407575757757998,
+            "traits": [
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c2",
+            "slotId": "slot-r2-c2",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 1.3565268067058278,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 3,
+                "acquiredAtLevel": 5
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c3",
+            "slotId": "slot-r2-c3",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 0.22522549932098213,
+            "traits": [
+              {
+                "definitionId": "tower_attack_speed",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 3,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c4",
+            "slotId": "slot-r2-c4",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 0.052680652838806956,
+            "traits": [
+              {
+                "definitionId": "tower_damage",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 3,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c5",
+            "slotId": "slot-r2-c5",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0.4313671837235509,
+            "traits": [
+              {
+                "definitionId": "tower_attack_speed",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 3,
+                "acquiredAtLevel": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [],
+        "pendingTraitDraft": null
+      }
+    },
+    {
+      "levelId": "kings_march",
+      "heroId": "lumber_baron",
+      "outcome": "victory",
+      "seed": 1337,
+      "maxWave": 15,
+      "finalWave": 15,
+      "peakLiveUnits": 14,
+      "peakStep": 23694,
+      "peakEffectiveSeconds": 784.7999999997525,
+      "commands": [
+        {
+          "step": 0,
+          "command": {
+            "type": "restart"
+          }
+        },
+        {
+          "step": 0,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c1",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 0,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c1",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 480,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c2",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 1140,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c3",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 2040,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c1",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 2100,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c2",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 2670,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c4",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 2910,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c2",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 3090,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r3-c5",
+            "definitionId": "lumberyard"
+          }
+        },
+        {
+          "step": 3480,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c1"
+          }
+        },
+        {
+          "step": 3480,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c1",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 3899,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c1"
+          }
+        },
+        {
+          "step": 3899,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c1",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 4108,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c3",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 4138,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c2"
+          }
+        },
+        {
+          "step": 4138,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c2",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 4437,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c2"
+          }
+        },
+        {
+          "step": 4437,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c2",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 4616,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c4"
+          }
+        },
+        {
+          "step": 4616,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c4",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 4855,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c4"
+          }
+        },
+        {
+          "step": 4855,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c4",
+            "traitDefinitionId": "lumber_flat"
+          }
+        },
+        {
+          "step": 4974,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c5"
+          }
+        },
+        {
+          "step": 4974,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c5",
+            "traitDefinitionId": "lumber_output"
+          }
+        },
+        {
+          "step": 5153,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r3-c5"
+          }
+        },
+        {
+          "step": 5153,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r3-c5",
+            "traitDefinitionId": "lumber_flat"
+          }
+        },
+        {
+          "step": 5242,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c4",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 5272,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c4",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 5302,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r1-c5",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 5362,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c1",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 5422,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c2",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 5482,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c3",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 5572,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c4",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 5632,
+          "command": {
+            "type": "build_building",
+            "slotId": "slot-r2-c5",
+            "definitionId": "arrow_tower"
+          }
+        },
+        {
+          "step": 5692,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 5692,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 5721,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r1-c5",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 5781,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 5781,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 5870,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 5870,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 5959,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 5959,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 6018,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 6018,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 6047,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c1",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 6107,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 6107,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 6196,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 6196,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 6285,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 6285,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "tower_attack_speed"
+          }
+        },
+        {
+          "step": 6344,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 6344,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 6433,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 6433,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "tower_attack_speed"
+          }
+        },
+        {
+          "step": 6462,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c2",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 6552,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 6552,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 6671,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 6671,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 6790,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 6790,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 6909,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 6909,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 6998,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 6998,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 7117,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 7117,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 7236,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 7236,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 7355,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 7355,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 7384,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c3",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 7474,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 7474,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "tower_damage"
+          }
+        },
+        {
+          "step": 7593,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 7593,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "tower_attack_speed"
+          }
+        },
+        {
+          "step": 7712,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c4",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 7742,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 7742,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 7921,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 7921,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 8070,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 8070,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 8099,
+          "command": {
+            "type": "transform_tower",
+            "buildingId": "growth-slot-r2-c5",
+            "targetTowerId": "cannon"
+          }
+        },
+        {
+          "step": 8249,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 8249,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 8398,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 8398,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 8577,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 8577,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 8726,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 8726,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 8875,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 8875,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9054,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 9054,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 9203,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 9203,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9442,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c1"
+          }
+        },
+        {
+          "step": 9442,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c1",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 9681,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c2"
+          }
+        },
+        {
+          "step": 9681,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c2",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 9890,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c3"
+          }
+        },
+        {
+          "step": 9890,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c3",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 10129,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c4"
+          }
+        },
+        {
+          "step": 10129,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c4",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 10368,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r1-c5"
+          }
+        },
+        {
+          "step": 10368,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r1-c5",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 10577,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c1"
+          }
+        },
+        {
+          "step": 10577,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c1",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 10816,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c2"
+          }
+        },
+        {
+          "step": 10816,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c2",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 11055,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c3"
+          }
+        },
+        {
+          "step": 11055,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c3",
+            "traitDefinitionId": "cannon_burn"
+          }
+        },
+        {
+          "step": 11264,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c4"
+          }
+        },
+        {
+          "step": 11264,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c4",
+            "traitDefinitionId": "cannon_blast"
+          }
+        },
+        {
+          "step": 11503,
+          "command": {
+            "type": "upgrade_building",
+            "buildingId": "growth-slot-r2-c5"
+          }
+        },
+        {
+          "step": 11503,
+          "command": {
+            "type": "choose_building_trait",
+            "buildingId": "growth-slot-r2-c5",
+            "traitDefinitionId": "cannon_burn"
+          }
+        }
+      ],
+      "finalStep": 26592,
+      "equalFinalStateFromLegalCommands": true,
+      "victory": true,
+      "finalState": {
+        "phase": "VICTORY",
+        "pausedFromPhase": null,
+        "systemPausedFromPhase": null,
+        "wave": 15,
+        "maxWave": 15,
+        "effectiveBattleTimeSeconds": 881.3999999996646,
+        "nextWaveTimeRemainingSeconds": 0,
+        "openingCountdownRemainingSeconds": 0,
+        "waveSpawnProgress": [
+          34,
+          54,
+          76,
+          100,
+          90,
+          123,
+          118,
+          138,
+          160,
+          161,
+          180,
+          194,
+          202,
+          216,
+          208
+        ],
+        "spawnedEnemies": 2054,
+        "defeatedEnemies": 2054,
+        "wood": 9252.491666663638,
+        "gold": 855.5,
+        "wallHp": 100,
+        "wallMaxHp": 100,
+        "wallShield": 120,
+        "wallShieldMax": 120,
+        "overlordInspireRemainingSeconds": 0,
+        "overlordInspireMultiplier": 1,
+        "seed": 1337,
+        "hero": {
+          "id": "hero-lumber_baron",
+          "definitionId": "lumber_baron",
+          "attackCooldownSeconds": 0.6000000000000001
+        },
+        "buildings": [
+          {
+            "id": "main-city",
+            "slotId": "slot-r3-c3",
+            "kind": "main_city",
+            "definitionId": "main_city",
+            "level": 1,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 0
+          },
+          {
+            "id": "growth-slot-r1-c1",
+            "slotId": "slot-r1-c1",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 1.3248251750077789,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c1",
+            "slotId": "slot-r3-c1",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c2",
+            "slotId": "slot-r1-c2",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 0.9902097903924266,
+            "traits": [
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c3",
+            "slotId": "slot-r1-c3",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 1.4646853148679997,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 3,
+                "acquiredAtLevel": 5
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c2",
+            "slotId": "slot-r3-c2",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c4",
+            "slotId": "slot-r3-c4",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "lumber_flat",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r3-c5",
+            "slotId": "slot-r3-c5",
+            "kind": "lumberyard",
+            "definitionId": "lumberyard",
+            "growthDefinitionId": "lumberyard",
+            "level": 3,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0,
+            "traits": [
+              {
+                "definitionId": "lumber_output",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "lumber_flat",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c4",
+            "slotId": "slot-r1-c4",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 1.4787878789706101,
+            "traits": [
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r1-c5",
+            "slotId": "slot-r1-c5",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0.7686480188307628,
+            "traits": [
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c1",
+            "slotId": "slot-r2-c1",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.1,
+            "attackCooldownSeconds": 1.0277389279216829,
+            "traits": [
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 4,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c2",
+            "slotId": "slot-r2-c2",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.25,
+            "attackCooldownSeconds": 1.1130536132363857,
+            "traits": [
+              {
+                "definitionId": "tower_damage",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              },
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 2,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c3",
+            "slotId": "slot-r2-c3",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.5,
+            "attackCooldownSeconds": 0.03800547297113598,
+            "traits": [
+              {
+                "definitionId": "tower_attack_speed",
+                "stacks": 1,
+                "acquiredAtLevel": 2
+              },
+              {
+                "definitionId": "tower_damage",
+                "stacks": 1,
+                "acquiredAtLevel": 3
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 2,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c4",
+            "slotId": "slot-r2-c4",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.75,
+            "attackCooldownSeconds": 0.707459207642032,
+            "traits": [
+              {
+                "definitionId": "tower_damage",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              },
+              {
+                "definitionId": "cannon_blast",
+                "stacks": 2,
+                "acquiredAtLevel": 5
+              }
+            ]
+          },
+          {
+            "id": "growth-slot-r2-c5",
+            "slotId": "slot-r2-c5",
+            "kind": "tower",
+            "definitionId": "cannon",
+            "growthDefinitionId": "cannon",
+            "level": 5,
+            "lanePosition": 0.9,
+            "attackCooldownSeconds": 0.30322520307396983,
+            "traits": [
+              {
+                "definitionId": "tower_attack_speed",
+                "stacks": 2,
+                "acquiredAtLevel": 3
+              },
+              {
+                "definitionId": "cannon_burn",
+                "stacks": 2,
+                "acquiredAtLevel": 5
+              }
+            ]
+          }
+        ],
+        "enemies": [],
+        "pendingTraitDraft": null
+      }
+    }
+  ]
+}

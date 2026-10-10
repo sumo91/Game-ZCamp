@@ -10,7 +10,9 @@
 
 [根独立原记录](evidence/issue-11/root/review.md)对应同一精确来源的 5330 静态构建。普通 URL 实际进入首关，以真实玩家按钮建箭塔 40、木材厂 60，木材 123→23、实际模型出现在所选格位；战术暂停和 resize 后选择正确。390×844 的 15 个 44×44 热区无重叠；[热区记录](evidence/issue-11/root/product-default-slots-root-390.json)及同目录 lobby/battle 截图归档。
 
-根随后明确打开 `?dev=campaign`，使用原 catalog、合法命令和固定步长完成真实 10/12/15 波结算，两轮解锁；返回普通 URL 刷新后保持六卡解锁及所选英雄/关卡，[公开卡片记录](evidence/issue-11/root/product-default-reloaded-cards-root.json)和三关 replay/reloaded 截图归档。该加速序列验证正式规则结果与持久化，**不能称普通手动实时通关**。独立 normal_game_qa 的 5331 普通按钮完整十波玩测仍 pending；本证据不预填该结果，#11 Issue 关闭须等独立记录。听感、真机、安全区硬件、最终预算与所有者人工接受亦未宣称通过。
+根随后明确打开 `?dev=campaign`，使用原 catalog、合法命令和固定步长完成真实 10/12/15 波结算，两轮解锁；返回普通 URL 刷新后保持六卡解锁及所选英雄/关卡，[公开卡片记录](evidence/issue-11/root/product-default-reloaded-cards-root.json)和三关 replay/reloaded 截图归档。该加速序列验证正式规则结果与持久化，**不能称普通手动实时通关**。
+
+独立 normal_game_qa 的普通十波玩测现已完成：[正常局原报告](evidence/issue-11/normal/product-normal-game-qa.md)固定 source `40685ce386f1e8ef31aefd7eb47e0e287443363b`、5331 冻结产物、无 query 的正式 URL，以 fresh origin、真实玩家按钮和正常时间完成第一防线十波。首局未失败，胜利结果为 894 击杀、231 金币，正常返回及刷新后连弩卫士/裂谷尸潮保持解锁；[胜利截图](evidence/issue-11/normal/product-normal-victory.jpg)、[刷新截图](evidence/issue-11/normal/product-normal-unlock-refreshed.jpg)、AX/DOM 与正常成长截图均在同目录。这解除此前普通首关完整局 pending，不能外推为三关全部手动胜负已验。Lv3 燃烧词条与 Lv5 成长截图恰为亡灵 0 帧，不证明瞬时火焰 VFX。该独立记录的 11 份原件全字节复制，见 [补充复制审计](evidence/issue-12/copy-audit.json)。Issue 关闭与听感、真机、安全区硬件、最终预算及所有者人工接受由根另行处理，未在本次合入中操作 tracker。
 
 同时补归档根 #9/#10 单独来源的 [真实 Boss / Hero 记录](evidence/campaign-batch/root-ui-review.md)及对应截图/公开 JSON；warning→charge、鼓舞、普通第二波失败与原开局重试只证明报告所列范围，不计作本候选完整手动通关。
 
@@ -20,6 +22,6 @@
 
 ## Spec
 
-[独立原文报告](evidence/issue-11/spec-review.md)：0 实施缺陷，支持代码合入；正式完整手动胜负取证与 #5/#13 设备、所有者接受门保留。
+[独立原文报告](evidence/issue-11/spec-review.md)：0 实施缺陷，支持代码合入。报告写作时待补的普通首关正常胜利/解锁刷新现由上述独立 QA 补齐；其他手动胜负范围与 #5/#13 设备、所有者接受门保留。
 
 30 份新增报告/截图/公开 JSON 的 [复制审计](evidence/issue-11/copy-audit.json)记录原件与副本 SHA/bytes。Spec 与作者交付仅 CRLF→LF；旧批次根报告清理 EOF 多余空行以通过 diff-check；其余副本逐字节相同，原件未改。两轴原文独立归档，不合并或重排。外部检查日志及 `product-issue-11-merge.md` 位于 `C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/`。未操作 master/tracker/远端；未触浏览器或旧 phone 服务。

@@ -1,0 +1,10 @@
+{
+  "registeredAt": "2026-10-11",
+  "source": "Read-only Windows CIM on the shared project host; browser workload fields remain browser-reported hints",
+  "cpu": "12th Gen Intel(R) Core(TM) i7-12700KF",
+  "logicalProcessors": 20,
+  "gpu": "NVIDIA GeForce RTX 4060 Ti",
+  "os": "Microsoft Windows 11 家庭版 中文版",
+  "version": "10.0.26300",
+  "buildNumber": "26300"
+}
