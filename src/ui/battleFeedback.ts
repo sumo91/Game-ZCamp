@@ -18,7 +18,7 @@ export function routeBattleNotice(event: GameEvent): FeedbackNotice | null {
     case "wave_started":
       return { channel: "global", text: "第 " + event.wave + " 波尸潮已接近", color: "#f6c453", durationSeconds: 1.8 };
     case "overlord_inspire":
-      return { channel: "global", text: "尸潮君王鼓舞 · 残余尸潮 +" + Math.round((event.multiplier - 1) * 100) + "%", color: "#f6c453", durationSeconds: Math.max(1, event.durationSeconds) };
+      return { channel: "global", text: "亡灵君王鼓舞 · 残余尸潮 +" + Math.round((event.multiplier - 1) * 100) + "%", color: "#f6c453", durationSeconds: Math.max(1, event.durationSeconds) };
     case "enemy_charge_warning":
       return { channel: "warning", text: "⚠ 冲锋预警 · " + event.durationSeconds.toFixed(1) + " 秒", color: "#f06a6a", durationSeconds: event.durationSeconds + 0.3 };
     case "enemy_charge_started":

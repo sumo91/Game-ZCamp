@@ -12,6 +12,7 @@ export interface AssetProgress { loaded: number; total: number; name: string }
 export class ModelLibrary {
   private readonly models = new Map<AssetId, GLTF>();
   private disposed = false;
+  private rendererUsers = 0;
 
   public static async load(progress: (value: AssetProgress) => void): Promise<ModelLibrary> {
     const library = new ModelLibrary();
@@ -75,11 +76,34 @@ export class ModelLibrary {
     });
     for (const skeleton of skeletons) skeleton.dispose();
   }
-  public snapshot() { return { cachedAssets: this.models.size, disposed: this.disposed }; }
+  /** A scene lease protects concurrent presenters. Ending the last lease retires GPU bindings,
+   * including renderer-specific dispose listeners, without discarding cloneable CPU assets. */
+  public acquireRendererResources(): () => void {
+    if (this.disposed) throw new Error("模型资源已释放");
+    this.rendererUsers += 1;
+    let released = false;
+    return () => {
+      if (released) return;
+      released = true;
+      this.rendererUsers -= 1;
+      if (this.rendererUsers === 0) {
+        const { geometries, materials, textures } = this.sharedResources();
+        for (const resource of [...geometries, ...materials, ...textures]) resource.dispose();
+      }
+    };
+  }
+  public snapshot() { return { cachedAssets: this.models.size, disposed: this.disposed, rendererUsers: this.rendererUsers }; }
 
   public dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
+    const { geometries, materials, textures } = this.sharedResources();
+    for (const resource of [...geometries, ...materials, ...textures]) resource.dispose();
+    if (typeof ImageBitmap !== "undefined") for (const texture of textures) if (texture.image instanceof ImageBitmap) texture.image.close();
+    this.models.clear();
+  }
+
+  private sharedResources() {
     const geometries = new Set<BufferGeometry>();
     const materials = new Set<Material>();
     const textures = new Set<Texture>();
@@ -91,9 +115,7 @@ export class ModelLibrary {
         for (const value of Object.values(material)) if (value instanceof Texture) textures.add(value);
       }
     });
-    for (const resource of [...geometries, ...materials, ...textures]) resource.dispose();
-    if (typeof ImageBitmap !== "undefined") for (const texture of textures) if (texture.image instanceof ImageBitmap) texture.image.close();
-    this.models.clear();
+    return { geometries, materials, textures };
   }
 
   private validate(asset: PresentationAsset, model: GLTF): void {

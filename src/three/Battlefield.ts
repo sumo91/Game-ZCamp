@@ -15,6 +15,7 @@ import { SiegeFeedback } from "./siegeFeedback";
 import { ArcaneFeedback } from "./arcaneFeedback";
 import { GRAPHICS_QUALITY, type GraphicsQuality } from "./graphicsQuality";
 import { BattleScenery } from "./BattleScenery";
+import { BattleFeedback } from "./BattleFeedback";
 
 type Effect = { object: Object3D; ttl: number; duration: number; from?: Vector3; to?: Vector3 };
 type EnemyView = { object: Object3D; definitionId: string; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean; slowMultiplier?: number; animationPending: number };
@@ -33,6 +34,12 @@ export class Battlefield {
   private readonly enemies = new Map<string, EnemyView>();
   private readonly enemyAnchors = new Map<string, { definitionId: string; position: number }>();
   private library: ModelLibrary | null = null;
+  private releaseResources: (() => void) | null = null;
+  private disposed = false;
+  private readonly feedback = new BattleFeedback();
+  private readonly feedbackLayer = document.createElement("div");
+  private readonly announcements = document.createElement("div");
+  private readonly feedbackNodes = new Map<string, { element: HTMLElement; position?: Vector3 }>();
   private readonly effects: Effect[] = [];
   private readonly geometries = new Set<BufferGeometry>();
   private readonly materials = new Set<Material>();
@@ -66,6 +73,10 @@ export class Battlefield {
     this.renderer.toneMappingExposure = 1.05;
     this.renderer.domElement.setAttribute("aria-label", "人类堡垒与亡灵战场");
     this.host.prepend(this.renderer.domElement);
+    this.feedbackLayer.className = "battle-feedback-layer";
+    this.announcements.className = "battle-feedback-announcements";
+    this.feedbackLayer.append(this.announcements);
+    this.host.append(this.feedbackLayer);
     this.camera.position.set(0, 23, 14);
     this.camera.lookAt(0, 0, -2);
     this.scene.add(new HemisphereLight(0xd2ddf0, 0x5b5649, 1.7));
@@ -108,7 +119,9 @@ export class Battlefield {
     this.disposeObject(this.wall);
     this.disposeObject(this.environment);
     this.environment.clear();
+    this.releaseResources?.();
     this.library = library;
+    this.releaseResources = library.acquireRendererResources();
     this.wall = library.createStaticBatch("wall", Array.from({ length: 6 }, (_, index) => new Matrix4().makeTranslation(-4.75 + index * 1.9, 0, 0)));
     this.scene.add(this.wall);
     this.environment.userData.sharedAsset = true;
@@ -208,6 +221,7 @@ export class Battlefield {
     this.synchronizeHero(state);
     this.arcane.synchronize(state);
     for (const event of events) this.presentEvent(state, event);
+    this.presentFeedback(state, events, deltaSeconds);
     this.synchronizeBossFeedback(state);
     if (this.hero) {
       this.hero.attackRemaining = Math.max(0, this.hero.attackRemaining - deltaSeconds);
@@ -294,6 +308,9 @@ export class Battlefield {
   }
 
   public reset(): void {
+    this.feedback.reset();
+    for (const { element } of this.feedbackNodes.values()) element.remove();
+    this.feedbackNodes.clear();
     this.contactShadows.count = 0;
     if (this.hero) { this.hero.mixer.stopAllAction(); this.hero.mixer.uncacheRoot(this.hero.object); this.scene.remove(this.hero.object); this.disposeObject(this.hero.object); this.hero = null; }
     this.siege.reset();
@@ -319,6 +336,8 @@ export class Battlefield {
   }
 
   public dispose(): void {
+    if (this.disposed) return;
+    this.disposed = true;
     this.reset();
     this.siege.dispose();
     this.arcane.dispose();
@@ -331,8 +350,11 @@ export class Battlefield {
     for (const geometry of this.geometries) geometry.dispose();
     for (const material of this.materials) material.dispose();
     this.scene.traverse((object) => { if (object instanceof DirectionalLight) object.shadow.dispose(); });
+    this.releaseResources?.(); this.releaseResources = null;
     this.renderer.dispose();
+    this.renderer.forceContextLoss();
     this.renderer.domElement.remove();
+    this.feedbackLayer.remove();
     delete this.host.dataset.presentation;
   }
 
@@ -538,6 +560,81 @@ export class Battlefield {
           this.addEffect(coin, 0.7);
         }
       } else if (view?.dying === null && !this.bossAnimation(state, state.enemies.find((enemy) => enemy.id === event.enemyId))) { view.interrupt = .3; this.play(view, "hit"); }
+    }
+  }
+
+  private presentFeedback(state: GameState, events: readonly GameEvent[], deltaSeconds: number): void {
+    this.feedback.advance(events, deltaSeconds, state.phase);
+    const view = this.feedback.view();
+    const active = new Set<string>();
+    const floating: Array<{ id: number; entry: { element: HTMLElement; position?: Vector3 }; rise: number }> = [];
+    const node = (key: string, text: string, className: string, position?: () => Vector3) => {
+      active.add(key);
+      let entry = this.feedbackNodes.get(key);
+      if (!entry) {
+        const element = document.createElement("span");
+        element.className = className; element.textContent = text;
+        if (position) { element.setAttribute("aria-hidden", "true"); this.feedbackLayer.append(element); }
+        else { element.setAttribute("role", "status"); element.setAttribute("aria-live", className.endsWith("warning") ? "assertive" : "polite"); this.announcements.append(element); }
+        entry = { element, position: position?.() }; this.feedbackNodes.set(key, entry);
+      }
+      return entry;
+    };
+    for (const number of view.numbers) {
+      const entry = node(`damage:${number.id}`, `${Number(number.damage.toFixed(1))}`, "battle-feedback-damage", () => this.enemyHitPosition(number.enemyId, number.position));
+      floating.push({ id: number.id, entry, rise: 12 + number.ageSeconds * 35 });
+      entry.element.style.opacity = String(1 - number.ageSeconds / .8);
+    }
+    for (const notice of view.notices) {
+      const target = notice.target;
+      const position = target ? () => this.enemyHitPosition(target.enemyId, target.position ?? this.enemyAnchors.get(target.enemyId)?.position ?? 0) : undefined;
+      const entry = node(`notice:${notice.id}`, notice.text, `battle-feedback-${notice.channel}`, position);
+      entry.element.style.color = notice.color;
+      if (target) floating.push({ id: notice.id, entry, rise: 50 });
+    }
+    for (const [key, { element }] of this.feedbackNodes) if (!active.has(key)) { element.remove(); this.feedbackNodes.delete(key); }
+    if (!active.size) return;
+
+    // Measure once before placing anything. The safe band excludes real HUD/demo rectangles
+    // and the wall/plots; the same packing space prevents ambient and damage text collisions.
+    const hostRect = this.host.getBoundingClientRect();
+    let reservedBottom = 8;
+    for (const panel of Array.from(this.host.parentElement!.querySelectorAll<HTMLElement>(".preview-wave-card, .preview-top-actions, .preview-boss, .preview-zone, .preview-replay"))) {
+      const rect = panel.getBoundingClientRect();
+      if (rect.width && rect.height) reservedBottom = Math.max(reservedBottom, rect.bottom - hostRect.top + 8);
+    }
+    const top = reservedBottom + (this.announcements.offsetHeight ? this.announcements.offsetHeight + 6 : 0);
+    const bottom = this.projectWall().y - 30;
+    const measured = floating.sort((a, b) => b.id - a.id).map((item) => ({ ...item, width: item.entry.element.offsetWidth, height: item.entry.element.offsetHeight }));
+    this.announcements.style.top = `${reservedBottom}px`;
+    const occupied: Array<{ left: number; top: number; right: number; bottom: number }> = [];
+    for (const item of measured) {
+      const { element, position } = item.entry;
+      if (!position) continue;
+      const halfWidth = item.width / 2, halfHeight = item.height / 2;
+      const minX = 8 + halfWidth, maxX = this.width - 8 - halfWidth;
+      const minY = top + halfHeight, maxY = bottom - halfHeight;
+      element.style.visibility = "hidden";
+      if (minX > maxX || minY > maxY) continue;
+      const point = position.clone().project(this.camera);
+      const x = Math.max(minX, Math.min(maxX, (point.x + 1) * this.width / 2));
+      const y = Math.max(minY, Math.min(maxY, (1 - point.y) * this.height / 2 - item.rise));
+      const rows = Math.ceil((maxY - minY) / (item.height + 6));
+      const columns = Math.ceil((maxX - minX) / (item.width + 6));
+      let placed = false;
+      for (let row = 0; row <= rows * 2 && !placed; row += 1) {
+        const candidateY = y + (row % 2 ? 1 : -1) * Math.ceil(row / 2) * (item.height + 6);
+        if (candidateY < minY || candidateY > maxY) continue;
+        for (let column = 0; column <= columns * 2; column += 1) {
+          const candidateX = x + (column % 2 ? 1 : -1) * Math.ceil(column / 2) * (item.width + 6);
+          if (candidateX < minX || candidateX > maxX) continue;
+          const rect = { left: candidateX - halfWidth, top: candidateY - halfHeight, right: candidateX + halfWidth, bottom: candidateY + halfHeight };
+          if (occupied.some((other) => rect.left < other.right + 4 && rect.right + 4 > other.left && rect.top < other.bottom + 4 && rect.bottom + 4 > other.top)) continue;
+          occupied.push(rect);
+          element.style.left = `${candidateX}px`; element.style.top = `${candidateY}px`; element.style.visibility = "visible";
+          placed = true; break;
+        }
+      }
     }
   }
 
