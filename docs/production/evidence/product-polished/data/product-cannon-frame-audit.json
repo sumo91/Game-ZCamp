@@ -1,0 +1,374 @@
+{
+  "first": {
+    "frames": [
+      {
+        "index": 0,
+        "ms": 82,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-00.jpg"
+      },
+      {
+        "index": 1,
+        "ms": 158,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-01.jpg"
+      },
+      {
+        "index": 2,
+        "ms": 225,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-02.jpg"
+      },
+      {
+        "index": 3,
+        "ms": 289,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-03.jpg"
+      },
+      {
+        "index": 4,
+        "ms": 356,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-04.jpg"
+      },
+      {
+        "index": 5,
+        "ms": 408,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-05.jpg"
+      },
+      {
+        "index": 6,
+        "ms": 479,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-06.jpg"
+      },
+      {
+        "index": 7,
+        "ms": 534,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-07.jpg"
+      },
+      {
+        "index": 8,
+        "ms": 594,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-08.jpg"
+      },
+      {
+        "index": 9,
+        "ms": 657,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-09.jpg"
+      },
+      {
+        "index": 10,
+        "ms": 717,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-10.jpg"
+      },
+      {
+        "index": 11,
+        "ms": 782,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-11.jpg"
+      },
+      {
+        "index": 12,
+        "ms": 834,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-12.jpg"
+      },
+      {
+        "index": 13,
+        "ms": 890,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-13.jpg"
+      },
+      {
+        "index": 14,
+        "ms": 946,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-14.jpg"
+      },
+      {
+        "index": 15,
+        "ms": 1001,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-15.jpg"
+      },
+      {
+        "index": 16,
+        "ms": 1059,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-16.jpg"
+      },
+      {
+        "index": 17,
+        "ms": 1113,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-17.jpg"
+      },
+      {
+        "index": 18,
+        "ms": 1163,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-18.jpg"
+      },
+      {
+        "index": 19,
+        "ms": 1225,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-19.jpg"
+      },
+      {
+        "index": 20,
+        "ms": 1279,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-20.jpg"
+      },
+      {
+        "index": 21,
+        "ms": 1338,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-21.jpg"
+      },
+      {
+        "index": 22,
+        "ms": 1393,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-22.jpg"
+      },
+      {
+        "index": 23,
+        "ms": 1450,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-23.jpg"
+      },
+      {
+        "index": 24,
+        "ms": 1504,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-24.jpg"
+      },
+      {
+        "index": 25,
+        "ms": 1561,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-25.jpg"
+      },
+      {
+        "index": 26,
+        "ms": 1614,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-26.jpg"
+      },
+      {
+        "index": 27,
+        "ms": 1670,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-new-frame-27.jpg"
+      }
+    ],
+    "elapsedMs": 1670
+  },
+  "second": {
+    "frames": [
+      {
+        "index": 0,
+        "ms": 65,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-00.jpg"
+      },
+      {
+        "index": 1,
+        "ms": 123,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-01.jpg"
+      },
+      {
+        "index": 2,
+        "ms": 172,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-02.jpg"
+      },
+      {
+        "index": 3,
+        "ms": 236,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-03.jpg"
+      },
+      {
+        "index": 4,
+        "ms": 292,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-04.jpg"
+      },
+      {
+        "index": 5,
+        "ms": 351,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-05.jpg"
+      },
+      {
+        "index": 6,
+        "ms": 402,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-06.jpg"
+      },
+      {
+        "index": 7,
+        "ms": 465,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-07.jpg"
+      },
+      {
+        "index": 8,
+        "ms": 519,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-08.jpg"
+      },
+      {
+        "index": 9,
+        "ms": 585,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-09.jpg"
+      },
+      {
+        "index": 10,
+        "ms": 647,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-10.jpg"
+      },
+      {
+        "index": 11,
+        "ms": 706,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-11.jpg"
+      },
+      {
+        "index": 12,
+        "ms": 764,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-12.jpg"
+      },
+      {
+        "index": 13,
+        "ms": 834,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-13.jpg"
+      },
+      {
+        "index": 14,
+        "ms": 902,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-14.jpg"
+      },
+      {
+        "index": 15,
+        "ms": 962,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-15.jpg"
+      },
+      {
+        "index": 16,
+        "ms": 1025,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-16.jpg"
+      },
+      {
+        "index": 17,
+        "ms": 1089,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-17.jpg"
+      },
+      {
+        "index": 18,
+        "ms": 1145,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-18.jpg"
+      },
+      {
+        "index": 19,
+        "ms": 1199,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-19.jpg"
+      },
+      {
+        "index": 20,
+        "ms": 1261,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-20.jpg"
+      },
+      {
+        "index": 21,
+        "ms": 1323,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-21.jpg"
+      },
+      {
+        "index": 22,
+        "ms": 1376,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-22.jpg"
+      },
+      {
+        "index": 23,
+        "ms": 1432,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-23.jpg"
+      },
+      {
+        "index": 24,
+        "ms": 1503,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-24.jpg"
+      },
+      {
+        "index": 25,
+        "ms": 1564,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-25.jpg"
+      },
+      {
+        "index": 26,
+        "ms": 1620,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-26.jpg"
+      },
+      {
+        "index": 27,
+        "ms": 1672,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-27.jpg"
+      },
+      {
+        "index": 28,
+        "ms": 1735,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-28.jpg"
+      },
+      {
+        "index": 29,
+        "ms": 1795,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-29.jpg"
+      },
+      {
+        "index": 30,
+        "ms": 1847,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-30.jpg"
+      },
+      {
+        "index": 31,
+        "ms": 1905,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-31.jpg"
+      },
+      {
+        "index": 32,
+        "ms": 1957,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-32.jpg"
+      },
+      {
+        "index": 33,
+        "ms": 2016,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-33.jpg"
+      },
+      {
+        "index": 34,
+        "ms": 2069,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-34.jpg"
+      },
+      {
+        "index": 35,
+        "ms": 2119,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-35.jpg"
+      },
+      {
+        "index": 36,
+        "ms": 2172,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-36.jpg"
+      },
+      {
+        "index": 37,
+        "ms": 2236,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-37.jpg"
+      },
+      {
+        "index": 38,
+        "ms": 2306,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-38.jpg"
+      },
+      {
+        "index": 39,
+        "ms": 2359,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-39.jpg"
+      },
+      {
+        "index": 40,
+        "ms": 2420,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-40.jpg"
+      },
+      {
+        "index": 41,
+        "ms": 2488,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-41.jpg"
+      },
+      {
+        "index": 42,
+        "ms": 2539,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-42.jpg"
+      },
+      {
+        "index": 43,
+        "ms": 2591,
+        "path": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-cannon-contrast-frame-43.jpg"
+      }
+    ],
+    "elapsedMs": 2591
+  },
+  "samePausedActors": true,
+  "samePausedArcane": true
+}

@@ -1,0 +1,13 @@
+{
+  "candidateCode": "77616d125728191f73418dc309f72b301efe155b",
+  "evidence": "191273cff438e54461fa0e7b491a0df0aaa1056a",
+  "eightFrozenV1V2ModelHashesIdentical": true,
+  "metadataManifestHashMatches": true,
+  "skeletonFootMinYBeforeAfter": 0.0026999711990356445,
+  "animationChannelTargetNamesEqual": true,
+  "recordedKhronosErrorsWarnings": [
+    0,
+    0
+  ],
+  "note": "Independent read-only GLB/hash/evidence inspection; no Blender execution or browser/performance acceptance."
+}

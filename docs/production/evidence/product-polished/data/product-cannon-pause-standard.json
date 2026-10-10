@@ -1,0 +1,196 @@
+{
+  "presentation": {
+    "activeModels": 20,
+    "animationMixers": 21,
+    "arcane": {
+      "chains": [
+        {
+          "buildingId": "growth-slot-r1-c4",
+          "targetIds": [
+            "walker-237",
+            "walker-240",
+            "walker-243"
+          ]
+        },
+        {
+          "buildingId": "growth-slot-r3-c4",
+          "targetIds": [
+            "walker-237",
+            "walker-240",
+            "walker-243",
+            "walker-246",
+            "walker-249"
+          ]
+        },
+        {
+          "buildingId": "growth-slot-r2-c4",
+          "targetIds": [
+            "walker-237",
+            "walker-240",
+            "walker-243",
+            "walker-246",
+            "walker-249"
+          ]
+        }
+      ],
+      "effects": 7,
+      "slowedIds": [
+        "walker-237"
+      ]
+    },
+    "bossWarnings": [],
+    "calls": 172,
+    "effects": 30,
+    "enemies": [
+      {
+        "clip": "hit",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-237",
+        "time": 13.817853560682009
+      },
+      {
+        "clip": "hit",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-240",
+        "time": 13.537111334001969
+      },
+      {
+        "clip": "walk",
+        "definitionId": "tank",
+        "dying": false,
+        "id": "tank-242",
+        "time": 10.738014042126352
+      },
+      {
+        "clip": "hit",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-243",
+        "time": 11.139518555666973
+      },
+      {
+        "clip": "walk",
+        "definitionId": "tank",
+        "dying": false,
+        "id": "tank-245",
+        "time": 10.440421263791348
+      },
+      {
+        "clip": "hit",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-246",
+        "time": 8.741925777331975
+      },
+      {
+        "clip": "walk",
+        "definitionId": "tank",
+        "dying": false,
+        "id": "tank-248",
+        "time": 8.04282848545635
+      },
+      {
+        "clip": "hit",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-249",
+        "time": 8.444332998996972
+      },
+      {
+        "clip": "walk",
+        "definitionId": "tank",
+        "dying": false,
+        "id": "tank-251",
+        "time": 5.662086258776319
+      },
+      {
+        "clip": "walk",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-252",
+        "time": 6.06359077231694
+      },
+      {
+        "clip": "walk",
+        "definitionId": "tank",
+        "dying": false,
+        "id": "tank-254",
+        "time": 5.364493480441316
+      },
+      {
+        "clip": "walk",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-255",
+        "time": 5.7659979939819355
+      },
+      {
+        "clip": "walk",
+        "definitionId": "runner",
+        "dying": false,
+        "id": "runner-256",
+        "time": 3.39348044132397
+      },
+      {
+        "clip": "walk",
+        "definitionId": "tank",
+        "dying": false,
+        "id": "tank-257",
+        "time": 2.9669007021063183
+      },
+      {
+        "clip": "walk",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-258",
+        "time": 3.368405215646939
+      },
+      {
+        "clip": "walk",
+        "definitionId": "runner",
+        "dying": false,
+        "id": "runner-259",
+        "time": 3.0958876629889662
+      },
+      {
+        "clip": "walk",
+        "definitionId": "tank",
+        "dying": false,
+        "id": "tank-260",
+        "time": 2.6861584754262795
+      },
+      {
+        "clip": "walk",
+        "definitionId": "walker",
+        "dying": false,
+        "id": "walker-261",
+        "time": 0.9876629889669007
+      },
+      {
+        "clip": "walk",
+        "definitionId": "runner",
+        "dying": false,
+        "id": "runner-262",
+        "time": 0.7151454363089268
+      },
+      {
+        "clip": "walk",
+        "definitionId": "tank",
+        "dying": false,
+        "id": "tank-263",
+        "time": 0.28856569709127383
+      }
+    ],
+    "geometries": 74,
+    "inspireSource": null,
+    "inspired": [],
+    "models": true,
+    "quality": "standard",
+    "renderPixelRatio": 1.5,
+    "textures": 64,
+    "triangles": 644982
+  },
+  "snapshot": "第 5 波 / 10\n下一波 37 秒\n战术暂停\n亡灵 20\n继续\n画质·标准\n寒霜与雷电\n演示配置：600生命目标、无攻墙伤害、授予资源。正式战役不使用此配置。\n城墙 100/100\n护盾 100/100\nLv.3\nLv.1\n+\nLv.1\nLv.2\n+\nLv.3\n+\nLv.3\n+\n+\nLv.5\n主城\nLv.5\n+\n4695\n+0.6/秒\n88\n连弩塔 · Lv.2/5\n\n速射连弩 · 词条可穿透\n\n当前：伤害 14.4 · 间隔 0.68秒 · 射程 0.6\n\n下级：伤害 16.8 · 间隔 0.63秒 · 射程 0.6 · 可升级\n\n穿透弩箭 ×1 · 穿透目标 +1；后续目标承受本次伤害的 70%\n\n升级至 Lv.3｜木材 70\n拆除"
+}
