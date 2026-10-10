@@ -1,0 +1,324 @@
+{
+  "base": "0bf8227a4979f84d5dc23e71bddabbdfeb7a8ce2",
+  "sourceCandidate": "5252f732e0dc2fd377af5ccf774991b3841d4577",
+  "mergeCommit": "2b8af0ecf652bf9dfda33aec87b447cae84f911e",
+  "manifest": "docs/production/evidence/issue-4/asset-manifest.json",
+  "manifestSha256": "899efef17cdf7d05f561d8b56926a3f7a088be7ac84cdcdff679a26dbeb481dd",
+  "officialAssetCoreBibleDiffEmpty": true,
+  "checkedSha256Values": 36,
+  "allMatch": true,
+  "assets": [
+    {
+      "asset": "arrow_tower_high.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/arrow_tower_high.blend",
+          "bytes": 1571424,
+          "expectedSha256": "9f97177994c3e55c1196498ad4b8df4e6bf6e4f47ed44ad3403e1d26ec56dc3e",
+          "actualSha256": "9f97177994c3e55c1196498ad4b8df4e6bf6e4f47ed44ad3403e1d26ec56dc3e",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/arrow_tower_high.glb",
+          "bytes": 1241992,
+          "expectedSha256": "74336c1643589bfc9c1a39eef812add181a186dabb398765755d8ea2107ddf7c",
+          "actualSha256": "74336c1643589bfc9c1a39eef812add181a186dabb398765755d8ea2107ddf7c",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/arrow_tower_high.glb",
+          "bytes": 1241992,
+          "expectedSha256": "74336c1643589bfc9c1a39eef812add181a186dabb398765755d8ea2107ddf7c",
+          "actualSha256": "74336c1643589bfc9c1a39eef812add181a186dabb398765755d8ea2107ddf7c",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "arrow_tower_low.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/arrow_tower_low.blend",
+          "bytes": 1250698,
+          "expectedSha256": "0d5967ff6420be54ab85dd8863dca3dded91b8c437325d856e2b67c9f96c9d46",
+          "actualSha256": "0d5967ff6420be54ab85dd8863dca3dded91b8c437325d856e2b67c9f96c9d46",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/arrow_tower_low.glb",
+          "bytes": 1169432,
+          "expectedSha256": "2b9c24c822ad9dc7eade18ff3a76cdfc817bee92f7bdd3387a433572c7357c18",
+          "actualSha256": "2b9c24c822ad9dc7eade18ff3a76cdfc817bee92f7bdd3387a433572c7357c18",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/arrow_tower_low.glb",
+          "bytes": 1169432,
+          "expectedSha256": "2b9c24c822ad9dc7eade18ff3a76cdfc817bee92f7bdd3387a433572c7357c18",
+          "actualSha256": "2b9c24c822ad9dc7eade18ff3a76cdfc817bee92f7bdd3387a433572c7357c18",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "arrow_tower_medium.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/arrow_tower_medium.blend",
+          "bytes": 1256810,
+          "expectedSha256": "a484b66237572d3701f8035a6227890e8f3d8b4f998aac3d50f5d53f9de351ad",
+          "actualSha256": "a484b66237572d3701f8035a6227890e8f3d8b4f998aac3d50f5d53f9de351ad",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/arrow_tower_medium.glb",
+          "bytes": 1204952,
+          "expectedSha256": "9603271e10dc50228b3fb20c935a107b9453ffd71f02157f6fc8aa1de2d43adb",
+          "actualSha256": "9603271e10dc50228b3fb20c935a107b9453ffd71f02157f6fc8aa1de2d43adb",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/arrow_tower_medium.glb",
+          "bytes": 1204952,
+          "expectedSha256": "9603271e10dc50228b3fb20c935a107b9453ffd71f02157f6fc8aa1de2d43adb",
+          "actualSha256": "9603271e10dc50228b3fb20c935a107b9453ffd71f02157f6fc8aa1de2d43adb",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "camp_plot.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/camp_plot.blend",
+          "bytes": 394487,
+          "expectedSha256": "9007dd39062f8da82be5598c78a0de4b80130c799ba25d3a1cd56186f7aa15dc",
+          "actualSha256": "9007dd39062f8da82be5598c78a0de4b80130c799ba25d3a1cd56186f7aa15dc",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/camp_plot.glb",
+          "bytes": 317424,
+          "expectedSha256": "4096bfc6bc09577341f3f46eab11a78e79719e7b282f21a6a204b7ae005fe10a",
+          "actualSha256": "4096bfc6bc09577341f3f46eab11a78e79719e7b282f21a6a204b7ae005fe10a",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/camp_plot.glb",
+          "bytes": 317424,
+          "expectedSha256": "4096bfc6bc09577341f3f46eab11a78e79719e7b282f21a6a204b7ae005fe10a",
+          "actualSha256": "4096bfc6bc09577341f3f46eab11a78e79719e7b282f21a6a204b7ae005fe10a",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "lumberyard_high.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/lumberyard_high.blend",
+          "bytes": 889476,
+          "expectedSha256": "38eb2f764349a152a91c59f85b499f81b1afa2a2b0cf48046b3f062473e9c44c",
+          "actualSha256": "38eb2f764349a152a91c59f85b499f81b1afa2a2b0cf48046b3f062473e9c44c",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/lumberyard_high.glb",
+          "bytes": 1121796,
+          "expectedSha256": "32612d9b5c46a5b846b60891dc1b69323c8d52418bdea652825d7a48ca2f213c",
+          "actualSha256": "32612d9b5c46a5b846b60891dc1b69323c8d52418bdea652825d7a48ca2f213c",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/lumberyard_high.glb",
+          "bytes": 1121796,
+          "expectedSha256": "32612d9b5c46a5b846b60891dc1b69323c8d52418bdea652825d7a48ca2f213c",
+          "actualSha256": "32612d9b5c46a5b846b60891dc1b69323c8d52418bdea652825d7a48ca2f213c",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "lumberyard_low.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/lumberyard_low.blend",
+          "bytes": 755000,
+          "expectedSha256": "fe64c3aac26bdd37717fb33ddcb40b6fe2f2c3de94e93b57ef36da602409c598",
+          "actualSha256": "fe64c3aac26bdd37717fb33ddcb40b6fe2f2c3de94e93b57ef36da602409c598",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/lumberyard_low.glb",
+          "bytes": 800392,
+          "expectedSha256": "4e74b6ceb7485327ddc77ab044b822b984c296bce93e634c303e720635ae89e5",
+          "actualSha256": "4e74b6ceb7485327ddc77ab044b822b984c296bce93e634c303e720635ae89e5",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/lumberyard_low.glb",
+          "bytes": 800392,
+          "expectedSha256": "4e74b6ceb7485327ddc77ab044b822b984c296bce93e634c303e720635ae89e5",
+          "actualSha256": "4e74b6ceb7485327ddc77ab044b822b984c296bce93e634c303e720635ae89e5",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "lumberyard_medium.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/lumberyard_medium.blend",
+          "bytes": 812732,
+          "expectedSha256": "2f57e08442d7963180254e31dc75a002a8cc51ad1c293ad3b59e20ea8d120a05",
+          "actualSha256": "2f57e08442d7963180254e31dc75a002a8cc51ad1c293ad3b59e20ea8d120a05",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/lumberyard_medium.glb",
+          "bytes": 965724,
+          "expectedSha256": "6e25732c9ebb171da717c5c2ac56c78661793345b0a8150b4734b6e8b6e696ef",
+          "actualSha256": "6e25732c9ebb171da717c5c2ac56c78661793345b0a8150b4734b6e8b6e696ef",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/lumberyard_medium.glb",
+          "bytes": 965724,
+          "expectedSha256": "6e25732c9ebb171da717c5c2ac56c78661793345b0a8150b4734b6e8b6e696ef",
+          "actualSha256": "6e25732c9ebb171da717c5c2ac56c78661793345b0a8150b4734b6e8b6e696ef",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "main_city.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/main_city.blend",
+          "bytes": 1119279,
+          "expectedSha256": "c27282fc185baae28b45af5c66f3548f06abf985d04d4f561a1385a29f10ea0c",
+          "actualSha256": "c27282fc185baae28b45af5c66f3548f06abf985d04d4f561a1385a29f10ea0c",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/main_city.glb",
+          "bytes": 1839060,
+          "expectedSha256": "7e0cb2bf737d60992a12706e8355ec2a92307f3f009cc3dacec7fa25ab19f476",
+          "actualSha256": "7e0cb2bf737d60992a12706e8355ec2a92307f3f009cc3dacec7fa25ab19f476",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/main_city.glb",
+          "bytes": 1839060,
+          "expectedSha256": "7e0cb2bf737d60992a12706e8355ec2a92307f3f009cc3dacec7fa25ab19f476",
+          "actualSha256": "7e0cb2bf737d60992a12706e8355ec2a92307f3f009cc3dacec7fa25ab19f476",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "pine_tree.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/pine_tree.blend",
+          "bytes": 591865,
+          "expectedSha256": "5236ba12acfdbf673b41922c3582cd0086fdb4639331b9e7dc903628c71605af",
+          "actualSha256": "5236ba12acfdbf673b41922c3582cd0086fdb4639331b9e7dc903628c71605af",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/pine_tree.glb",
+          "bytes": 320432,
+          "expectedSha256": "18081c36910c9b014fc02c4b253a4eb8156b3d4ebb66b799ba02cd0232f9e591",
+          "actualSha256": "18081c36910c9b014fc02c4b253a4eb8156b3d4ebb66b799ba02cd0232f9e591",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/pine_tree.glb",
+          "bytes": 320432,
+          "expectedSha256": "18081c36910c9b014fc02c4b253a4eb8156b3d4ebb66b799ba02cd0232f9e591",
+          "actualSha256": "18081c36910c9b014fc02c4b253a4eb8156b3d4ebb66b799ba02cd0232f9e591",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "rock_cluster.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/rock_cluster.blend",
+          "bytes": 422905,
+          "expectedSha256": "7e0c462fb3225923833d34b0b0c1d43ef8e0a6e2f52f7063c9d0766e4afc5ceb",
+          "actualSha256": "7e0c462fb3225923833d34b0b0c1d43ef8e0a6e2f52f7063c9d0766e4afc5ceb",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/rock_cluster.glb",
+          "bytes": 290636,
+          "expectedSha256": "4b2ddcc9cf82d449f580b62ee0f756dc840069b4d4bd0f9cba5cf9239bf5168c",
+          "actualSha256": "4b2ddcc9cf82d449f580b62ee0f756dc840069b4d4bd0f9cba5cf9239bf5168c",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/rock_cluster.glb",
+          "bytes": 290636,
+          "expectedSha256": "4b2ddcc9cf82d449f580b62ee0f756dc840069b4d4bd0f9cba5cf9239bf5168c",
+          "actualSha256": "4b2ddcc9cf82d449f580b62ee0f756dc840069b4d4bd0f9cba5cf9239bf5168c",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "skeleton_infantry.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/skeleton_infantry.blend",
+          "bytes": 1581115,
+          "expectedSha256": "6796eb93b2f6c8163a7df976d1fac44eb61758b9fb88f74d164317d8e404e543",
+          "actualSha256": "6796eb93b2f6c8163a7df976d1fac44eb61758b9fb88f74d164317d8e404e543",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/skeleton_infantry.glb",
+          "bytes": 1034236,
+          "expectedSha256": "518e833012d99a105770f7377b18ac16f884d3fa6ed8997535dd5a2f0deb3ddb",
+          "actualSha256": "518e833012d99a105770f7377b18ac16f884d3fa6ed8997535dd5a2f0deb3ddb",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/skeleton_infantry.glb",
+          "bytes": 1034236,
+          "expectedSha256": "518e833012d99a105770f7377b18ac16f884d3fa6ed8997535dd5a2f0deb3ddb",
+          "actualSha256": "518e833012d99a105770f7377b18ac16f884d3fa6ed8997535dd5a2f0deb3ddb",
+          "matches": true
+        }
+      }
+    },
+    {
+      "asset": "wall_segment.glb",
+      "checks": {
+        "source": {
+          "path": "art/threejs/sources/wall_segment.blend",
+          "bytes": 639537,
+          "expectedSha256": "3a36e0798286523e5a4b287a621735c1f1a79d1cfc8c891943e5baaeb5657572",
+          "actualSha256": "3a36e0798286523e5a4b287a621735c1f1a79d1cfc8c891943e5baaeb5657572",
+          "matches": true
+        },
+        "public": {
+          "path": "public/assets/threejs/wall_segment.glb",
+          "bytes": 898288,
+          "expectedSha256": "54ea6e5f9f902c124f5df9e95afe505b50b736e24d91a7d1a2d96c6eed383834",
+          "actualSha256": "54ea6e5f9f902c124f5df9e95afe505b50b736e24d91a7d1a2d96c6eed383834",
+          "matches": true
+        },
+        "dist": {
+          "path": "dist/assets/threejs/wall_segment.glb",
+          "bytes": 898288,
+          "expectedSha256": "54ea6e5f9f902c124f5df9e95afe505b50b736e24d91a7d1a2d96c6eed383834",
+          "actualSha256": "54ea6e5f9f902c124f5df9e95afe505b50b736e24d91a7d1a2d96c6eed383834",
+          "matches": true
+        }
+      }
+    }
+  ]
+}
