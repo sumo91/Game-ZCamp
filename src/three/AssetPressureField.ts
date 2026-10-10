@@ -70,7 +70,6 @@ export class AssetPressureField {
     this.clearUnits();
     this.quality = quality;
     this.elapsed = 0;
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, quality === "standard" ? 2 : 1));
     const columns = count === 100 ? 10 : 20;
     const rows = count / columns;
     for (let index = 0; index < count; index += 1) {

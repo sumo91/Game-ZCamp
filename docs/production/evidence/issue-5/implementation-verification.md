@@ -40,4 +40,6 @@ SHA核对：[unchanged-assets.json](./unchanged-assets.json) 显示12份来源�
 
 ## 未执行项
 
-根独立桌面100/300各60秒、200连续300秒，实体中档手机、雷电实际浏览器补测、真实后台切换/context loss（没有通过未支持或合成事件伪装）、正式预算、Art/UI Bible接受修订及所有者逐项接受仍待对应记录。代码具备后台/context loss明确中断处理，但本轮仅用真实resize和手动停止取证。#5保持OPEN，#13仍另需完整混编/核心持续攻击与生命周期；这些短冒烟不填人工勾选。
+本开发短冒烟之后，根已在固定 `d26b800a5b4a92200ecda0c613c97d98f716f896` 完成独立桌面100/300各60秒、200连续300秒及公开负面检查；原始完整下载、截图与审计原样纳入同目录，见 [独立报告](./root-independent-review.md)。后续限定lab canvas pan-y与DPR去重的构建短复验见 [复验记录](./post-review-verification.md)；不重写长测运行身份或不利轮次。
+
+实体中档手机、雷电实际浏览器补测、真实后台切换/context loss（没有通过未支持或合成事件伪装）、正式预算、Art/UI Bible接受修订及所有者逐项接受仍待对应记录。代码具备后台/context loss明确中断处理，实际取证仅涵盖resize和手动停止；根about:blank探测没有让文档hidden。#5保持OPEN，#13仍另需完整混编/核心持续攻击与生命周期；桌面证据不填人工勾选。
