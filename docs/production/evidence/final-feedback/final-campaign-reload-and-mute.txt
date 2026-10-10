@@ -1,0 +1,54 @@
+- main "尸潮营地游戏画布":
+  - generic: Z
+  - text: 人类堡垒 · 亡灵围城
+  - heading "尸潮营地" [level=1]
+  - button "画质·标准"
+  - button "声音已关闭" [active]
+  - main:
+    - text: 守住黎明前的最后一道城墙
+    - paragraph: 开发演示 · 可加速真实战役，结果会记录到本浏览器进度。
+    - heading "驻守英雄" [level=2]
+    - button "堡垒守望者 均衡驻守英雄 已选择" [pressed]:
+      - strong: 堡垒守望者
+      - generic: 均衡驻守英雄
+      - generic: 已选择
+    - button "连弩卫士 战斗驻守英雄 可出战":
+      - strong: 连弩卫士
+      - generic: 战斗驻守英雄
+      - generic: 可出战
+    - button "采伐领主 经济驻守英雄 可出战":
+      - strong: 采伐领主
+      - generic: 经济驻守英雄
+      - generic: 可出战
+    - heading "堡垒守望者" [level=3]
+    - paragraph: 弩箭攻击 · 自动驻守主城
+    - paragraph: 木材总产量 +10%
+    - paragraph: 开局城墙护盾 +100
+    - heading "前线战役" [level=2]
+    - button "第一防线 十波连续尸潮 可出战 ◆ 新手":
+      - generic: "01"
+      - strong: 第一防线
+      - generic: 十波连续尸潮
+      - generic: 可出战
+      - text: ◆
+      - generic: 新手
+    - button "裂谷尸潮 十二波连续尸潮 可出战 ◆◆ 进阶":
+      - generic: "02"
+      - strong: 裂谷尸潮
+      - generic: 十二波连续尸潮
+      - generic: 可出战
+      - text: ◆◆
+      - generic: 进阶
+    - button "君王亲征 十五波连续尸潮 · 双 Boss 终局 已选择 ◆◆◆ 困难" [pressed]:
+      - generic: "03"
+      - strong: 君王亲征
+      - generic: 十五波连续尸潮 · 双 Boss 终局
+      - generic: 已选择
+      - text: ◆◆◆
+      - generic: 困难
+    - heading "君王亲征 · 已通关" [level=3]
+    - paragraph: 敌情 · 坦克海 · 双冲锋压阵 · 终局亡灵君王 · 共 15 波
+  - status
+  - button "开始战斗 《君王亲征》 · 堡垒守望者":
+    - strong: 开始战斗
+    - generic: 《君王亲征》 · 堡垒守望者

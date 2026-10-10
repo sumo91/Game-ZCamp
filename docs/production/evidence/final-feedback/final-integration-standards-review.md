@@ -1,0 +1,13 @@
+## Standards
+
+Fixed full migration range: `b8637996d54d2bb523f5a8375c4157f58a94b219...1b7774d9ee05dd7083d9f5f4bef375fa56c0a3a2`; all 82 listed commits, including core, UI, rendering, sound, save boundaries and asset-source tools.
+
+**Documented breach — [P2] Retired renderers remain retained by shared assets.** `src/three/HeroGallery.ts:49–51` ends with `this.renderer.dispose(); this.renderer.domElement.remove();`; `src/three/Battlefield.ts:321–335` does the equivalent. `ThreeGame.ts:59,70,74` creates new renderers on each lobby/battle transition while `ModelLibrary.ts:41,59,80–96` retains shared geometry, materials and textures until final page disposal. In the installed Three.js 0.186.1, `WebGLGeometries.js:55`, `WebGLTextures.js:719` and `WebGLRenderer.js:2216` attach renderer-specific resource-disposal listeners. `WebGLRenderer.dispose():1086–1109` neither unregisters these shared-resource listeners nor releases their geometry/texture caches. Geometry listeners retain `WebGLAttributes`, including its context and uploaded buffers.
+
+Trigger: repeatedly start a battle, reach a legal terminal result, and return to the lobby. Each new renderer registers another set of callbacks and uploads the shared resources again; retiring its canvas does not retire these retained owners. This breaches `docs/specs/ZCamp-Threejs-3D-lowpoly-spec.md:102`, “场景销毁释放或回收…监听器”, and the lifecycle requirement at :205, “预热后不持续单调增长”. Retain the CPU model cache while correctly retiring renderer/context ownership, or reuse a page-owned renderer. Do not dispose shared models per scene.
+
+`ThreeGame.ts:118` records only the newly active gallery's `renderer.info`; its stable geometry/texture counts exclude retired contexts. JS heap samples and these counts do not measure aggregate GPU bytes. The finding follows dependency ownership analysis; no actual GPU-byte measurement is claimed.
+
+**Judgement only — possible Duplicated Code, nonblocking.** `art/threejs/create_hero_sources.py:106–144` and `refine_sources.py:73–111` duplicate `def bake_atlas(root,body,name):` through `root['atlas_revision']=1`, including identical image creation, bake, material wiring and revision logic. Future bake-contract changes could drift between callers. Consolidation is appropriate when that contract next changes; this batch needs no cosmetic refactor. `art/threejs/README.md` explicitly keeps baking outside `runtime_surface.py`.
+
+No other substantial findings among the twelve heuristics. Read-only review included all 33 formal GLBs; no browser work, repository edits or long tests. Counts: **1 documented P2; 1 nonblocking heuristic**.

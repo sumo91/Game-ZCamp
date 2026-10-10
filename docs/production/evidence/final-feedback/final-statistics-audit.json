@@ -1,0 +1,287 @@
+{
+  "commit": "e1981030d00198646520da6ad6147ef9e0d0feee",
+  "method": "Median from sorted samples, P95 nearest-rank ceil(n*.95)-1; elapsed recomputed from complete raw rAF intervals. Native recordings, no independent CPU/GPU timing.",
+  "runs": [
+    {
+      "configuration": {
+        "count": 100,
+        "quality": "standard",
+        "requestedSeconds": 15,
+        "conditions": "开发压力：HP 10亿、攻墙伤害0维持活动数量；其余攻击、移动、减速、链电及Boss技能沿用正式规则。",
+        "fixedStepHz": 30,
+        "occupiedPlots": 15
+      },
+      "completed": true,
+      "interruption": null,
+      "measuredSeconds": 15.0001,
+      "reported": {
+        "samples": 2150,
+        "medianMs": 6.900000000001455,
+        "p95Ms": 7,
+        "maxMs": 21
+      },
+      "recomputed": {
+        "samples": 2150,
+        "medianMs": 6.900000000001455,
+        "p95Ms": 7,
+        "maxMs": 21,
+        "sumSeconds": 15.0001
+      },
+      "countMatches": true,
+      "valuesMatch": true,
+      "durationMatches": true,
+      "live": {
+        "min": 100,
+        "max": 100,
+        "actual": 100
+      },
+      "composition": {
+        "walker": 20,
+        "runner": 20,
+        "tank": 20,
+        "armored": 19,
+        "brute": 19,
+        "charger_boss": 1,
+        "overlord_boss": 1
+      },
+      "finalMetrics": {
+        "quality": "standard",
+        "renderPixelRatio": 1.5,
+        "calls": 441,
+        "triangles": 1818164,
+        "geometries": 171,
+        "textures": 142,
+        "activeModels": 100,
+        "animationMixers": 101,
+        "effects": 25
+      },
+      "responses": [],
+      "lastResource": {
+        "milliseconds": 19465.4,
+        "device": "Intel Core i7-12700KF / NVIDIA RTX 4060 Ti / Windows 11 (registered desktop; browser does not verify model)",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "nativeDpr": 1.5,
+        "hardwareConcurrencyHint": 20,
+        "jsHeapBytes": {
+          "used": 91622089,
+          "allocated": 152322509,
+          "limit": 4395630592
+        },
+        "quality": "standard",
+        "renderPixelRatio": 1.5,
+        "calls": 372,
+        "triangles": 1817444,
+        "geometries": 153,
+        "textures": 142,
+        "activeModels": 100,
+        "animationMixers": 101,
+        "effects": 4
+      }
+    },
+    {
+      "configuration": {
+        "count": 200,
+        "quality": "standard",
+        "requestedSeconds": 300,
+        "conditions": "开发压力：HP 10亿、攻墙伤害0维持活动数量；其余攻击、移动、减速、链电及Boss技能沿用正式规则。",
+        "fixedStepHz": 30,
+        "occupiedPlots": 15
+      },
+      "completed": true,
+      "interruption": null,
+      "measuredSeconds": 300.0013,
+      "reported": {
+        "samples": 42387,
+        "medianMs": 6.900000000023283,
+        "p95Ms": 7,
+        "maxMs": 41.70000000001164
+      },
+      "recomputed": {
+        "samples": 42387,
+        "medianMs": 6.900000000023283,
+        "p95Ms": 7,
+        "maxMs": 41.70000000001164,
+        "sumSeconds": 300.0013
+      },
+      "countMatches": true,
+      "valuesMatch": true,
+      "durationMatches": true,
+      "live": {
+        "min": 200,
+        "max": 200,
+        "actual": 200
+      },
+      "composition": {
+        "walker": 40,
+        "runner": 40,
+        "tank": 40,
+        "armored": 39,
+        "brute": 39,
+        "charger_boss": 1,
+        "overlord_boss": 1
+      },
+      "finalMetrics": {
+        "quality": "standard",
+        "renderPixelRatio": 1.5,
+        "calls": 1095,
+        "triangles": 3149502,
+        "geometries": 55,
+        "textures": 242,
+        "activeModels": 200,
+        "animationMixers": 201,
+        "effects": 611
+      },
+      "responses": [
+        {
+          "eventTimestamp": 235513.79999998212,
+          "handlerMs": 0.30000001192092896,
+          "nextFrameMs": 5.300000011920929
+        },
+        {
+          "eventTimestamp": 285964.89999997616,
+          "handlerMs": 0.20000001788139343,
+          "nextFrameMs": 4.4000000059604645
+        }
+      ],
+      "lastResource": {
+        "milliseconds": 304980.4,
+        "device": "Intel Core i7-12700KF / NVIDIA RTX 4060 Ti / Windows 11 (registered desktop; browser does not verify model)",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "nativeDpr": 1.5,
+        "hardwareConcurrencyHint": 20,
+        "jsHeapBytes": {
+          "used": 103379343,
+          "allocated": 180551279,
+          "limit": 4395630592
+        },
+        "quality": "standard",
+        "renderPixelRatio": 1.5,
+        "calls": 1095,
+        "triangles": 3149502,
+        "geometries": 55,
+        "textures": 242,
+        "activeModels": 200,
+        "animationMixers": 201,
+        "effects": 611
+      }
+    },
+    {
+      "configuration": {
+        "count": 300,
+        "quality": "standard",
+        "requestedSeconds": 60,
+        "conditions": "开发压力：HP 10亿、攻墙伤害0维持活动数量；其余攻击、移动、减速、链电及Boss技能沿用正式规则。",
+        "fixedStepHz": 30,
+        "occupiedPlots": 15
+      },
+      "completed": true,
+      "interruption": null,
+      "measuredSeconds": 60.0002,
+      "reported": {
+        "samples": 8040,
+        "medianMs": 6.900000000001455,
+        "p95Ms": 13.799999999999272,
+        "maxMs": 62.400000000001455
+      },
+      "recomputed": {
+        "samples": 8040,
+        "medianMs": 6.900000000001455,
+        "p95Ms": 13.799999999999272,
+        "maxMs": 62.400000000001455,
+        "sumSeconds": 60.00020000000001
+      },
+      "countMatches": true,
+      "valuesMatch": true,
+      "durationMatches": true,
+      "live": {
+        "min": 300,
+        "max": 300,
+        "actual": 300
+      },
+      "composition": {
+        "walker": 60,
+        "runner": 60,
+        "tank": 60,
+        "armored": 59,
+        "brute": 59,
+        "charger_boss": 1,
+        "overlord_boss": 1
+      },
+      "finalMetrics": {
+        "quality": "standard",
+        "renderPixelRatio": 1.5,
+        "calls": 789,
+        "triangles": 4470422,
+        "geometries": 119,
+        "textures": 342,
+        "activeModels": 300,
+        "animationMixers": 301,
+        "effects": 72
+      },
+      "responses": [
+        {
+          "eventTimestamp": 41893.20000001788,
+          "handlerMs": 6.299999982118607,
+          "nextFrameMs": 11.5
+        }
+      ],
+      "lastResource": {
+        "milliseconds": 64847.5,
+        "device": "Intel Core i7-12700KF / NVIDIA RTX 4060 Ti / Windows 11 (registered desktop; browser does not verify model)",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "nativeDpr": 1.5,
+        "hardwareConcurrencyHint": 20,
+        "jsHeapBytes": {
+          "used": 115393448,
+          "allocated": 187944320,
+          "limit": 4395630592
+        },
+        "quality": "standard",
+        "renderPixelRatio": 1.5,
+        "calls": 672,
+        "triangles": 4469798,
+        "geometries": 53,
+        "textures": 342,
+        "activeModels": 300,
+        "animationMixers": 301,
+        "effects": 3
+      }
+    }
+  ],
+  "feedback": {
+    "step": "15508",
+    "visibleTexts": [
+      "35",
+      "15.8",
+      "15.8",
+      "15.8",
+      "溅射命中"
+    ],
+    "overlapPairs": []
+  },
+  "lifecycle": {
+    "cycles": 10,
+    "samples": 11,
+    "rendererCountsStable": true,
+    "soundContextMaximum": 1,
+    "heapUsedMin": 79237730,
+    "heapUsedMax": 93197199,
+    "method": "Actual public start/replay defense/retry/replay defeat/return actions; accelerated unchanged rules, no full real-time claim; initial warm gallery loaded low before UI toggle to standard."
+  },
+  "consoleWarningsOrErrors": {
+    "pressure200": 0,
+    "pressure300": 0
+  }
+}
