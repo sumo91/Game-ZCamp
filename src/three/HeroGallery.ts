@@ -3,14 +3,15 @@ import type { Object3D } from "three";
 import { starterHeroContent } from "../core/hero";
 import { heroAsset } from "./assetCatalog";
 import type { ModelLibrary } from "./ModelLibrary";
+import { GRAPHICS_QUALITY, type GraphicsQuality } from "./graphicsQuality";
 
 /** One canvas renders the same three rigged heroes into their lobby card portraits. */
 export class HeroGallery {
   private readonly renderer = new WebGLRenderer({ alpha: true, antialias: true });
   private readonly camera = new OrthographicCamera(-.88, .88, .92, -.92, .1, 20);
   private readonly views: Array<{ scene: Scene; object: Object3D; mixer: AnimationMixer; host: HTMLElement }> = [];
-  public constructor(private readonly host: HTMLElement, private readonly library: ModelLibrary) {
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  public constructor(private readonly host: HTMLElement, private readonly library: ModelLibrary, quality: GraphicsQuality = "standard") {
+    this.setQuality(quality);
     this.renderer.toneMapping = ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.05;
     this.renderer.domElement.className = "lobby-hero-canvas";
@@ -43,6 +44,8 @@ export class HeroGallery {
       this.renderer.render(view.scene, this.camera);
     }
   }
+  public setQuality(quality: GraphicsQuality): void { this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, GRAPHICS_QUALITY[quality].maxDpr)); }
+  public snapshot() { return { geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures, portraits: this.views.length }; }
   public dispose(): void {
     for (const view of this.views) { view.mixer.stopAllAction(); view.mixer.uncacheRoot(view.object); this.library.releaseInstance(view.object); }
     this.renderer.dispose(); this.renderer.domElement.remove();

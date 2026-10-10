@@ -75,6 +75,7 @@ export class ModelLibrary {
     });
     for (const skeleton of skeletons) skeleton.dispose();
   }
+  public snapshot() { return { cachedAssets: this.models.size, disposed: this.disposed }; }
 
   public dispose(): void {
     if (this.disposed) return;

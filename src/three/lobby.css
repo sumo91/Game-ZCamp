@@ -1,6 +1,8 @@
 .lobby-app { position: relative; width: min(100vw, 62dvh) !important; min-width: 0 !important; height: 100dvh !important; min-height: 0 !important; display: grid; grid-template-rows: auto minmax(0,1fr) auto; color: #f4e6c3; background: radial-gradient(ellipse at 45% 8%,#2f5485,#172941 58%,#101c2d); font: 14px/1.4 Arial,"Microsoft YaHei",sans-serif; padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
 .lobby-header { display: flex; align-items: center; gap: 12px; padding: 18px 18px 14px; border-bottom: 1px solid #697c98; background: linear-gradient(#263d60,#1a2c46); box-shadow: 0 3px 10px #0005; }
 .lobby-header h1 { margin: 0; font-size: clamp(24px,3.6dvh,36px); letter-spacing: 3px; }
+.lobby-settings { margin-left:auto; display:flex; flex-direction:column; gap:4px; flex-shrink:0; }
+.lobby-settings button { margin-left:0; font-size:11px; }
 .lobby-header small { color: #abc2da; font-size: 11px; }
 .lobby-crest { display:grid; place-items:center; width:45px; height:54px; border:3px solid #c9a14f; border-radius: 8px 8px 20px 20px; background:#2d5d9f; color:#edcd7e; font-size:26px; font-weight:bold; box-shadow:inset 0 0 0 3px #17355c; }
 .lobby-header button { margin-left:auto; background:#172d48; color:#dfc990; border:1px solid #8795a8; border-radius:6px; font:inherit; min-height:44px; padding:4px 8px; }
