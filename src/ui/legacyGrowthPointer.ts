@@ -1,6 +1,6 @@
-import { CAMP_SLOT_LAYOUTS, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, type LogicalBounds } from "./layout";
-import type { GrowthPointerHit } from "../ui/growthUi";
-export * from "../ui/growthUi";
+import { CAMP_SLOT_LAYOUTS, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS, type LogicalBounds } from "./legacyLayout";
+import type { GrowthPointerHit } from "./growthUi";
+export * from "./growthUi";
 function pointInBounds(x: number, y: number, bounds: LogicalBounds): boolean {
   return x >= bounds.x && x <= bounds.x + bounds.width && y >= bounds.y && y <= bounds.y + bounds.height;
 }
@@ -18,3 +18,4 @@ export function hitGrowthPointer(x: number, y: number, transformOpen = true): Gr
   if (slot) return { kind: "slot", slotId: slot.id };
   return { kind: "none" };
 }
+

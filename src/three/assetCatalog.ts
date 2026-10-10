@@ -1,6 +1,6 @@
 import type { GrowthBuildingId } from "../core/buildingGrowth";
 import { starterCatalog, type EnemyDefinition } from "../core/content";
-import type { HeroId } from "../core/hero";
+import { starterHeroContent, type HeroId } from "../core/hero";
 
 export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "ballista_low" | "ballista_medium" | "ballista_high" | "cannon_low" | "cannon_medium" | "cannon_high" | "frost_low" | "frost_medium" | "frost_high" | "electric_low" | "electric_medium" | "electric_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton" | "undead_runner" | "undead_tank" | "undead_armored" | "undead_brute" | "charger_lord" | "undead_king" | HeroId;
 export type AnimationSemantic = "walk" | "attack" | "hit" | "death" | "warning" | "charge" | "inspire" | "idle";
@@ -52,7 +52,7 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
 export const SAMPLE_COVERAGE = "正式模型：三英雄、箭塔/连弩/火炮/寒霜/雷电/木材厂三档、主城、城墙、七类亡灵含双 Boss、树岩";
 
 type BuildingContentId = GrowthBuildingId | "main_city";
-const BUILDING_ASSETS: Readonly<Partial<Record<BuildingContentId, readonly [AssetId, AssetId, AssetId]>>> = {
+const BUILDING_ASSETS: Readonly<Record<BuildingContentId, readonly [AssetId, AssetId, AssetId]>> = {
   machine_gun: ["ballista_low", "ballista_medium", "ballista_high"],
   cannon: ["cannon_low", "cannon_medium", "cannon_high"],
   arrow_tower: ["arrow_low", "arrow_medium", "arrow_high"],
@@ -69,11 +69,12 @@ export function enemyWallInset(id: string): number {
   return SAMPLE_ASSETS.find((asset) => asset.id === assetId)?.wallInset ?? 0;
 }
 
-/** Validate the declared sample coverage before requesting any model files. */
+/** Formal content must have complete presentation coverage before loading any models. */
 export function validateSampleCatalog(): void {
   const assets = new Set(SAMPLE_ASSETS.map((asset) => asset.id));
-  const references = [...Object.values(BUILDING_ASSETS).flat(), ...ENEMY_ASSETS.values()];
+  const references = [...Object.values(BUILDING_ASSETS).flat(), ...ENEMY_ASSETS.values(), ...starterHeroContent.heroes.map((hero) => hero.id)];
   for (const id of references) if (!assets.has(id)) throw new Error(`样板目录引用未登记的模型：${id}`);
+  for (const enemy of starterCatalog.enemies) if (!ENEMY_ASSETS.has(enemy.id)) throw new Error(`正式敌人缺少模型：${enemy.id}`);
   for (const id of ENEMY_ASSETS.keys()) {
     if (!starterCatalog.enemies.some((enemy) => enemy.id === id)) throw new Error(`样板目录引用未知敌人：${id}`);
   }

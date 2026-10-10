@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { starterHeroContent } from "../../src/core/hero";
 import type { LevelId } from "../../src/core/hero";
-import { decideLobbyAction, deriveLobbyView, deriveResultActions } from "../../src/phaser/lobbyUi";
+import { decideLobbyAction, deriveLobbyView, deriveResultActions } from "../../src/ui/lobbyUi";
 
 describe("camp lobby view", () => {
   it("shows three level cards and three hero cards with lock states from progression", () => {
@@ -56,3 +56,4 @@ describe("camp lobby view", () => {
     expect(deriveResultActions()).toEqual({ rematchLabel: "再战", lobbyLabel: "返回营地", terminalOnly: true });
   });
 });
+

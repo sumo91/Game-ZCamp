@@ -55,7 +55,7 @@ export class Battlefield {
     this.renderer.shadowMap.type = PCFShadowMap;
     this.renderer.toneMapping = ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.05;
-    this.renderer.domElement.setAttribute("aria-label", "3D 白模战场");
+    this.renderer.domElement.setAttribute("aria-label", "人类堡垒与亡灵战场");
     this.host.prepend(this.renderer.domElement);
     this.camera.position.set(0, 23, 14);
     this.camera.lookAt(0, 0, -2);
@@ -114,7 +114,7 @@ export class Battlefield {
     const trees = [[-5.35, 2.8], [5.35, 3.3], [-5.3, -2.7], [5.3, -5.7]].map(([x, z]) => new Matrix4().makeTranslation(x!, 0, z!).scale(new Vector3(.85, .85, .85)));
     const rocks = [[-5.35, .8], [5.35, -.9], [-5.2, -5.1], [5.25, -8.3]].map(([x, z]) => new Matrix4().makeTranslation(x!, 0, z!));
     this.environment.add(library.createStaticBatch("tree", trees), library.createStaticBatch("rocks", rocks));
-    this.renderer.domElement.setAttribute("aria-label", "3D 精修美术样板战场");
+    this.renderer.domElement.setAttribute("aria-label", "人类堡垒与亡灵战场");
   }
 
   public resize(): void {
@@ -146,6 +146,11 @@ export class Battlefield {
   public projectSlot(slotId: string): { x: number; y: number } {
     const model = [...this.buildings.values()].find((building) => building.userData.slotId === slotId);
     const projected = this.anchorPosition(model, "label_anchor", CAMP_POSITIONS.get(slotId)!.clone().add(new Vector3(0, .025, .5))).project(this.camera);
+    return { x: (projected.x + 1) * this.width / 2, y: (1 - projected.y) * this.height / 2 };
+  }
+
+  public projectWall(): { x: number; y: number } {
+    const projected = new Vector3(0, .65, 0).project(this.camera);
     return { x: (projected.x + 1) * this.width / 2, y: (1 - projected.y) * this.height / 2 };
   }
 

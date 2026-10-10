@@ -19,11 +19,15 @@ import { createSiegeDemoSession, prepareSiegeDemo, SIEGE_DEMO_LABEL } from "./si
 import { fantasyArcanePresentation } from "./fantasyArcanePresentation";
 import { ARCANE_DEMO_CATALOG, ARCANE_DEMO_RESOURCES, prepareArcaneDemo } from "./arcaneDemo";
 import { prepareUndeadDemo } from "./undeadDemo";
+import { replayCampaignBattle } from "./campaignReplay";
 import "./preview.css";
 
 const content = fantasyArcanePresentation(withFantasySiegePresentation(starterCatalog.buildingGrowth));
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
 const number = (value: number | undefined) => Number((value ?? 0).toFixed(2));
+const woodIcon = '<svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#986032" stroke="#51361f" stroke-width="2" d="M7 26 2 15 21 4 28 15Z"/><path fill="#c38a44" stroke="#593923" stroke-width="2" d="m7 26 20-10 3 4-20 10Z"/><ellipse fill="#daa45b" stroke="#664525" stroke-width="2" cx="7" cy="21" rx="6" ry="8" transform="rotate(-25 7 21)"/><ellipse fill="none" stroke="#906032" cx="7" cy="21" rx="2.5" ry="4" transform="rotate(-25 7 21)"/></svg>';
+const goldIcon = '<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#eab549" stroke="#8d5d1c" stroke-width="2"/><circle cx="16" cy="16" r="10" fill="none" stroke="#ffe28a" stroke-width="2"/><path fill="#fff1aa" d="m16 8 3 5 5 1-4 4 1 6-5-3-5 3 1-6-4-4 5-1Z"/></svg>';
+const skullIcon = '<svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#e5e8e8" d="M6 17C0 1 32 1 26 17l-4 5v7h-5v-5h-2v5h-5v-7Z"/><path fill="#172133" d="M6 13c0-4 7-4 7 0s-7 5-7 0m13 0c0-4 7-4 7 0s-7 5-7 0m-3 2-3 6h6Z"/></svg>';
 const statsText = (stats: GrowthStatsView) => stats.kind === "lumberyard"
   ? `产木 ${number(stats.woodPerSecond)}/秒`
   : `伤害 ${number(stats.damage)} · 间隔 ${number(stats.attackIntervalSeconds)}秒 · 射程 ${number(stats.range)}`;
@@ -36,30 +40,31 @@ export interface BattlePresentationOptions {
   result?: () => CampaignResult | null;
   retry?: () => boolean;
   returnToLobby?: () => void;
+  developmentReplay?: boolean;
 }
-export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentationOptions = {}): () => void {
+export function mountBattlePresentation(app: HTMLElement, options: BattlePresentationOptions = {}): () => void {
   const demo = options.session ? null : new URLSearchParams(window.location.search).get("demo");
   const siegeDemo = demo === "siege";
   const arcaneDemo = demo === "arcane";
   const undeadDemo = demo === "undead";
   const bossDemo = demo === "boss";
-  app.classList.add("whitebox-app");
+  app.classList.add("battle-app");
   app.dataset.browserUserAgent = navigator.userAgent;
   app.dataset.renderPixelRatio = String(Math.min(window.devicePixelRatio, 2));
   app.innerHTML = `
     <header class="preview-hud">
-      <div class="preview-title"><strong>尸潮营地</strong><button type="button" data-action="mute" aria-label="切换声音">声音</button></div>
-      <div class="preview-resources"><span data-view="wood"></span><span data-view="gold"></span></div>
-      <div class="preview-wall"><span data-view="wall"></span><span data-view="shield"></span></div>
-      <div class="preview-wave"><span data-view="wave"></span><span data-view="time"></span></div>
+      <div class="preview-wave-card"><div class="preview-wave">${skullIcon}<strong data-view="wave"></strong></div><div class="preview-time" data-view="time"></div><div class="preview-phase"><span data-view="phase"></span><span data-view="threat"></span></div></div>
+      <div class="preview-top-actions"><button type="button" data-action="toggle_pause" aria-label="暂停战斗">暂停</button><button type="button" data-action="mute" aria-label="切换声音">声音</button></div>
       <div class="preview-boss" data-view="boss" aria-live="polite"></div>
     </header>
     <section class="preview-field" aria-label="人类堡垒与亡灵防线">
-      <div class="preview-zone">守住城墙，击退亡灵</div>
+      <div class="preview-zone" hidden></div>
+      <div class="preview-wall" aria-label="城墙防线"><strong data-view="wall"></strong><div class="preview-wall-bar"><span data-view="wall-fill"></span></div><span data-view="shield"></span></div>
       <div class="preview-slots" aria-label="5×3 营地格位"></div>
+      ${options.developmentReplay ? '<aside class="preview-replay"><strong>开发演示 · 真实战役加速</strong><p>原始关卡与费用 · 结果记录进度</p><button type="button" data-action="replay_victory">回放防守</button><button type="button" data-action="replay_defeat">回放失守</button></aside>' : ""}
     </section>
     <footer class="preview-controls">
-      <div class="preview-status"><span data-view="phase"></span><button type="button" data-action="toggle_pause">暂停</button></div>
+      <div class="preview-resources"><span class="preview-resource">${woodIcon}<span data-view="wood"></span></span><span class="preview-resource">${goldIcon}<span data-view="gold"></span></span></div>
       <div class="preview-context preview-scroll" aria-label="所选建筑详情" tabindex="0"></div>
       <div class="preview-actions"></div>
       <div class="preview-notice" role="status" aria-live="polite"></div>
@@ -67,36 +72,43 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
     <div class="preview-overlay" hidden><section class="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="growth-dialog-title">
       <div class="preview-dialog-content preview-scroll"></div><div class="preview-modal-notice" role="status" aria-live="polite"></div>
     </section></div>
-    <div class="preview-loading" data-loading role="status" aria-live="polite"><section><h2>准备营地</h2><p data-loading-progress>加载模型…</p>${siegeDemo || bossDemo ? `<p>${SAMPLE_COVERAGE}</p>` : ""}<button type="button" data-action="retry_assets" hidden>重试加载</button></section></div>`;
+    <div class="preview-loading" data-loading role="status" aria-live="polite"><section><h2>准备营地</h2><p data-loading-progress>准备英雄与防线…</p>${siegeDemo ? `<p>${SAMPLE_COVERAGE}</p>` : ""}<button type="button" data-action="retry_assets" hidden>重试加载</button></section></div>`;
   const session = options.session ?? (bossDemo ? createBossDemo() : siegeDemo ? createSiegeDemoSession() : new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" }, ...(arcaneDemo ? { catalog: ARCANE_DEMO_CATALOG, initialResources: ARCANE_DEMO_RESOURCES } : {}) }));
+  const showDemoLabel = (label: string) => { const zone = app.querySelector<HTMLElement>(".preview-zone")!; zone.hidden = false; zone.textContent = label; };
+  if (siegeDemo) showDemoLabel(SIEGE_DEMO_LABEL);
+  if (arcaneDemo) prepareArcaneDemo(session);
   if (bossDemo) {
-    app.querySelector(".preview-title strong")!.textContent = "双 Boss 开发演示 · 点继续观察冲锋";
+    showDemoLabel("双 Boss 开发演示");
     app.querySelector(".preview-zone")!.innerHTML = "双 Boss<small>演示：普通/精英 HP 1，所有攻墙伤害 0 · Boss 原生命与技能</small>";
   }
-  if (siegeDemo) app.querySelector<HTMLElement>(".preview-title strong")!.textContent = SIEGE_DEMO_LABEL;
-  if (arcaneDemo) prepareArcaneDemo(session);
-  else if (!undeadDemo && !siegeDemo && !bossDemo) app.querySelector<HTMLElement>(".preview-title strong")!.textContent = fantasyHeroContent.heroes.find((hero) => hero.id === session.getState().hero?.definitionId)?.displayName ?? "尸潮营地";
   if (arcaneDemo || undeadDemo) {
-    app.querySelector<HTMLElement>(".preview-title strong")!.textContent = arcaneDemo ? "开发演示 · 寒霜与雷电三档" : "开发演示 · 五种亡灵";
+    showDemoLabel(arcaneDemo ? "开发演示 · 寒霜与雷电三档" : "开发演示 · 五种亡灵");
     app.querySelector<HTMLElement>(".preview-zone")!.innerHTML = arcaneDemo ? "寒霜与雷电<small>演示配置：600生命目标、无攻墙伤害、授予资源。正式战役不使用此配置。</small>" : "亡灵混编<small>真实第一关第10波 · 点继续观察攻墙</small>";
   }
   const muteButton = app.querySelector<HTMLButtonElement>("[data-action=mute]")!;
   muteButton.hidden = !options.sound;
-  muteButton.textContent = options.sound?.isMuted() ? "声音已关闭" : "声音已开启";
+  const updateMute = () => {
+    const muted = options.sound?.isMuted() ?? true;
+    muteButton.textContent = muted ? "静音" : "声音";
+    muteButton.setAttribute("aria-label", muted ? "开启声音" : "关闭声音");
+    muteButton.setAttribute("aria-pressed", String(muted));
+  };
+  updateMute();
   const field = app.querySelector<HTMLElement>(".preview-field")!;
   let battlefield: Battlefield;
   try { battlefield = new Battlefield(field); }
   catch {
-    app.innerHTML = `<div class="preview-error"><h1>战场暂时无法显示</h1><p>请使用支持 WebGL 2 的浏览器，或重新加载后重试。</p>${options.returnToLobby ? '<button type="button" data-return-error>返回营地</button>' : `<a href="${import.meta.env.BASE_URL}?preview=threejs">返回营地</a>`}</div>`;
+    app.innerHTML = `<div class="preview-error"><h1>战场暂时无法显示</h1><p>请使用支持 WebGL 2 的浏览器，或重新加载后重试。</p>${options.returnToLobby ? '<button type="button" data-return-error>返回营地</button>' : `<a href="${import.meta.env.BASE_URL}">返回营地</a>`}</div>`;
     session.dispose();
     const back = app.querySelector<HTMLButtonElement>("[data-return-error]");
     const returnToLobby = () => options.returnToLobby?.();
     back?.addEventListener("click", returnToLobby);
-    return () => { back?.removeEventListener("click", returnToLobby); app.replaceChildren(); app.classList.remove("whitebox-app"); };
+    return () => { back?.removeEventListener("click", returnToLobby); app.replaceChildren(); app.classList.remove("battle-app"); };
   }
   const view = (name: string) => app.querySelector<HTMLElement>(`[data-view="${name}"]`)!;
   const hud = app.querySelector<HTMLElement>(".preview-hud")!;
   const controls = app.querySelector<HTMLElement>(".preview-controls")!;
+  const wallHud = app.querySelector<HTMLElement>(".preview-wall")!;
   const context = app.querySelector<HTMLElement>(".preview-context")!;
   const actions = app.querySelector<HTMLElement>(".preview-actions")!;
   const pauseButton = app.querySelector<HTMLButtonElement>("[data-action=toggle_pause]")!;
@@ -205,26 +217,34 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
     battlefield.render(state, events, deltaSeconds, ui.selectedSlot);
     app.dataset.phase = state.phase;
     app.dataset.selectedSlot = ui.selectedSlot ?? "";
-    view("wood").textContent = `木材 ${Math.floor(state.wood)} · +${getWoodProductionPerSecond(state).toFixed(1)}/秒`;
-    view("gold").textContent = `金币 ${Number(state.gold.toFixed(2))}`;
+    view("wood").innerHTML = `<strong>${Math.floor(state.wood)}</strong><small>+${getWoodProductionPerSecond(state).toFixed(1)}/秒</small>`;
+    view("wood").parentElement!.setAttribute("aria-label", `木材 ${Math.floor(state.wood)}，产量每秒 ${getWoodProductionPerSecond(state).toFixed(1)}`);
+    view("gold").textContent = `${Number(state.gold.toFixed(2))}`;
+    view("gold").parentElement!.setAttribute("aria-label", `金币 ${Number(state.gold.toFixed(2))}`);
     const wallInDanger = isWallInDanger(state);
-    view("wall").textContent = `城墙 ${Math.ceil(state.wallHp)} / ${state.wallMaxHp}${wallInDanger ? " · 危险" : ""}`;
+    view("wall").textContent = `城墙 ${Math.ceil(state.wallHp)}/${state.wallMaxHp}${wallInDanger ? " · 危险" : ""}`;
     view("wall").classList.toggle("danger", wallInDanger);
-    view("shield").textContent = `护盾 ${Math.ceil(state.wallShield)} / ${state.wallShieldMax}`;
-    view("wave").textContent = `波次 ${state.wave} / ${state.maxWave} · 敌人 ${state.enemies.length}`;
+    view("wall-fill").style.width = `${Math.max(0, state.wallHp / state.wallMaxHp) * 100}%`;
+    view("wall-fill").classList.toggle("danger", wallInDanger);
+    view("shield").textContent = state.wallShield > 0 ? `护盾 ${Math.ceil(state.wallShield)}/${state.wallShieldMax}` : "";
+    const wallPoint = battlefield.projectWall();
+    wallHud.style.left = `${wallPoint.x}px`; wallHud.style.top = `${wallPoint.y}px`;
+    view("wave").textContent = `第 ${state.wave} 波 / ${state.maxWave}`;
+    view("threat").textContent = `亡灵 ${state.enemies.length}`;
     view("time").textContent = deriveGrowthWaveTime(state);
     const charging = state.enemies.find((enemy) => enemy.chargeWarningRemainingSeconds > 0 || enemy.chargeRemainingSeconds > 0);
-    view("boss").textContent = [charging ? charging.chargeWarningRemainingSeconds > 0 ? `冲锋领主蓄力 ${charging.chargeWarningRemainingSeconds.toFixed(1)}秒 · 地面箭头为推进目标` : "冲锋领主冲锋中" : "", state.overlordInspireRemainingSeconds > 0 ? `君王鼓舞 ${state.overlordInspireRemainingSeconds.toFixed(1)}秒 · 绿色足环为选中对象` : ""].filter(Boolean).join(" · ");
-    view("phase").textContent = state.phase === "TACTICAL_PAUSE" ? "战术暂停 · 可成长" : state.phase === "OPENING_COUNTDOWN" ? "准备防线" : `战斗 ${Math.floor(state.effectiveBattleTimeSeconds)} 秒 · 击杀 ${state.defeatedEnemies}`;
+    view("boss").textContent = [charging ? charging.chargeWarningRemainingSeconds > 0 ? `领主蓄力 ${charging.chargeWarningRemainingSeconds.toFixed(1)}秒 · 即将冲锋` : "领主冲锋中" : "", state.overlordInspireRemainingSeconds > 0 ? `君王鼓舞 ${state.overlordInspireRemainingSeconds.toFixed(1)}秒 · 亡灵强化` : ""].filter(Boolean).join(" · ");
+    view("phase").textContent = state.phase === "TACTICAL_PAUSE" ? "战术暂停" : state.phase === "OPENING_COUNTDOWN" ? "准备防线" : `击退 ${state.defeatedEnemies}`;
     const pause = deriveGrowthPauseControl(state.phase);
     pauseButton.textContent = pause.label;
+    pauseButton.setAttribute("aria-label", pause.label === "暂停" ? "暂停战斗" : "继续战斗");
     pauseButton.disabled = !pause.enabled || priority !== "building";
     pauseButton.hidden = !pause.visible;
     for (const [slotId, button] of slotButtons) {
       const building = state.buildings.find((candidate) => candidate.slotId === slotId);
       const name = building?.kind === "main_city" ? "主城" : building?.growthDefinitionId ? getGrowthBuildingPresentation(content, building.growthDefinitionId)?.displayName : null;
       const label = building?.kind === "main_city" ? "主城" : building ? `${name ?? "建筑"} Lv.${building.level}` : "+";
-      button.textContent = label;
+      button.textContent = building?.kind === "main_city" ? "主城" : building ? `Lv.${building.level}` : "+";
       button.setAttribute("aria-label", `第${button.dataset.row}行第${button.dataset.column}列，${building ? label.replace("\n", " ") : "空格"}`);
       button.setAttribute("aria-pressed", String(slotId === ui.selectedSlot));
       button.disabled = priority !== "building";
@@ -243,12 +263,13 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
       contextHtml = `<strong>空地 · 建造防线</strong>${choices.map((choice) => `<p>${escapeHtml(getGrowthBuildingPresentation(content, choice.definitionId)?.displayName ?? choice.definitionId)}：${escapeHtml(choice.description)} · ${escapeHtml(choice.reason)}</p>`).join("")}`;
       actionHtml = choices.map((choice) => buttonHtml("build", choice.label, choice.affordable && Boolean(choice.command), `data-definition="${choice.definitionId}"`)).join("");
     } else if (building?.kind === "main_city") {
-      contextHtml = `<strong>主城 · 驻守堡垒</strong><p>驻守英雄与城墙防线 · 基础产木 ${MAIN_CITY_WOOD_INCOME}/秒</p><p>不可升级、改造或拆除</p>`;
+      const heroName = fantasyHeroContent.heroes.find((hero) => hero.id === state.hero?.definitionId)?.displayName ?? "驻守英雄";
+      contextHtml = `<strong>主城 · ${escapeHtml(heroName)}</strong><p>守住城墙 · 基础产木 ${MAIN_CITY_WOOD_INCOME}/秒</p><p>不可升级、改造或拆除</p>`;
     } else if (building) {
       const detail = deriveBuildingDetail(content, state, building);
       if (detail) {
         contextHtml = `<strong>${escapeHtml(detail.name)} · Lv.${detail.level}/${detail.maxLevel}</strong><p>${escapeHtml(detail.role)}</p><p>当前：${statsText(detail.current)}</p><p>${detail.next ? `下级：${statsText(detail.next)}` : "已满级 · 无下级属性"} · ${escapeHtml(detail.upgrade.reason)}</p>`;
-        contextHtml += detail.traits.length ? detail.traits.map((trait) => `<p>${escapeHtml(trait.name)} ×${trait.currentStacks} · ${escapeHtml(formatGrowthTraitEffectAtStacks(content, trait.id, trait.currentStacks))}</p>`).join("") : "<p>尚无词条 · 升级后强制三选一</p>";
+        contextHtml += detail.traits.length ? detail.traits.map((trait) => `<p>${escapeHtml(trait.name)} ×${trait.currentStacks} · ${escapeHtml(formatGrowthTraitEffectAtStacks(content, trait.id, trait.currentStacks))}</p>`).join("") : "<p>升级后选择词条</p>";
         if (ui.destroyConfirm) {
           contextHtml = `<strong>确认拆除 ${escapeHtml(detail.name)}？</strong><p>不返还木材或金币，永久失去等级与词条。</p>`;
           actionHtml = buttonHtml("cancel_destroy", "取消拆除") + buttonHtml("confirm_destroy", "确认拆除 · 零返还", true, 'class="destructive"');
@@ -287,7 +308,7 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
     modalNotice.textContent = modal ? message : "";
     if (priority !== lastPriority) {
       if (modal) {
-        if (lastPriority === "building") previousFocus = document.activeElement as HTMLElement;
+        if (lastPriority === "building" || lastPriority === "none") previousFocus = document.activeElement as HTMLElement;
         (dialog.querySelector<HTMLElement>("button:not([disabled])") ?? dialog.querySelector<HTMLElement>("h2"))?.focus({ preventScroll: true });
       } else if (previousFocus?.isConnected && !previousFocus.closest("[inert]")) previousFocus.focus({ preventScroll: true });
       lastPriority = priority;
@@ -301,12 +322,20 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
     const target = event.target as HTMLElement;
     const button = target.closest<HTMLButtonElement>("[data-action]");
     options.sound?.unlock();
-    if (button?.dataset.action === "mute") { options.sound?.toggleMuted(); button.textContent = options.sound?.isMuted() ? "声音已关闭" : "声音已开启"; return; }
+    if (button?.dataset.action === "mute") { options.sound?.toggleMuted(); updateMute(); return; }
     if (button?.dataset.action === "retry_assets") { void loadAssets(); return; }
     if (!library) return;
     if (button) {
       event.stopPropagation();
       const action = button.dataset.action!;
+      if (action === "replay_victory" || action === "replay_defeat") {
+        if (options.developmentReplay && getGrowthInputPriority(session.getState().phase, ui.transformOpen) === "building") {
+          battlefield.reset(); options.sound?.resetBattle();
+          replayCampaignBattle(session, action === "replay_victory" ? "victory" : "defeat");
+          ui = initialGrowthUiState(); render(0);
+        }
+        return;
+      }
       if (action === "return_lobby") { options.returnToLobby?.(); return; }
       if (action === "restart" && options.retry) { if (options.retry()) { battlefield.reset(); ui = initialGrowthUiState(); options.sound?.resetBattle(); options.sound?.playUi("battle_start"); render(0); } return; }
       if (action === "build") act({ type: "build", definitionId: button.dataset.definition as "arrow_tower" | "lumberyard" });
@@ -350,10 +379,10 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
     loading = true;
     app.dataset.assetState = "loading";
     retryAssets.hidden = true;
-    loadingProgress.textContent = "0% · 加载模型与材质";
+    loadingProgress.textContent = "准备英雄与防线 · 0%";
     try {
-      const loaded = options.library ?? await ModelLibrary.load(({ loaded, total, name }) => {
-        if (!disposed) loadingProgress.textContent = `${Math.round(loaded / total * 100)}% · ${loaded}/${total} · ${name}`;
+      const loaded = options.library ?? await ModelLibrary.load(({ loaded, total }) => {
+        if (!disposed) loadingProgress.textContent = `准备英雄与防线 · ${Math.round(loaded / total * 100)}%`;
       });
       if (disposed) { if (!options.library) loaded.dispose(); return; }
       library = loaded;
@@ -362,10 +391,10 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
       loadingOverlay.hidden = true;
       app.dataset.assetState = "ready";
       render(0);
-    } catch (error) {
+    } catch {
       if (!disposed) {
         app.dataset.assetState = "failed";
-        loadingProgress.textContent = `加载失败：${error instanceof Error ? error.message : "资源不可用"}。检查连接后重试。`;
+        loadingProgress.textContent = "资源加载中断，请检查网络后重试。";
         retryAssets.hidden = false;
       }
     } finally { loading = false; }
@@ -394,7 +423,7 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
     battlefield.dispose();
     if (!options.library) library?.dispose();
     app.replaceChildren();
-    app.classList.remove("whitebox-app");
+    app.classList.remove("battle-app");
     for (const key of ["browserUserAgent", "renderPixelRatio", "phase", "selectedSlot", "commandHistory", "assetState", "clockStep", "openingCountdown"]) delete app.dataset[key];
   };
   const pageHide = (event: PageTransitionEvent) => { if (event.persisted) systemPause(); else dispose(); };
@@ -403,3 +432,7 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
   window.addEventListener("pageshow", pageShow);
   return dispose;
 }
+
+/** Compatibility for explicitly marked historical development entries. */
+export const mountWhiteboxPreview = mountBattlePresentation;
+
