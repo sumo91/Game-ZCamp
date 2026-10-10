@@ -158,11 +158,11 @@ export function mountWhiteboxPreview(app: HTMLElement, options: BattlePresentati
         message = result.reason ?? "操作不可用";
       } else {
         const type = decision.command.type;
-        message = type === "build_building" ? "建筑已建造 · 木材扣费一次"
-          : type === "upgrade_building" ? "升级扣费一次 · 请选择当前建筑词条"
-          : type === "choose_building_trait" ? "词条仅对当前建筑生效"
-          : type === "transform_tower" ? "改造完成 · 保留等级与合法词条"
-          : type === "destroy_building" ? "建筑已拆除 · 不返还木材或金币" : "";
+        message = type === "build_building" ? "建筑已建造"
+          : type === "upgrade_building" ? "升级完成 · 请选择词条"
+          : type === "choose_building_trait" ? "词条已生效"
+          : type === "transform_tower" ? "改造完成"
+          : type === "destroy_building" ? "建筑已拆除" : "";
         if (type === "restart") {
           battlefield.reset(); options.sound?.resetBattle();
           if (siegeDemo) prepareSiegeDemo(session);
