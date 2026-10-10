@@ -544,7 +544,7 @@ export class GameSimulation {
     if (profile.tower.id === "cannon") {
       for (const enemy of splashTargets) {
         this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * getGrowthSecondaryDamageMultiplier(profile), building.id);
-        this.events.push({ type: "tower_special", buildingId: building.id, effect: "溅射", targetId: enemy.id });
+        this.events.push({ type: "tower_special", buildingId: building.id, effect: "溅射", targetId: enemy.id, targetPosition: enemy.position });
       }
       const burn = getGrowthCannonBurn(this.catalog.buildingGrowth, building);
       if (burn) {
@@ -581,7 +581,7 @@ export class GameSimulation {
       const carryMultiplier = getGrowthMachinePenetrationMultiplier(this.catalog.buildingGrowth);
       for (const enemy of penetrationTargets) {
         this.applyDamage(enemy, this.getGrowthDamage(building, enemy) * carryMultiplier, building.id);
-        this.events.push({ type: "tower_special", buildingId: building.id, effect: "穿透", targetId: enemy.id });
+        this.events.push({ type: "tower_special", buildingId: building.id, effect: "穿透", targetId: enemy.id, targetPosition: enemy.position });
       }
     }
   }

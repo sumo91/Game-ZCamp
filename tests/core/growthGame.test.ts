@@ -69,6 +69,30 @@ function trait(definitionId: NonNullable<BuildingState["traits"]>[number]["defin
 }
 
 describe("growth building combat and economy integration", () => {
+  it("reports the actual pierced target position even when the hit defeats it", () => {
+    const { game } = makeGrowthTower("machine_gun", [trait("machine_penetration")]);
+    game.getState().enemies = [enemy("front", 1, 100), enemy("behind", .8, 1)];
+    game.tick(.1);
+    expect(game.drainEvents()).toContainEqual(expect.objectContaining({ type: "tower_special", effect: "穿透", targetId: "behind", targetPosition: .8 }));
+    expect(game.getState().enemies.some((candidate) => candidate.id === "behind")).toBe(false);
+    game.dispatch({ type: "pause" });
+    const frozen = structuredClone(game.getState());
+    game.tick(1);
+    expect(game.getState()).toEqual(frozen);
+    expect(game.drainEvents()).toEqual([]);
+  });
+
+  it("reports cannon splash anchors while burn damage settles before presentation", () => {
+    const { game, building } = makeGrowthTower("cannon", [trait("cannon_burn")]);
+    game.getState().enemies = [enemy("impact", 1, 100), enemy("splash", .9, 100)];
+    game.tick(.1);
+    const events = game.drainEvents();
+    expect(events).toContainEqual(expect.objectContaining({ type: "tower_special", effect: "溅射", targetId: "splash", targetPosition: .9 }));
+    expect(events).toContainEqual(expect.objectContaining({ type: "enemy_burned", enemyId: "splash", sourceBuildingId: building.id, position: .9 }));
+    expect(game.getState().enemies.find((candidate) => candidate.id === "impact")!.hp).toBeCloseTo(64.3);
+    expect(game.getState().enemies.find((candidate) => candidate.id === "splash")!.hp).toBeCloseTo(83.55);
+  });
+
   it("lets the arrow tower and every transformed tower attack a wall-contact enemy", () => {
     for (const towerId of ["arrow_tower", "machine_gun", "cannon", "frost", "electric"] as const) {
       const { game, building } = makeGrowthTower(towerId);

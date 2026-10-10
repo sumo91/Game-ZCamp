@@ -9,9 +9,11 @@ import { Battlefield } from "./Battlefield";
 import { isWallInDanger } from "./whiteboxCatalog";
 import { ModelLibrary } from "./ModelLibrary";
 import { buildingAsset, SAMPLE_COVERAGE } from "./assetCatalog";
+import { withFantasySiegePresentation } from "./fantasySiegePresentation";
+import { createSiegeDemoSession, SIEGE_DEMO_LABEL } from "./siegeDemo";
 import "./preview.css";
 
-const content = starterCatalog.buildingGrowth;
+const content = withFantasySiegePresentation(starterCatalog.buildingGrowth);
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
 const number = (value: number | undefined) => Number((value ?? 0).toFixed(2));
 const statsText = (stats: GrowthStatsView) => stats.kind === "lumberyard"
@@ -20,6 +22,7 @@ const statsText = (stats: GrowthStatsView) => stats.kind === "lumberyard"
 
 /** Partial art sample; loading and presentation never write simulation state. */
 export function mountWhiteboxPreview(app: HTMLElement): () => void {
+  const siegeDemo = new URLSearchParams(window.location.search).get("demo") === "siege";
   app.classList.add("whitebox-app");
   app.dataset.browserUserAgent = navigator.userAgent;
   app.dataset.renderPixelRatio = String(Math.min(window.devicePixelRatio, 2));
@@ -31,7 +34,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
       <div class="preview-wave"><span data-view="wave"></span><span data-view="time"></span></div>
     </header>
     <section class="preview-field" aria-label="人类堡垒与亡灵防线">
-      <div class="preview-zone">亡灵推进区 ↓<small>英雄 / 特殊塔 / 其余敌人：开发占位</small></div>
+      <div class="preview-zone">亡灵推进区 ↓<small>英雄 / 寒霜雷电 / 其余敌人：开发占位</small></div>
       <div class="preview-slots" aria-label="5×3 营地格位"></div>
     </section>
     <footer class="preview-controls">
@@ -44,7 +47,8 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
       <div class="preview-dialog-content preview-scroll"></div><div class="preview-modal-notice" role="status" aria-live="polite"></div>
     </section></div>
     <div class="preview-loading" data-loading role="status" aria-live="polite"><section><h2>准备营地资产</h2><p data-loading-progress>加载模型…</p><p>${SAMPLE_COVERAGE}</p><button type="button" data-action="retry_assets" hidden>重试加载</button></section></div>`;
-  const session = new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" } });
+  const session = siegeDemo ? createSiegeDemoSession() : new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" } });
+  if (siegeDemo) app.querySelector<HTMLElement>(".preview-title strong")!.textContent = SIEGE_DEMO_LABEL;
   const field = app.querySelector<HTMLElement>(".preview-field")!;
   let battlefield: Battlefield;
   try { battlefield = new Battlefield(field); }
