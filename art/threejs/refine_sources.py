@@ -10,6 +10,8 @@ from pathlib import Path
 from mathutils import Vector, Matrix
 
 HERE=Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from runtime_surface import merge_runtime_surface
 
 def height(z):
     if z <= .44: return z*1.35
@@ -47,22 +49,9 @@ def refine_skeleton(root,body):
 def rebuild_surface(root,name):
     old=bpy.data.objects[root['export_mesh']]
     bpy.data.objects.remove(old,do_unlink=True)
-    runtime=bpy.data.collections['runtime_export']; copies=[]
-    bpy.ops.object.select_all(action='DESELECT')
-    for obj in bpy.data.collections['editable_modules'].objects:
-        if obj.type!='MESH': continue
-        duplicate=obj.copy(); duplicate.data=obj.data.copy(); runtime.objects.link(duplicate)
-        duplicate.parent=None; duplicate.matrix_world=obj.matrix_world.copy()
-        duplicate.select_set(True); bpy.context.view_layer.objects.active=duplicate
-        bpy.ops.object.convert(target='MESH'); copies.append(bpy.context.object)
-        duplicate.select_set(False)
-    for obj in copies: obj.select_set(True)
-    bpy.context.view_layer.objects.active=copies[0]; bpy.ops.object.join(); body=bpy.context.object
-    body.name=name+'_surface'; body.parent=root
-    bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
-    bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.uv.smart_project(angle_limit=math.radians(66),island_margin=.012)
-    bpy.ops.object.mode_set(mode='OBJECT')
+    runtime=bpy.data.collections['runtime_export']
+    parts=(obj for obj in bpy.data.collections['editable_modules'].objects if obj.type=='MESH')
+    body=merge_runtime_surface(parts,runtime,root,name)
     old_ao=bpy.data.images.get(name+'_ao')
     if old_ao: bpy.data.images.remove(old_ao,do_unlink=True)
     ao=bpy.data.images.new(name+'_ao',width=512,height=512,alpha=False); ao.colorspace_settings.name='Non-Color'

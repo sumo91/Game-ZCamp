@@ -11,6 +11,9 @@ from pathlib import Path
 from mathutils import Vector
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from runtime_surface import merge_runtime_surface
+
 PARTS = []
 MATS = {}
 ROOT = None
@@ -325,24 +328,10 @@ def save_source(asset):
     # Save original editable modules alongside a merged, UV-unwrapped runtime derivative.
     originals=bpy.data.collections.new('editable_modules'); bpy.context.scene.collection.children.link(originals)
     runtime=bpy.data.collections.new('runtime_export'); bpy.context.scene.collection.children.link(runtime)
-    copies=[]
-    bpy.ops.object.select_all(action='DESELECT')
     for obj in PARTS:
         for col in list(obj.users_collection): col.objects.unlink(obj)
         originals.objects.link(obj)
-        duplicate=obj.copy(); duplicate.data=obj.data.copy(); runtime.objects.link(duplicate)
-        duplicate.parent=None; duplicate.matrix_world=obj.matrix_world.copy()
-        duplicate.select_set(True); bpy.context.view_layer.objects.active=duplicate
-        bpy.ops.object.convert(target='MESH')
-        copies.append(bpy.context.object)
-        duplicate.select_set(False)
-    for obj in copies: obj.select_set(True)
-    bpy.context.view_layer.objects.active=copies[0]; bpy.ops.object.join(); body=bpy.context.object
-    body.name=asset+'_surface'; body.parent=ROOT
-    bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
-    bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.uv.smart_project(angle_limit=math.radians(66),island_margin=.012)
-    bpy.ops.object.mode_set(mode='OBJECT')
+    body=merge_runtime_surface(PARTS,runtime,ROOT,asset)
     originals.hide_render=True; originals.hide_viewport=True
     ao=bpy.data.images.new(asset+'_ao',width=512,height=512,alpha=False)
     ao.colorspace_settings.name='Non-Color'

@@ -9,7 +9,7 @@ import { starterCatalog } from "../core/content";
 import type { BuildingState, GameEvent, GameState } from "../core/types";
 import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
 import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
-import { buildingAsset, type AnimationSemantic } from "./assetCatalog";
+import { buildingAsset, enemyAsset, type AnimationSemantic } from "./assetCatalog";
 import type { ModelLibrary } from "./ModelLibrary";
 
 type Effect = { object: Object3D; ttl: number; duration: number; from?: Vector3; to?: Vector3 };
@@ -318,8 +318,9 @@ export class Battlefield {
 
   private makeEnemy(id: string, definitionId: string): EnemyView {
     let view: EnemyView;
-    if (definitionId === "walker" && this.library) {
-      const instance = this.library.create("skeleton");
+    const asset = enemyAsset(definitionId);
+    if (asset && this.library) {
+      const instance = this.library.create(asset);
       const mixer = new AnimationMixer(instance.object);
       view = { object: instance.object, mixer, actions: new Map(instance.clips.map((clip) => [clip.name as AnimationSemantic, mixer.clipAction(clip)])), interrupt: 0, dying: null, atWall: false };
       this.play(view, "walk");

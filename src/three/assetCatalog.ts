@@ -1,4 +1,5 @@
 import type { GrowthBuildingId } from "../core/buildingGrowth";
+import { starterCatalog, type EnemyDefinition } from "../core/content";
 
 export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton";
 export type AnimationSemantic = "walk" | "attack" | "hit" | "death";
@@ -28,10 +29,31 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
 
 export const SAMPLE_COVERAGE = "精修：箭塔/木材厂三档、主城、城墙、骷髅、树岩；英雄、特殊塔及其余敌人是开发占位";
 
+type BuildingContentId = GrowthBuildingId | "main_city";
+const BUILDING_ASSETS: Readonly<Partial<Record<BuildingContentId, readonly [AssetId, AssetId, AssetId]>>> = {
+  arrow_tower: ["arrow_low", "arrow_medium", "arrow_high"],
+  lumberyard: ["lumber_low", "lumber_medium", "lumber_high"],
+  main_city: ["main_city", "main_city", "main_city"],
+};
+
+/** Only walker has a finished enemy model in this sample. Other IDs use development geometry. */
+const ENEMY_ASSETS: ReadonlyMap<EnemyDefinition["id"], AssetId> = new Map([["walker", "skeleton"]]);
+
+/** Validate the declared sample coverage before requesting any model files. */
+export function validateSampleCatalog(): void {
+  const assets = new Set(SAMPLE_ASSETS.map((asset) => asset.id));
+  const references = [...Object.values(BUILDING_ASSETS).flat(), ...ENEMY_ASSETS.values()];
+  for (const id of references) if (!assets.has(id)) throw new Error(`样板目录引用未登记的模型：${id}`);
+  for (const id of ENEMY_ASSETS.keys()) {
+    if (!starterCatalog.enemies.some((enemy) => enemy.id === id)) throw new Error(`样板目录引用未知敌人：${id}`);
+  }
+}
+
+export function enemyAsset(id: EnemyDefinition["id"]): AssetId | null {
+  return ENEMY_ASSETS.get(id) ?? null;
+}
+
 /** The tier is a display mapping of the real level, not another growth rule. */
-export function buildingAsset(id: GrowthBuildingId | "main_city", level: number): AssetId | null {
-  if (id === "arrow_tower") return level <= 2 ? "arrow_low" : level <= 4 ? "arrow_medium" : "arrow_high";
-  if (id === "lumberyard") return level <= 2 ? "lumber_low" : level <= 4 ? "lumber_medium" : "lumber_high";
-  if (id === "main_city") return "main_city";
-  return null;
+export function buildingAsset(id: BuildingContentId, level: number): AssetId | null {
+  return BUILDING_ASSETS[id]?.[level <= 2 ? 0 : level <= 4 ? 1 : 2] ?? null;
 }

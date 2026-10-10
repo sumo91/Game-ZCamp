@@ -9,6 +9,7 @@
 - `create_sample_sources.py` 保存原始构造过程，只用于新建来源；不要对已有精修来源再次运行它。创建脚本并非游戏运行时几何工厂。
 - `create_environment_sources.py` 新建木材厂三档、主城、墙段、松树、岩簇及营地石边 plot；若指定的 `.blend` 已存在会拒绝覆盖。木材厂含锯刃、切木年轮、桁架与低/中/高附件；主城有角楼、分石拱门及蓝顶金饰；墙段含分层石缝、扶壁与原创旗徽。
 - `refine_sources.py` 读取已保存来源，执行记录了 revision 的比例、弓手朝向及 PBR 图集修订。它从保留分件更新 runtime 面、UV、结构 AO 与图集，并保存来源；只有显式调用该修订工具才会更新 runtime。首对当前是 skeleton proportion revision 3、skin revision 1、tower archer revision 3、cloth revision 1、atlas revision 1；薄旗与布片有实体厚度，重复运行这些修订会跳过已应用步骤。
+- `runtime_surface.py` 仅共享复制/转换分件、合并、应用变换与 UV 展开的机械步骤；不选择创建或修订来源，不烘焙、保存或导出。来源创建与已保存来源的修改决策仍分别由上述工具负责。
 - `refine_environment_shapes.py` 保存固定镜头审阅后的主城/松树修订：主城收窄中央屋顶、抬起石质主堡并前移两座尖顶角楼；松树收窄树冠、拉高顶梢。`camera_shape_revision=1` 防止重复应用；这是已执行的制作记录。源修改后仍需更新 runtime 面与图集再导出，默认导出不会重跑这些造型修订。
 - `export_assets.py` **只读取已保存的 `.blend`**，导出 `runtime_export` 与 rig/语义 Empty，不重建造型、不回存来源。可直接编辑 runtime 网格、UV、材料、骨架与 Actions 后保存再导出。`editable_modules` 是保留的可编辑分件备份；若改动该备份，需在 Blender 中更新 runtime 合并面、UV/AO 再保存，不会被默认导出器悄悄替换。
 

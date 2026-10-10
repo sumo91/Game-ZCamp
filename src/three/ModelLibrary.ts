@@ -3,7 +3,7 @@ import type { AnimationClip, BufferGeometry, Material, Matrix4, Object3D, Skelet
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import type { GLTF } from "three/addons/loaders/GLTFLoader.js";
 import { clone } from "three/addons/utils/SkeletonUtils.js";
-import { SAMPLE_ASSETS, type AssetId, type PresentationAsset } from "./assetCatalog";
+import { SAMPLE_ASSETS, validateSampleCatalog, type AssetId, type PresentationAsset } from "./assetCatalog";
 
 export interface ModelInstance { object: Object3D; clips: AnimationClip[] }
 export interface AssetProgress { loaded: number; total: number; name: string }
@@ -17,6 +17,7 @@ export class ModelLibrary {
     const library = new ModelLibrary();
     const loader = new GLTFLoader();
     try {
+      validateSampleCatalog();
       for (const [index, asset] of SAMPLE_ASSETS.entries()) {
         progress({ loaded: index, total: SAMPLE_ASSETS.length, name: asset.file });
         let model: GLTF;
