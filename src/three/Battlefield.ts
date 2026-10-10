@@ -1,15 +1,19 @@
 import {
   BoxGeometry, Color, CylinderGeometry, DirectionalLight, Group, HemisphereLight,
-  Mesh, MeshBasicMaterial, MeshStandardMaterial, OctahedronGeometry, OrthographicCamera, PlaneGeometry,
+  Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, OctahedronGeometry, OrthographicCamera, PlaneGeometry,
   Raycaster, Scene, SphereGeometry, Vector2, Vector3, WebGLRenderer,
+  AnimationMixer, LoopOnce, LoopRepeat, PCFShadowMap, ACESFilmicToneMapping,
 } from "three";
-import type { BufferGeometry, Material, Object3D } from "three";
+import type { AnimationAction, BufferGeometry, Material, Object3D } from "three";
 import { starterCatalog } from "../core/content";
 import type { BuildingState, GameEvent, GameState } from "../core/types";
 import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
 import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
+import { buildingAsset, enemyAsset, type AnimationSemantic } from "./assetCatalog";
+import type { ModelLibrary } from "./ModelLibrary";
 
-type Effect = { object: Object3D; ttl: number };
+type Effect = { object: Object3D; ttl: number; duration: number; from?: Vector3; to?: Vector3 };
+type EnemyView = { object: Object3D; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean };
 
 /** Owns all preview GPU resources, picking and event-driven presentation. */
 export class Battlefield {
@@ -19,12 +23,15 @@ export class Battlefield {
   private readonly raycaster = new Raycaster();
   private readonly pickers: Mesh[] = [];
   private readonly tiles = new Map<string, Mesh>();
-  private readonly buildings = new Map<string, Group>();
-  private readonly enemies = new Map<string, Group>();
+  private readonly buildings = new Map<string, Object3D>();
+  private readonly enemies = new Map<string, EnemyView>();
+  private readonly enemyAnchors = new Map<string, { definitionId: string; position: number }>();
+  private library: ModelLibrary | null = null;
   private readonly effects: Effect[] = [];
   private readonly geometries = new Set<BufferGeometry>();
   private readonly materials = new Set<Material>();
-  private readonly wall: Mesh;
+  private wall: Object3D;
+  private readonly environment = new Group();
   private width = 1;
   private height = 1;
   private previousWall: number | null = null;
@@ -34,12 +41,15 @@ export class Battlefield {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setClearColor(0x222330);
     this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = PCFShadowMap;
+    this.renderer.toneMapping = ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.05;
     this.renderer.domElement.setAttribute("aria-label", "3D 白模战场");
     this.host.prepend(this.renderer.domElement);
-    this.camera.position.set(0, 24, 12);
+    this.camera.position.set(0, 23, 14);
     this.camera.lookAt(0, 0, -2);
-    this.scene.add(new HemisphereLight(0xe9eef9, 0x465440, 2.5));
-    const sun = new DirectionalLight(0xffeed5, 3);
+    this.scene.add(new HemisphereLight(0xd2ddf0, 0x5b5649, 1.7));
+    const sun = new DirectionalLight(0xffe8c4, 3.2);
     sun.position.set(-5, 14, 6);
     sun.castShadow = true;
     sun.shadow.mapSize.set(1024, 1024);
@@ -47,11 +57,15 @@ export class Battlefield {
     sun.shadow.camera.right = 9;
     sun.shadow.camera.top = 13;
     sun.shadow.camera.bottom = -13;
+    sun.shadow.bias = -0.0003;
+    sun.shadow.normalBias = 0.025;
     this.scene.add(sun);
-    this.box(12, 0.12, 12, 0x494450, new Vector3(0, -0.12, -6));
-    this.box(12, 0.12, 8.2, 0x56634f, new Vector3(0, -0.12, 4.1));
-    this.wall = this.box(11.4, 0.9, 0.55, 0xc3c6c8, new Vector3(0, 0.45, 0));
-    for (let index = 0; index < 12; index += 1) this.box(0.48, 0.3, 0.65, 0xd3d6d6, new Vector3(-5.25 + index * 0.95, 1.02, 0));
+    this.box(12, 0.12, 12, 0x605c73, new Vector3(0, -0.12, -6));
+    this.box(12, 0.12, 8.2, 0x749051, new Vector3(0, -0.12, 4.1));
+    this.wall = new Group();
+    this.wall.add(this.box(11.4, 0.9, 0.55, 0xc3c6c8, new Vector3(0, 0.45, 0)));
+    for (let index = 0; index < 12; index += 1) this.wall.add(this.box(0.48, 0.3, 0.65, 0xd3d6d6, new Vector3(-5.25 + index * 0.95, 1.02, 0)));
+    this.scene.add(this.wall, this.environment);
     for (const [slotId, position] of CAMP_POSITIONS) {
       const tile = this.box(1.85, 0.09, 1.58, 0x899287, position.clone());
       this.tiles.set(slotId, tile);
@@ -62,6 +76,34 @@ export class Battlefield {
       this.pickers.push(picker);
       this.scene.add(picker);
     }
+  }
+
+  public setModels(library: ModelLibrary): void {
+    this.reset();
+    this.scene.remove(this.wall);
+    this.disposeObject(this.wall);
+    this.disposeObject(this.environment);
+    this.environment.clear();
+    this.library = library;
+    this.wall = library.createStaticBatch("wall", Array.from({ length: 6 }, (_, index) => new Matrix4().makeTranslation(-4.75 + index * 1.9, 0, 0)));
+    this.scene.add(this.wall);
+    this.environment.userData.sharedAsset = true;
+    this.environment.add(library.createStaticBatch("plot", [...CAMP_POSITIONS.values()].map((position) => new Matrix4().makeTranslation(position.x, position.y, position.z))));
+    for (const [slotId, position] of CAMP_POSITIONS) {
+      const oldTile = this.tiles.get(slotId)!;
+      this.scene.remove(oldTile);
+      this.disposeObject(oldTile);
+      const selection = new Mesh(this.geometry(new PlaneGeometry(1.86, 1.58)), this.material(new MeshBasicMaterial({ color: 0xffd774, transparent: true, opacity: .24, depthWrite: false })));
+      selection.rotation.x = -Math.PI / 2;
+      selection.position.copy(position).y = .063;
+      selection.visible = false;
+      this.tiles.set(slotId, selection);
+      this.scene.add(selection);
+    }
+    const trees = [[-5.35, 2.8], [5.35, 3.3], [-5.3, -2.7], [5.3, -5.7]].map(([x, z]) => new Matrix4().makeTranslation(x!, 0, z!).scale(new Vector3(.85, .85, .85)));
+    const rocks = [[-5.35, .8], [5.35, -.9], [-5.2, -5.1], [5.25, -8.3]].map(([x, z]) => new Matrix4().makeTranslation(x!, 0, z!));
+    this.environment.add(library.createStaticBatch("tree", trees), library.createStaticBatch("rocks", rocks));
+    this.renderer.domElement.setAttribute("aria-label", "3D 精修美术样板战场");
   }
 
   public resize(): void {
@@ -82,24 +124,53 @@ export class Battlefield {
   public pick(clientX: number, clientY: number): string | null {
     const bounds = this.renderer.domElement.getBoundingClientRect();
     this.raycaster.setFromCamera(new Vector2((clientX - bounds.left) / bounds.width * 2 - 1, -(clientY - bounds.top) / bounds.height * 2 + 1), this.camera);
-    return this.raycaster.intersectObjects(this.pickers, false)[0]?.object.userData.slotId ?? null;
+    const hits = this.raycaster.intersectObjects([...this.buildings.values(), ...this.pickers], true);
+    for (const hit of hits) {
+      let object: Object3D | null = hit.object;
+      while (object) { if (object.userData.slotId) return object.userData.slotId as string; object = object.parent; }
+    }
+    return null;
   }
 
   public projectSlot(slotId: string): { x: number; y: number } {
-    const projected = CAMP_POSITIONS.get(slotId)!.clone().add(new Vector3(0, 0.2, 0)).project(this.camera);
+    const model = [...this.buildings.values()].find((building) => building.userData.slotId === slotId);
+    const projected = this.anchorPosition(model, "label_anchor", CAMP_POSITIONS.get(slotId)!.clone().add(new Vector3(0, .025, .5))).project(this.camera);
     return { x: (projected.x + 1) * this.width / 2, y: (1 - projected.y) * this.height / 2 };
   }
 
   public render(state: GameState, events: GameEvent[], deltaSeconds: number, selectedSlot: string | null): void {
+    for (const event of events) if (event.type === "enemy_spawned") this.enemyAnchors.set(event.enemyId, { definitionId: event.definitionId, position: 0 });
+    for (const enemy of state.enemies) this.enemyAnchors.set(enemy.id, { definitionId: enemy.definitionId, position: enemy.position });
     this.synchronizeBuildings(state.buildings);
     this.synchronizeEnemies(state);
     for (const event of events) this.presentEvent(state, event);
+    const active = new Set(state.enemies.map((enemy) => enemy.id));
+    for (const [id, view] of this.enemies) {
+      if (view.dying !== null) view.dying -= deltaSeconds;
+      else if (!active.has(id)) view.dying = 0;
+      if (view.dying !== null && view.dying <= 0) {
+        this.scene.remove(view.object);
+        view.mixer?.stopAllAction();
+        view.mixer?.uncacheRoot(view.object);
+        this.disposeObject(view.object);
+        this.enemies.delete(id);
+        this.enemyAnchors.delete(id);
+      } else {
+        view.interrupt = Math.max(0, view.interrupt - deltaSeconds);
+        if (view.dying === null && view.interrupt === 0) this.play(view, view.atWall ? "attack" : "walk");
+        view.mixer?.update(deltaSeconds);
+      }
+    }
     const wallTotal = state.wallHp + state.wallShield;
     if (this.previousWall !== null && wallTotal < this.previousWall) this.wallFlash = 0.24;
     this.previousWall = wallTotal;
     this.wallFlash = Math.max(0, this.wallFlash - deltaSeconds);
-    (this.wall.material as MeshStandardMaterial).color.set(this.wallFlash > 0 ? 0xf67f70 : isWallInDanger(state) ? 0xb47673 : 0xc3c6c8);
-    for (const [slotId, tile] of this.tiles) (tile.material as MeshStandardMaterial).color.set(slotId === selectedSlot ? 0xeed58b : 0x899287);
+    const wallTint = this.wallFlash > 0 ? 0xff9b87 : isWallInDanger(state) ? 0xd3847f : this.library ? 0xffffff : 0xc3c6c8;
+    this.wall.traverse((object) => { if (object instanceof Mesh && object.material instanceof MeshStandardMaterial) object.material.color.set(wallTint); });
+    for (const [slotId, tile] of this.tiles) {
+      if (this.library) tile.visible = slotId === selectedSlot;
+      else (tile.material as MeshStandardMaterial).color.set(slotId === selectedSlot ? 0xeed58b : 0x899287);
+    }
     for (let index = this.effects.length - 1; index >= 0; index -= 1) {
       const effect = this.effects[index]!;
       effect.ttl -= deltaSeconds;
@@ -107,29 +178,40 @@ export class Battlefield {
         this.scene.remove(effect.object);
         this.disposeObject(effect.object);
         this.effects.splice(index, 1);
+      } else if (effect.from && effect.to) {
+        const progress = 1 - effect.ttl / effect.duration;
+        effect.object.position.lerpVectors(effect.from, effect.to, progress);
       } else if (effect.object.userData.reward) effect.object.position.y += deltaSeconds * 1.6;
     }
     this.renderer.render(this.scene, this.camera);
+    // Read-only presentation evidence in the development sample, never a core handle.
+    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), effects: this.effects.length, calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
   }
 
   public reset(): void {
-    for (const object of [...this.buildings.values(), ...this.enemies.values(), ...this.effects.map((effect) => effect.object)]) {
+    for (const view of this.enemies.values()) { view.mixer?.stopAllAction(); view.mixer?.uncacheRoot(view.object); }
+    for (const object of [...this.buildings.values(), ...[...this.enemies.values()].map((view) => view.object), ...this.effects.map((effect) => effect.object)]) {
       this.scene.remove(object);
       this.disposeObject(object);
     }
     this.buildings.clear();
     this.enemies.clear();
+    this.enemyAnchors.clear();
     this.effects.length = 0;
     this.previousWall = null;
     this.wallFlash = 0;
   }
 
   public dispose(): void {
+    this.reset();
+    this.disposeObject(this.wall);
+    this.disposeObject(this.environment);
     for (const geometry of this.geometries) geometry.dispose();
     for (const material of this.materials) material.dispose();
     this.scene.traverse((object) => { if (object instanceof DirectionalLight) object.shadow.dispose(); });
     this.renderer.dispose();
     this.renderer.domElement.remove();
+    delete this.host.dataset.presentation;
   }
 
   private synchronizeBuildings(buildings: BuildingState[]): void {
@@ -142,8 +224,10 @@ export class Battlefield {
       const previous = this.buildings.get(building.id);
       if (previous?.userData.signature === signature) continue;
       if (previous) { this.scene.remove(previous); this.disposeObject(previous); }
-      const group = this.makeWhiteboxBuilding(building);
+      const asset = buildingAsset(building.growthDefinitionId ?? "main_city", building.level);
+      const group = asset && this.library ? this.library.create(asset).object : this.makeWhiteboxBuilding(building);
       group.userData.signature = signature;
+      group.userData.slotId = building.slotId;
       group.position.copy(CAMP_POSITIONS.get(building.slotId)!);
       this.buildings.set(building.id, group);
       this.scene.add(group);
@@ -215,52 +299,75 @@ export class Battlefield {
   }
 
   private synchronizeEnemies(state: GameState): void {
-    const active = new Set(state.enemies.map((enemy) => enemy.id));
-    for (const [id, object] of this.enemies) {
-      if (!active.has(id)) { this.scene.remove(object); this.disposeObject(object); this.enemies.delete(id); }
-    }
     for (const enemy of state.enemies) {
-      let group = this.enemies.get(enemy.id);
-      if (!group) {
-        const view = whiteboxEnemy(enemy.definitionId);
-        group = new Group();
-        group.add(this.meshBox(0.38, 0.65, 0.28, view.color, new Vector3(0, 0.55, 0)));
-        group.add(this.meshBox(0.3, 0.28, 0.3, 0xe2e0df, new Vector3(0, 1.02, 0)));
-        group.add(this.meshBox(0.13, 0.3, 0.16, view.color, new Vector3(-0.12, 0.16, 0)));
-        group.add(this.meshBox(0.13, 0.3, 0.16, view.color, new Vector3(0.12, 0.16, 0)));
-        group.scale.setScalar(view.scale);
-        this.enemies.set(enemy.id, group);
-        this.scene.add(group);
+      let view = this.enemies.get(enemy.id);
+      if (!view) {
+        view = this.makeEnemy(enemy.id, enemy.definitionId);
       }
+      const group = view.object;
       group.position.copy(enemyPosition(enemy.id, enemy.position));
+      view.atWall = enemy.atWall;
       // Driven by effective simulation time; all battle motion stops in frozen phases.
       const phase = state.effectiveBattleTimeSeconds * (enemy.atWall ? 9 : 6) + Number(enemy.id.slice(enemy.id.lastIndexOf("-") + 1));
-      group.rotation.x = enemy.atWall ? Math.sin(phase) * 0.15 : Math.sin(phase) * 0.06;
-      group.position.y = enemy.atWall ? 0 : Math.abs(Math.sin(phase)) * 0.04;
+      if (!view.mixer) {
+        group.rotation.x = enemy.atWall ? Math.sin(phase) * 0.15 : Math.sin(phase) * 0.06;
+        group.position.y = enemy.atWall ? 0 : Math.abs(Math.sin(phase)) * 0.04;
+      }
     }
+  }
+
+  private makeEnemy(id: string, definitionId: string): EnemyView {
+    let view: EnemyView;
+    const asset = enemyAsset(definitionId);
+    if (asset && this.library) {
+      const instance = this.library.create(asset);
+      const mixer = new AnimationMixer(instance.object);
+      view = { object: instance.object, mixer, actions: new Map(instance.clips.map((clip) => [clip.name as AnimationSemantic, mixer.clipAction(clip)])), interrupt: 0, dying: null, atWall: false };
+      this.play(view, "walk");
+      let phase = 0;
+      for (const character of id) phase = (phase * 31 + character.charCodeAt(0)) % 997;
+      mixer.update(phase / 997 * .8);
+    } else {
+      const style = whiteboxEnemy(definitionId);
+      const group = new Group();
+      group.add(this.meshBox(0.38, 0.65, 0.28, style.color, new Vector3(0, 0.55, 0)));
+      group.add(this.meshBox(0.3, 0.28, 0.3, 0xe2e0df, new Vector3(0, 1.02, 0)));
+      group.add(this.meshBox(0.13, 0.3, 0.16, style.color, new Vector3(-0.12, 0.16, 0)));
+      group.add(this.meshBox(0.13, 0.3, 0.16, style.color, new Vector3(0.12, 0.16, 0)));
+      group.scale.setScalar(style.scale);
+      view = { object: group, interrupt: 0, dying: null, atWall: false };
+    }
+    this.enemies.set(id, view);
+    this.scene.add(view.object);
+    return view;
   }
 
   private presentEvent(state: GameState, event: GameEvent): void {
     if (event.type === "tower_attack") {
       const source = state.buildings.find((building) => building.id === event.buildingId) ?? (event.buildingId === state.hero?.id ? state.buildings.find((building) => building.kind === "main_city") : undefined);
       if (!source) return;
-      const from = CAMP_POSITIONS.get(source.slotId)!.clone().add(new Vector3(0, 1.25, 0));
-      const to = enemyPosition(event.targetId, event.targetPosition).add(new Vector3(0, 0.5, 0));
+      const from = this.anchorPosition(this.buildings.get(source.id), "attack_anchor", CAMP_POSITIONS.get(source.slotId)!.clone().add(new Vector3(0, 1.25, 0)));
+      const to = this.enemyHitPosition(event.targetId, event.targetPosition);
       const direction = to.clone().sub(from);
-      const shot = new Mesh(this.geometry(new CylinderGeometry(0.025, 0.025, direction.length(), 5)), this.material(new MeshBasicMaterial({ color: 0xffdd90 })));
-      shot.position.copy(from).add(to).multiplyScalar(0.5);
+      const shot = new Mesh(this.geometry(new CylinderGeometry(0.018, 0.025, .4, 5)), this.material(new MeshBasicMaterial({ color: 0xffdd90 })));
+      shot.position.copy(from);
       shot.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), direction.normalize());
-      this.addEffect(shot, 0.12);
+      this.addEffect(shot, 0.15, from, to);
     } else if (event.type === "enemy_hit" || event.type === "enemy_defeated") {
       // Event carries the last anchor even if the simulation removed this enemy.
-      const position = enemyPosition(event.enemyId, event.position).add(new Vector3(0, 0.5, 0));
+      const cached = this.enemyAnchors.get(event.enemyId);
+      // A target can spawn and die within the same batch of fixed steps.
+      const view = this.enemies.get(event.enemyId) ?? (cached ? this.makeEnemy(event.enemyId, cached.definitionId) : undefined);
+      if (cached) cached.position = event.position;
       const death = event.type === "enemy_defeated";
+      const position = this.enemyHitPosition(event.enemyId, event.position);
+      if (death && view) view.object.position.copy(enemyPosition(event.enemyId, event.position));
       const object = new Mesh(this.geometry(new SphereGeometry(death ? 0.32 : 0.18, 6, 4)), this.material(new MeshBasicMaterial({ color: death ? 0xd6bd77 : 0xfff0d2, wireframe: death })));
       object.position.copy(position);
       this.addEffect(object, death ? 0.4 : 0.12);
       if (death) {
-        const definitionId = event.enemyId.slice(0, event.enemyId.lastIndexOf("-"));
-        const reward = starterCatalog.enemies.find((enemy) => enemy.id === definitionId)?.goldReward ?? 0;
+        if (view) { view.dying = .95; this.play(view, "death"); }
+        const reward = starterCatalog.enemies.find((enemy) => enemy.id === cached?.definitionId)?.goldReward ?? 0;
         if (reward > 0) {
           const coin = new Mesh(this.geometry(new CylinderGeometry(0.12, 0.12, 0.05, 8)), this.standard(0xffcc61));
           coin.rotation.x = Math.PI / 2;
@@ -268,13 +375,45 @@ export class Battlefield {
           coin.userData.reward = reward;
           this.addEffect(coin, 0.7);
         }
-      }
+      } else if (view?.dying === null) { view.interrupt = .3; this.play(view, "hit"); }
     }
   }
 
-  private addEffect(object: Object3D, duration: number): void {
+  private anchorPosition(object: Object3D | undefined, name: string, fallback: Vector3): Vector3 {
+    const anchor = object?.getObjectByName(name);
+    if (!anchor) return fallback;
+    object!.updateMatrixWorld(true);
+    return anchor.getWorldPosition(new Vector3());
+  }
+
+  private enemyHitPosition(id: string, progress: number): Vector3 {
+    const object = this.enemies.get(id)?.object;
+    const eventPosition = enemyPosition(id, progress);
+    if (!object) return eventPosition.add(new Vector3(0, .65, 0));
+    // A fixed-step batch may contain an earlier hit and a later final position.
+    // Sample the event anchor without moving a living actor back along its path.
+    const currentPosition = object.position.clone();
+    object.position.copy(eventPosition);
+    const anchor = this.anchorPosition(object, "hit_anchor", eventPosition.add(new Vector3(0, .65, 0)));
+    object.position.copy(currentPosition);
+    return anchor;
+  }
+
+  private play(view: EnemyView, semantic: AnimationSemantic): void {
+    if (view.current === semantic) return;
+    const next = view.actions?.get(semantic);
+    if (!next) return;
+    const previous = view.current ? view.actions?.get(view.current) : undefined;
+    previous?.fadeOut(.08);
+    next.reset().setLoop(semantic === "walk" || semantic === "attack" ? LoopRepeat : LoopOnce, semantic === "walk" || semantic === "attack" ? Infinity : 1);
+    next.clampWhenFinished = semantic === "death";
+    next.fadeIn(.08).play();
+    view.current = semantic;
+  }
+
+  private addEffect(object: Object3D, duration: number, from?: Vector3, to?: Vector3): void {
     this.scene.add(object);
-    this.effects.push({ object, ttl: duration });
+    this.effects.push({ object, ttl: duration, duration, from, to });
   }
 
   private geometry<T extends BufferGeometry>(geometry: T): T { this.geometries.add(geometry); return geometry; }
@@ -293,6 +432,7 @@ export class Battlefield {
     return mesh;
   }
   private disposeObject(object: Object3D): void {
+    if (object.userData.sharedAsset) { this.library?.releaseInstance(object); return; }
     object.traverse((child) => {
       if (!(child instanceof Mesh)) return;
       child.geometry.dispose();

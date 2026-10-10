@@ -7,6 +7,8 @@ import { decideGrowthControl, initialGrowthUiState, type GrowthControlInput } fr
 import { deriveBuildingDetail, deriveEmptySlotActions, deriveGrowthPauseControl, deriveGrowthWaveTime, deriveTraitOptions, deriveTransformOptions, formatGrowthTraitEffectAtStacks, getGrowthInputPriority, type GrowthStatsView } from "../ui/growthUi";
 import { Battlefield } from "./Battlefield";
 import { isWallInDanger } from "./whiteboxCatalog";
+import { ModelLibrary } from "./ModelLibrary";
+import { buildingAsset, SAMPLE_COVERAGE } from "./assetCatalog";
 import "./preview.css";
 
 const content = starterCatalog.buildingGrowth;
@@ -16,20 +18,20 @@ const statsText = (stats: GrowthStatsView) => stats.kind === "lumberyard"
   ? `产木 ${number(stats.woodPerSecond)}/秒`
   : `伤害 ${number(stats.damage)} · 间隔 ${number(stats.attackIntervalSeconds)}秒 · 射程 ${number(stats.range)}`;
 
-/** Explicit development whitebox; all growth commands use the same battle session. */
+/** Partial art sample; loading and presentation never write simulation state. */
 export function mountWhiteboxPreview(app: HTMLElement): () => void {
   app.classList.add("whitebox-app");
   app.dataset.browserUserAgent = navigator.userAgent;
   app.dataset.renderPixelRatio = String(Math.min(window.devicePixelRatio, 2));
   app.innerHTML = `
     <header class="preview-hud">
-      <div class="preview-title"><strong>开发白模 · Three.js</strong><a href="${import.meta.env.BASE_URL}">原版入口</a></div>
+      <div class="preview-title"><strong>精修美术样板 · 部分覆盖</strong><a href="${import.meta.env.BASE_URL}">原版入口</a></div>
       <div class="preview-resources"><span data-view="wood"></span><span data-view="gold"></span></div>
       <div class="preview-wall"><span data-view="wall"></span><span data-view="shield"></span></div>
       <div class="preview-wave"><span data-view="wave"></span><span data-view="time"></span></div>
     </header>
-    <section class="preview-field" aria-label="白模防线">
-      <div class="preview-zone">亡灵推进区 ↓</div>
+    <section class="preview-field" aria-label="人类堡垒与亡灵防线">
+      <div class="preview-zone">亡灵推进区 ↓<small>英雄 / 特殊塔 / 其余敌人：开发占位</small></div>
       <div class="preview-slots" aria-label="5×3 营地格位"></div>
     </section>
     <footer class="preview-controls">
@@ -40,13 +42,14 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     </footer>
     <div class="preview-overlay" hidden><section class="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="growth-dialog-title">
       <div class="preview-dialog-content preview-scroll"></div><div class="preview-modal-notice" role="status" aria-live="polite"></div>
-    </section></div>`;
+    </section></div>
+    <div class="preview-loading" data-loading role="status" aria-live="polite"><section><h2>准备营地资产</h2><p data-loading-progress>加载模型…</p><p>${SAMPLE_COVERAGE}</p><button type="button" data-action="retry_assets" hidden>重试加载</button></section></div>`;
   const session = new BattleSession({ seed: 1337, config: { heroId: "camp_warden", levelId: "first_defense" } });
   const field = app.querySelector<HTMLElement>(".preview-field")!;
   let battlefield: Battlefield;
   try { battlefield = new Battlefield(field); }
   catch {
-    app.innerHTML = `<div class="preview-error"><h1>开发白模暂时无法显示</h1><p>请使用支持 WebGL 2 的浏览器，或重新加载后重试。</p><a href="${import.meta.env.BASE_URL}">返回原版入口</a></div>`;
+    app.innerHTML = `<div class="preview-error"><h1>美术样板暂时无法显示</h1><p>请使用支持 WebGL 2 的浏览器，或重新加载后重试。</p><a href="${import.meta.env.BASE_URL}">返回原版入口</a></div>`;
     session.dispose();
     return () => { app.replaceChildren(); app.classList.remove("whitebox-app"); };
   }
@@ -61,6 +64,11 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
   const notice = app.querySelector<HTMLElement>(".preview-notice")!;
   const modalNotice = app.querySelector<HTMLElement>(".preview-modal-notice")!;
   const slots = app.querySelector<HTMLElement>(".preview-slots")!;
+  const loadingOverlay = app.querySelector<HTMLElement>("[data-loading]")!;
+  const loadingProgress = app.querySelector<HTMLElement>("[data-loading-progress]")!;
+  const retryAssets = app.querySelector<HTMLButtonElement>("[data-action=retry_assets]")!;
+  let library: ModelLibrary | null = null;
+  let loading = false;
   const slotButtons = new Map<string, HTMLButtonElement>();
   const commandHistory: Array<{ step: number; command: GameCommand; accepted: boolean; reason?: string }> = [];
   let ui = initialGrowthUiState();
@@ -128,6 +136,14 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
   };
 
   function render(deltaSeconds: number): void {
+    app.dataset.phase = session.getState().phase;
+    app.dataset.clockStep = String(session.getStepIndex());
+    app.dataset.openingCountdown = String(session.getState().openingCountdownRemainingSeconds);
+    if (!library) {
+      hud.inert = true; field.inert = true; controls.inert = true;
+      overlay.hidden = true;
+      return;
+    }
     const state = session.getState();
     if (!state.pendingTraitDraft) ui.traitLocked = false;
     const priority = getGrowthInputPriority(state.phase, ui.transformOpen);
@@ -156,7 +172,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     for (const [slotId, button] of slotButtons) {
       const building = state.buildings.find((candidate) => candidate.slotId === slotId);
       const name = building?.kind === "main_city" ? "主城" : building?.growthDefinitionId ? getGrowthBuildingPresentation(content, building.growthDefinitionId)?.displayName : null;
-      const label = building?.kind === "main_city" ? "主城" : building ? `${name ?? "建筑"}\nLv.${building.level}` : `${button.dataset.row}·${button.dataset.column}`;
+      const label = building?.kind === "main_city" ? "主城" : building ? `${name ?? "建筑"} Lv.${building.level}` : `${button.dataset.row}·${button.dataset.column}`;
       button.textContent = label;
       button.setAttribute("aria-label", `第${button.dataset.row}行第${button.dataset.column}列，${building ? label.replace("\n", " ") : "空格"}`);
       button.setAttribute("aria-pressed", String(slotId === ui.selectedSlot));
@@ -177,11 +193,12 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
       contextHtml = `<strong>第 ${slotButton.dataset.row} 行第 ${slotButton.dataset.column} 列 · 空格</strong>${choices.map((choice) => `<p>${escapeHtml(getGrowthBuildingPresentation(content, choice.definitionId)?.displayName ?? choice.definitionId)}：${escapeHtml(choice.description)} · ${escapeHtml(choice.reason)}</p>`).join("")}`;
       actionHtml = choices.map((choice) => buttonHtml("build", choice.label, choice.affordable && Boolean(choice.command), `data-definition="${choice.definitionId}"`)).join("");
     } else if (building?.kind === "main_city") {
-      contextHtml = `<strong>固定主城 · Lv.1</strong><p>驻守英雄与城墙防线 · 基础产木 ${MAIN_CITY_WOOD_INCOME}/秒</p><p>固定第 3 行第 3 列 · 不可升级、改造或拆除</p>`;
+      contextHtml = `<strong>固定主城 · Lv.1 · 精修 GLB</strong><p>驻守英雄与城墙防线 · 基础产木 ${MAIN_CITY_WOOD_INCOME}/秒</p><p>固定第 3 行第 3 列 · 不可升级、改造或拆除</p>`;
     } else if (building) {
       const detail = deriveBuildingDetail(content, state, building);
       if (detail) {
-        contextHtml = `<strong>${escapeHtml(detail.name)} · Lv.${detail.level}/${detail.maxLevel} · 白模</strong><p>${escapeHtml(detail.role)}</p><p>当前：${statsText(detail.current)}</p><p>${detail.next ? `下级：${statsText(detail.next)}` : "已满级 · 无下级属性"} · ${escapeHtml(detail.upgrade.reason)}</p>`;
+        const asset = buildingAsset(building.growthDefinitionId ?? "main_city", building.level);
+        contextHtml = `<strong>${escapeHtml(detail.name)} · Lv.${detail.level}/${detail.maxLevel} · ${asset ? "精修 GLB" : "开发占位"}</strong><p>${escapeHtml(detail.role)}</p><p>当前：${statsText(detail.current)}</p><p>${detail.next ? `下级：${statsText(detail.next)}` : "已满级 · 无下级属性"} · ${escapeHtml(detail.upgrade.reason)}</p>`;
         contextHtml += detail.traits.length ? detail.traits.map((trait) => `<p>${escapeHtml(trait.name)} ×${trait.currentStacks} · ${escapeHtml(formatGrowthTraitEffectAtStacks(content, trait.id, trait.currentStacks))}</p>`).join("") : "<p>尚无词条 · 升级后强制三选一</p>";
         if (ui.destroyConfirm) {
           contextHtml = `<strong>确认拆除 ${escapeHtml(detail.name)}？</strong><p>不返还木材或金币，永久失去等级与词条。</p>`;
@@ -233,6 +250,8 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     if (event.detail > 1) return;
     const target = event.target as HTMLElement;
     const button = target.closest<HTMLButtonElement>("[data-action]");
+    if (button?.dataset.action === "retry_assets") { void loadAssets(); return; }
+    if (!library) return;
     if (button) {
       event.stopPropagation();
       const action = button.dataset.action!;
@@ -272,9 +291,35 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
   battlefield.resize();
   if (document.hidden) dispatch({ type: "system_pause" });
   render(0);
+  async function loadAssets(): Promise<void> {
+    if (loading || disposed) return;
+    loading = true;
+    app.dataset.assetState = "loading";
+    retryAssets.hidden = true;
+    loadingProgress.textContent = "0% · 加载模型与材质";
+    try {
+      const loaded = await ModelLibrary.load(({ loaded, total, name }) => {
+        if (!disposed) loadingProgress.textContent = `${Math.round(loaded / total * 100)}% · ${loaded}/${total} · ${name}`;
+      });
+      if (disposed) { loaded.dispose(); return; }
+      library = loaded;
+      battlefield.setModels(loaded);
+      loadingOverlay.hidden = true;
+      app.dataset.assetState = "ready";
+      render(0);
+    } catch (error) {
+      if (!disposed) {
+        app.dataset.assetState = "failed";
+        loadingProgress.textContent = `加载失败：${error instanceof Error ? error.message : "资源不可用"}。检查连接后重试。`;
+        retryAssets.hidden = false;
+      }
+    } finally { loading = false; }
+  }
+  void loadAssets();
   const frame = (timestamp: number) => {
     if (disposed) return;
-    render(session.advanceFrame(timestamp) / 30);
+    // The session sees its first timestamp only after all required assets are ready.
+    if (library) render(session.advanceFrame(timestamp) / 30);
     frameId = requestAnimationFrame(frame);
   };
   frameId = requestAnimationFrame(frame);
@@ -292,9 +337,10 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
     window.removeEventListener("pageshow", pageShow);
     session.dispose();
     battlefield.dispose();
+    library?.dispose();
     app.replaceChildren();
     app.classList.remove("whitebox-app");
-    for (const key of ["browserUserAgent", "renderPixelRatio", "phase", "selectedSlot", "commandHistory"]) delete app.dataset[key];
+    for (const key of ["browserUserAgent", "renderPixelRatio", "phase", "selectedSlot", "commandHistory", "assetState", "clockStep", "openingCountdown"]) delete app.dataset[key];
   };
   const pageHide = (event: PageTransitionEvent) => { if (event.persisted) systemPause(); else dispose(); };
   const pageShow = (event: PageTransitionEvent) => { if (event.persisted) systemResume(); };

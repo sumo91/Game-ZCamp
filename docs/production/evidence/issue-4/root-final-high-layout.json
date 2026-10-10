@@ -1,0 +1,461 @@
+[
+  {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "7246",
+      "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":5340,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c4\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c4\"},{\"step\":5340,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":7246,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_flat\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_damage\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+      "openingCountdown": "0",
+      "phase": "TACTICAL_PAUSE",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": "slot-r1-c3"
+    },
+    "slots": [
+      {
+        "h": 44,
+        "label": "1·1",
+        "level": "",
+        "slot": "slot-r1-c1",
+        "w": 44,
+        "x": 66.38542175292969,
+        "y": 333.4895935058594
+      },
+      {
+        "h": 44,
+        "label": "木材厂 Lv.5",
+        "level": "5",
+        "slot": "slot-r1-c2",
+        "w": 44,
+        "x": 112.1875,
+        "y": 333.4895935058594
+      },
+      {
+        "h": 44,
+        "label": "箭塔 Lv.5",
+        "level": "5",
+        "slot": "slot-r1-c3",
+        "w": 44,
+        "x": 158,
+        "y": 333.4895935058594
+      },
+      {
+        "h": 44,
+        "label": "箭塔 Lv.1",
+        "level": "1",
+        "slot": "slot-r1-c4",
+        "w": 44,
+        "x": 203.80209350585935,
+        "y": 333.4895935058594
+      },
+      {
+        "h": 44,
+        "label": "1·5",
+        "level": "",
+        "slot": "slot-r1-c5",
+        "w": 44,
+        "x": 249.6041717529297,
+        "y": 333.4895935058594
+      },
+      {
+        "h": 44,
+        "label": "2·1",
+        "level": "",
+        "slot": "slot-r2-c1",
+        "w": 44,
+        "x": 66.38542175292969,
+        "y": 378.6041870117187
+      },
+      {
+        "h": 44,
+        "label": "2·2",
+        "level": "",
+        "slot": "slot-r2-c2",
+        "w": 44,
+        "x": 112.1875,
+        "y": 378.6041870117187
+      },
+      {
+        "h": 44,
+        "label": "2·3",
+        "level": "",
+        "slot": "slot-r2-c3",
+        "w": 44,
+        "x": 158,
+        "y": 378.6041870117187
+      },
+      {
+        "h": 44,
+        "label": "2·4",
+        "level": "",
+        "slot": "slot-r2-c4",
+        "w": 44,
+        "x": 203.80209350585935,
+        "y": 378.6041870117187
+      },
+      {
+        "h": 44,
+        "label": "2·5",
+        "level": "",
+        "slot": "slot-r2-c5",
+        "w": 44,
+        "x": 249.6041717529297,
+        "y": 378.6041870117187
+      },
+      {
+        "h": 44,
+        "label": "3·1",
+        "level": "",
+        "slot": "slot-r3-c1",
+        "w": 44,
+        "x": 66.38542175292969,
+        "y": 423.7291870117187
+      },
+      {
+        "h": 44,
+        "label": "3·2",
+        "level": "",
+        "slot": "slot-r3-c2",
+        "w": 44,
+        "x": 112.1875,
+        "y": 423.7291870117187
+      },
+      {
+        "h": 44,
+        "label": "主城",
+        "level": "1",
+        "slot": "slot-r3-c3",
+        "w": 44,
+        "x": 158,
+        "y": 423.7291870117187
+      },
+      {
+        "h": 44,
+        "label": "3·4",
+        "level": "",
+        "slot": "slot-r3-c4",
+        "w": 44,
+        "x": 203.80209350585935,
+        "y": 423.7291870117187
+      },
+      {
+        "h": 44,
+        "label": "3·5",
+        "level": "",
+        "slot": "slot-r3-c5",
+        "w": 44,
+        "x": 249.6041717529297,
+        "y": 423.7291870117187
+      }
+    ],
+    "viewport": [
+      360,
+      640
+    ]
+  },
+  {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "7246",
+      "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":5340,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c4\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c4\"},{\"step\":5340,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":7246,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_flat\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_damage\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+      "openingCountdown": "0",
+      "phase": "TACTICAL_PAUSE",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": "slot-r1-c3"
+    },
+    "slots": [
+      {
+        "h": 44,
+        "label": "1·1",
+        "level": "",
+        "slot": "slot-r1-c1",
+        "w": 44,
+        "x": 40.79166793823242,
+        "y": 470.4583435058594
+      },
+      {
+        "h": 44,
+        "label": "木材厂 Lv.5",
+        "level": "5",
+        "slot": "slot-r1-c2",
+        "w": 44,
+        "x": 106.89583587646484,
+        "y": 470.4583435058594
+      },
+      {
+        "h": 44,
+        "label": "箭塔 Lv.5",
+        "level": "5",
+        "slot": "slot-r1-c3",
+        "w": 44,
+        "x": 173,
+        "y": 470.4583435058594
+      },
+      {
+        "h": 44,
+        "label": "箭塔 Lv.1",
+        "level": "1",
+        "slot": "slot-r1-c4",
+        "w": 44,
+        "x": 239.09375,
+        "y": 470.4583435058594
+      },
+      {
+        "h": 44,
+        "label": "1·5",
+        "level": "",
+        "slot": "slot-r1-c5",
+        "w": 44,
+        "x": 305.19793701171875,
+        "y": 470.4583435058594
+      },
+      {
+        "h": 44,
+        "label": "2·1",
+        "level": "",
+        "slot": "slot-r2-c1",
+        "w": 44,
+        "x": 40.79166793823242,
+        "y": 535.5729370117188
+      },
+      {
+        "h": 44,
+        "label": "2·2",
+        "level": "",
+        "slot": "slot-r2-c2",
+        "w": 44,
+        "x": 106.89583587646484,
+        "y": 535.5729370117188
+      },
+      {
+        "h": 44,
+        "label": "2·3",
+        "level": "",
+        "slot": "slot-r2-c3",
+        "w": 44,
+        "x": 173,
+        "y": 535.5729370117188
+      },
+      {
+        "h": 44,
+        "label": "2·4",
+        "level": "",
+        "slot": "slot-r2-c4",
+        "w": 44,
+        "x": 239.09375,
+        "y": 535.5729370117188
+      },
+      {
+        "h": 44,
+        "label": "2·5",
+        "level": "",
+        "slot": "slot-r2-c5",
+        "w": 44,
+        "x": 305.19793701171875,
+        "y": 535.5729370117188
+      },
+      {
+        "h": 44,
+        "label": "3·1",
+        "level": "",
+        "slot": "slot-r3-c1",
+        "w": 44,
+        "x": 40.79166793823242,
+        "y": 600.6979370117188
+      },
+      {
+        "h": 44,
+        "label": "3·2",
+        "level": "",
+        "slot": "slot-r3-c2",
+        "w": 44,
+        "x": 106.89583587646484,
+        "y": 600.6979370117188
+      },
+      {
+        "h": 44,
+        "label": "主城",
+        "level": "1",
+        "slot": "slot-r3-c3",
+        "w": 44,
+        "x": 173,
+        "y": 600.6979370117188
+      },
+      {
+        "h": 44,
+        "label": "3·4",
+        "level": "",
+        "slot": "slot-r3-c4",
+        "w": 44,
+        "x": 239.09375,
+        "y": 600.6979370117188
+      },
+      {
+        "h": 44,
+        "label": "3·5",
+        "level": "",
+        "slot": "slot-r3-c5",
+        "w": 44,
+        "x": 305.19793701171875,
+        "y": 600.6979370117188
+      }
+    ],
+    "viewport": [
+      390,
+      844
+    ]
+  },
+  {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "7246",
+      "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":5340,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c4\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c4\"},{\"step\":5340,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":7246,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_flat\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_damage\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+      "openingCountdown": "0",
+      "phase": "TACTICAL_PAUSE",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": "slot-r1-c3"
+    },
+    "slots": [
+      {
+        "h": 44,
+        "label": "1·1",
+        "level": "",
+        "slot": "slot-r1-c1",
+        "w": 44,
+        "x": 538.03125,
+        "y": 423.0625
+      },
+      {
+        "h": 44,
+        "label": "木材厂 Lv.5",
+        "level": "5",
+        "slot": "slot-r1-c2",
+        "w": 44,
+        "x": 599.5104370117188,
+        "y": 423.0625
+      },
+      {
+        "h": 44,
+        "label": "箭塔 Lv.5",
+        "level": "5",
+        "slot": "slot-r1-c3",
+        "w": 44,
+        "x": 661,
+        "y": 423.0625
+      },
+      {
+        "h": 44,
+        "label": "箭塔 Lv.1",
+        "level": "1",
+        "slot": "slot-r1-c4",
+        "w": 44,
+        "x": 722.4791870117188,
+        "y": 423.0625
+      },
+      {
+        "h": 44,
+        "label": "1·5",
+        "level": "",
+        "slot": "slot-r1-c5",
+        "w": 44,
+        "x": 783.9583740234375,
+        "y": 423.0625
+      },
+      {
+        "h": 44,
+        "label": "2·1",
+        "level": "",
+        "slot": "slot-r2-c1",
+        "w": 44,
+        "x": 538.03125,
+        "y": 483.6354370117187
+      },
+      {
+        "h": 44,
+        "label": "2·2",
+        "level": "",
+        "slot": "slot-r2-c2",
+        "w": 44,
+        "x": 599.5104370117188,
+        "y": 483.6354370117187
+      },
+      {
+        "h": 44,
+        "label": "2·3",
+        "level": "",
+        "slot": "slot-r2-c3",
+        "w": 44,
+        "x": 661,
+        "y": 483.6354370117187
+      },
+      {
+        "h": 44,
+        "label": "2·4",
+        "level": "",
+        "slot": "slot-r2-c4",
+        "w": 44,
+        "x": 722.4791870117188,
+        "y": 483.6354370117187
+      },
+      {
+        "h": 44,
+        "label": "2·5",
+        "level": "",
+        "slot": "slot-r2-c5",
+        "w": 44,
+        "x": 783.9583740234375,
+        "y": 483.6354370117187
+      },
+      {
+        "h": 44,
+        "label": "3·1",
+        "level": "",
+        "slot": "slot-r3-c1",
+        "w": 44,
+        "x": 538.03125,
+        "y": 544.1979370117188
+      },
+      {
+        "h": 44,
+        "label": "3·2",
+        "level": "",
+        "slot": "slot-r3-c2",
+        "w": 44,
+        "x": 599.5104370117188,
+        "y": 544.1979370117188
+      },
+      {
+        "h": 44,
+        "label": "主城",
+        "level": "1",
+        "slot": "slot-r3-c3",
+        "w": 44,
+        "x": 661,
+        "y": 544.1979370117188
+      },
+      {
+        "h": 44,
+        "label": "3·4",
+        "level": "",
+        "slot": "slot-r3-c4",
+        "w": 44,
+        "x": 722.4791870117188,
+        "y": 544.1979370117188
+      },
+      {
+        "h": 44,
+        "label": "3·5",
+        "level": "",
+        "slot": "slot-r3-c5",
+        "w": 44,
+        "x": 783.9583740234375,
+        "y": 544.1979370117188
+      }
+    ],
+    "viewport": [
+      1366,
+      768
+    ]
+  }
+]
