@@ -7,20 +7,22 @@ import {
 import type { AnimationAction, BufferGeometry, Material, Object3D } from "three";
 import { starterCatalog } from "../core/content";
 import type { BuildingState, GameEvent, GameState } from "../core/types";
-import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
+import { CAMP_POSITIONS, enemyDisplayPosition } from "./coordinates";
 import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
 import { buildingAsset, enemyAsset, heroAsset, type AnimationSemantic } from "./assetCatalog";
 import type { ModelLibrary } from "./ModelLibrary";
 import { SiegeFeedback } from "./siegeFeedback";
+import { ArcaneFeedback } from "./arcaneFeedback";
 
 type Effect = { object: Object3D; ttl: number; duration: number; from?: Vector3; to?: Vector3 };
-type EnemyView = { object: Object3D; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean };
+type EnemyView = { object: Object3D; definitionId: string; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean; slowMultiplier?: number };
 
 /** Owns all preview GPU resources, picking and event-driven presentation. */
 export class Battlefield {
   private readonly renderer = new WebGLRenderer({ antialias: true, alpha: false });
   private readonly scene = new Scene();
   private readonly siege = new SiegeFeedback(this.scene);
+  private readonly arcane = new ArcaneFeedback(this.scene);
   private readonly camera = new OrthographicCamera(-6, 6, 8, -8, 0.1, 100);
   private readonly raycaster = new Raycaster();
   private readonly pickers: Mesh[] = [];
@@ -147,6 +149,7 @@ export class Battlefield {
     this.synchronizeBuildings(state.buildings);
     this.synchronizeEnemies(state);
     this.synchronizeHero(state);
+    this.arcane.synchronize(state);
     for (const event of events) this.presentEvent(state, event);
     if (this.hero) {
       this.hero.attackRemaining = Math.max(0, this.hero.attackRemaining - deltaSeconds);
@@ -167,8 +170,18 @@ export class Battlefield {
         this.enemyAnchors.delete(id);
       } else {
         view.interrupt = Math.max(0, view.interrupt - deltaSeconds);
-        if (view.dying === null && view.interrupt === 0) this.play(view, view.atWall ? "attack" : "walk");
-        view.mixer?.update(deltaSeconds);
+        if (view.dying === null && view.interrupt === 0) {
+          this.play(view, "walk");
+          const walk = view.actions?.get("walk");
+          if (walk) {
+            walk.paused = view.atWall;
+            if (view.atWall) walk.time = 0;
+          }
+        }
+        if (view.mixer) {
+          view.mixer.timeScale = view.current === "walk" ? view.slowMultiplier ?? 1 : 1;
+          view.mixer.update(deltaSeconds);
+        }
       }
     }
     const wallTotal = state.wallHp + state.wallShield;
@@ -193,14 +206,16 @@ export class Battlefield {
         effect.object.position.lerpVectors(effect.from, effect.to, progress);
       } else if (effect.object.userData.reward) effect.object.position.y += deltaSeconds * 1.6;
     }
+    this.arcane.advance(deltaSeconds);
     this.renderer.render(this.scene, this.camera);
     // Read-only presentation evidence in the development sample, never a core handle.
-    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), effects: this.effects.length, calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
+    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, definitionId: view.definitionId, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), effects: this.effects.length, arcane: this.arcane.describe(), calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
   }
 
   public reset(): void {
     if (this.hero) { this.hero.mixer.stopAllAction(); this.hero.mixer.uncacheRoot(this.hero.object); this.scene.remove(this.hero.object); this.disposeObject(this.hero.object); this.hero = null; }
     this.siege.reset();
+    this.arcane.reset();
     for (const view of this.enemies.values()) { view.mixer?.stopAllAction(); view.mixer?.uncacheRoot(view.object); }
     for (const object of [...this.buildings.values(), ...[...this.enemies.values()].map((view) => view.object), ...this.effects.map((effect) => effect.object)]) {
       this.scene.remove(object);
@@ -217,6 +232,7 @@ export class Battlefield {
   public dispose(): void {
     this.reset();
     this.siege.dispose();
+    this.arcane.dispose();
     this.disposeObject(this.wall);
     this.disposeObject(this.environment);
     for (const geometry of this.geometries) geometry.dispose();
@@ -318,8 +334,9 @@ export class Battlefield {
         view = this.makeEnemy(enemy.id, enemy.definitionId);
       }
       const group = view.object;
-      group.position.copy(enemyPosition(enemy.id, enemy.position));
+      group.position.copy(enemyDisplayPosition(enemy.id, enemy.position, enemy.definitionId));
       view.atWall = enemy.atWall;
+      view.slowMultiplier = Math.min(1, ...(enemy.growthSlowStates ?? []).filter((slow) => slow.remainingSeconds > .000001).map((slow) => slow.multiplier));
       // Driven by effective simulation time; all battle motion stops in frozen phases.
       const phase = state.effectiveBattleTimeSeconds * (enemy.atWall ? 9 : 6) + Number(enemy.id.slice(enemy.id.lastIndexOf("-") + 1));
       if (!view.mixer) {
@@ -347,7 +364,7 @@ export class Battlefield {
     if (asset && this.library) {
       const instance = this.library.create(asset);
       const mixer = new AnimationMixer(instance.object);
-      view = { object: instance.object, mixer, actions: new Map(instance.clips.map((clip) => [clip.name as AnimationSemantic, mixer.clipAction(clip)])), interrupt: 0, dying: null, atWall: false };
+      view = { object: instance.object, definitionId, mixer, actions: new Map(instance.clips.map((clip) => [clip.name as AnimationSemantic, mixer.clipAction(clip)])), interrupt: 0, dying: null, atWall: false };
       this.play(view, "walk");
       let phase = 0;
       for (const character of id) phase = (phase * 31 + character.charCodeAt(0)) % 997;
@@ -360,7 +377,7 @@ export class Battlefield {
       group.add(this.meshBox(0.13, 0.3, 0.16, style.color, new Vector3(-0.12, 0.16, 0)));
       group.add(this.meshBox(0.13, 0.3, 0.16, style.color, new Vector3(0.12, 0.16, 0)));
       group.scale.setScalar(style.scale);
-      view = { object: group, interrupt: 0, dying: null, atWall: false };
+      view = { object: group, definitionId, interrupt: 0, dying: null, atWall: false };
     }
     this.enemies.set(id, view);
     this.scene.add(view.object);
@@ -376,6 +393,7 @@ export class Battlefield {
       const from = this.anchorPosition(heroAttack ? heroAttack.object : this.buildings.get(source.id), "attack_anchor", CAMP_POSITIONS.get(source.slotId)!.clone().add(new Vector3(0, 1.25, 0)));
       if (this.siege.present(event, from, (id, position) => this.enemyHitPosition(id, position))) return;
       const to = this.enemyHitPosition(event.targetId, event.targetPosition);
+      if (this.arcane.attack(event.towerDefinitionId, event.buildingId, event.targetId, from, to)) return;
       const direction = to.clone().sub(from);
       const shot = new Mesh(this.geometry(new CylinderGeometry(0.018, 0.025, .4, 5)), this.material(new MeshBasicMaterial({ color: 0xffdd90 })));
       shot.position.copy(from);
@@ -383,6 +401,23 @@ export class Battlefield {
       this.addEffect(shot, 0.15, from, to);
     } else if (event.type === "tower_special") {
       this.siege.present(event, undefined, (id, position) => this.enemyHitPosition(id, position));
+      if (event.effect === "弹射") {
+        const position = event.targetPosition ?? this.enemyAnchors.get(event.targetId)?.position;
+        if (position !== undefined) this.arcane.chain(event.buildingId, event.targetId, this.enemyHitPosition(event.targetId, position));
+      }
+    } else if (event.type === "enemy_wall_attack") {
+      const view = this.enemies.get(event.enemyId);
+      if (view?.dying === null) {
+        view.interrupt = Math.min(.8, event.intervalSeconds * .8);
+        this.play(view, "attack", true);
+        view.actions?.get("attack")?.setEffectiveTimeScale(.8 / view.interrupt);
+      }
+      const position = enemyDisplayPosition(event.enemyId, 1, event.definitionId);
+      position.set(position.x, .68, -.38);
+      const heavy = event.definitionId === "brute";
+      const strike = new Mesh(this.geometry(new SphereGeometry(heavy ? .23 : .10, 6, 4)), this.material(new MeshBasicMaterial({ color: heavy ? 0xf29d6a : 0xf7d6b0, wireframe: true })));
+      strike.position.copy(position);
+      this.addEffect(strike, heavy ? .25 : .15);
     } else if (event.type === "enemy_hit" || event.type === "enemy_defeated") {
       // Event carries the last anchor even if the simulation removed this enemy.
       const cached = this.enemyAnchors.get(event.enemyId);
@@ -391,7 +426,7 @@ export class Battlefield {
       if (cached) cached.position = event.position;
       const death = event.type === "enemy_defeated";
       const position = this.enemyHitPosition(event.enemyId, event.position);
-      if (death && view) view.object.position.copy(enemyPosition(event.enemyId, event.position));
+      if (death && view) view.object.position.copy(enemyDisplayPosition(event.enemyId, event.position, view.definitionId));
       const object = new Mesh(this.geometry(new SphereGeometry(death ? 0.32 : 0.18, 6, 4)), this.material(new MeshBasicMaterial({ color: death ? 0xd6bd77 : 0xfff0d2, wireframe: death })));
       object.position.copy(position);
       this.addEffect(object, death ? 0.4 : 0.12);
@@ -418,7 +453,7 @@ export class Battlefield {
 
   private enemyHitPosition(id: string, progress: number): Vector3 {
     const object = this.enemies.get(id)?.object;
-    const eventPosition = enemyPosition(id, progress);
+    const eventPosition = enemyDisplayPosition(id, progress, this.enemyAnchors.get(id)?.definitionId ?? "walker");
     if (!object) return eventPosition.add(new Vector3(0, .65, 0));
     // A fixed-step batch may contain an earlier hit and a later final position.
     // Sample the event anchor without moving a living actor back along its path.
@@ -429,13 +464,15 @@ export class Battlefield {
     return anchor;
   }
 
-  private play(view: EnemyView, semantic: AnimationSemantic): void {
-    if (view.current === semantic) return;
+  private play(view: EnemyView, semantic: AnimationSemantic, restart = false): void {
+    if (view.current === semantic && !restart) return;
     const next = view.actions?.get(semantic);
     if (!next) return;
     const previous = view.current ? view.actions?.get(view.current) : undefined;
     previous?.fadeOut(.08);
-    next.reset().setLoop(semantic === "walk" || semantic === "attack" ? LoopRepeat : LoopOnce, semantic === "walk" || semantic === "attack" ? Infinity : 1);
+    next.reset().setLoop(semantic === "walk" ? LoopRepeat : LoopOnce, semantic === "walk" ? Infinity : 1);
+    next.paused = false;
+    next.setEffectiveTimeScale(1);
     next.clampWhenFinished = semantic === "death";
     next.fadeIn(.08).play();
     view.current = semantic;
@@ -471,3 +508,4 @@ export class Battlefield {
     });
   }
 }
+

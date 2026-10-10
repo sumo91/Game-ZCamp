@@ -17,6 +17,12 @@ const yards = ["slot-r3-c1", "slot-r3-c2", "slot-r3-c4", "slot-r3-c5"];
  * and builds/transforms/upgrades only by public commands; no injected battle state. */
 export function createSiegeDemoSession(): BattleSession {
   const session = new BattleSession({ seed: 6, config: { heroId: "vanguard_gunner", levelId: "first_defense" } });
+  prepareSiegeDemo(session);
+  return session;
+}
+
+/** Reuse the same public-command replay after this explicit demo is restarted. */
+export function prepareSiegeDemo(session: BattleSession): void {
   const send = (command: GameCommand) => session.dispatch(command).accepted;
   send({ type: "build_building", slotId: towers[0].slot, definitionId: "arrow_tower" });
   send({ type: "build_building", slotId: yards[0]!, definitionId: "lumberyard" });
@@ -54,7 +60,7 @@ export function createSiegeDemoSession(): BattleSession {
     if (ready) {
       send({ type: "pause" });
       session.drainEvents();
-      return session;
+      return;
     }
     session.advance(1/30);
     session.drainEvents();

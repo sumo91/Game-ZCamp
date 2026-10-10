@@ -172,6 +172,18 @@ describe("growth building combat and economy integration", () => {
     expect(hit).toMatchObject({ damage: 4 });
   });
 
+  it("reports the actual electric chain anchors even when the selected targets die immediately", () => {
+    const { game, building } = makeGrowthTower("electric", [trait("electric_chain")]);
+    game.getState().enemies = [enemy("primary", 1, 10), enemy("chain-a", 0.9, 6), enemy("chain-b", 0.8, 6), enemy("chain-c", 0.7, 6), enemy("outside", 0.1, 100)];
+    game.tick(0.25);
+    expect(game.drainEvents().filter((event) => event.type === "tower_special")).toEqual([
+      { type: "tower_special", buildingId: building.id, effect: "弹射", targetId: "chain-a", targetPosition: 0.9 },
+      { type: "tower_special", buildingId: building.id, effect: "弹射", targetId: "chain-b", targetPosition: 0.8 },
+      { type: "tower_special", buildingId: building.id, effect: "弹射", targetId: "chain-c", targetPosition: 0.7 },
+    ]);
+    expect(game.getState().enemies.map((target) => target.id)).toEqual(["outside"]);
+  });
+
   it("removes all source states and future effects when a growth tower is dismantled", () => {
     const { game, building } = makeGrowthTower("cannon", [trait("cannon_burn")]);
     game.tick(0.25);
