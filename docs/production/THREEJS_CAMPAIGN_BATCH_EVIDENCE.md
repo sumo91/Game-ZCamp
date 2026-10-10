@@ -17,6 +17,8 @@
 
 本档案不宣称整合候选 UI、听感或手机人工通过；完整玩家胜负/最终预算、#5/#13 设备与所有者接受仍待根或后续候选验证。未操作 master/tracker/远端或旧 phone 服务。外部命令日志与交接位于 `C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/`：`product-campaign-batch-check.log`、`product-campaign-batch-build.log`、`product-campaign-batch-merge.md`。
 
+补充根实际范围：[单独来源 Boss / Hero 玩测](evidence/campaign-batch/root-ui-review.md)及同目录最终截图/公开 JSON。#9 的真实 warning→charge 与 King inspire、#10 普通大厅→第二波失败→原 120/0 和五秒开局再战均有直接记录；这些针对各单独固定构建，不冒充组合默认 #11 游戏的完整手动胜负。原审查与前述命令未重跑。
+
 ## Standards
 
 [独立原报告全文](evidence/campaign-batch/standards-review.md)：0 hard breaches，2 possible heuristics，均非阻断。分别为 Boss/Hero Python atlas 烘焙重复（Duplicated Code）与 Hero 脚本不可达 arrow 分支（Speculative Generality）；接受而不扩大本次合入。报告固定来源与基线，未冒充集成 UI 验证。

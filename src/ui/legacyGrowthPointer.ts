@@ -18,4 +18,3 @@ export function hitGrowthPointer(x: number, y: number, transformOpen = true): Gr
   if (slot) return { kind: "slot", slotId: slot.id };
   return { kind: "none" };
 }
-

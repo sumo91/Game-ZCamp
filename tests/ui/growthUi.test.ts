@@ -172,4 +172,3 @@ describe("growth UI derivation and input", () => {
     expect(deriveGrowthPauseControl("VICTORY").enabled).toBe(false);
   });
 });
-

@@ -118,4 +118,3 @@ export function mountThreeGame(app: HTMLElement, options: { developmentReplay?: 
   showLobby(); void load(); frameId = requestAnimationFrame(frame);
   return dispose;
 }
-
