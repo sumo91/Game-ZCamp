@@ -3,15 +3,16 @@ import type { Object3D, Scene } from "three";
 import type { GameState } from "../core/types";
 import { enemyDisplayPosition } from "./coordinates";
 
-type ArcaneEffect = { object: Object3D; remaining: number; duration: number; from?: Vector3; to?: Vector3 };
+type ArcaneEffect = { object: Object3D; remaining: number; duration: number; from?: Vector3; to?: Vector3; material?: MeshBasicMaterial[] };
 
 /** Visual ice and rune feedback. It observes core targets/statuses and never settles combat. */
 export class ArcaneFeedback {
   private readonly crystalGeometry = new OctahedronGeometry(.12, 0);
-  private readonly ringGeometry = new TorusGeometry(.32, .023, 4, 12);
-  private readonly boltGeometry = new CylinderGeometry(.032, .032, 1, 4);
+  private readonly ringGeometry = new TorusGeometry(.40, .028, 4, 12);
+  private readonly boltGeometry = new CylinderGeometry(.045, .045, 1, 4);
+  private readonly boltCoreGeometry = new CylinderGeometry(.015, .015, 1, 4);
   private readonly iceMaterial = new MeshBasicMaterial({ color: 0x74d0ef });
-  private readonly runeMaterial = new MeshBasicMaterial({ color: 0xc9afff });
+  private readonly runeMaterial = new MeshBasicMaterial({ color: 0xbf83ff });
   private readonly runeCoreMaterial = new MeshBasicMaterial({ color: 0xe8daff });
   private readonly slowed = new Map<string, Group>();
   private readonly chainAnchors = new Map<string, Vector3>();
@@ -29,14 +30,15 @@ export class ArcaneFeedback {
     }
     if (towerId !== "frost") return false;
     const shard = new Mesh(this.crystalGeometry, this.iceMaterial);
-    shard.scale.set(.65, 1.8, .65);
+    shard.scale.set(.85, 2.3, .85);
     shard.position.copy(from);
     shard.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), to.clone().sub(from).normalize());
-    this.add(shard, .13, from.clone(), to.clone());
-    const impact = new Mesh(this.ringGeometry, this.iceMaterial);
+    this.add(shard, .22, from.clone(), to.clone());
+    const impactMaterial = this.fadeMaterial(this.iceMaterial);
+    const impact = new Mesh(this.ringGeometry, impactMaterial);
     impact.rotation.x = Math.PI / 2;
-    impact.position.copy(to).y = .055;
-    this.add(impact, .20);
+    impact.position.copy(to).y = .08;
+    this.add(impact, .32, undefined, undefined, [impactMaterial]);
     return true;
   }
 
@@ -59,13 +61,13 @@ export class ArcaneFeedback {
         group = new Group();
         const ring = new Mesh(this.ringGeometry, this.iceMaterial);
         ring.rotation.x = Math.PI / 2;
-        ring.position.y = .025;
+        ring.position.y = .08;
         group.add(ring);
         for (let index = 0; index < 3; index += 1) {
           const shard = new Mesh(this.crystalGeometry, this.iceMaterial);
           const angle = index * Math.PI * 2 / 3;
-          shard.position.set(Math.cos(angle) * .30, .14, Math.sin(angle) * .30);
-          shard.scale.set(.5, 1.3, .5);
+          shard.position.set(Math.cos(angle) * .40, .20, Math.sin(angle) * .40);
+          shard.scale.set(.7, 1.8, .7);
           group.add(shard);
         }
         this.scene.add(group);
@@ -91,9 +93,14 @@ export class ArcaneFeedback {
       effect.remaining -= deltaSeconds;
       if (effect.remaining <= 0) {
         this.scene.remove(effect.object);
+        effect.material?.forEach((material) => material.dispose());
         this.effects.splice(index, 1);
-      } else if (effect.from && effect.to) {
-        effect.object.position.lerpVectors(effect.from, effect.to, 1 - effect.remaining / effect.duration);
+      } else {
+        if (effect.from && effect.to) effect.object.position.lerpVectors(effect.from, effect.to, 1 - effect.remaining / effect.duration);
+        // Hold the first third at full strength, then fade without advancing
+        // during pauses. Each flash owns its materials, so attacks do not fade
+        // one another or dim the real, persistent slow-state markers.
+        effect.material?.forEach((material) => { material.opacity = Math.min(1, effect.remaining / (effect.duration * 2 / 3)); });
       }
     }
   }
@@ -104,7 +111,10 @@ export class ArcaneFeedback {
 
   public reset(): void {
     for (const group of this.slowed.values()) this.scene.remove(group);
-    for (const effect of this.effects) this.scene.remove(effect.object);
+    for (const effect of this.effects) {
+      this.scene.remove(effect.object);
+      effect.material?.forEach((material) => material.dispose());
+    }
     this.slowed.clear();
     this.effects.length = 0;
     this.chainAnchors.clear();
@@ -113,33 +123,47 @@ export class ArcaneFeedback {
 
   public dispose(): void {
     this.reset();
-    for (const resource of [this.crystalGeometry, this.ringGeometry, this.boltGeometry, this.iceMaterial, this.runeMaterial, this.runeCoreMaterial]) resource.dispose();
+    for (const resource of [this.crystalGeometry, this.ringGeometry, this.boltGeometry, this.boltCoreGeometry, this.iceMaterial, this.runeMaterial, this.runeCoreMaterial]) resource.dispose();
   }
 
   private lightning(from: Vector3, to: Vector3): void {
     const group = new Group();
     const direction = to.clone().sub(from);
-    const side = new Vector3(-direction.z, 0, direction.x).normalize().multiplyScalar(.09);
-    const points = [from.clone(), from.clone().lerp(to, .3).add(side), from.clone().lerp(to, .56).sub(side), from.clone().lerp(to, .78).add(side.clone().multiplyScalar(.65)), to.clone()];
+    const side = new Vector3(-direction.z, 0, direction.x).normalize().multiplyScalar(.14);
+    const points = [from.clone(), from.clone().lerp(to, .3).add(side).add(new Vector3(0, .25, 0)), from.clone().lerp(to, .56).sub(side).add(new Vector3(0, .35, 0)), from.clone().lerp(to, .78).add(side.clone().multiplyScalar(.65)).add(new Vector3(0, .20, 0)), to.clone()];
+    const outerMaterial = this.fadeMaterial(this.runeMaterial);
+    const coreMaterial = this.fadeMaterial(this.runeCoreMaterial);
     for (let index = 1; index < points.length; index += 1) {
       const start = points[index - 1]!;
       const end = points[index]!;
       const delta = end.clone().sub(start);
-      const bolt = new Mesh(this.boltGeometry, this.runeMaterial);
+      const bolt = new Mesh(this.boltGeometry, outerMaterial);
       bolt.position.copy(start).add(end).multiplyScalar(.5);
       bolt.scale.y = delta.length();
       bolt.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), delta.normalize());
       group.add(bolt);
+      const core = new Mesh(this.boltCoreGeometry, coreMaterial);
+      core.position.copy(bolt.position);
+      core.scale.copy(bolt.scale);
+      core.quaternion.copy(bolt.quaternion);
+      group.add(core);
     }
-    const spark = new Mesh(this.crystalGeometry, this.runeCoreMaterial);
+    const spark = new Mesh(this.crystalGeometry, coreMaterial);
     spark.position.copy(to);
     spark.scale.setScalar(.85);
     group.add(spark);
-    this.add(group, .17);
+    this.add(group, .34, undefined, undefined, [outerMaterial, coreMaterial]);
   }
 
-  private add(object: Object3D, duration: number, from?: Vector3, to?: Vector3): void {
+  private fadeMaterial(source: MeshBasicMaterial): MeshBasicMaterial {
+    const material = source.clone();
+    material.transparent = true;
+    material.depthWrite = false;
+    return material;
+  }
+
+  private add(object: Object3D, duration: number, from?: Vector3, to?: Vector3, material?: MeshBasicMaterial[]): void {
     this.scene.add(object);
-    this.effects.push({ object, remaining: duration, duration, from, to });
+    this.effects.push({ object, remaining: duration, duration, from, to, material });
   }
 }
