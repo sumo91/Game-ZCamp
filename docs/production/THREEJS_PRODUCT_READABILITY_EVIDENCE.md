@@ -20,9 +20,11 @@
 
 根在最终固定代码 `cc7b6fd` 的 5360 入口完成短复验，并明确接受本批组合画面：普通默认大厅 Start enabled，进入正式首关，付费建两箭塔、运行至 27 kills / 6.75 gold 后真实 Pause。[普通截图](evidence/product-readability/data/product-readable-game-normal.jpg)与 [公开 DOM 原记录](evidence/product-readability/data/product-readable-game-normal.json)保留实际范围，这是短回归，不是本轮另一场完整通关。
 
-最终原 arcaneDemo 有明确开发标签（600 HP、授予资源、零墙伤，正式战役不使用），由真实 Continue 运行至第二波 25 敌人后 Pause。根看到冰晶、减速圈、多段紫电与场景灯火；标准→流畅→标准维持 25 敌人、4846 木／47 金／36 秒 HUD，关键 VFX 保留且无旧装饰长影，warn/error 为空。[标准截图](evidence/product-readability/data/product-readable-game-arcane.jpg)、[流畅截图](evidence/product-readability/data/product-readable-game-arcane-low.jpg)及各自 JSON 保存原始输出。视觉依据是实际截图中的反馈，非 chains 缓存或 effects 总数；手机尚未测。
+最终原 arcaneDemo 有明确开发标签（600 HP、授予资源、零墙伤，正式战役不使用），由真实 Continue 运行至第二波 25 敌人后 Pause。根看到冰晶、减速圈、多段紫电与场景灯火；标准→流畅→标准维持 25 敌人、4846 木／47 金／36 秒 HUD，关键 VFX 保留且无旧装饰长影，warn/error 为空。[标准截图](evidence/product-readability/data/product-readable-game-arcane.jpg)、[流畅截图](evidence/product-readability/data/product-readable-game-arcane-low.jpg)及各自 JSON 保存原始输出。根追加的 [最终复验原报告](evidence/product-readability/integration-root-review.md)和 [暂停比较](evidence/product-readability/data/product-readable-game-pause-audit.json)确认两份 JSON 的 25 actors 与 arcane 反馈完全相同（15 effects）；这是原记录的比较，没有改动运行状态。视觉依据仍是实际截图中的反馈，非 chains 缓存或 effects 总数；手机尚未测。
 
 #6 的三档正式模型及既有行为回归沿用 [原内容交付](THREEJS_CONTENT_BATCH_EVIDENCE.md)。本批真实混编内燃烧和细长金白弹道可见，但尚未清楚抓到抛物线炮弹与橙色扩散环；归档 live-1／live-3、paused 和 current.json，仅证明各自实际镜头。live-2 是一次截图空读帧，后续正常截图恢复，不据此宣称游戏整体空白，也不归档它作为交付图。**#6 的完整运行镜头接受保留，继续 open。**
+
+根还在最终普通首关用自然所得资源付费把两箭塔改为连弩／火炮、升 Lv.2 并选择真实提供的猎杀／扩大爆炸词条，自然运行至第 7 波 Pause（100 墙／72 盾、4 亡灵、147 木／132.75 金、44 秒）。[普通特殊塔截图](evidence/product-readability/data/product-readable-game-normal-special.jpg)与 JSON 仅展示建筑及少量上缘敌人，未清楚抓到炮弧／爆炸环／穿透，不能据此补全 #6；也不是新的完整通关。最终普通付费流程与组合画面短复验通过，没有代码变化。
 
 ## Standards
 
@@ -32,6 +34,6 @@
 
 [独立原报告](evidence/product-readability/spec-review.md)同一固定来源三范围：0 findings。核心目标／伤害不等待显示动画，真实减速按状态清理；地面可读、装饰不抢选取、低档保留接地与关键反馈。代码审查不冒称自身完成浏览器或设备接受。
 
-[复制审计](evidence/product-readability/copy-audit.json)记录 27 份工作区原件副本：26 份逐字节一致；单个 Spec 文本仅 CRLF→LF 并去掉末尾额外空行，文字与 findings 不变，外部原件未改。未新增 attributes 或更改 Git 换行／白空格配置。截图与 JSON 的名称、缓存和计数不扩张视觉结论。
+[复制审计](evidence/product-readability/copy-audit.json)记录 31 份工作区原件副本：30 份逐字节一致；单个 Spec 文本仅 CRLF→LF 并去掉末尾额外空行，文字与 findings 不变，外部原件未改。末四份最终普通战役／暂停原件在初次证据提交后追加，代码不变。未新增 attributes 或更改 Git 换行／白空格配置。截图与 JSON 的名称、缓存和计数不扩张视觉结论。
 
-本批完成产品可读性和环境交付，不新增采集平台、不重跑手机流程。新组合 GPU／长期性能尚未测，旧 `b7465c3` 桌面数据只证明旧候选；#12 仍待新组合复验。#5／#13 美术、实体设备与项目所有者明确接受及 master 最终合入保留，#1／Goal 未完成。根负责 #7 达标后的 tracker／PR 更新；本合入仅正常推送三来源分支与集成分支并核对远端 SHA，不 force、不合 master、不发布。
+本批完成产品可读性和环境交付，不新增采集平台、不重跑手机流程。新组合 GPU／长期性能尚未测，旧 `b7465c3` 桌面数据只证明旧候选；#12 仍待新组合复验。#5／#13 美术、实体设备与项目所有者明确接受及 master 最终合入保留，#1／Goal 未完成。根负责 #7 达标后的 tracker／PR 更新；本合入只获三来源分支与集成分支的正常推送授权，远端同步必须以实际 `ls-remote` 精确结果为准，本地证据提交不代表推送已成功。没有 force、master 合入或发布。

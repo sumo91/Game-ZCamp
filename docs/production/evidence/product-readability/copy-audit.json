@@ -276,7 +276,47 @@
       "copySha256": "d60be1ec8baf8a51e10f99d3c301ac163a76ea760c139337b9fb2bb7e9181c56",
       "byteIdentical": true,
       "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-root-ui.md",
+      "repositoryPath": "docs/production/evidence/product-readability/integration-root-review.md",
+      "originalBytes": 1394,
+      "copyBytes": 1394,
+      "originalSha256": "2a30970c6c89036cfb8b1aedca37fdc8007ab2502ba9c342d347da6f4f223d57",
+      "copySha256": "2a30970c6c89036cfb8b1aedca37fdc8007ab2502ba9c342d347da6f4f223d57",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-pause-audit.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-pause-audit.json",
+      "originalBytes": 158,
+      "copyBytes": 158,
+      "originalSha256": "58fc450d8628783cdbfc7f1a6bc0f31412f2839a1d46451e26e43a3622a32911",
+      "copySha256": "58fc450d8628783cdbfc7f1a6bc0f31412f2839a1d46451e26e43a3622a32911",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-normal-special.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-normal-special.jpg",
+      "originalBytes": 44958,
+      "copyBytes": 44958,
+      "originalSha256": "ec2ae695f826ff1050c8a1fc5e268bb1a131da1811f83a6fc40a22c8bca308ef",
+      "copySha256": "ec2ae695f826ff1050c8a1fc5e268bb1a131da1811f83a6fc40a22c8bca308ef",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-normal-special.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-normal-special.json",
+      "originalBytes": 1637,
+      "copyBytes": 1637,
+      "originalSha256": "fbcbc5e7e68d19347265b75fe1d8673fd84bdc53d4c30f5574804a9e5ac80ca1",
+      "copySha256": "fbcbc5e7e68d19347265b75fe1d8673fd84bdc53d4c30f5574804a9e5ac80ca1",
+      "byteIdentical": true,
+      "normalization": "none"
     }
   ],
-  "note": "26 byte-exact worktree copies and one Spec terminal-whitespace-only exception authorized by coordinator; external originals unchanged. Existing Git line-ending configuration is not modified. The known live-2 empty-read image is intentionally excluded. Screenshot names and effects counts do not establish cannon arc/explosion visibility."
+  "note": "30 byte-exact worktree copies and one Spec terminal-whitespace-only exception authorized by coordinator; external originals unchanged. Existing Git line-ending configuration is not modified. The known live-2 empty-read image is intentionally excluded. Screenshot names and effects counts do not establish cannon arc/explosion visibility. Final four ordinary-campaign/pause records were supplied after the first evidence commit, with no code change."
 }
