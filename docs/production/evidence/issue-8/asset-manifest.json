@@ -1,0 +1,255 @@
+{
+  "schema": 1,
+  "authorship": "Original ZCamp derivative body/equipment, refined skeleton rig and Actions reused",
+  "note": "Container/source checks and actual counts; not an art or phone-performance acceptance",
+  "assets": [
+    {
+      "asset": "undead_runner.glb",
+      "bytes": 931564,
+      "sha256": "db51105203f2a28e7659466667479b1f087de3e85fe79bdd2f948267d662d70d",
+      "source": "art/threejs/sources/undead_runner.blend",
+      "sourceSha256": "ddf87ebdab74ff7735f89d8c43da54fd9d77be5b157c5d95985980b51791ad82",
+      "sourceBytes": 1933355,
+      "triangles": 5936,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "joints": 14,
+      "clips": [
+        {
+          "name": "walk",
+          "seconds": 0.8,
+          "channels": 42
+        },
+        {
+          "name": "attack",
+          "seconds": 0.8,
+          "channels": 42
+        },
+        {
+          "name": "hit",
+          "seconds": 0.3,
+          "channels": 42
+        },
+        {
+          "name": "death",
+          "seconds": 0.9,
+          "channels": 42
+        }
+      ],
+      "sourceBoundsZUp": {
+        "min": [
+          -0.337179958820343,
+          -0.20165909826755524,
+          0.002537965774536133
+        ],
+        "max": [
+          0.337179958820343,
+          0.29472875595092773,
+          1.2921991348266602
+        ]
+      },
+      "allVerticesBound": true,
+      "embeddedImages": [
+        {
+          "mimeType": "image/png",
+          "width": 512,
+          "height": 512,
+          "bytes": 170251
+        },
+        {
+          "mimeType": "image/png",
+          "width": 512,
+          "height": 512,
+          "bytes": 191632
+        }
+      ],
+      "silhouette": "lean hunched ghoul, long claws, uncovered skull, no shield"
+    },
+    {
+      "asset": "undead_tank.glb",
+      "bytes": 860564,
+      "sha256": "0a710c6ef407e7af1c7ddfafcf060554f7f59e561770559ba1d983a6f3b6c18f",
+      "source": "art/threejs/sources/undead_tank.blend",
+      "sourceSha256": "59cb8e8147812791cca5e332d76a1692060643a32902d7475eb7ee716be34198",
+      "sourceBytes": 1898484,
+      "triangles": 5960,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "joints": 14,
+      "clips": [
+        {
+          "name": "walk",
+          "seconds": 0.8,
+          "channels": 42
+        },
+        {
+          "name": "attack",
+          "seconds": 0.8,
+          "channels": 42
+        },
+        {
+          "name": "hit",
+          "seconds": 0.3,
+          "channels": 42
+        },
+        {
+          "name": "death",
+          "seconds": 0.9,
+          "channels": 42
+        }
+      ],
+      "sourceBoundsZUp": {
+        "min": [
+          -0.5289999842643738,
+          -0.27037501335144043,
+          0.002888977527618408
+        ],
+        "max": [
+          0.5289999842643738,
+          0.27810001373291016,
+          1.4709075689315796
+        ]
+      },
+      "allVerticesBound": true,
+      "embeddedImages": [
+        {
+          "mimeType": "image/png",
+          "width": 512,
+          "height": 512,
+          "bytes": 141246
+        },
+        {
+          "mimeType": "image/png",
+          "width": 512,
+          "height": 512,
+          "bytes": 179485
+        }
+      ],
+      "silhouette": "broad barrel torso, rounded pauldrons, iron fists and wraps"
+    },
+    {
+      "asset": "undead_armored.glb",
+      "bytes": 991540,
+      "sha256": "80c2a3a0846d1b2f9135c20b14cf3368dbc9e412fddf91dac78d0729a1abf31a",
+      "source": "art/threejs/sources/undead_armored.blend",
+      "sourceSha256": "ee8c2dc06ee6925a0fae3049fa929237edcb6f690bb539b74a9fec59bec6d772",
+      "sourceBytes": 1896836,
+      "triangles": 6672,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "joints": 14,
+      "clips": [
+        {
+          "name": "walk",
+          "seconds": 0.8,
+          "channels": 42
+        },
+        {
+          "name": "attack",
+          "seconds": 0.8,
+          "channels": 42
+        },
+        {
+          "name": "hit",
+          "seconds": 0.3,
+          "channels": 42
+        },
+        {
+          "name": "death",
+          "seconds": 0.9,
+          "channels": 42
+        }
+      ],
+      "sourceBoundsZUp": {
+        "min": [
+          -0.5904666185379028,
+          -0.22280000150203705,
+          0.0027809739112854004
+        ],
+        "max": [
+          0.572399914264679,
+          0.17000000178813934,
+          1.6493289470672607
+        ]
+      },
+      "allVerticesBound": true,
+      "embeddedImages": [
+        {
+          "mimeType": "image/png",
+          "width": 512,
+          "height": 512,
+          "bytes": 146201
+        },
+        {
+          "mimeType": "image/png",
+          "width": 512,
+          "height": 512,
+          "bytes": 155166
+        }
+      ],
+      "silhouette": "closed crested helm, pointed pauldrons, large kite shield and cleaver"
+    },
+    {
+      "asset": "undead_brute.glb",
+      "bytes": 957044,
+      "sha256": "102539476c66c08b8d27cbd14ea2e48309ebc2803afe55d04b8e0f265a6ef92e",
+      "source": "art/threejs/sources/undead_brute.blend",
+      "sourceSha256": "a431930e26dc199d03457049755044620445088518c1e8b7aacf62d3b6ad6afa",
+      "sourceBytes": 1911394,
+      "triangles": 7160,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "joints": 14,
+      "clips": [
+        {
+          "name": "walk",
+          "seconds": 0.8,
+          "channels": 42
+        },
+        {
+          "name": "attack",
+          "seconds": 0.8,
+          "channels": 42
+        },
+        {
+          "name": "hit",
+          "seconds": 0.3,
+          "channels": 42
+        },
+        {
+          "name": "death",
+          "seconds": 0.9,
+          "channels": 42
+        }
+      ],
+      "sourceBoundsZUp": {
+        "min": [
+          -0.6256000399589539,
+          -0.3885999619960785,
+          0.0037260055541992188
+        ],
+        "max": [
+          0.8431999087333679,
+          0.33640000224113464,
+          1.8970582485198975
+        ]
+      },
+      "allVerticesBound": true,
+      "embeddedImages": [
+        {
+          "mimeType": "image/png",
+          "width": 512,
+          "height": 512,
+          "bytes": 122839
+        },
+        {
+          "mimeType": "image/png",
+          "width": 512,
+          "height": 512,
+          "bytes": 161962
+        }
+      ],
+      "silhouette": "oversized stitched belly, asymmetric spikes, two-handed scale iron maul"
+    }
+  ]
+}

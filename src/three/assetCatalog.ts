@@ -1,7 +1,7 @@
 import type { GrowthBuildingId } from "../core/buildingGrowth";
 import { starterCatalog, type EnemyDefinition } from "../core/content";
 
-export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton";
+export type AssetId = "arrow_low" | "arrow_medium" | "arrow_high" | "lumber_low" | "lumber_medium" | "lumber_high" | "main_city" | "wall" | "tree" | "rocks" | "plot" | "skeleton" | "undead_runner" | "undead_tank" | "undead_armored" | "undead_brute";
 export type AnimationSemantic = "walk" | "attack" | "hit" | "death";
 export interface PresentationAsset {
   id: AssetId;
@@ -10,6 +10,8 @@ export interface PresentationAsset {
   maximumSize: readonly [number, number, number];
   anchors: readonly string[];
   clips: readonly AnimationSemantic[];
+  /** Display-only setback so large equipment remains outside the wall. */
+  wallInset?: number;
 }
 
 export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
@@ -17,6 +19,10 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
   { id: "arrow_medium", file: "arrow_tower_medium.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "arrow_high", file: "arrow_tower_high.glb", maximumSize: [1.8, 2.15, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "skeleton", file: "skeleton_infantry.glb", maximumSize: [1.15, 1.6, .65], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"] },
+  { id: "undead_runner", file: "undead_runner.glb", maximumSize: [1.2, 1.55, .9], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"], wallInset: .08 },
+  { id: "undead_tank", file: "undead_tank.glb", maximumSize: [1.45, 1.7, .95], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"], wallInset: .12 },
+  { id: "undead_armored", file: "undead_armored.glb", maximumSize: [1.55, 1.9, .95], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"], wallInset: .12 },
+  { id: "undead_brute", file: "undead_brute.glb", maximumSize: [2, 2.15, 1.15], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: ["walk", "attack", "hit", "death"], wallInset: .25 },
   { id: "lumber_low", file: "lumberyard_low.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "lumber_medium", file: "lumberyard_medium.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
   { id: "lumber_high", file: "lumberyard_high.glb", maximumSize: [1.8, 1.85, 1.55], anchors: ["attack_anchor", "hit_anchor", "label_anchor"], clips: [] },
@@ -27,7 +33,7 @@ export const SAMPLE_ASSETS: readonly PresentationAsset[] = [
   { id: "plot", file: "camp_plot.glb", maximumSize: [1.9, .1, 1.65], anchors: ["label_anchor"], clips: [] },
 ];
 
-export const SAMPLE_COVERAGE = "精修：箭塔/木材厂三档、主城、城墙、骷髅、树岩；英雄、特殊塔及其余敌人是开发占位";
+export const SAMPLE_COVERAGE = "精修：箭塔/木材厂三档、主城、城墙、五种普通及精英亡灵、树岩；英雄、特殊塔及双 Boss 是开发占位";
 
 type BuildingContentId = GrowthBuildingId | "main_city";
 const BUILDING_ASSETS: Readonly<Partial<Record<BuildingContentId, readonly [AssetId, AssetId, AssetId]>>> = {
@@ -36,8 +42,12 @@ const BUILDING_ASSETS: Readonly<Partial<Record<BuildingContentId, readonly [Asse
   main_city: ["main_city", "main_city", "main_city"],
 };
 
-/** Only walker has a finished enemy model in this sample. Other IDs use development geometry. */
-const ENEMY_ASSETS: ReadonlyMap<EnemyDefinition["id"], AssetId> = new Map([["walker", "skeleton"]]);
+const ENEMY_ASSETS: ReadonlyMap<EnemyDefinition["id"], AssetId> = new Map([["walker", "skeleton"], ["runner", "undead_runner"], ["tank", "undead_tank"], ["armored", "undead_armored"], ["brute", "undead_brute"]]);
+
+export function enemyWallInset(id: string): number {
+  const assetId = enemyAsset(id);
+  return SAMPLE_ASSETS.find((asset) => asset.id === assetId)?.wallInset ?? 0;
+}
 
 /** Validate the declared sample coverage before requesting any model files. */
 export function validateSampleCatalog(): void {
