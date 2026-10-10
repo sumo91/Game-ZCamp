@@ -1,7 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { createSiegeDemoSession } from "../../src/three/siegeDemo";
+import { createSiegeDemoSession, prepareSiegeDemo } from "../../src/three/siegeDemo";
 
 describe("siege product demonstration through BattleSession", () => {
+  it("rebuilds the same paid three-tier demonstration after an ordinary restart", () => {
+    const session = createSiegeDemoSession();
+    const initial = structuredClone(session.getState());
+    expect(session.dispatch({ type: "restart" }).accepted).toBe(true);
+    expect(session.getState().phase).toBe("OPENING_COUNTDOWN");
+    expect(session.getState().buildings).not.toEqual(initial.buildings);
+    prepareSiegeDemo(session);
+    expect(session.getState()).toEqual(initial);
+    session.dispose();
+  });
+
   it("replays paid transformations and three-tier growth, then fights and freezes real mixed waves", () => {
     const session = createSiegeDemoSession();
     const initial = session.getState();

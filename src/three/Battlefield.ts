@@ -7,7 +7,7 @@ import {
 import type { AnimationAction, BufferGeometry, Material, Object3D } from "three";
 import { starterCatalog } from "../core/content";
 import type { BuildingState, EnemyRuntimeState, GameEvent, GameState } from "../core/types";
-import { CAMP_POSITIONS, enemyPosition } from "./coordinates";
+import { CAMP_POSITIONS, enemyDisplayPosition } from "./coordinates";
 import { isWallInDanger, whiteboxEnemy } from "./whiteboxCatalog";
 import { buildingAsset, enemyAsset, type AnimationSemantic } from "./assetCatalog";
 import type { ModelLibrary } from "./ModelLibrary";
@@ -15,7 +15,7 @@ import { SiegeFeedback } from "./siegeFeedback";
 import { ArcaneFeedback } from "./arcaneFeedback";
 
 type Effect = { object: Object3D; ttl: number; duration: number; from?: Vector3; to?: Vector3 };
-type EnemyView = { object: Object3D; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean; slowMultiplier?: number };
+type EnemyView = { object: Object3D; definitionId: string; mixer?: AnimationMixer; actions?: Map<AnimationSemantic, AnimationAction>; current?: AnimationSemantic; interrupt: number; dying: number | null; atWall: boolean; slowMultiplier?: number };
 
 /** Owns all preview GPU resources, picking and event-driven presentation. */
 export class Battlefield {
@@ -171,7 +171,11 @@ export class Battlefield {
       } else {
         view.interrupt = Math.max(0, view.interrupt - deltaSeconds);
         const bossAction = this.bossAnimation(state, active.get(id));
-        if (view.dying === null && (bossAction || view.interrupt === 0)) this.play(view, bossAction ?? (view.atWall ? "attack" : "walk"));
+        if (view.dying === null && (bossAction || view.interrupt === 0)) this.play(view, bossAction ?? "walk");
+        if (view.dying === null && !bossAction && view.interrupt === 0) {
+          const walk = view.actions?.get("walk");
+          if (walk) { walk.paused = view.atWall; if (view.atWall) walk.time = 0; }
+        }
         if (bossAction) {
           const enemy = active.get(id)!;
           const remaining = bossAction === "warning" ? enemy.chargeWarningRemainingSeconds : bossAction === "charge" ? enemy.chargeRemainingSeconds : state.overlordInspireRemainingSeconds;
@@ -212,7 +216,7 @@ export class Battlefield {
     this.arcane.advance(deltaSeconds);
     this.renderer.render(this.scene, this.camera);
     // Read-only presentation evidence in the development sample, never a core handle.
-    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), bossWarnings: [...this.bossWarnings.keys()], inspired: [...this.inspireMarks.keys()].filter((id) => id !== this.inspireSource), inspireSource: this.inspireSource, effects: this.effects.length, arcane: this.arcane.describe(), calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
+    this.host.dataset.presentation = JSON.stringify({ models: this.library !== null, enemies: [...this.enemies].map(([id, view]) => ({ id, definitionId: view.definitionId, clip: view.current ?? "development", dying: view.dying !== null, time: view.mixer?.time ?? 0 })), bossWarnings: [...this.bossWarnings.keys()], inspired: [...this.inspireMarks.keys()].filter((id) => id !== this.inspireSource), inspireSource: this.inspireSource, effects: this.effects.length, arcane: this.arcane.describe(), calls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles, geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures });
   }
 
   public reset(): void {
@@ -343,7 +347,7 @@ export class Battlefield {
         view = this.makeEnemy(enemy.id, enemy.definitionId);
       }
       const group = view.object;
-      group.position.copy(this.enemyDisplayPosition(enemy.id, enemy.position));
+      group.position.copy(enemyDisplayPosition(enemy.id, enemy.position, enemy.definitionId));
       view.atWall = enemy.atWall;
       view.slowMultiplier = Math.min(1, ...(enemy.growthSlowStates ?? []).filter((slow) => slow.remainingSeconds > .000001).map((slow) => slow.multiplier));
       // Driven by effective simulation time; all battle motion stops in frozen phases.
@@ -361,7 +365,7 @@ export class Battlefield {
     if (asset && this.library) {
       const instance = this.library.create(asset);
       const mixer = new AnimationMixer(instance.object);
-      view = { object: instance.object, mixer, actions: new Map(instance.clips.map((clip) => [clip.name as AnimationSemantic, mixer.clipAction(clip)])), interrupt: 0, dying: null, atWall: false };
+      view = { object: instance.object, definitionId, mixer, actions: new Map(instance.clips.map((clip) => [clip.name as AnimationSemantic, mixer.clipAction(clip)])), interrupt: 0, dying: null, atWall: false };
       this.play(view, "walk");
       let phase = 0;
       for (const character of id) phase = (phase * 31 + character.charCodeAt(0)) % 997;
@@ -374,7 +378,7 @@ export class Battlefield {
       group.add(this.meshBox(0.13, 0.3, 0.16, style.color, new Vector3(-0.12, 0.16, 0)));
       group.add(this.meshBox(0.13, 0.3, 0.16, style.color, new Vector3(0.12, 0.16, 0)));
       group.scale.setScalar(style.scale);
-      view = { object: group, interrupt: 0, dying: null, atWall: false };
+      view = { object: group, definitionId, interrupt: 0, dying: null, atWall: false };
     }
     this.enemies.set(id, view);
     this.scene.add(view.object);
@@ -401,6 +405,19 @@ export class Battlefield {
         const position = event.targetPosition ?? this.enemyAnchors.get(event.targetId)?.position;
         if (position !== undefined) this.arcane.chain(event.buildingId, event.targetId, this.enemyHitPosition(event.targetId, position));
       }
+    } else if (event.type === "enemy_wall_attack") {
+      const view = this.enemies.get(event.enemyId);
+      if (view?.dying === null) {
+        view.interrupt = Math.min(.8, event.intervalSeconds * .8);
+        this.play(view, "attack", true);
+        view.actions?.get("attack")?.setEffectiveTimeScale(.8 / view.interrupt);
+      }
+      const position = enemyDisplayPosition(event.enemyId, 1, event.definitionId);
+      position.set(position.x, .68, -.38);
+      const heavy = event.definitionId === "brute";
+      const strike = new Mesh(this.geometry(new SphereGeometry(heavy ? .23 : .10, 6, 4)), this.material(new MeshBasicMaterial({ color: heavy ? 0xf29d6a : 0xf7d6b0, wireframe: true })));
+      strike.position.copy(position);
+      this.addEffect(strike, heavy ? .25 : .15);
     } else if (event.type === "enemy_hit" || event.type === "enemy_defeated") {
       // Event carries the last anchor even if the simulation removed this enemy.
       const cached = this.enemyAnchors.get(event.enemyId);
@@ -409,7 +426,7 @@ export class Battlefield {
       if (cached) cached.position = event.position;
       const death = event.type === "enemy_defeated";
       const position = this.enemyHitPosition(event.enemyId, event.position);
-      if (death && view) view.object.position.copy(this.enemyDisplayPosition(event.enemyId, event.position));
+      if (death && view) view.object.position.copy(enemyDisplayPosition(event.enemyId, event.position, view.definitionId));
       const object = new Mesh(this.geometry(new SphereGeometry(death ? 0.32 : 0.18, 6, 4)), this.material(new MeshBasicMaterial({ color: death ? 0xd6bd77 : 0xfff0d2, wireframe: death })));
       object.position.copy(position);
       this.addEffect(object, death ? 0.4 : 0.12);
@@ -451,19 +468,19 @@ export class Battlefield {
     if (event.type === "enemy_charge_impact" || event.type === "enemy_wall_attack") {
       const enemy = state.enemies.find((unit) => unit.id === event.enemyId);
       const definition = this.enemyAnchors.get(event.enemyId)?.definitionId;
-      if (definition !== "charger_boss" && definition !== "overlord_boss") return event.type === "enemy_wall_attack";
+      if (definition !== "charger_boss" && definition !== "overlord_boss") return false;
       if (event.type === "enemy_wall_attack") {
         // Restart the strike on actual core damage; idle attack loops do not create hits.
         const view = this.enemies.get(event.enemyId);
         if (view && !this.bossAnimation(state, enemy)) {
-          view.current = undefined; this.play(view, "attack"); view.interrupt = .8;
+          this.play(view, "attack", true); view.interrupt = Math.min(.8, event.intervalSeconds * .8);
           const strike = view.actions?.get("attack");
-          if (strike) { strike.setLoop(LoopOnce, 1); strike.clampWhenFinished = true; }
+          if (strike) { strike.setLoop(LoopOnce, 1).setEffectiveTimeScale(.8 / view.interrupt); strike.clampWhenFinished = true; }
         }
         if (event.damage <= 0) return true;
         this.wallFlash = .4;
       }
-      const position = this.enemyDisplayPosition(event.enemyId, event.position).add(new Vector3(0, .35, event.type === "enemy_wall_attack" ? .65 : 0));
+      const position = enemyDisplayPosition(event.enemyId, event.position, definition ?? "walker").add(new Vector3(0, .35, event.type === "enemy_wall_attack" ? .65 : 0));
       const shock = new Mesh(this.geometry(new RingGeometry(.25, .5, 12)), this.material(new MeshBasicMaterial({ color: event.type === "enemy_charge_impact" ? 0xffa251 : 0xff715b, side: 2 })));
       shock.rotation.x = -Math.PI / 2;
       shock.position.copy(position);
@@ -478,8 +495,8 @@ export class Battlefield {
     for (const enemy of state.enemies) {
       if (enemy.chargeWarningRemainingSeconds <= 0 && enemy.chargeRemainingSeconds <= 0) continue;
       const target = this.chargeTargets.get(enemy.id) ?? enemy.chargeTargetPosition;
-      const from = this.enemyDisplayPosition(enemy.id, enemy.position);
-      const to = this.enemyDisplayPosition(enemy.id, target);
+      const from = enemyDisplayPosition(enemy.id, enemy.position, enemy.definitionId);
+      const to = enemyDisplayPosition(enemy.id, target, enemy.definitionId);
       let group = this.bossWarnings.get(enemy.id);
       if (!group) {
         group = new Group();
@@ -518,7 +535,7 @@ export class Battlefield {
         this.inspireMarks.set(id, ring); this.scene.add(ring);
       }
       const unit = units.get(id)!;
-      ring.position.copy(this.enemyDisplayPosition(id, unit.position)); ring.position.y = .055;
+      ring.position.copy(enemyDisplayPosition(id, unit.position, unit.definitionId)); ring.position.y = .055;
       ring.scale.setScalar(id === this.inspireSource ? 1.9 : 1);
     }
     for (const [id, ring] of this.inspireMarks) if (!marked.has(id)) { this.scene.remove(ring); this.disposeObject(ring); this.inspireMarks.delete(id); }
@@ -533,7 +550,7 @@ export class Battlefield {
 
   private enemyHitPosition(id: string, progress: number): Vector3 {
     const object = this.enemies.get(id)?.object;
-    const eventPosition = this.enemyDisplayPosition(id, progress);
+    const eventPosition = enemyDisplayPosition(id, progress, this.enemyAnchors.get(id)?.definitionId ?? "walker");
     if (!object) return eventPosition.add(new Vector3(0, .65, 0));
     // A fixed-step batch may contain an earlier hit and a later final position.
     // Sample the event anchor without moving a living actor back along its path.
@@ -544,27 +561,18 @@ export class Battlefield {
     return anchor;
   }
 
-  private enemyDisplayPosition(id: string, progress: number): Vector3 {
-    const point = enemyPosition(id, progress);
-    const definitionId = this.enemyAnchors.get(id)?.definitionId;
-    if (definitionId === "charger_boss" || definitionId === "overlord_boss") {
-      // Tall silhouettes start inside the top safe edge, ending at the same wall.
-      // Every model, hit anchor, warning target and status ring uses this mapping.
-      point.z = -9.1 + Math.max(0, Math.min(1, progress)) * 8.45;
-    }
-    return point;
-  }
-
-  private play(view: EnemyView, semantic: AnimationSemantic): void {
-    if (view.current === semantic) return;
+  private play(view: EnemyView, semantic: AnimationSemantic, restart = false): void {
+    if (view.current === semantic && !restart) return;
     const next = view.actions?.get(semantic);
     if (!next) return;
     const previous = view.current ? view.actions?.get(view.current) : undefined;
     const ability = semantic === "warning" || semantic === "charge" || semantic === "inspire";
     if (ability) view.mixer?.stopAllAction();
     else previous?.fadeOut(.08);
-    const looping = semantic === "walk" || semantic === "attack" || semantic === "charge";
+    const looping = semantic === "walk" || semantic === "charge";
     next.reset().setLoop(looping ? LoopRepeat : LoopOnce, looping ? Infinity : 1);
+    next.paused = false;
+    next.setEffectiveTimeScale(1);
     next.clampWhenFinished = semantic === "death" || semantic === "warning" || semantic === "inspire";
     if (ability) next.stopFading().setEffectiveWeight(1).play();
     else next.fadeIn(.08).play();

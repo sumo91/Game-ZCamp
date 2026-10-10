@@ -2,7 +2,7 @@
 
 Issue #9 新增 `create_boss_sources.py`：只创建缺失的 `charger_lord` 与 `undead_king` 来源，拒绝覆盖保存来源。保留同一 14 关节与锚点协议、512 PBR 图集；新增独立剪影与 warning/charge/inspire Actions。正式导出仍只读取保存来源。双 Boss 的资产清单和接入边界见 `docs/production/THREEJS_ISSUE_9_EVIDENCE.md`。
 
-此目录只承载 Issue #4 的原创样板。人物、结构、纹理、分段骨架与动作由本任务在 Blender 5.2.1 制作；没有导入 Warcraft、第三方游戏模型或付费素材。参考图只用于色彩、比例、材质与镜头对照。其他敌人、特殊塔和英雄由后续任务制作，当前运行仍明确标记其开发占位。
+此目录保存 Three.js 原创来源，包含 Issue #4 基础样板及 #6–#9 塔、亡灵与双 Boss 的扩充。人物、结构、纹理、分段骨架与动作在 Blender 5.2.1 制作；没有导入 Warcraft、第三方游戏模型或付费素材。参考图用于色彩、比例、材质与镜头对照。英雄由后续任务制作，当前运行明确标记其开发占位。
 
 ## 可编辑来源与运行产物
 
@@ -42,3 +42,5 @@ Blender 默认保留的 `.blend1` 等备份不进入交付，修改源文件时�
 `inspect_assets.py` 检查容器、自包含资源、必需锚点和骨架 clip，并写出实际 SHA/字节/三角形/材质统计。官方 Khronos 校验报告和真实游戏截图随 `docs/production/evidence/issue-4/` 留存；这些格式检查不能代替美术判断。GPU draw calls 与活动单位帧耗时另由运行测量，不能把单模型 primitive 数当作场景性能。
 
 十二个来源与 GLB 已完整接入当前样板，最终资产 SHA、运行步骤及检查结果见 [Issue #4 实施证据](../../docs/production/THREEJS_ISSUE_4_EVIDENCE.md)。首对历史审阅图保留为比例、标签和材质修订的记录，不作为最终资产清单。实体手机、100/200/300 活动实例与项目所有者接受属于 #5/#13 后续门，当前没有相应通过声明。
+
+后续普通与精英亡灵来源、四语义与实际制作统计见 [Issue #8 亡灵说明](README_UNDEAD.md)；原十二件样板来源及清单保留。

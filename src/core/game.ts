@@ -684,7 +684,7 @@ export class GameSimulation {
         ? definition.wallDamage * this.state.overlordInspireMultiplier
         : definition.wallDamage;
       this.applyWallDamage(damage);
-      this.events.push({ type: "enemy_wall_attack", enemyId: enemy.id, position: enemy.position, damage });
+      this.events.push({ type: "enemy_wall_attack", enemyId: enemy.id, definitionId: enemy.definitionId, position: enemy.position, damage, intervalSeconds: definition.wallAttackIntervalSeconds });
       if (this.state.wallHp <= 0) {
         this.state.phase = "DEFEAT";
         return;

@@ -11,9 +11,10 @@ import { ModelLibrary } from "./ModelLibrary";
 import { buildingAsset, SAMPLE_COVERAGE } from "./assetCatalog";
 import { createBossDemo } from "./bossDemo";
 import { withFantasySiegePresentation } from "./fantasySiegePresentation";
-import { createSiegeDemoSession, SIEGE_DEMO_LABEL } from "./siegeDemo";
+import { createSiegeDemoSession, prepareSiegeDemo, SIEGE_DEMO_LABEL } from "./siegeDemo";
 import { fantasyArcanePresentation } from "./fantasyArcanePresentation";
 import { ARCANE_DEMO_CATALOG, ARCANE_DEMO_RESOURCES, prepareArcaneDemo } from "./arcaneDemo";
+import { prepareUndeadDemo } from "./undeadDemo";
 import "./preview.css";
 
 const content = fantasyArcanePresentation(withFantasySiegePresentation(starterCatalog.buildingGrowth));
@@ -28,19 +29,20 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
   const demo = new URLSearchParams(window.location.search).get("demo");
   const siegeDemo = demo === "siege";
   const arcaneDemo = demo === "arcane";
+  const undeadDemo = demo === "undead";
   app.classList.add("whitebox-app");
   app.dataset.browserUserAgent = navigator.userAgent;
   app.dataset.renderPixelRatio = String(Math.min(window.devicePixelRatio, 2));
   app.innerHTML = `
     <header class="preview-hud">
-      <div class="preview-title"><strong>${arcaneDemo ? "开发演示 · 寒霜与雷电三档" : "精修美术样板 · 部分覆盖"}</strong><a href="${import.meta.env.BASE_URL}">原版入口</a></div>
+      <div class="preview-title"><strong>${arcaneDemo ? "开发演示 · 寒霜与雷电三档" : undeadDemo ? "亡灵混编 · 开发演示" : "精修美术样板 · 部分覆盖"}</strong><a href="${import.meta.env.BASE_URL}">原版入口</a></div>
       <div class="preview-resources"><span data-view="wood"></span><span data-view="gold"></span></div>
       <div class="preview-wall"><span data-view="wall"></span><span data-view="shield"></span></div>
       <div class="preview-wave"><span data-view="wave"></span><span data-view="time"></span></div>
       <div class="preview-boss" data-view="boss" aria-live="polite"></div>
     </header>
     <section class="preview-field" aria-label="人类堡垒与亡灵防线">
-      <div class="preview-zone">亡灵推进区 ↓<small>${arcaneDemo ? "开发配置：600生命目标、无攻墙伤害、授予资源。正式入口不使用此预设。" : SAMPLE_COVERAGE}</small></div>
+      <div class="preview-zone">亡灵推进区 ↓<small>${arcaneDemo ? "开发配置：600生命目标、无攻墙伤害、授予资源。正式入口不使用此预设。" : undeadDemo ? "真实第一关第10波 · 五种亡灵 · 点继续观察攻墙" : SAMPLE_COVERAGE}</small></div>
       <div class="preview-slots" aria-label="5×3 营地格位"></div>
     </section>
     <footer class="preview-controls">
@@ -84,6 +86,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
   const loadingProgress = app.querySelector<HTMLElement>("[data-loading-progress]")!;
   const retryAssets = app.querySelector<HTMLButtonElement>("[data-action=retry_assets]")!;
   let library: ModelLibrary | null = null;
+  let demoPrepared = false;
   let loading = false;
   const slotButtons = new Map<string, HTMLButtonElement>();
   const commandHistory: Array<{ step: number; command: GameCommand; accepted: boolean; reason?: string }> = [];
@@ -145,8 +148,10 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
           : type === "transform_tower" ? "改造完成 · 保留等级与合法词条"
           : type === "destroy_building" ? "建筑已拆除 · 不返还木材或金币" : "";
         if (type === "restart") {
-          if (arcaneDemo) prepareArcaneDemo(session);
           battlefield.reset();
+          if (siegeDemo) prepareSiegeDemo(session);
+          if (arcaneDemo) prepareArcaneDemo(session);
+          if (undeadDemo) prepareUndeadDemo(session);
         }
       }
     }
@@ -324,6 +329,7 @@ export function mountWhiteboxPreview(app: HTMLElement): () => void {
       });
       if (disposed) { loaded.dispose(); return; }
       library = loaded;
+      if (undeadDemo && !demoPrepared) { prepareUndeadDemo(session); demoPrepared = true; }
       battlefield.setModels(loaded);
       loadingOverlay.hidden = true;
       app.dataset.assetState = "ready";
