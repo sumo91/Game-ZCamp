@@ -309,10 +309,3 @@ export class SoundDirector {
   }
 }
 
-let sharedDirector: SoundDirector | null = null;
-
-/** One director per page so unlock state, mute preference, and throttle history survive scene changes. */
-export function getSoundDirector(): SoundDirector {
-  sharedDirector ??= new SoundDirector();
-  return sharedDirector;
-}

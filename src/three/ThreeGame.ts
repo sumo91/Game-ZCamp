@@ -2,13 +2,13 @@ import { SoundDirector } from "../audio/SoundDirector";
 import { Campaign } from "../ui/campaign";
 import { HeroGallery } from "./HeroGallery";
 import { ModelLibrary } from "./ModelLibrary";
-import { mountWhiteboxPreview } from "./WhiteboxPreview";
+import { mountBattlePresentation } from "./WhiteboxPreview";
 import "./lobby.css";
 
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]!);
 
 /** Page owner: one library, one sound director, one campaign, one active screen. */
-export function mountThreeGame(app: HTMLElement): () => void {
+export function mountThreeGame(app: HTMLElement, options: { developmentReplay?: boolean } = {}): () => void {
   const campaign = new Campaign();
   const sound = new SoundDirector();
   let library: ModelLibrary | null = null;
@@ -41,10 +41,10 @@ export function mountThreeGame(app: HTMLElement): () => void {
   const showLobby = () => {
     battleDispose?.(); battleDispose = null;
     campaign.returnToLobby();
-    app.classList.remove("whitebox-app"); app.classList.add("lobby-app"); app.dataset.screen = "lobby";
+    app.classList.remove("battle-app"); app.classList.add("lobby-app"); app.dataset.screen = "lobby";
     const view = campaign.view();
     app.innerHTML = `<header class="lobby-header"><div class="lobby-crest" aria-hidden="true">Z</div><div><small>人类堡垒 · 亡灵围城</small><h1>尸潮营地</h1></div><button type="button" data-lobby-action="mute">声音</button></header>
-      <main class="lobby-scroll"><section class="lobby-intro"><span>守住黎明前的最后一道城墙</span><p>选择你的驻守英雄，建造并强化防线。</p></section>
+      <main class="lobby-scroll"><section class="lobby-intro"><span>守住黎明前的最后一道城墙</span><p>${options.developmentReplay ? "开发演示 · 可加速真实战役，结果会记录到本浏览器进度。" : "选择你的驻守英雄，建造并强化防线。"}</p></section>
       <section class="lobby-section"><h2>驻守英雄</h2><div class="lobby-heroes">${view.heroCards.map((card) => `<button type="button" class="lobby-hero-card" data-card="${card.id}" data-kind="hero"><span class="lobby-portrait" data-portrait="${card.id}"></span><strong>${escapeHtml(card.title)}</strong><span class="lobby-role">${escapeHtml(card.subtitle)}</span><small data-lock></small></button>`).join("")}</div><div class="lobby-detail" data-hero-detail></div></section>
       <section class="lobby-section"><h2>前线战役</h2><div class="lobby-levels">${view.levelCards.map((card, index) => `<button type="button" class="lobby-level-card" data-card="${card.id}" data-kind="level"><span class="lobby-level-number" aria-hidden="true">0${index+1}</span><span><strong>${escapeHtml(card.title)}</strong><span>${escapeHtml(card.subtitle)}</span><small data-lock></small></span><span class="lobby-difficulty">${"◆".repeat(card.stars)}<small>${escapeHtml(card.starLabel)}</small></span></button>`).join("")}</div><div class="lobby-detail" data-level-detail></div></section></main>
       <footer class="lobby-footer"><p data-lobby-notice role="status" aria-live="polite"></p><button type="button" class="lobby-start" data-lobby-action="start"><strong data-start-label></strong><span data-start-detail></span></button></footer>
@@ -54,6 +54,7 @@ export function mountThreeGame(app: HTMLElement): () => void {
       catch { lobbyMessage = "英雄预览暂时不可用，仍可正常出战。"; }
     }
     lastFrame = 0; updateLobby();
+    for (const panel of Array.from(app.querySelectorAll<HTMLElement>(".lobby-header, .lobby-scroll, .lobby-footer"))) panel.inert = !library;
   };
   const start = () => {
     if (!library || battleDispose || disposed) return;
@@ -63,7 +64,7 @@ export function mountThreeGame(app: HTMLElement): () => void {
     app.classList.remove("lobby-app"); app.dataset.screen = "battle";
     sound.resetBattle(); sound.playUi("battle_start");
     let announced = false;
-    battleDispose = mountWhiteboxPreview(app, { session, library, sound,
+    battleDispose = mountBattlePresentation(app, { session, library, sound, developmentReplay: options.developmentReplay,
       result: () => { const result = campaign.result(); if (result && !announced) { announced = true; sound.playUi(result.victory ? "victory" : "defeat"); } return result; },
       retry: () => { const accepted = campaign.retry(); if (accepted) announced = false; return accepted; },
       returnToLobby: showLobby,
@@ -75,6 +76,7 @@ export function mountThreeGame(app: HTMLElement): () => void {
     if (!button) return;
     sound.unlock();
     const action = button.dataset.lobbyAction;
+    if (!library && action !== "retry") return;
     if (action === "mute") { sound.toggleMuted(); updateLobby(); return; }
     if (action === "retry") { void load(); return; }
     if (action === "start") { start(); return; }
@@ -98,6 +100,7 @@ export function mountThreeGame(app: HTMLElement): () => void {
     } finally { loading = false; }
   }
   const visibility = () => document.hidden ? sound.suspend() : sound.resume();
+  const pageShow = (event: PageTransitionEvent) => { if (event.persisted && !document.hidden) { sound.resume(); lastFrame = 0; } };
   const frame = (timestamp: number) => {
     if (disposed) return;
     if (gallery && !document.hidden) gallery.render(lastFrame ? Math.min(.1, (timestamp-lastFrame)/1000) : 0);
@@ -107,11 +110,12 @@ export function mountThreeGame(app: HTMLElement): () => void {
   const dispose = () => {
     if (disposed) return; disposed = true;
     cancelAnimationFrame(frameId); battleDispose?.(); gallery?.dispose(); campaign.dispose(); sound.dispose(); library?.dispose();
-    app.removeEventListener("click", click); document.removeEventListener("visibilitychange", visibility); window.removeEventListener("pagehide", pageHide);
-    app.replaceChildren(); app.classList.remove("lobby-app", "whitebox-app"); delete app.dataset.screen;
+    app.removeEventListener("click", click); document.removeEventListener("visibilitychange", visibility); window.removeEventListener("pagehide", pageHide); window.removeEventListener("pageshow", pageShow);
+    app.replaceChildren(); app.classList.remove("lobby-app", "battle-app"); delete app.dataset.screen;
   };
   const pageHide = (event: PageTransitionEvent) => { if (!event.persisted) dispose(); else sound.suspend(); };
-  app.addEventListener("click", click); document.addEventListener("visibilitychange", visibility); window.addEventListener("pagehide", pageHide);
+  app.addEventListener("click", click); document.addEventListener("visibilitychange", visibility); window.addEventListener("pagehide", pageHide); window.addEventListener("pageshow", pageShow);
   showLobby(); void load(); frameId = requestAnimationFrame(frame);
   return dispose;
 }
+

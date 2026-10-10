@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, SLOT_BAR_BUTTON_PITCH, WALL_ZONE, deriveSlotActionBarBounds, pointInLogicalBounds, slotBarButtonCenterX } from "../../src/phaser/layout";
+import { CAMP_SLOT_LAYOUTS, CONTEXT_PANEL, ENEMY_ZONE, GRID_ZONE, LOGICAL_HEIGHT, LOGICAL_WIDTH, RESOURCE_RAIL, SLOT_BAR_BUTTON_PITCH, WALL_ZONE, deriveSlotActionBarBounds, pointInLogicalBounds, slotBarButtonCenterX } from "../../src/ui/legacyLayout";
 
 describe("vertical zone contract", () => {
   it("stacks zones edge-to-edge from the battlefield to the info strip", () => {
@@ -70,3 +70,4 @@ describe("pointInLogicalBounds", () => {
     expect(pointInLogicalBounds(125, 261, bounds)).toBe(false);
   });
 });
+

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AMBIENT_NOTICE_MIN_INTERVAL_SECONDS, ThrottleGate, coinFlightLabel, decideResourcePulse, decideWallImpact, deriveWaveBanner, isBossEntrance, mapTowerProjectileStyle, routeBattleNotice, shouldShowDamageNumber } from "../../src/phaser/feedback";
+import { AMBIENT_NOTICE_MIN_INTERVAL_SECONDS, ThrottleGate, coinFlightLabel, decideResourcePulse, decideWallImpact, deriveWaveBanner, isBossEntrance, mapTowerProjectileStyle, routeBattleNotice, shouldShowDamageNumber } from "../../src/ui/battleFeedback";
 
 describe("routeBattleNotice", () => {
   it("routes crowd-critical events to the always-on global channel", () => {
@@ -106,3 +106,4 @@ describe("isBossEntrance", () => {
     expect(isBossEntrance("walker", ["charger_boss", "overlord_boss"])).toBe(false);
   });
 });
+

@@ -15,7 +15,6 @@
     "check": "npm run typecheck && npm test && npm run test:collector"
   },
   "dependencies": {
-    "phaser": "4.2.1",
     "three": "0.186.1"
   },
   "devDependencies": {

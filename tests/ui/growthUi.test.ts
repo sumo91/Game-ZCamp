@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { starterCatalog } from "../../src/core/content";
 import { GameSimulation } from "../../src/core/game";
-import { deriveBuildingDetail, deriveEmptySlotActions, deriveTraitOptions, deriveTransformOptions, decideGrowthAction, decideGrowthPointer, decideGrowthTrait, decideGrowthTransform, deriveGrowthPauseControl, formatGrowthTraitEffect, getGrowthInputPriority, hitGrowthPointer } from "../../src/phaser/growthUi";
-import { CAMP_SLOT_LAYOUTS, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS } from "../../src/phaser/layout";
+import { deriveBuildingDetail, deriveEmptySlotActions, deriveTraitOptions, deriveTransformOptions, decideGrowthAction, decideGrowthPointer, decideGrowthTrait, decideGrowthTransform, deriveGrowthPauseControl, formatGrowthTraitEffect, getGrowthInputPriority, hitGrowthPointer } from "../../src/ui/legacyGrowthPointer";
+import { CAMP_SLOT_LAYOUTS, GROWTH_CONTEXT_ACTION_BOUNDS, GROWTH_TRANSFORM_CLOSE_BOUNDS, GROWTH_TRANSFORM_OPTION_BOUNDS } from "../../src/ui/legacyLayout";
 
 function build(game: GameSimulation, slotId: string, definitionId: "arrow_tower" | "lumberyard"): string {
   const result = game.dispatch({ type: "build_building", slotId, definitionId });
@@ -172,3 +172,4 @@ describe("growth UI derivation and input", () => {
     expect(deriveGrowthPauseControl("VICTORY").enabled).toBe(false);
   });
 });
+
