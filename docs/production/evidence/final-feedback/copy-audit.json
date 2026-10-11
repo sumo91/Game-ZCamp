@@ -1,0 +1,225 @@
+{
+  "candidateCode": "e1981030d00198646520da6ad6147ef9e0d0feee",
+  "localMerge": "8b365782c3644182b037b527bf002e5f83763d0d",
+  "readmeCommit": "fce5662565a7303b172fb57836ee9d8a97bf2b3e",
+  "completedEvidencePlanItems": 24,
+  "totalAuditedCopies": 27,
+  "copies": [
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/feedback-final-layout.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\feedback-final-layout.json",
+      "bytes": 1410,
+      "sourceSha256": "5AB7572692DA95C9D9A7D982A622733BFF4A190463C5F0D32F38E3B47C28D739",
+      "destinationSha256": "5AB7572692DA95C9D9A7D982A622733BFF4A190463C5F0D32F38E3B47C28D739",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/feedback-final-low-full.png",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\feedback-final-low-full.png",
+      "bytes": 50574,
+      "sourceSha256": "126693158EBE6814539A078DA0BD7914F3859DE08617FDBDC2305118AF1CC849",
+      "destinationSha256": "126693158EBE6814539A078DA0BD7914F3859DE08617FDBDC2305118AF1CC849",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/feedback-final-standard-full.png",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\feedback-final-standard-full.png",
+      "bytes": 57952,
+      "sourceSha256": "3F6EECA8E1D031E5E5E87440879F682F7D0E546F9BA535E840B6C9C6895BAF64",
+      "destinationSha256": "3F6EECA8E1D031E5E5E87440879F682F7D0E546F9BA535E840B6C9C6895BAF64",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-100-feedback-full.png",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-100-feedback-full.png",
+      "bytes": 69487,
+      "sourceSha256": "4769A5CB305F121041B5DFD8CD9EABCF337B3FA45002BB3FA182D1C162CD6551",
+      "destinationSha256": "4769A5CB305F121041B5DFD8CD9EABCF337B3FA45002BB3FA182D1C162CD6551",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-100-standard-15s.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-100-standard-15s.json",
+      "bytes": 52392,
+      "sourceSha256": "1949B4056E01E0CE331712EBDB71695A0136E5F123CEAB3F85ADA853EB654C40",
+      "destinationSha256": "1949B4056E01E0CE331712EBDB71695A0136E5F123CEAB3F85ADA853EB654C40",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-200-completed-full.png",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-200-completed-full.png",
+      "bytes": 68833,
+      "sourceSha256": "B66249803983D3CFF4921271D64FA3160335EAE1584B869D01CD503AAE0668FE",
+      "destinationSha256": "B66249803983D3CFF4921271D64FA3160335EAE1584B869D01CD503AAE0668FE",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-200-live-full.png",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-200-live-full.png",
+      "bytes": 67694,
+      "sourceSha256": "C1985F1AA4C62D1841E17A9B2018C255BDA822DEC93E63C0E014EABDE281B666",
+      "destinationSha256": "C1985F1AA4C62D1841E17A9B2018C255BDA822DEC93E63C0E014EABDE281B666",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-200-standard-300s.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-200-standard-300s.json",
+      "bytes": 926964,
+      "sourceSha256": "80ADDB3E49C036432CAFDE1B2B859762077836C2ED4A1CDD92E1110A14C5A176",
+      "destinationSha256": "80ADDB3E49C036432CAFDE1B2B859762077836C2ED4A1CDD92E1110A14C5A176",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-300-completed-full.png",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-300-completed-full.png",
+      "bytes": 71166,
+      "sourceSha256": "F2A6E27062D3BBDB001644A47FB9E7244BD76C455E1DE2B7E125A2A523F885EE",
+      "destinationSha256": "F2A6E27062D3BBDB001644A47FB9E7244BD76C455E1DE2B7E125A2A523F885EE",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-300-live-full.png",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-300-live-full.png",
+      "bytes": 65212,
+      "sourceSha256": "15D5C52A59FB36955C5DAC33DA71643F6377CC8B1D63C7A5EF3AC1E11BFDA25A",
+      "destinationSha256": "15D5C52A59FB36955C5DAC33DA71643F6377CC8B1D63C7A5EF3AC1E11BFDA25A",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-300-standard-60s.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-300-standard-60s.json",
+      "bytes": 186079,
+      "sourceSha256": "C374E39D788B0E7B9B0B04CE32B3E2138DEDA10C2275A2632518347BA5E05A1F",
+      "destinationSha256": "C374E39D788B0E7B9B0B04CE32B3E2138DEDA10C2275A2632518347BA5E05A1F",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-campaign-reload-and-mute.txt",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-campaign-reload-and-mute.txt",
+      "bytes": 2117,
+      "sourceSha256": "B89ED8BE6553603FCCFCCA12FFE679315145AA06E24690721881E6867D890994",
+      "destinationSha256": "B89ED8BE6553603FCCFCCA12FFE679315145AA06E24690721881E6867D890994",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-game-lobby-full.png",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-game-lobby-full.png",
+      "bytes": 49415,
+      "sourceSha256": "F1C820F85E6ADF11BEBBA20D9B3CD815013F44D53B8BC6BA19090C3A5432184B",
+      "destinationSha256": "F1C820F85E6ADF11BEBBA20D9B3CD815013F44D53B8BC6BA19090C3A5432184B",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-lifecycle-10-cycles.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-lifecycle-10-cycles.json",
+      "bytes": 11508,
+      "sourceSha256": "F6A7A37F96DA66D5E763D506B4AE2A8DCDF026BC0432411DBB05D52E038E5CB8",
+      "destinationSha256": "F6A7A37F96DA66D5E763D506B4AE2A8DCDF026BC0432411DBB05D52E038E5CB8",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/final-statistics-audit.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-statistics-audit.json",
+      "bytes": 8248,
+      "sourceSha256": "62804E9F647FCF0A1D9A93F3A71E9C6AEAE27392D90F845BC16231CAEDF35899",
+      "destinationSha256": "62804E9F647FCF0A1D9A93F3A71E9C6AEAE27392D90F845BC16231CAEDF35899",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-candidate-evidence/desktop-device-registration.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\desktop-device-registration.json",
+      "bytes": 347,
+      "sourceSha256": "501C9BB7DD0494CD16FA72091D7E7371DF8167C8323C42982725D184043AEEA0",
+      "destinationSha256": "501C9BB7DD0494CD16FA72091D7E7371DF8167C8323C42982725D184043AEEA0",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-feedback-freeze-audit-v4.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-feedback-freeze-audit-v4.json",
+      "bytes": 17366,
+      "sourceSha256": "5910F3DCC1BFBCDB09DADC155559D3314CBE5160F527AE257D37B7F455D82173",
+      "destinationSha256": "5910F3DCC1BFBCDB09DADC155559D3314CBE5160F527AE257D37B7F455D82173",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-feedback-spec-review.md",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-feedback-spec-review.md",
+      "bytes": 1874,
+      "sourceSha256": "2D0555B9CA86566AC7AD52BA810F0E8B3EF265EFAF25E125D61AD3C55C716751",
+      "destinationSha256": "2D0555B9CA86566AC7AD52BA810F0E8B3EF265EFAF25E125D61AD3C55C716751",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-feedback-standards-review.md",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-feedback-standards-review.md",
+      "bytes": 2968,
+      "sourceSha256": "3353C758C95D73BD3539B8E8C8D0D43901C98C1E569BD8167EBD2F2FE9F3878F",
+      "destinationSha256": "3353C758C95D73BD3539B8E8C8D0D43901C98C1E569BD8167EBD2F2FE9F3878F",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-feedback-final-spec-review.md",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-feedback-final-spec-review.md",
+      "bytes": 1790,
+      "sourceSha256": "FE514362B6AF31B3B166CF568D55D6AE6AC73919FF3224EAB7A213EACEFAE423",
+      "destinationSha256": "FE514362B6AF31B3B166CF568D55D6AE6AC73919FF3224EAB7A213EACEFAE423",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-feedback-final-standards-review.md",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-feedback-final-standards-review.md",
+      "bytes": 2299,
+      "sourceSha256": "B6D169AF0F237EAAD1FA19B12B62589C6E7535F30E370E493893C0C11966BED9",
+      "destinationSha256": "B6D169AF0F237EAAD1FA19B12B62589C6E7535F30E370E493893C0C11966BED9",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-integration-spec-review.md",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-integration-spec-review.md",
+      "bytes": 2370,
+      "sourceSha256": "2AE0FF1F3B415096F1BB115BC44EB9ED10A8B561D3A3481CD1B9FA48BD9738CB",
+      "destinationSha256": "2AE0FF1F3B415096F1BB115BC44EB9ED10A8B561D3A3481CD1B9FA48BD9738CB",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-integration-standards-review.md",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-integration-standards-review.md",
+      "bytes": 2694,
+      "sourceSha256": "D8FF46A05DCAE06718EC96C46AFA63F27E5F79EE0616A4E3115EBB17478E06B0",
+      "destinationSha256": "D8FF46A05DCAE06718EC96C46AFA63F27E5F79EE0616A4E3115EBB17478E06B0",
+      "same": true
+    },
+    {
+      "source": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/final-spec-all-asset-audit.json",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-spec-all-asset-audit.json",
+      "bytes": 24732,
+      "sourceSha256": "D2B1E39D1CCB89E84B0085EA19AA22321B1954425E36A5FEEB59C46626F744D5",
+      "destinationSha256": "D2B1E39D1CCB89E84B0085EA19AA22321B1954425E36A5FEEB59C46626F744D5",
+      "same": true
+    },
+    {
+      "source": "C:\\Users\\Admin\\AppData\\Local\\Temp\\zcamp-threejs-implementation\\THREEJS_FINAL_FEEDBACK_GAME_EVIDENCE.md",
+      "destination": "D:/AI/Codex/WebGames/ZCamp/docs/production/THREEJS_FINAL_FEEDBACK_GAME_EVIDENCE.md",
+      "bytes": 5652,
+      "sourceSha256": "7FBBE1D286186B1E19A8BDB2BFE259CA0EDE1ABAA6C2256A0C178A47BE70C516",
+      "destinationSha256": "7FBBE1D286186B1E19A8BDB2BFE259CA0EDE1ABAA6C2256A0C178A47BE70C516",
+      "same": true
+    },
+    {
+      "source": "C:\\Users\\Admin\\AppData\\Local\\Temp\\zcamp-threejs-implementation\\final-feedback-merge.md",
+      "destination": "D:\\AI\\Codex\\WebGames\\ZCamp\\docs\\production\\evidence\\final-feedback\\final-feedback-merge.md",
+      "bytes": 5804,
+      "sourceSha256": "51E22EB64E4D6599CCF28DBB21FEB84BE7F7E2047FDB3AAAF1006EF0C2B5F37C",
+      "destinationSha256": "51E22EB64E4D6599CCF28DBB21FEB84BE7F7E2047FDB3AAAF1006EF0C2B5F37C",
+      "same": true
+    },
+    {
+      "source": "C:\\Users\\Admin\\AppData\\Local\\Temp\\zcamp-threejs-implementation\\final-README.md",
+      "destination": "D:/AI/Codex/WebGames/ZCamp/README.md",
+      "bytes": 2690,
+      "sourceSha256": "83BEE39107FCE0114119C60821FC9CD1FC475F8D7752E90DB46D5C8AE6174BFD",
+      "destinationSha256": "83BEE39107FCE0114119C60821FC9CD1FC475F8D7752E90DB46D5C8AE6174BFD",
+      "same": true
+    }
+  ]
+}

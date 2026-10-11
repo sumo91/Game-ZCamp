@@ -1,0 +1,125 @@
+{
+  "fixedBase": "ff3cd40d2548f23d0b554f51b8745ec55773de9b",
+  "fixedSource": "6d1a168d86fe2ff0b19dc448917e236309a6739e",
+  "mergeCommit": "7be09fcc8b75c1875e0220a14a4c77cdca4f2ac3",
+  "scope": "Independent desktop public UX review; not physical-phone or iQOO performance evidence",
+  "rootAuditOriginal": {
+    "bytes": 1243,
+    "sha256": "fda3d1d61e352ee52d4bd9ae70521fe652c842c14abf292b3f0c14c76ba80c4e"
+  },
+  "rootUiReviewOriginal": {
+    "bytes": 2575,
+    "sha256": "c3d3337d032c13d5508c93fe8369e1c1e74d3f686a28aa74c69f7fa80848f33e"
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "count": 100,
+      "quality": "standard",
+      "warmupSecondsRequested": 5,
+      "requestedSeconds": 60,
+      "outcome": "completed",
+      "interruptionReason": null,
+      "actualSampleSeconds": 60.000300000000045,
+      "samples": 8637,
+      "medianMs": 6.900000000023283,
+      "p95Ms": 7,
+      "maxMs": 20.899999999906868,
+      "responseChecks": 1,
+      "bytes": 206852,
+      "sha256": "5c79d5ac25d2957a34023431fc37d8fe8d88e1a49390563ce57e9e5ea531c0f1",
+      "deviceCategory": "desktop",
+      "ownerAccepted": false,
+      "physicalDeviceAccepted": false,
+      "coreBattleRunning": false,
+      "collectorBuildSha": "6d1a168d86fe2ff0b19dc448917e236309a6739e",
+      "statisticsMatchRawFrames": true
+    },
+    {
+      "round": 2,
+      "count": 200,
+      "quality": "standard",
+      "warmupSecondsRequested": 5,
+      "requestedSeconds": 300,
+      "outcome": "interrupted",
+      "interruptionReason": "manual-stop",
+      "actualSampleSeconds": 63.20869999999995,
+      "samples": 9100,
+      "medianMs": 6.900000000023283,
+      "p95Ms": 7,
+      "maxMs": 14,
+      "responseChecks": 0,
+      "bytes": 252389,
+      "sha256": "819311b42f1a2961b44960833b2743ef89293dad424bce74126a4d2644d695de",
+      "deviceCategory": "desktop",
+      "ownerAccepted": false,
+      "physicalDeviceAccepted": false,
+      "coreBattleRunning": false,
+      "collectorBuildSha": "6d1a168d86fe2ff0b19dc448917e236309a6739e",
+      "statisticsMatchRawFrames": true
+    }
+  ],
+  "clientSecondComplete": {
+    "bytes": 252389,
+    "sha256": "819311b42f1a2961b44960833b2743ef89293dad424bce74126a4d2644d695de",
+    "identicalToDurableSecondRound": true
+  },
+  "firstTruncatedDomRead": {
+    "bytes": 200582,
+    "sha256": "66a48fec89d6ca48b484211824acfedbe457903f95ca7a39078b365d4948c9b2",
+    "characterLimitReported": 200000,
+    "successfulCompleteRead": false,
+    "usedAsAcceptanceEvidence": false
+  },
+  "completeReadMethod": "Three read-only segments of at most 100000 characters from the public textarea were concatenated; complete UTF-8 bytes match the durable second-round file.",
+  "stoppedUiScreenshotOriginal": {
+    "bytes": 74725,
+    "sha256": "d39be64cbb95b05f37d62b8b4456aac7623a2574b65cfe84841e869dd756255f"
+  },
+  "thirdRoundStarted": false,
+  "backupDownloadVerified": false,
+  "backupDownloadLimitation": "Supported-tool download-event capture timed out; no successful backup-download claim.",
+  "rawArtifactsCommitted": false,
+  "qrCommitted": false,
+  "privateSessionMetadataCommitted": false,
+  "independentReportCopies": [
+    {
+      "file": "standards-review.md",
+      "bytes": 2464,
+      "originalSha256": "0e5900d1a4aba6b3b50d87f5d43fb72d1124407fef051060f54b70e4748e7ad9",
+      "copySha256": "0e5900d1a4aba6b3b50d87f5d43fb72d1124407fef051060f54b70e4748e7ad9",
+      "byteIdentical": true
+    },
+    {
+      "file": "spec-review.md",
+      "bytes": 2236,
+      "originalSha256": "553373140ccb71e8838a40b7eb62dcc6ac8eae326ffe98b2e561890a61df363e",
+      "copySha256": "553373140ccb71e8838a40b7eb62dcc6ac8eae326ffe98b2e561890a61df363e",
+      "byteIdentical": true
+    }
+  ],
+  "supplementalDesktopMobileSizeLayout": {
+    "reportedByRoot": true,
+    "surface": "Desktop IAB",
+    "viewportCssPixels": {
+      "width": 360,
+      "height": 800
+    },
+    "startButtonHeightCssPixels": 56,
+    "visible": [
+      "declared model and unverified Android version",
+      "three real rounds",
+      "receiver connection",
+      "Start",
+      "touch response",
+      "loading-ready state",
+      "rendered model"
+    ],
+    "screenshotLocalOriginal": {
+      "bytes": 62606,
+      "sha256": "1ea78eeaa67a8244333a7cbed74a2c2410386f8ed6ad1b3958d6b06b36bcb18e"
+    },
+    "temporaryViewportReset": true,
+    "physicalDeviceEvidence": false
+  }
+}

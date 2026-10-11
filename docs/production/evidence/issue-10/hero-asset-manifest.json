@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "assets": [
+    {
+      "asset": "hero_camp_warden.glb",
+      "sha256": "5940f81ed8589142dfccb18f3a92eb37d34dd27d8867c47b187b0fd928b5f6a7",
+      "bytes": 827344,
+      "source": "art/threejs/sources/hero_camp_warden.blend",
+      "sourceSha256": "2c75498b4ab2fc9518cddfadf14795c43747dfd09fca6134df3d23865b4b3ca8",
+      "sourceBytes": 765379,
+      "triangles": 5191,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [
+        {
+          "name": "idle",
+          "seconds": 2,
+          "channels": 42
+        },
+        {
+          "name": "attack",
+          "seconds": 0.4,
+          "channels": 42
+        }
+      ],
+      "skins": 1,
+      "joints": 14,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    },
+    {
+      "asset": "hero_lumber_baron.glb",
+      "sha256": "6cc91ff7d667b3cf0274b4e882365726ef910fa2bb87302e3d8484d4ea41c377",
+      "bytes": 933760,
+      "source": "art/threejs/sources/hero_lumber_baron.blend",
+      "sourceSha256": "d16b5cd666fb18c59ed874fa7052c945f479ae0a94dedeb64998626304d5a3cd",
+      "sourceBytes": 807680,
+      "triangles": 6240,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [
+        {
+          "name": "idle",
+          "seconds": 2,
+          "channels": 42
+        },
+        {
+          "name": "attack",
+          "seconds": 0.4,
+          "channels": 42
+        }
+      ],
+      "skins": 1,
+      "joints": 14,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    },
+    {
+      "asset": "hero_vanguard_gunner.glb",
+      "sha256": "58b38ebd69eac7ce53dcbf2c1c316be654b5d3a27eee0b935f9a60e4734ab310",
+      "bytes": 846240,
+      "source": "art/threejs/sources/hero_vanguard_gunner.blend",
+      "sourceSha256": "17104bdbddd14d8afe00457523326f2adb84e76def1e40cbeae9f0fb75de4837",
+      "sourceBytes": 767986,
+      "triangles": 5424,
+      "materials": 1,
+      "meshPrimitives": 1,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [
+        {
+          "name": "idle",
+          "seconds": 2,
+          "channels": 42
+        },
+        {
+          "name": "attack",
+          "seconds": 0.4,
+          "channels": 42
+        }
+      ],
+      "skins": 1,
+      "joints": 14,
+      "embeddedTextures": 2,
+      "occlusionMaterials": 1
+    }
+  ]
+}

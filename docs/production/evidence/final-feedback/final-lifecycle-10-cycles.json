@@ -1,0 +1,522 @@
+{
+  "commit": "e1981030d00198646520da6ad6147ef9e0d0feee",
+  "cycles": [
+    {
+      "index": 1,
+      "hero": "堡垒守望者",
+      "level": "君王亲征",
+      "win": {
+        "commands": 121,
+        "finalWave": 15,
+        "maxWave": 15,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 804.5999999997345,
+        "peakLiveUnits": 13,
+        "peakStep": 24288,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 1,
+        "maxWave": 15,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 36.79999999999975,
+        "peakLiveUnits": 14,
+        "peakStep": 1254,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 2,
+      "hero": "堡垒守望者",
+      "level": "第一防线",
+      "win": {
+        "commands": 121,
+        "finalWave": 10,
+        "maxWave": 10,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 482.9666666666667,
+        "peakLiveUnits": 8,
+        "peakStep": 14639,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 2,
+        "maxWave": 10,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 93.39999999999652,
+        "peakLiveUnits": 13,
+        "peakStep": 2952,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 3,
+      "hero": "堡垒守望者",
+      "level": "裂谷尸潮",
+      "win": {
+        "commands": 121,
+        "finalWave": 12,
+        "maxWave": 12,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 602.7999999999178,
+        "peakLiveUnits": 11,
+        "peakStep": 18234,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 1,
+        "maxWave": 12,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 42.39999999999944,
+        "peakLiveUnits": 11,
+        "peakStep": 1422,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 4,
+      "hero": "连弩卫士",
+      "level": "第一防线",
+      "win": {
+        "commands": 121,
+        "finalWave": 10,
+        "maxWave": 10,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 488.2,
+        "peakLiveUnits": 9,
+        "peakStep": 14796,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 3,
+        "maxWave": 10,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 151.19999999999322,
+        "peakLiveUnits": 19,
+        "peakStep": 4686,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 5,
+      "hero": "连弩卫士",
+      "level": "裂谷尸潮",
+      "win": {
+        "commands": 121,
+        "finalWave": 12,
+        "maxWave": 12,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 602.7999999999178,
+        "peakLiveUnits": 11,
+        "peakStep": 18234,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 3,
+        "maxWave": 12,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 143.7999999999937,
+        "peakLiveUnits": 23,
+        "peakStep": 4464,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 6,
+      "hero": "连弩卫士",
+      "level": "君王亲征",
+      "win": {
+        "commands": 121,
+        "finalWave": 15,
+        "maxWave": 15,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 780.3999999997565,
+        "peakLiveUnits": 14,
+        "peakStep": 23562,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 3,
+        "maxWave": 15,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 141.99999999999378,
+        "peakLiveUnits": 28,
+        "peakStep": 4410,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 7,
+      "hero": "采伐领主",
+      "level": "第一防线",
+      "win": {
+        "commands": 121,
+        "finalWave": 10,
+        "maxWave": 10,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 318.6,
+        "peakLiveUnits": 7,
+        "peakStep": 9708,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 2,
+        "maxWave": 10,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 93.39999999999652,
+        "peakLiveUnits": 13,
+        "peakStep": 2952,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 8,
+      "hero": "采伐领主",
+      "level": "裂谷尸潮",
+      "win": {
+        "commands": 121,
+        "finalWave": 12,
+        "maxWave": 12,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 602.7999999999178,
+        "peakLiveUnits": 11,
+        "peakStep": 18234,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 1,
+        "maxWave": 12,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 42.39999999999944,
+        "peakLiveUnits": 11,
+        "peakStep": 1422,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 9,
+      "hero": "采伐领主",
+      "level": "君王亲征",
+      "win": {
+        "commands": 121,
+        "finalWave": 15,
+        "maxWave": 15,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 784.7999999997525,
+        "peakLiveUnits": 14,
+        "peakStep": 23694,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 1,
+        "maxWave": 15,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 36.79999999999975,
+        "peakLiveUnits": 14,
+        "peakStep": 1254,
+        "seed": 1337
+      }
+    },
+    {
+      "index": 10,
+      "hero": "堡垒守望者",
+      "level": "君王亲征",
+      "win": {
+        "commands": 121,
+        "finalWave": 15,
+        "maxWave": 15,
+        "outcome": "victory",
+        "peakEffectiveSeconds": 804.5999999997345,
+        "peakLiveUnits": 13,
+        "peakStep": 24288,
+        "seed": 1337
+      },
+      "loss": {
+        "commands": 1,
+        "finalWave": 1,
+        "maxWave": 15,
+        "outcome": "defeat",
+        "peakEffectiveSeconds": 36.79999999999975,
+        "peakLiveUnits": 14,
+        "peakStep": 1254,
+        "seed": 1337
+      }
+    }
+  ],
+  "samples": [
+    {
+      "index": 0,
+      "jsHeapBytes": {
+        "used": 91257986,
+        "allocated": 98012382
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 0,
+        "activeSources": 0,
+        "state": "closed",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 1,
+      "jsHeapBytes": {
+        "used": 79237730,
+        "allocated": 89809338
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 2,
+      "jsHeapBytes": {
+        "used": 84416951,
+        "allocated": 101565243
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 3,
+      "jsHeapBytes": {
+        "used": 86274993,
+        "allocated": 101068757
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 4,
+      "jsHeapBytes": {
+        "used": 85384941,
+        "allocated": 92259637
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 5,
+      "jsHeapBytes": {
+        "used": 83709841,
+        "allocated": 102252585
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 6,
+      "jsHeapBytes": {
+        "used": 93197199,
+        "allocated": 119041831
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 4,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 7,
+      "jsHeapBytes": {
+        "used": 90191929,
+        "allocated": 119461953
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 8,
+      "jsHeapBytes": {
+        "used": 84167047,
+        "allocated": 91327683
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 9,
+      "jsHeapBytes": {
+        "used": 89992583,
+        "allocated": 103485675
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    },
+    {
+      "index": 10,
+      "jsHeapBytes": {
+        "used": 88412851,
+        "allocated": 104287363
+      },
+      "gallery": {
+        "geometries": 3,
+        "textures": 10,
+        "portraits": 3
+      },
+      "library": {
+        "cachedAssets": 33,
+        "disposed": false,
+        "rendererUsers": 1
+      },
+      "sound": {
+        "contexts": 1,
+        "activeSources": 3,
+        "state": "running",
+        "muted": false
+      },
+      "canvases": 1
+    }
+  ],
+  "method": "Actual public start/replay defense/retry/replay defeat/return actions; accelerated unchanged rules, no full real-time claim; initial warm gallery loaded low before UI toggle to standard."
+}

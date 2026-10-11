@@ -1,0 +1,23 @@
+[
+  {
+    "externalArtifact": "product-campaign-standards-review.md",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/standards-review.md",
+    "sha256": "08c3ccc5394ea09544915c4d9d7c725b4272f4b48e26e592c2ebd0f388cff7b8",
+    "bytes": 2773,
+    "identical": true
+  },
+  {
+    "externalArtifact": "product-campaign-spec-review.md",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/spec-review.md",
+    "sha256": "837c3fbe8f0dde72f60598eaac4a9badedb21706a5fbf4b6967dcfbe51f019f2",
+    "bytes": 2401,
+    "identical": true
+  },
+  {
+    "externalArtifact": "product-campaign-assets-audit.json",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/asset-audit.json",
+    "sha256": "683d772b9c01954317f65e2eec9ff4c4eb30a9f9181e7e1f8cccc047e6364f9e",
+    "bytes": 19606,
+    "identical": true
+  }
+]

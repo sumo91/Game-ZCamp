@@ -1,0 +1,56 @@
+{
+  "before": {
+    "app": {
+      "assetState": "failed",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "0",
+      "openingCountdown": "5",
+      "phase": "OPENING_COUNTDOWN",
+      "renderPixelRatio": "1.5"
+    },
+    "at": "2026-10-09T14:36:29.378Z",
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      \n      \n      \n    ",
+    "inert": [
+      {
+        "class": "preview-hud"
+      },
+      {
+        "class": "preview-field"
+      },
+      {
+        "class": "preview-controls"
+      }
+    ],
+    "loadingHidden": false,
+    "presentation": null,
+    "progress": "加载失败：模型或材质资源不可用：arrow_tower_low.glb。检查连接后重试。"
+  },
+  "after": {
+    "app": {
+      "assetState": "failed",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "0",
+      "openingCountdown": "5",
+      "phase": "OPENING_COUNTDOWN",
+      "renderPixelRatio": "1.5"
+    },
+    "at": "2026-10-09T14:36:45.731Z",
+    "height": 1280,
+    "inert": [
+      {
+        "class": "preview-hud",
+        "inert": true
+      },
+      {
+        "class": "preview-field",
+        "inert": true
+      },
+      {
+        "class": "preview-controls",
+        "inert": true
+      }
+    ],
+    "progress": "加载失败：模型或材质资源不可用：arrow_tower_low.glb。检查连接后重试。",
+    "width": 720
+  }
+}

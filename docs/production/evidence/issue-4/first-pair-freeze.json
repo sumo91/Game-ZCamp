@@ -1,0 +1,11 @@
+{
+  "before": {
+    "presentation": "{\"models\":true,\"enemies\":[{\"id\":\"walker-25\",\"clip\":\"attack\",\"dying\":false,\"time\":9.266666666666644},{\"id\":\"walker-26\",\"clip\":\"walk\",\"dying\":false,\"time\":6.1666666666666545},{\"id\":\"walker-27\",\"clip\":\"walk\",\"dying\":false,\"time\":3.0666666666666655}],\"effects\":0,\"calls\":155,\"triangles\":67616}",
+    "step": "1663"
+  },
+  "after": {
+    "presentation": "{\"models\":true,\"enemies\":[{\"id\":\"walker-25\",\"clip\":\"attack\",\"dying\":false,\"time\":9.266666666666644},{\"id\":\"walker-26\",\"clip\":\"walk\",\"dying\":false,\"time\":6.1666666666666545},{\"id\":\"walker-27\",\"clip\":\"walk\",\"dying\":false,\"time\":3.0666666666666655}],\"effects\":0,\"calls\":155,\"triangles\":67616}",
+    "step": "1663"
+  },
+  "unchanged": true
+}

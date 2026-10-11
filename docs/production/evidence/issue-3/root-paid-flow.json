@@ -1,0 +1,77 @@
+{
+  "commandHistory": [
+    {
+      "accepted": true,
+      "command": {
+        "type": "pause"
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "buildingId": "growth-slot-r2-c1",
+      "command": {
+        "definitionId": "lumberyard",
+        "slotId": "slot-r2-c1",
+        "type": "build_building"
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "buildingId": "growth-slot-r1-c3",
+      "command": {
+        "definitionId": "arrow_tower",
+        "slotId": "slot-r1-c3",
+        "type": "build_building"
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "command": {
+        "type": "resume"
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "buildingId": "growth-slot-r1-c3",
+      "command": {
+        "buildingId": "growth-slot-r1-c3",
+        "type": "upgrade_building"
+      },
+      "step": 1787
+    },
+    {
+      "accepted": true,
+      "buildingId": "growth-slot-r1-c3",
+      "command": {
+        "buildingId": "growth-slot-r1-c3",
+        "traitDefinitionId": "tower_range",
+        "type": "choose_building_trait"
+      },
+      "step": 1787
+    },
+    {
+      "accepted": true,
+      "command": {
+        "type": "pause"
+      },
+      "step": 2280
+    },
+    {
+      "accepted": true,
+      "buildingId": "growth-slot-r1-c3",
+      "command": {
+        "buildingId": "growth-slot-r1-c3",
+        "targetTowerId": "frost",
+        "type": "transform_tower"
+      },
+      "step": 2280
+    }
+  ],
+  "phase": "TACTICAL_PAUSE",
+  "selectedSlot": "slot-r1-c3",
+  "text": "开发白模 · Three.js\n原版入口\n木材 87 · +1.7/秒\n金币 0\n城墙 100 / 100\n护盾 100 / 100\n波次 2 / 10 · 敌人 0\n下一波 50 秒\n亡灵推进区 ↓\n1·1\n1·2\n冰冻塔\nLv.2\n1·4\n1·5\n木材厂\nLv.1\n2·2\n2·3\n2·4\n2·5\n3·1\n3·2\n主城\n3·4\n3·5\n战术暂停 · 可成长\n继续\n冰冻塔 · Lv.2/5 · 白模\n\n减速控制\n\n当前：伤害 4.8 · 间隔 0.91秒 · 射程 0.72\n\n下级：伤害 5.6 · 间隔 0.83秒 · 射程 0.72 · 可升级\n\n远射 ×1 · 该塔射程累计 +10%\n\n升级至 Lv.3｜木材 70\n拆除\n改造完成 · 保留等级与合法词条"
+}

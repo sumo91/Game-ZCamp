@@ -1,0 +1,126 @@
+{
+  "actualDevice": "Windows desktop Codex IAB; quick preset is declaration only, never phone evidence",
+  "fixedSource": "02e26aa4814b3424b3063a6c7e91e5a09d052ee2",
+  "rawOutsideRepoPreserved": true,
+  "records": [
+    {
+      "file": "result-2026-10-10T15-18-51-914Z-88ec9a24-6f25-4468-b8f7-59bc2a410df5.json",
+      "bytes": 261256,
+      "sha256": "2d34d48a599c0e026c03e04d4f2c6a7e8b54cf3e7310c669fbd9f3e89f8ed980",
+      "phoneTest": {
+        "round": 2,
+        "attempt": 1,
+        "entryFromRound": 2,
+        "totalRounds": 3,
+        "protocol": "standard 100/60s, 200/300s, 300/60s; each 5s warmup; independent attempts; advance only after durable receipt"
+      },
+      "sourceBuildSha": "02e26aa4814b3424b3063a6c7e91e5a09d052ee2",
+      "outcome": "interrupted",
+      "reason": "manual-stop",
+      "request": 300,
+      "warmup": 5,
+      "warmupStartedAt": "2026-10-10T15:17:40.142Z",
+      "endedAt": "2026-10-10T15:18:51.896Z",
+      "stats": {
+        "sampleCount": 9611,
+        "actualSampleDurationSeconds": 66.7434,
+        "medianMs": 6.900000000023283,
+        "p95Ms": 7,
+        "maxMs": 7.100000000005821
+      },
+      "statisticsMatch": true,
+      "framesPositiveFinite": true,
+      "responseCount": 1,
+      "environmentActualUa": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "allUnits": 200,
+      "measuredRendering": {
+        "samples": 9611,
+        "callsMin": 439,
+        "callsMax": 439,
+        "trianglesMin": 3351410,
+        "trianglesMax": 3351410,
+        "boundary": "每个测量帧读取实际renderer.info；calls/triangles包含实时阴影绘制，非模型清单推算"
+      }
+    },
+    {
+      "file": "result-2026-10-10T15-21-47-285Z-f9ca93a0-c580-4f6a-952d-ea15808ed01e.json",
+      "bytes": 343710,
+      "sha256": "ad4feffbef92eaacc3a36996ad8d8716074dba42e68a32c24bc60cc925210ef8",
+      "phoneTest": {
+        "round": 2,
+        "attempt": 2,
+        "entryFromRound": 2,
+        "totalRounds": 3,
+        "protocol": "standard 100/60s, 200/300s, 300/60s; each 5s warmup; independent attempts; advance only after durable receipt"
+      },
+      "sourceBuildSha": "02e26aa4814b3424b3063a6c7e91e5a09d052ee2",
+      "outcome": "interrupted",
+      "reason": "manual-stop",
+      "request": 300,
+      "warmup": 5,
+      "warmupStartedAt": "2026-10-10T15:20:04.933Z",
+      "endedAt": "2026-10-10T15:21:47.259Z",
+      "stats": {
+        "sampleCount": 14014,
+        "actualSampleDurationSeconds": 97.32,
+        "medianMs": 6.900000000023283,
+        "p95Ms": 7,
+        "maxMs": 7.2000000000116415
+      },
+      "statisticsMatch": true,
+      "framesPositiveFinite": true,
+      "responseCount": 1,
+      "environmentActualUa": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "allUnits": 200,
+      "measuredRendering": {
+        "samples": 14014,
+        "callsMin": 439,
+        "callsMax": 439,
+        "trianglesMin": 3351410,
+        "trianglesMax": 3351410,
+        "boundary": "每个测量帧读取实际renderer.info；calls/triangles包含实时阴影绘制，非模型清单推算"
+      }
+    },
+    {
+      "file": "result-2026-10-10T15-25-47-497Z-10b27117-68dd-45dc-8261-8ce1c2a3b1ab.json",
+      "bytes": 280163,
+      "sha256": "7f6aa433a40d7654a5edffa4b8da07a9ae45f7eef81a5affc4b76b37ece4dc4d",
+      "phoneTest": {
+        "round": 3,
+        "attempt": 1,
+        "entryFromRound": 3,
+        "totalRounds": 3,
+        "protocol": "standard 100/60s, 200/300s, 300/60s; each 5s warmup; independent attempts; advance only after durable receipt"
+      },
+      "sourceBuildSha": "02e26aa4814b3424b3063a6c7e91e5a09d052ee2",
+      "outcome": "completed",
+      "reason": null,
+      "request": 60,
+      "warmup": 5,
+      "warmupStartedAt": "2026-10-10T15:24:42.469Z",
+      "endedAt": "2026-10-10T15:25:47.484Z",
+      "stats": {
+        "sampleCount": 8565,
+        "actualSampleDurationSeconds": 60.0003,
+        "medianMs": 6.900000000008731,
+        "p95Ms": 7,
+        "maxMs": 14
+      },
+      "statisticsMatch": true,
+      "framesPositiveFinite": true,
+      "responseCount": 1,
+      "environmentActualUa": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "allUnits": 300,
+      "measuredRendering": {
+        "samples": 8565,
+        "callsMin": 639,
+        "callsMax": 639,
+        "trianglesMin": 4747810,
+        "trianglesMax": 4747810,
+        "boundary": "每个测量帧读取实际renderer.info；calls/triangles包含实时阴影绘制，非模型清单推算"
+      }
+    }
+  ],
+  "rawFailure": "CLI launch with 127.0.0.1 host rejected by assigned-LAN-only validation; no process started. Then explicit assigned LAN QA service worked.",
+  "ownerAccepted": false
+}

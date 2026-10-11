@@ -1,0 +1,846 @@
+{
+  "range": "b863799...1b7774d",
+  "boundary": "read-only GLB/source bytes identity; not render/animated-pose acceptance",
+  "sampleMetaManifestIdentity": false,
+  "assets": [
+    {
+      "asset": "arrow_tower_high.glb",
+      "sha256": "cd3a906caa502dfe76cf25db7a1a393c51e7dc3bb542cb019c8e0b83fc304854",
+      "sourceSha256": "287c054404b79e6b068eb437839df5fca58043ec6bb7fa7411e741b34ffe0cf1",
+      "matchingManifests": [
+        "product-source-refinement/asset-manifest.json:after"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 1416848,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "arrow_tower_low.glb",
+      "sha256": "41a136a637198d9b2dd7f02026338e2a9641f24dff3fe807ad5842bc17d6654d",
+      "sourceSha256": "3e65c6b431ada189098883153f337dc67805169cae01433c3d5c967eb960e079",
+      "matchingManifests": [
+        "product-source-refinement/asset-manifest.json:after"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 1333528,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "arrow_tower_medium.glb",
+      "sha256": "6cc9afefb60f5cc4b1c6271a92c2f6806f5da228cce136021394b7541185aa6e",
+      "sourceSha256": "dedf2b2b39808aaa691a9ee549b5af9a32b204ddd7b798e50a32d3166f5b6654",
+      "matchingManifests": [
+        "product-source-refinement/asset-manifest.json:after"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 1369360,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "ballista_tower_high.glb",
+      "sha256": "5f541a154eb3b4e5703fd83ccbce648c9db1be080ae994b15ab702b9b583e1e4",
+      "sourceSha256": "e3811bc72efb1baa92fdda3e39acf48f6ad5880aee79db7922886192e3888218",
+      "matchingManifests": [
+        "issue-6/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 875160,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "ballista_tower_low.glb",
+      "sha256": "4d584adad657689bfab4fafedd4e7d4b7bbbac4cb0f943917be80c64a8ee22a2",
+      "sourceSha256": "b91fcb2b0d4093f990deee83ef3d77ed65f1a268a9980e66c917f1ceb2d0448b",
+      "matchingManifests": [
+        "issue-6/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 775972,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "ballista_tower_medium.glb",
+      "sha256": "a7b54e4d73151129fe9a9b17f289bc686e7c1ef1cfe6a43b0ff21025e613e566",
+      "sourceSha256": "30ee8903d74ed2908639735beac35f5999d90a144a744024867f8dfb09b59478",
+      "matchingManifests": [
+        "issue-6/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 824404,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "camp_plot.glb",
+      "sha256": "4096bfc6bc09577341f3f46eab11a78e79719e7b282f21a6a204b7ae005fe10a",
+      "sourceSha256": "9007dd39062f8da82be5598c78a0de4b80130c799ba25d3a1cd56186f7aa15dc",
+      "matchingManifests": [
+        "issue-4/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 317424,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "cannon_tower_high.glb",
+      "sha256": "133845f871a3d3254bf778780ebe322650c5ac45e7c250141a4d4349e1e735a5",
+      "sourceSha256": "a05e5643d95c0ccb925dcb5fc38b6a68e5721bdd4695335ed133bf34b6b2910c",
+      "matchingManifests": [
+        "issue-6/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 854868,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "cannon_tower_low.glb",
+      "sha256": "4a6f337c91e85b36e504e11b58fb04da097ce578c586c8fdfbffe774e4c181f0",
+      "sourceSha256": "c2609eda39fda2e76c53adfe5b308a84f5d573e4ee50ed3ec55d878dbf50b987",
+      "matchingManifests": [
+        "issue-6/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 744992,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "cannon_tower_medium.glb",
+      "sha256": "48bb5a3384e0a1d57891c128cff4f813e6c29cde4c89946825587fe0bed4a5f8",
+      "sourceSha256": "a3982b6380ec96962e3ab4e941bb90bb9a5fafad4bb44b6bae7921d82e261712",
+      "matchingManifests": [
+        "issue-6/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 810076,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "charger_lord.glb",
+      "sha256": "ec35ace6182dc865548658e457b6a37f1e0f55378e27a521f9dd20d452c1fa74",
+      "sourceSha256": "e8860185c2b9f2bef09d2038ecad96d541eaecb6c08262dd8ccd923b8d24056e",
+      "matchingManifests": [
+        "issue-9/boss-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 953128,
+      "clips": [
+        "attack",
+        "charge",
+        "death",
+        "hit",
+        "walk",
+        "warning"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "electric_tower_high.glb",
+      "sha256": "c3aa7007b45fa2e40634da7d2def5a7571cb9354ddf6add12e9618db73a8688c",
+      "sourceSha256": "9a260dbac992d7f444b9e97b654d3a4f5b7e874e5bfcd3188a0de6807557cf9a",
+      "matchingManifests": [
+        "issue-7/arcane-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 830428,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "electric_tower_low.glb",
+      "sha256": "f83dbe1e210e640ea8f4d83d977c40765a0bf0f74bdbc35487c62cddb670bf76",
+      "sourceSha256": "8b0d5ae48a13ca8a56074be572ae781fb72acd236715d983d301f8508a52054f",
+      "matchingManifests": [
+        "issue-7/arcane-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 690612,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "electric_tower_medium.glb",
+      "sha256": "fdab43e82a0bd81972e17f1073d613f3079001e471c5669bb10e65bcd71202a5",
+      "sourceSha256": "d1c682b85fc55f091359d1e928bd5bce0a8dbe4fd3f4e471e304361a1cdc482e",
+      "matchingManifests": [
+        "issue-7/arcane-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 753400,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "frost_tower_high.glb",
+      "sha256": "f3d8339d94dd62a984072360526f3bc57ed371211cc285ffebd3c49c590c909d",
+      "sourceSha256": "66119de6c943e58a1f653516111fb38b6a95a52330798be437aebe22e8a43ce0",
+      "matchingManifests": [
+        "issue-7/arcane-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 866528,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "frost_tower_low.glb",
+      "sha256": "5a97aad26da9a0ae0494d7d408f87572ba8ed2de740019df272f048cd29ee501",
+      "sourceSha256": "60edbab1e60219af31f1558c5cb456f5499a5b3bf4b8fbd49833b0f6fa16edd9",
+      "matchingManifests": [
+        "issue-7/arcane-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 677280,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "frost_tower_medium.glb",
+      "sha256": "4b257ae6adf868e73d86fb5e00b0180aba02d8933727ed22e273a53ffde78a48",
+      "sourceSha256": "7c2c5d62856efd483450fc6edf4f266edbc3bd902a9ebc82f4ec784e977c6999",
+      "matchingManifests": [
+        "issue-7/arcane-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 764240,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "hero_camp_warden.glb",
+      "sha256": "5940f81ed8589142dfccb18f3a92eb37d34dd27d8867c47b187b0fd928b5f6a7",
+      "sourceSha256": "2c75498b4ab2fc9518cddfadf14795c43747dfd09fca6134df3d23865b4b3ca8",
+      "matchingManifests": [
+        "issue-10/hero-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 827344,
+      "clips": [
+        "attack",
+        "idle"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "hero_lumber_baron.glb",
+      "sha256": "6cc91ff7d667b3cf0274b4e882365726ef910fa2bb87302e3d8484d4ea41c377",
+      "sourceSha256": "d16b5cd666fb18c59ed874fa7052c945f479ae0a94dedeb64998626304d5a3cd",
+      "matchingManifests": [
+        "issue-10/hero-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 933760,
+      "clips": [
+        "attack",
+        "idle"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "hero_vanguard_gunner.glb",
+      "sha256": "58b38ebd69eac7ce53dcbf2c1c316be654b5d3a27eee0b935f9a60e4734ab310",
+      "sourceSha256": "17104bdbddd14d8afe00457523326f2adb84e76def1e40cbeae9f0fb75de4837",
+      "matchingManifests": [
+        "issue-10/hero-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 846240,
+      "clips": [
+        "attack",
+        "idle"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "lumberyard_high.glb",
+      "sha256": "460593660a0bac02209e991e3d70b7233944f07264eda4b230499ea1155e5ff8",
+      "sourceSha256": "5264cc58c69708196eafefbb31c49d0edebcd90faaf3c93ce4422c0b636940e5",
+      "matchingManifests": [
+        "product-source-refinement/asset-manifest.json:after"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 1378332,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "lumberyard_low.glb",
+      "sha256": "6439b72c87b91f69197c8824ec203fbb69e020779bfd996b3bfc7e43db314963",
+      "sourceSha256": "e440b94b9551091d48c7b1b1d33e41aad005ff95243c02ead913711c6b3acaad",
+      "matchingManifests": [
+        "product-source-refinement/asset-manifest.json:after"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 981420,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "lumberyard_medium.glb",
+      "sha256": "7d7fb376098e1d4e41b78fa408e5a4ce8aec9244a199a133e078441504f615b3",
+      "sourceSha256": "1b267ca2359cfbb25c309bb655b19440712ecc7b5d7ef8e7a1052d7d83d42429",
+      "matchingManifests": [
+        "product-source-refinement/asset-manifest.json:after"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 1205952,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "main_city.glb",
+      "sha256": "5e511f7a7534bfecfe986641cf5ed79fb8dded2d2444aae8a266b30fb9fe81e9",
+      "sourceSha256": "460bb29b673f6880b5f11ca2e57498240f3c3dd112e21893e7c51a95b90aa8f4",
+      "matchingManifests": [
+        "product-source-refinement/asset-manifest.json:after"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 1872624,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "pine_tree.glb",
+      "sha256": "18081c36910c9b014fc02c4b253a4eb8156b3d4ebb66b799ba02cd0232f9e591",
+      "sourceSha256": "5236ba12acfdbf673b41922c3582cd0086fdb4639331b9e7dc903628c71605af",
+      "matchingManifests": [
+        "issue-4/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 320432,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "rock_cluster.glb",
+      "sha256": "4b2ddcc9cf82d449f580b62ee0f756dc840069b4d4bd0f9cba5cf9239bf5168c",
+      "sourceSha256": "7e0c462fb3225923833d34b0b0c1d43ef8e0a6e2f52f7063c9d0766e4afc5ceb",
+      "matchingManifests": [
+        "issue-4/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 290636,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "skeleton_infantry.glb",
+      "sha256": "ae07d7f02d88b8bd4eb2712cc08875ec0b81119fe77f0d5ab3f149b48d4a2934",
+      "sourceSha256": "1a2e0cb6f96a4af2f8b6ef98e5728476801e40a5b5875f69d195576da7abdacf",
+      "matchingManifests": [
+        "product-source-refinement/asset-manifest.json:after"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 1151112,
+      "clips": [
+        "attack",
+        "death",
+        "hit",
+        "walk"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0.0026999711990356445,
+      "ormShared": true
+    },
+    {
+      "asset": "undead_armored.glb",
+      "sha256": "80c2a3a0846d1b2f9135c20b14cf3368dbc9e412fddf91dac78d0729a1abf31a",
+      "sourceSha256": "ee8c2dc06ee6925a0fae3049fa929237edcb6f690bb539b74a9fec59bec6d772",
+      "matchingManifests": [
+        "issue-8/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 991540,
+      "clips": [
+        "attack",
+        "death",
+        "hit",
+        "walk"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0.0027809739112854004,
+      "ormShared": true
+    },
+    {
+      "asset": "undead_brute.glb",
+      "sha256": "102539476c66c08b8d27cbd14ea2e48309ebc2803afe55d04b8e0f265a6ef92e",
+      "sourceSha256": "a431930e26dc199d03457049755044620445088518c1e8b7aacf62d3b6ad6afa",
+      "matchingManifests": [
+        "issue-8/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 957044,
+      "clips": [
+        "attack",
+        "death",
+        "hit",
+        "walk"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0.0037260055541992188,
+      "ormShared": true
+    },
+    {
+      "asset": "undead_king.glb",
+      "sha256": "77b830dcc791131ce05f374a26decd9704efb9e019c90a15d763ecb1f64a9173",
+      "sourceSha256": "2e01b1260b17d94d3339e2502469e6f8aaf330480de00cd82b6efdc096805ff8",
+      "matchingManifests": [
+        "issue-9/boss-asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 908448,
+      "clips": [
+        "attack",
+        "death",
+        "hit",
+        "inspire",
+        "walk"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    },
+    {
+      "asset": "undead_runner.glb",
+      "sha256": "db51105203f2a28e7659466667479b1f087de3e85fe79bdd2f948267d662d70d",
+      "sourceSha256": "ddf87ebdab74ff7735f89d8c43da54fd9d77be5b157c5d95985980b51791ad82",
+      "matchingManifests": [
+        "issue-8/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 931564,
+      "clips": [
+        "attack",
+        "death",
+        "hit",
+        "walk"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0.002537965774536133,
+      "ormShared": true
+    },
+    {
+      "asset": "undead_tank.glb",
+      "sha256": "0a710c6ef407e7af1c7ddfafcf060554f7f59e561770559ba1d983a6f3b6c18f",
+      "sourceSha256": "59cb8e8147812791cca5e332d76a1692060643a32902d7475eb7ee716be34198",
+      "matchingManifests": [
+        "issue-8/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 860564,
+      "clips": [
+        "attack",
+        "death",
+        "hit",
+        "walk"
+      ],
+      "joints": 14,
+      "groundPositionMinY": 0.002888977527618408,
+      "ormShared": true
+    },
+    {
+      "asset": "wall_segment.glb",
+      "sha256": "54ea6e5f9f902c124f5df9e95afe505b50b736e24d91a7d1a2d96c6eed383834",
+      "sourceSha256": "3a36e0798286523e5a4b287a621735c1f1a79d1cfc8c891943e5baaeb5657572",
+      "matchingManifests": [
+        "issue-4/asset-manifest.json"
+      ],
+      "checks": {
+        "container": true,
+        "clips": true,
+        "onePbrTwoPng": true,
+        "selfContained": true,
+        "rootIdentity": true,
+        "contentId": true,
+        "skin": true,
+        "anchors": true,
+        "sampleMeta": true
+      },
+      "bytes": 898288,
+      "clips": [],
+      "joints": 0,
+      "groundPositionMinY": 0,
+      "ormShared": true
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "externalArtifact": "product-batch-standards-review.md",
+    "repositoryArtifact": "docs/production/evidence/content-batch/standards-review.md",
+    "externalSha256": "8a7a000b421bdcdf9043ef75de92a1656941bc5e513979363305af3d68a36414",
+    "repositorySha256": "8a7a000b421bdcdf9043ef75de92a1656941bc5e513979363305af3d68a36414",
+    "externalBytes": 2518,
+    "repositoryBytes": 2518,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-batch-spec-review.md",
+    "repositoryArtifact": "docs/production/evidence/content-batch/spec-review.md",
+    "externalSha256": "3d94cfb8f541042133f4fe5f2d97fae3f27fbe91634c96d249197511ab72e64c",
+    "repositorySha256": "3d94cfb8f541042133f4fe5f2d97fae3f27fbe91634c96d249197511ab72e64c",
+    "externalBytes": 2209,
+    "repositoryBytes": 2209,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-batch-root-ui.md",
+    "repositoryArtifact": "docs/production/evidence/content-batch/root-ui-review.md",
+    "externalSha256": "d97e19ccb6bad34b6a6d4c21adb6297f2973ae989e160a33c2511762e12cdc53",
+    "repositorySha256": "1e8b02335636001779c16b11a6e0925cbb321154ba7d07bf6d6ceff6a66f83ac",
+    "externalBytes": 1722,
+    "repositoryBytes": 1721,
+    "identical": false,
+    "conversion": "CRLF to LF only; external original unchanged"
+  },
+  {
+    "externalArtifact": "product-content-batch-assets-audit.json",
+    "repositoryArtifact": "docs/production/evidence/content-batch/asset-audit.json",
+    "externalSha256": "a343df5a4277607d8602d2f4aaa34401da288a966e559620bfdcc629beed961b",
+    "repositorySha256": "ccc7937474e7e07243240f9ac228bfef82e7afa23dcf0a30ca164ec4b514f5ca",
+    "externalBytes": 16965,
+    "repositoryBytes": 16616,
+    "identical": false,
+    "conversion": "CRLF to LF only; external original unchanged"
+  }
+]

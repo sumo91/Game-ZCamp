@@ -1,0 +1,215 @@
+{
+  "app": {
+    "assetState": "ready",
+    "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "clockStep": "546",
+    "commandHistory": "[{\"step\":546,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":546,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+    "openingCountdown": "0",
+    "phase": "TACTICAL_PAUSE",
+    "renderPixelRatio": "1.0000000298023224",
+    "selectedSlot": "slot-r1-c3"
+  },
+  "cells": [
+    {
+      "bottom": 802.2708740234375,
+      "height": 56,
+      "left": 98.61458587646484,
+      "right": 162.61458587646484,
+      "slot": "slot-r1-c1",
+      "top": 746.2708740234375,
+      "width": 64,
+      "x": 98.61458587646484,
+      "y": 746.2708740234375
+    },
+    {
+      "bottom": 802.2708740234375,
+      "height": 56,
+      "left": 213.30209350585935,
+      "right": 277.3020935058594,
+      "slot": "slot-r1-c2",
+      "top": 746.2708740234375,
+      "width": 64,
+      "x": 213.30209350585935,
+      "y": 746.2708740234375
+    },
+    {
+      "bottom": 802.2708740234375,
+      "height": 56,
+      "left": 328,
+      "right": 392,
+      "slot": "slot-r1-c3",
+      "top": 746.2708740234375,
+      "width": 64,
+      "x": 328,
+      "y": 746.2708740234375
+    },
+    {
+      "bottom": 802.2708740234375,
+      "height": 56,
+      "left": 442.6875,
+      "right": 506.6875,
+      "slot": "slot-r1-c4",
+      "top": 746.2708740234375,
+      "width": 64,
+      "x": 442.6875,
+      "y": 746.2708740234375
+    },
+    {
+      "bottom": 802.2708740234375,
+      "height": 56,
+      "left": 557.375,
+      "right": 621.375,
+      "slot": "slot-r1-c5",
+      "top": 746.2708740234375,
+      "width": 64,
+      "x": 557.375,
+      "y": 746.2708740234375
+    },
+    {
+      "bottom": 915.25,
+      "height": 56,
+      "left": 98.61458587646484,
+      "right": 162.61458587646484,
+      "slot": "slot-r2-c1",
+      "top": 859.25,
+      "width": 64,
+      "x": 98.61458587646484,
+      "y": 859.25
+    },
+    {
+      "bottom": 915.25,
+      "height": 56,
+      "left": 213.30209350585935,
+      "right": 277.3020935058594,
+      "slot": "slot-r2-c2",
+      "top": 859.25,
+      "width": 64,
+      "x": 213.30209350585935,
+      "y": 859.25
+    },
+    {
+      "bottom": 915.25,
+      "height": 56,
+      "left": 328,
+      "right": 392,
+      "slot": "slot-r2-c3",
+      "top": 859.25,
+      "width": 64,
+      "x": 328,
+      "y": 859.25
+    },
+    {
+      "bottom": 915.25,
+      "height": 56,
+      "left": 442.6875,
+      "right": 506.6875,
+      "slot": "slot-r2-c4",
+      "top": 859.25,
+      "width": 64,
+      "x": 442.6875,
+      "y": 859.25
+    },
+    {
+      "bottom": 915.25,
+      "height": 56,
+      "left": 557.375,
+      "right": 621.375,
+      "slot": "slot-r2-c5",
+      "top": 859.25,
+      "width": 64,
+      "x": 557.375,
+      "y": 859.25
+    },
+    {
+      "bottom": 1028.2291870117188,
+      "height": 56,
+      "left": 98.61458587646484,
+      "right": 162.61458587646484,
+      "slot": "slot-r3-c1",
+      "top": 972.2291870117188,
+      "width": 64,
+      "x": 98.61458587646484,
+      "y": 972.2291870117188
+    },
+    {
+      "bottom": 1028.2291870117188,
+      "height": 56,
+      "left": 213.30209350585935,
+      "right": 277.3020935058594,
+      "slot": "slot-r3-c2",
+      "top": 972.2291870117188,
+      "width": 64,
+      "x": 213.30209350585935,
+      "y": 972.2291870117188
+    },
+    {
+      "bottom": 1028.2291870117188,
+      "height": 56,
+      "left": 328,
+      "right": 392,
+      "slot": "slot-r3-c3",
+      "top": 972.2291870117188,
+      "width": 64,
+      "x": 328,
+      "y": 972.2291870117188
+    },
+    {
+      "bottom": 1028.2291870117188,
+      "height": 56,
+      "left": 442.6875,
+      "right": 506.6875,
+      "slot": "slot-r3-c4",
+      "top": 972.2291870117188,
+      "width": 64,
+      "x": 442.6875,
+      "y": 972.2291870117188
+    },
+    {
+      "bottom": 1028.2291870117188,
+      "height": 56,
+      "left": 557.375,
+      "right": 621.375,
+      "slot": "slot-r3-c5",
+      "top": 972.2291870117188,
+      "width": 64,
+      "x": 557.375,
+      "y": 972.2291870117188
+    }
+  ],
+  "presentation": {
+    "calls": 92,
+    "effects": 2,
+    "enemies": [
+      {
+        "clip": "death",
+        "dying": true,
+        "id": "walker-6",
+        "time": 3.878067535941153
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-7",
+        "time": 3.4788699431628194
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-8",
+        "time": 0.6796723503844867
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-9",
+        "time": 0.2804747576061518
+      }
+    ],
+    "models": true,
+    "triangles": 74611
+  },
+  "viewport": [
+    720,
+    1280
+  ]
+}

@@ -1,0 +1,63 @@
+
+> zcamp@0.1.0 check
+> npm run typecheck && npm test && npm run test:collector
+
+
+> zcamp@0.1.0 typecheck
+> tsc --noEmit
+
+
+> zcamp@0.1.0 test
+> vitest run
+
+
+ RUN  v3.2.7 D:/AI/Codex/WebGames/ZCamp
+
+ ✓ tests/three/phoneTest.test.ts (22 tests) 11ms
+ ✓ tests/core/buildingGrowth.test.ts (10 tests) 6ms
+ ✓ tests/ui/feedback.test.ts (16 tests) 6ms
+ ✓ tests/core/content.test.ts (6 tests) 28ms
+ ✓ tests/ui/legacyLayout.test.ts (8 tests) 6ms
+ ✓ tests/three/coordinates.test.ts (2 tests) 10ms
+ ✓ tests/core/undeadWall.test.ts (1 test) 9ms
+ ✓ tests/core/heroFoundation.test.ts (7 tests) 25ms
+ ✓ tests/core/battleSession.test.ts (7 tests) 49ms
+ ✓ tests/core/growthGame.test.ts (18 tests) 91ms
+ ✓ tests/core/growthCore.test.ts (19 tests) 95ms
+ ✓ tests/ui/growthUi.test.ts (10 tests) 24ms
+ ✓ tests/core/siegeReplay.test.ts (2 tests) 282ms
+ ✓ tests/core/battlePressure.test.ts (3 tests) 311ms
+ ✓ tests/core/bossPresentation.test.ts (2 tests) 379ms
+ ✓ tests/ui/lobbyUi.test.ts (5 tests) 6ms
+ ✓ tests/ui/growthControls.test.ts (9 tests) 73ms
+ ✓ tests/core/undeadDemo.test.ts (1 test) 221ms
+ ✓ tests/core/progression.test.ts (5 tests) 5ms
+ ✓ tests/core/growthCombat.test.ts (5 tests) 6ms
+ ✓ tests/core/random.test.ts (2 tests) 5ms
+ ✓ tests/ui/progressionStore.test.ts (2 tests) 4ms
+ ✓ tests/core/clock.test.ts (2 tests) 4ms
+ ✓ tests/ui/campaign.test.ts (3 tests) 383ms
+   ✓ campaign session ownership > records a real final-boss victory once, freezes the result and restarts the same selected battle  343ms
+ ✓ tests/ui/campaignReplay.test.ts (2 tests) 350ms
+
+ Test Files  25 passed (25)
+      Tests  169 passed (169)
+   Start at  04:27:22
+   Duration  2.55s (transform 4.13s, setup 0ms, collect 11.70s, tests 2.39s, environment 5ms, prepare 3.76s)
+
+
+> zcamp@0.1.0 test:collector
+> node --test tests/phoneCollector.test.mjs
+
+✔ the receiver persists the identical full JSON before acknowledging each unique file (65.2405ms)
+✔ the receiver rejects wrong tokens, invalid JSON, omitted raw data and oversized bodies (19.46ms)
+✔ a failed disk write produces no success receipt and retains previously saved evidence (25.3922ms)
+✔ candidate static paths remain inside the selected dist, including encoded traversal and symlinks (27.2ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 269.5129

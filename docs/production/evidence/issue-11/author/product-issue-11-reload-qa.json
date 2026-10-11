@@ -1,0 +1,36 @@
+{
+  "cards": [
+    {
+      "id": "camp_warden",
+      "locked": "false",
+      "selected": "false"
+    },
+    {
+      "id": "vanguard_gunner",
+      "locked": "false",
+      "selected": "false"
+    },
+    {
+      "id": "lumber_baron",
+      "locked": "false",
+      "selected": "true"
+    },
+    {
+      "id": "first_defense",
+      "locked": "false",
+      "selected": "false"
+    },
+    {
+      "id": "broken_valley",
+      "locked": "false",
+      "selected": "false"
+    },
+    {
+      "id": "kings_march",
+      "locked": "false",
+      "selected": "true"
+    }
+  ],
+  "screen": "lobby",
+  "text": "守住黎明前的最后一道城墙选择你的驻守英雄，建造并强化防线。\n      驻守英雄堡垒守望者均衡驻守英雄可出战连弩卫士战斗驻守英雄可出战采伐领主经济驻守英雄已选择采伐领主弩箭攻击 · 自动驻守主城木材总产量 +25%开局城墙护盾 +120\n      前线战役01第一防线十波连续尸潮可出战◆新手02裂谷尸潮十二波连续尸潮可出战◆◆进阶03君王亲征十五波连续尸潮 · 双 Boss 终局已选择◆◆◆困难君王亲征 · 已通关敌情 · 坦克海 · 双冲锋压阵 · 终局尸潮君王 · 共 15 波"
+}

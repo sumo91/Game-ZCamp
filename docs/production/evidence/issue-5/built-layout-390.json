@@ -1,0 +1,131 @@
+{
+  "controls": [
+    {
+      "height": 44,
+      "name": "开始测量",
+      "width": 79.33333587646484
+    },
+    {
+      "height": 44,
+      "name": "停止",
+      "width": 47.33333587646485
+    },
+    {
+      "height": 44,
+      "name": "响应检查",
+      "width": 79.33333587646484
+    },
+    {
+      "height": 44,
+      "name": "100200300",
+      "width": 344.66668701171875
+    },
+    {
+      "height": 44,
+      "name": "标准 · DPR上限2降低像素密度 · DPR上限1",
+      "width": 344.66668701171875
+    },
+    {
+      "height": 44,
+      "name": "60秒 · 初期取证300秒 · 连续取证15秒 · 操作冒烟",
+      "width": 344.66668701171875
+    },
+    {
+      "height": 44,
+      "name": "桌面电脑实体手机模拟器",
+      "width": 344.66668701171875
+    },
+    {
+      "height": 44,
+      "name": "请填写真实型号；模拟器请写名称",
+      "width": 344.66668701171875
+    },
+    {
+      "height": 44,
+      "name": "请填写实际系统和版本",
+      "width": 344.66668701171875
+    },
+    {
+      "height": 44,
+      "name": "缓存/网络、其他负载、操作观察",
+      "width": 344.66668701171875
+    },
+    {
+      "height": 44,
+      "name": "重新测量",
+      "width": 79.33333587646484
+    },
+    {
+      "height": 44,
+      "name": "导出JSON",
+      "width": 90.01042175292969
+    },
+    {
+      "height": 44,
+      "name": "复制结果",
+      "width": 79.33333587646484
+    },
+    {
+      "height": 154.5,
+      "name": "完成或中断后显示完整原始结果",
+      "width": 366
+    }
+  ],
+  "fieldRect": {
+    "bottom": 853.3541870117188,
+    "height": 568,
+    "left": 12,
+    "right": 378,
+    "top": 285.35418701171875,
+    "width": 366,
+    "x": 12,
+    "y": 285.35418701171875
+  },
+  "pageWidth": 390,
+  "scene": {
+    "activeUnits": 200,
+    "animation": "SkeletonUtils.clone + 每实例 AnimationMixer；四动作每4秒轮换并循环；所有 mixer 每个显示帧更新",
+    "animationTimeSeconds": 0.5903000000000029,
+    "calls": 439,
+    "canvasCss": {
+      "height": 568,
+      "width": 366
+    },
+    "centersInView": 200,
+    "composition": {
+      "arrow_high": 3,
+      "arrow_low": 2,
+      "arrow_medium": 2,
+      "lumber_high": 2,
+      "lumber_low": 2,
+      "lumber_medium": 3,
+      "main_city": 1,
+      "plot": 15,
+      "rocks": 4,
+      "skeleton": 200,
+      "tree": 4,
+      "wall": 6
+    },
+    "geometries": 14,
+    "independentMixers": 200,
+    "quality": "reduced",
+    "rendererDpr": 1,
+    "semantics": {
+      "attack": 50,
+      "death": 50,
+      "hit": 50,
+      "walk": 50
+    },
+    "shadow": {
+      "enabled": true,
+      "groundProjection": true,
+      "resolution": [
+        1024,
+        1024
+      ],
+      "type": "PCFShadowMap"
+    },
+    "textures": 227,
+    "triangles": 3351410
+  }
+}

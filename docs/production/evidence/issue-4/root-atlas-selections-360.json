@@ -1,0 +1,62 @@
+[
+  {
+    "requested": "slot-r1-c1",
+    "selected": "slot-r1-c1"
+  },
+  {
+    "requested": "slot-r1-c2",
+    "selected": "slot-r1-c2"
+  },
+  {
+    "requested": "slot-r1-c3",
+    "selected": "slot-r1-c3"
+  },
+  {
+    "requested": "slot-r1-c4",
+    "selected": "slot-r1-c4"
+  },
+  {
+    "requested": "slot-r1-c5",
+    "selected": "slot-r1-c5"
+  },
+  {
+    "requested": "slot-r2-c1",
+    "selected": "slot-r2-c1"
+  },
+  {
+    "requested": "slot-r2-c2",
+    "selected": "slot-r2-c2"
+  },
+  {
+    "requested": "slot-r2-c3",
+    "selected": "slot-r2-c3"
+  },
+  {
+    "requested": "slot-r2-c4",
+    "selected": "slot-r2-c4"
+  },
+  {
+    "requested": "slot-r2-c5",
+    "selected": "slot-r2-c5"
+  },
+  {
+    "requested": "slot-r3-c1",
+    "selected": "slot-r3-c1"
+  },
+  {
+    "requested": "slot-r3-c2",
+    "selected": "slot-r3-c2"
+  },
+  {
+    "requested": "slot-r3-c3",
+    "selected": "slot-r3-c3"
+  },
+  {
+    "requested": "slot-r3-c4",
+    "selected": "slot-r3-c4"
+  },
+  {
+    "requested": "slot-r3-c5",
+    "selected": "slot-r3-c5"
+  }
+]

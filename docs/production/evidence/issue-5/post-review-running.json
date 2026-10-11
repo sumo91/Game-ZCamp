@@ -1,0 +1,1653 @@
+{
+  "appScrollTop": 0,
+  "canvasTouchAction": "pan-y",
+  "phase": "measuring",
+  "scene": {
+    "activeUnits": 200,
+    "animation": "SkeletonUtils.clone + 每实例 AnimationMixer；四动作每4秒轮换并循环；所有 mixer 每个显示帧更新",
+    "animationTimeSeconds": 12.076400000000016,
+    "calls": 439,
+    "canvasCss": {
+      "height": 364,
+      "width": 321
+    },
+    "centersInView": 200,
+    "composition": {
+      "arrow_high": 3,
+      "arrow_low": 2,
+      "arrow_medium": 2,
+      "lumber_high": 2,
+      "lumber_low": 2,
+      "lumber_medium": 3,
+      "main_city": 1,
+      "plot": 15,
+      "rocks": 4,
+      "skeleton": 200,
+      "tree": 4,
+      "wall": 6
+    },
+    "geometries": 14,
+    "independentMixers": 200,
+    "quality": "reduced",
+    "rendererDpr": 1,
+    "semantics": {
+      "attack": 50,
+      "death": 50,
+      "hit": 50,
+      "walk": 50
+    },
+    "shadow": {
+      "enabled": true,
+      "groundProjection": true,
+      "resolution": [
+        1024,
+        1024
+      ],
+      "type": "PCFShadowMap"
+    },
+    "textures": 227,
+    "triangles": 3351410,
+    "units": [
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 1,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 2,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 3,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 4,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 5,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 6,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 7,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 8,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 9,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 10,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 11,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 12,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 13,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 14,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 15,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 16,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 17,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 18,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 19,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 20,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 21,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 22,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 23,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 24,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 25,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 26,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 27,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 28,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 29,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 30,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 31,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 32,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 33,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 34,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 35,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 36,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 37,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 38,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 39,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 40,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 41,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 42,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 43,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 44,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 45,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 46,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 47,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 48,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 49,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 50,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 51,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 52,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 53,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 54,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 55,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 56,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 57,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 58,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 59,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 60,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 61,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 62,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 63,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 64,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 65,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 66,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 67,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 68,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 69,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 70,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 71,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 72,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 73,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 74,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 75,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 76,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 77,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 78,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 79,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 80,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 81,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 82,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 83,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 84,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 85,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 86,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 87,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 88,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 89,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 90,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 91,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 92,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 93,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 94,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 95,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 96,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 97,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 98,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 99,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 100,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 101,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 102,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 103,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 104,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 105,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 106,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 107,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 108,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 109,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 110,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 111,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 112,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 113,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 114,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 115,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 116,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 117,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 118,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 119,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 120,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 121,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 122,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 123,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 124,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 125,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 126,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 127,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 128,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 129,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 130,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 131,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 132,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 133,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 134,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 135,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 136,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 137,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 138,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 139,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 140,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 141,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 142,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 143,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 144,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 145,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 146,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 147,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 148,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 149,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 150,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 151,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 152,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 153,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 154,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 155,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 156,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 157,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 158,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 159,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 160,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 161,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 162,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 163,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 164,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 165,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 166,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 167,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 168,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 169,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 170,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 171,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 172,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 173,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 174,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 175,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 176,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 177,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 178,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 179,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 180,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 181,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 182,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 183,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 184,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 185,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 186,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 187,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 188,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 189,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 190,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 191,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 192,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 193,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 194,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 195,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 196,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "death",
+        "id": 197,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "walk",
+        "id": 198,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "attack",
+        "id": 199,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      },
+      {
+        "actionRunning": true,
+        "centerInView": true,
+        "clip": "hit",
+        "id": 200,
+        "mixerTimeSeconds": 12.076400000000016,
+        "visible": true
+      }
+    ]
+  }
+}

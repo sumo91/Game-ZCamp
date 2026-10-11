@@ -1,0 +1,156 @@
+[
+  {
+    "file": "root-100-standard-60-no-in-run-response.json",
+    "outcome": "completed",
+    "reason": null,
+    "count": 100,
+    "quality": "standard",
+    "seconds": 60.000299999999996,
+    "samples": 8640,
+    "medianMs": 6.900000000008731,
+    "p95Ms": 7,
+    "maxMs": 7.5,
+    "calls": [
+      239,
+      239
+    ],
+    "triangles": [
+      1955010,
+      1955010
+    ],
+    "responses": 0,
+    "rawStatisticsVerified": true
+  },
+  {
+    "file": "root-100-standard-60.json",
+    "outcome": "completed",
+    "reason": null,
+    "count": 100,
+    "quality": "standard",
+    "seconds": 60.000199999999985,
+    "samples": 8639,
+    "medianMs": 6.900000000023283,
+    "p95Ms": 7,
+    "maxMs": 13.89999999999418,
+    "calls": [
+      239,
+      239
+    ],
+    "triangles": [
+      1955010,
+      1955010
+    ],
+    "responses": 1,
+    "rawStatisticsVerified": true
+  },
+  {
+    "file": "root-200-standard-300.json",
+    "outcome": "completed",
+    "reason": null,
+    "count": 200,
+    "quality": "standard",
+    "seconds": 300.00169999999997,
+    "samples": 43181,
+    "medianMs": 6.900000000023283,
+    "p95Ms": 7.099999999976717,
+    "maxMs": 34.70000000001164,
+    "calls": [
+      439,
+      439
+    ],
+    "triangles": [
+      3351410,
+      3351410
+    ],
+    "responses": 3,
+    "rawStatisticsVerified": true
+  },
+  {
+    "file": "root-300-standard-60.json",
+    "outcome": "completed",
+    "reason": null,
+    "count": 300,
+    "quality": "standard",
+    "seconds": 60.0005,
+    "samples": 8628,
+    "medianMs": 6.900000000023283,
+    "p95Ms": 7.099999999976717,
+    "maxMs": 14,
+    "calls": [
+      639,
+      639
+    ],
+    "triangles": [
+      4747810,
+      4747810
+    ],
+    "responses": 1,
+    "rawStatisticsVerified": true
+  },
+  {
+    "file": "root-360-reduced-manual-stop.json",
+    "outcome": "interrupted",
+    "reason": "manual-stop",
+    "count": 200,
+    "quality": "reduced",
+    "seconds": 10.395800000000047,
+    "samples": 1497,
+    "medianMs": 6.900000000023283,
+    "p95Ms": 7,
+    "maxMs": 7.100000000093132,
+    "calls": [
+      439,
+      439
+    ],
+    "triangles": [
+      3351410,
+      3351410
+    ],
+    "responses": 1,
+    "rawStatisticsVerified": true
+  },
+  {
+    "file": "root-390-resize-interrupted.json",
+    "outcome": "interrupted",
+    "reason": "viewport-resized",
+    "count": 200,
+    "quality": "reduced",
+    "seconds": 0,
+    "samples": 0,
+    "medianMs": null,
+    "p95Ms": null,
+    "maxMs": null,
+    "calls": [
+      null,
+      null
+    ],
+    "triangles": [
+      null,
+      null
+    ],
+    "responses": 0,
+    "rawStatisticsVerified": true
+  },
+  {
+    "file": "root-background-probe-manual-stop.json",
+    "outcome": "interrupted",
+    "reason": "manual-stop",
+    "count": 100,
+    "quality": "standard",
+    "seconds": 44.28510000000001,
+    "samples": 6377,
+    "medianMs": 6.900000000008731,
+    "p95Ms": 7.099999999991269,
+    "maxMs": 7.2000000000116415,
+    "calls": [
+      239,
+      239
+    ],
+    "triangles": [
+      1955010,
+      1955010
+    ],
+    "responses": 0,
+    "rawStatisticsVerified": true
+  }
+]

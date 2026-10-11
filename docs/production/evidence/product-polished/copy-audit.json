@@ -1,0 +1,350 @@
+{
+  "baseline": "c3310f8c085edb21078cc03c7af51ed43636c319",
+  "codeHead": "6d5dcf87fce4a5e0efe2afeeaa4259e511e29a23",
+  "cannonSource": "d2fcc75d1c39fc8460884ea60baa8c6ae14f7ed8",
+  "sourceTechnical": "77616d125728191f73418dc309f72b301efe155b",
+  "sourceFinal": "191273cff438e54461fa0e7b491a0df0aaa1056a",
+  "copies": [
+    {
+      "externalRelativePath": "product-source-standards-review.md",
+      "repositoryPath": "docs/production/evidence/product-polished/standards-review.md",
+      "originalBytes": 2917,
+      "copyBytes": 2917,
+      "originalSha256": "9711df7504e87d36cd5d73e4c10a6cc3ebb8dc31b6c806ea0ee8d2545a30dc0c",
+      "copySha256": "9711df7504e87d36cd5d73e4c10a6cc3ebb8dc31b6c806ea0ee8d2545a30dc0c",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-source-spec-review.md",
+      "repositoryPath": "docs/production/evidence/product-polished/spec-review.md",
+      "originalBytes": 2579,
+      "copyBytes": 2579,
+      "originalSha256": "9ce7c44204b3e75a80a18ffc5e25184a0870c13b9100fd6a8f0a5117e568c5c1",
+      "copySha256": "9ce7c44204b3e75a80a18ffc5e25184a0870c13b9100fd6a8f0a5117e568c5c1",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-source-spec-independent-audit.json",
+      "repositoryPath": "docs/production/evidence/product-polished/spec-independent-audit.json",
+      "originalBytes": 497,
+      "copyBytes": 497,
+      "originalSha256": "993fcc795dcfd58d6c48912e09fa1de0e6b51963d51bb15d903764e5c57fae02",
+      "copySha256": "993fcc795dcfd58d6c48912e09fa1de0e6b51963d51bb15d903764e5c57fae02",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-contrast-delivery.md",
+      "repositoryPath": "docs/production/evidence/product-polished/cannon-author-delivery.md",
+      "originalBytes": 2499,
+      "copyBytes": 2499,
+      "originalSha256": "84a86daf62d3d788a50fb608c969a35f6990176b427c6f72dc437612d0bbd911",
+      "copySha256": "84a86daf62d3d788a50fb608c969a35f6990176b427c6f72dc437612d0bbd911",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-source-refinement-delivery.md",
+      "repositoryPath": "docs/production/evidence/product-polished/source-author-delivery.md",
+      "originalBytes": 4204,
+      "copyBytes": 4204,
+      "originalSha256": "f991ce31e6d698be704ec8331443d3944e7ae4c6b6a9daebee48ec6ecfc78be0",
+      "copySha256": "f991ce31e6d698be704ec8331443d3944e7ae4c6b6a9daebee48ec6ecfc78be0",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-root-review.md",
+      "repositoryPath": "docs/production/evidence/product-polished/root-review.md",
+      "originalBytes": 1810,
+      "copyBytes": 1810,
+      "originalSha256": "fdf148b537cb2c24c595b9ff8c5117e64a9152dac975de30cf8d5e21cfb683cd",
+      "copySha256": "fdf148b537cb2c24c595b9ff8c5117e64a9152dac975de30cf8d5e21cfb683cd",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-root-acceptance.md",
+      "repositoryPath": "docs/production/evidence/product-polished/cannon-root-acceptance.md",
+      "originalBytes": 1305,
+      "copyBytes": 1305,
+      "originalSha256": "a58318864211e317affbbe2155639439bbdf0898720e27994d3d5e6add9060e3",
+      "copySha256": "a58318864211e317affbbe2155639439bbdf0898720e27994d3d5e6add9060e3",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-game-integration-check.log",
+      "repositoryPath": "docs/production/evidence/product-polished/integration-check.log",
+      "originalBytes": 2626,
+      "copyBytes": 2626,
+      "originalSha256": "c41640b4413b6eb6fbd8bb96c225bdbd2933f969d95cf7b21309f342bd16ff2e",
+      "copySha256": "c41640b4413b6eb6fbd8bb96c225bdbd2933f969d95cf7b21309f342bd16ff2e",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-game-integration-build.log",
+      "repositoryPath": "docs/production/evidence/product-polished/integration-build.log",
+      "originalBytes": 2905,
+      "copyBytes": 2905,
+      "originalSha256": "9999e02a0656725e6310fd4a2ef6ba281568e59a938d7d4d82598d6f6dad9cec",
+      "copySha256": "9999e02a0656725e6310fd4a2ef6ba281568e59a938d7d4d82598d6f6dad9cec",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-game-integration-verification.json",
+      "repositoryPath": "docs/production/evidence/product-polished/integration-verification.json",
+      "originalBytes": 366,
+      "copyBytes": 366,
+      "originalSha256": "8a4a1437395bfc89a908ff43374b404428326b86c92e8ea7d0a3451b6520ec5b",
+      "copySha256": "8a4a1437395bfc89a908ff43374b404428326b86c92e8ea7d0a3451b6520ec5b",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-game-frozen-dist-audit.json",
+      "repositoryPath": "docs/production/evidence/product-polished/frozen-dist-audit.json",
+      "originalBytes": 8864,
+      "copyBytes": 8864,
+      "originalSha256": "47d668f0f9d5a80aa59c825ad54a96fb01e3c4c1a89ed3ba5d70f70ffbc7be5f",
+      "copySha256": "47d668f0f9d5a80aa59c825ad54a96fb01e3c4c1a89ed3ba5d70f70ffbc7be5f",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-ui-actions.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-ui-actions.json",
+      "originalBytes": 137754,
+      "copyBytes": 137754,
+      "originalSha256": "6b930ade53b0c6b86a057014ff2184d340887937bfd2036783eebb84560a57b3",
+      "copySha256": "6b930ade53b0c6b86a057014ff2184d340887937bfd2036783eebb84560a57b3",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-normal.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-normal.jpg",
+      "originalBytes": 43112,
+      "copyBytes": 43112,
+      "originalSha256": "0b0d262fb5063dd6a74c617b6dab84fb0fb447ea7b082dccc1111b57c55fdc7d",
+      "copySha256": "0b0d262fb5063dd6a74c617b6dab84fb0fb447ea7b082dccc1111b57c55fdc7d",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-normal.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-normal.json",
+      "originalBytes": 2249,
+      "copyBytes": 2249,
+      "originalSha256": "d06280668068d1c995ed77afcd88320834b169ad6c74ec92a883c9b10a4eb5a5",
+      "copySha256": "d06280668068d1c995ed77afcd88320834b169ad6c74ec92a883c9b10a4eb5a5",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-normal-upgrade.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-normal-upgrade.jpg",
+      "originalBytes": 44881,
+      "copyBytes": 44881,
+      "originalSha256": "6fbb0ac4152df1e66168362ed1e4dcd5b5b458a944c6dd0c1366bd427fb0d170",
+      "copySha256": "6fbb0ac4152df1e66168362ed1e4dcd5b5b458a944c6dd0c1366bd427fb0d170",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-normal-transform.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-normal-transform.json",
+      "originalBytes": 26743,
+      "copyBytes": 26743,
+      "originalSha256": "07d7c7afcaac407a164834d173dc2124d80380ce97c123002aab3396ec39f452",
+      "copySha256": "07d7c7afcaac407a164834d173dc2124d80380ce97c123002aab3396ec39f452",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-normal-final.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-normal-final.json",
+      "originalBytes": 1948,
+      "copyBytes": 1948,
+      "originalSha256": "924d9d2d7cecf90c3c7ffb3543eca38b80b17b2bdb88457666a404d2f1c365f8",
+      "copySha256": "924d9d2d7cecf90c3c7ffb3543eca38b80b17b2bdb88457666a404d2f1c365f8",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-live-00.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-live-00.jpg",
+      "originalBytes": 60989,
+      "copyBytes": 60989,
+      "originalSha256": "2b6782fa103e6f8d03cd5983cb8fb7e6358ec298b22ebba35527407e8f787d26",
+      "copySha256": "2b6782fa103e6f8d03cd5983cb8fb7e6358ec298b22ebba35527407e8f787d26",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-live-16.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-live-16.jpg",
+      "originalBytes": 60939,
+      "copyBytes": 60939,
+      "originalSha256": "f54a247dc597240d8088113d8da97251d9c66033806166f19c97ad54cb90b799",
+      "copySha256": "f54a247dc597240d8088113d8da97251d9c66033806166f19c97ad54cb90b799",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-live-29.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-live-29.jpg",
+      "originalBytes": 60881,
+      "copyBytes": 60881,
+      "originalSha256": "64e6c71fd9d30437dd856853dde05b1812c7d059dd418397bba2629bda7a5ff5",
+      "copySha256": "64e6c71fd9d30437dd856853dde05b1812c7d059dd418397bba2629bda7a5ff5",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-pause-standard.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-pause-standard.json",
+      "originalBytes": 3712,
+      "copyBytes": 3712,
+      "originalSha256": "d00b83ddafb4165a5dbbd57711fac2d36ec7dffd8844baf709a97be9084b2148",
+      "copySha256": "d00b83ddafb4165a5dbbd57711fac2d36ec7dffd8844baf709a97be9084b2148",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-pause-low.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-pause-low.json",
+      "originalBytes": 3704,
+      "copyBytes": 3704,
+      "originalSha256": "e046bdbb2d1f1bf53e7a98c23ce59a03febbf59c7ef673e83addc6b838cf1f08",
+      "copySha256": "e046bdbb2d1f1bf53e7a98c23ce59a03febbf59c7ef673e83addc6b838cf1f08",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-pause-comparison.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-pause-comparison.json",
+      "originalBytes": 82,
+      "copyBytes": 82,
+      "originalSha256": "7de4c1f0b9b6fa8662ea60906d187452b1a1365aabe1fb070721832f065cb896",
+      "copySha256": "7de4c1f0b9b6fa8662ea60906d187452b1a1365aabe1fb070721832f065cb896",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-low.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-low.jpg",
+      "originalBytes": 53672,
+      "copyBytes": 53672,
+      "originalSha256": "418b8cb79d668db21adeebc1e3c8bf005e5a43d974e097e7fbf33a21a82430ef",
+      "copySha256": "418b8cb79d668db21adeebc1e3c8bf005e5a43d974e097e7fbf33a21a82430ef",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-polished-frame-audit.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-polished-frame-audit.json",
+      "originalBytes": 5511,
+      "copyBytes": 5511,
+      "originalSha256": "e4ce7c3e5c6bd679109a2855d3471b14af95b81b2ab46691856f5b82ba79f849",
+      "copySha256": "e4ce7c3e5c6bd679109a2855d3471b14af95b81b2ab46691856f5b82ba79f849",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-siege-short-frame-10.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-siege-short-frame-10.jpg",
+      "originalBytes": 59032,
+      "copyBytes": 59032,
+      "originalSha256": "e08be3d3cef06185416f30ef8d79c061020ecbcdf38bafb547447a98239bb8e4",
+      "copySha256": "e08be3d3cef06185416f30ef8d79c061020ecbcdf38bafb547447a98239bb8e4",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-new-frame-00.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-cannon-new-frame-00.jpg",
+      "originalBytes": 61633,
+      "copyBytes": 61633,
+      "originalSha256": "ddc575bbd43a79edbbf4130b8d94c32e2591ce4e2469010e8519b13fefdf34b9",
+      "copySha256": "ddc575bbd43a79edbbf4130b8d94c32e2591ce4e2469010e8519b13fefdf34b9",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-contrast-frame-04.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-cannon-contrast-frame-04.jpg",
+      "originalBytes": 59654,
+      "copyBytes": 59654,
+      "originalSha256": "b0b53fb5c72bca3c4c365ef5ed3856aa456c8156c391409eb260f18b0a40c05d",
+      "copySha256": "b0b53fb5c72bca3c4c365ef5ed3856aa456c8156c391409eb260f18b0a40c05d",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-contrast-frame-25.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-cannon-contrast-frame-25.jpg",
+      "originalBytes": 59743,
+      "copyBytes": 59743,
+      "originalSha256": "8cfc957682bf88688b697339376c35d30347789f82515d3d35c3962e2f71afcf",
+      "copySha256": "8cfc957682bf88688b697339376c35d30347789f82515d3d35c3962e2f71afcf",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-pause-standard.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-cannon-pause-standard.json",
+      "originalBytes": 4948,
+      "copyBytes": 4948,
+      "originalSha256": "87991a03a2cfb9e53b4fa008a1581679466ed4dd2800ebebbffe26f592ccb034",
+      "copySha256": "87991a03a2cfb9e53b4fa008a1581679466ed4dd2800ebebbffe26f592ccb034",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-pause-low.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-cannon-pause-low.json",
+      "originalBytes": 4941,
+      "copyBytes": 4941,
+      "originalSha256": "80d08b5a0f8e8c264f1ef2549c21ce1ca7f00042906ca60a5de62ef5c2fdd4a6",
+      "copySha256": "80d08b5a0f8e8c264f1ef2549c21ce1ca7f00042906ca60a5de62ef5c2fdd4a6",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-contrast-low.jpg",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-cannon-contrast-low.jpg",
+      "originalBytes": 52254,
+      "copyBytes": 52254,
+      "originalSha256": "039d392e2913d80f07f631b2c02ed7a175308c505b43c73703df0a0bc179bc3c",
+      "copySha256": "039d392e2913d80f07f631b2c02ed7a175308c505b43c73703df0a0bc179bc3c",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-contrast-ui-actions.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-cannon-contrast-ui-actions.json",
+      "originalBytes": 36537,
+      "copyBytes": 36537,
+      "originalSha256": "5f3cb398ce218d7e6bbe30a8769074cd5300d80ae0b6afaf3dce0c2201f13b78",
+      "copySha256": "5f3cb398ce218d7e6bbe30a8769074cd5300d80ae0b6afaf3dce0c2201f13b78",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-cannon-frame-audit.json",
+      "repositoryPath": "docs/production/evidence/product-polished/data/product-cannon-frame-audit.json",
+      "originalBytes": 12662,
+      "copyBytes": 12662,
+      "originalSha256": "7a0522872b20b50c7ba21c6c40ef6471df2a81ccc9befc9c10425203d12a5b39",
+      "copySha256": "7a0522872b20b50c7ba21c6c40ef6471df2a81ccc9befc9c10425203d12a5b39",
+      "byteIdentical": true,
+      "normalization": "none"
+    }
+  ],
+  "note": "34 exact worktree-byte copies; external originals and pre-existing source evidence remain unchanged. Existing Git newline configuration remains unchanged. Only selected 3 final combined frames and 4 cannon/baseline frames are archived; the full 34/44/28 frame series are not duplicated. Raw frame audits retain references to all temporary captures; their timestamps are capture sequence timing, not GPU/frame-performance results. Original author and Phase1 verification reports retain the actual earlier stage, including then-pending review/push/UI statements; the canonical document records later producer acceptance."
+}

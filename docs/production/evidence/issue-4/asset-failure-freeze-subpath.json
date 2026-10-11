@@ -1,0 +1,16 @@
+{
+  "before": {
+    "observedAt": "2026-10-09T03:42:16.102Z",
+    "asset": "failed",
+    "countdown": "5",
+    "phase": "OPENING_COUNTDOWN",
+    "step": "0"
+  },
+  "after": {
+    "observedAt": "2026-10-09T03:44:33.253Z",
+    "asset": "failed",
+    "countdown": "5",
+    "phase": "OPENING_COUNTDOWN",
+    "step": "0"
+  }
+}

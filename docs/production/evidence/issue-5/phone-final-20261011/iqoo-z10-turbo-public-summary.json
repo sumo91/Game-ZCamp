@@ -1,0 +1,188 @@
+{
+  "schema": 1,
+  "evidenceType": "physical-device-acceptance",
+  "capturedAtUtc": "2026-10-11",
+  "candidateBuildSha": "cc7c8baa167c52d75bc0526712a516c9f9980785",
+  "device": {
+    "model": "iQOO Z10 Turbo",
+    "modelSource": "project-owner declaration and QR session preset",
+    "osDeclared": "Android",
+    "osObservedInUserAgent": "Android 16",
+    "browserObserved": "Quark 10.18.6.1161 / Chrome 144.0.7559.86",
+    "network": "same Wi-Fi as test computer per project-owner declaration",
+    "deviceCategory": "physical-phone"
+  },
+  "session": {
+    "roundsExpected": [
+      100,
+      200,
+      300
+    ],
+    "roundsCompleted": [
+      100,
+      200,
+      300
+    ],
+    "allCompleted": true,
+    "allVisibleAtBoundaries": true,
+    "allTrustedTouchChecks": true
+  },
+  "rounds": [
+    {
+      "sourceFile": "result-2026-10-11T12-47-03-645Z-abda7490-ccfd-4342-b4a7-44ae7c9d3c49.json",
+      "rawBytes": 219885,
+      "rawSha256": "29d3e06f57d02b2783f2e0fa9456de9f9d6949cd3358927ce5b1ca5b184cd230",
+      "round": 1,
+      "count": 100,
+      "quality": "standard",
+      "outcome": "completed",
+      "interruptionReason": null,
+      "requestedSeconds": 60,
+      "actualSampleDurationSeconds": 60.0074,
+      "sampleCount": 3611,
+      "frameMedianMs": 16.599999999998545,
+      "frameP95Ms": 16.700000000004366,
+      "frameMaxMs": 16.900000000001455,
+      "responseChecks": 213,
+      "trustedTouchChecks": 213,
+      "responseMedianMs": 8.099999999627471,
+      "responseP95Ms": 13.400000000372529,
+      "responseMaxMs": 24.699999999254942,
+      "sceneStart": {
+        "activeUnits": 100,
+        "independentMixers": 100,
+        "centersInView": 100,
+        "calls": 239,
+        "triangles": 2054642,
+        "skeletons": 100
+      },
+      "sceneEnd": {
+        "activeUnits": 100,
+        "independentMixers": 100,
+        "centersInView": 100,
+        "calls": 239,
+        "triangles": 2054642,
+        "skeletons": 100
+      },
+      "visibilityStart": "visible",
+      "visibilityEnd": "visible",
+      "viewport": {
+        "width": 360,
+        "height": 702
+      },
+      "nativeDpr": 3.5,
+      "hardwareConcurrencyHint": 8,
+      "userAgent": "Mozilla/5.0 (Linux; U; Android 16; zh-CN; V2452A Build/BP2A.250605.031.A3_V000L1) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/144.0.7559.86 Quark/10.18.6.1161 Mobile Safari/537.36"
+    },
+    {
+      "sourceFile": "result-2026-10-11T12-52-08-895Z-74b7a499-f3bd-4de3-9f79-b91f070cc175.json",
+      "rawBytes": 710529,
+      "rawSha256": "7d4bf8806ac59c75d1acaea63b9d7c4409377c93fbcaf8edcab227413b4f693f",
+      "round": 2,
+      "count": 200,
+      "quality": "standard",
+      "outcome": "completed",
+      "interruptionReason": null,
+      "requestedSeconds": 300,
+      "actualSampleDurationSeconds": 300.0095,
+      "sampleCount": 17606,
+      "frameMedianMs": 16.60000000000582,
+      "frameP95Ms": 16.70000000001164,
+      "frameMaxMs": 50,
+      "responseChecks": 540,
+      "trustedTouchChecks": 540,
+      "responseMedianMs": 14.399999999441206,
+      "responseP95Ms": 34.79999999888241,
+      "responseMaxMs": 827.0,
+      "sceneStart": {
+        "activeUnits": 200,
+        "independentMixers": 200,
+        "centersInView": 200,
+        "calls": 239,
+        "triangles": 2054642,
+        "skeletons": 200
+      },
+      "sceneEnd": {
+        "activeUnits": 200,
+        "independentMixers": 200,
+        "centersInView": 200,
+        "calls": 439,
+        "triangles": 3537442,
+        "skeletons": 200
+      },
+      "visibilityStart": "visible",
+      "visibilityEnd": "visible",
+      "viewport": {
+        "width": 360,
+        "height": 702
+      },
+      "nativeDpr": 3.5,
+      "hardwareConcurrencyHint": 8,
+      "userAgent": "Mozilla/5.0 (Linux; U; Android 16; zh-CN; V2452A Build/BP2A.250605.031.A3_V000L1) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/144.0.7559.86 Quark/10.18.6.1161 Mobile Safari/537.36"
+    },
+    {
+      "sourceFile": "result-2026-10-11T12-53-14-152Z-80b91523-d2cb-4cbc-a5ed-8d7b5d5a8029.json",
+      "rawBytes": 227872,
+      "rawSha256": "ab6fc9c9ff6752c643bb88cc0fa80a12030c017cc304e0cc2e835405f796ad2c",
+      "round": 3,
+      "count": 300,
+      "quality": "standard",
+      "outcome": "completed",
+      "interruptionReason": null,
+      "requestedSeconds": 60,
+      "actualSampleDurationSeconds": 60.00259999999998,
+      "sampleCount": 2305,
+      "frameMedianMs": 33.09999999997672,
+      "frameP95Ms": 49.79999999998836,
+      "frameMaxMs": 66.60000000003492,
+      "responseChecks": 112,
+      "trustedTouchChecks": 112,
+      "responseMedianMs": 36.799999999813735,
+      "responseP95Ms": 55.09999999962747,
+      "responseMaxMs": 76.69999999925494,
+      "sceneStart": {
+        "activeUnits": 300,
+        "independentMixers": 300,
+        "centersInView": 300,
+        "calls": 439,
+        "triangles": 3537442,
+        "skeletons": 300
+      },
+      "sceneEnd": {
+        "activeUnits": 300,
+        "independentMixers": 300,
+        "centersInView": 300,
+        "calls": 639,
+        "triangles": 5020242,
+        "skeletons": 300
+      },
+      "visibilityStart": "visible",
+      "visibilityEnd": "visible",
+      "viewport": {
+        "width": 360,
+        "height": 702
+      },
+      "nativeDpr": 3.5,
+      "hardwareConcurrencyHint": 8,
+      "userAgent": "Mozilla/5.0 (Linux; U; Android 16; zh-CN; V2452A Build/BP2A.250605.031.A3_V000L1) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/144.0.7559.86 Quark/10.18.6.1161 Mobile Safari/537.36"
+    }
+  ],
+  "boundaries": [
+    "本摘要公开统计与原始文件哈希，不包含局域网地址、会话令牌或收件会话 ID。",
+    "压力入口测量的是正式 GLB 样板、活动单位、动画和触控响应；完整战役玩法与美术接受由浏览器回归及项目所有者此前的 10 波通关记录覆盖。",
+    "设备型号来自项目所有者声明；浏览器 UA 观察到 Android 16，但不据此推断 OriginOS 版本。"
+  ],
+  "formalGameSmoke": {
+    "completed": true,
+    "campaign": "first_defense",
+    "wavesCompleted": 10,
+    "actions": [
+      "pause",
+      "resume",
+      "return_to_lobby"
+    ],
+    "ownerReport": "无白屏、文字裁切、点击错位或流程异常",
+    "device": "iQOO Z10 Turbo",
+    "scope": "实体正式游戏界面与生命周期短流程；与压力入口数据共同覆盖Issue #13"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "commit": "e1981030d00198646520da6ad6147ef9e0d0feee",
+  "phase": "TACTICAL_PAUSE",
+  "step": "15508",
+  "visible": [
+    {
+      "bottom": 160.1250057220459,
+      "left": 771.3229370117188,
+      "right": 795.343770980835,
+      "style": "opacity: 0.375; visibility: visible; left: 345.84px; top: 148.427px;",
+      "text": "35",
+      "top": 136.7291717529297
+    },
+    {
+      "bottom": 160.1250057220459,
+      "left": 722.2396240234375,
+      "right": 764.2604598999023,
+      "style": "opacity: 0.375; visibility: visible; left: 305.759px; top: 148.427px;",
+      "text": "15.8",
+      "top": 136.7291717529297
+    },
+    {
+      "bottom": 160.1250057220459,
+      "left": 475.8958435058594,
+      "right": 517.9166793823242,
+      "style": "opacity: 0.375; visibility: visible; left: 59.4074px; top: 148.427px;",
+      "text": "15.8",
+      "top": 136.7291717529297
+    },
+    {
+      "bottom": 160.1250057220459,
+      "left": 544.4896240234375,
+      "right": 586.5104598999023,
+      "style": "opacity: 0.375; visibility: visible; left: 128.003px; top: 148.427px;",
+      "text": "15.8",
+      "top": 136.7291717529297
+    },
+    {
+      "bottom": 153.97916793823242,
+      "left": 646.0885620117188,
+      "right": 696.4114799499512,
+      "style": "color: rgb(246, 196, 83); visibility: visible; left: 233.759px; top: 145.427px;",
+      "text": "溅射命中",
+      "top": 136.875
+    }
+  ]
+}

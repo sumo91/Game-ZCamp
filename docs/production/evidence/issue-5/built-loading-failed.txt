@@ -1,0 +1,59 @@
+- main "尸潮营地游戏画布":
+  - 'heading "表现资产压力实验 · #5 候选" [level=1]'
+  - paragraph: 只展示已完成模型，不运行核心战斗。初期单骷髅结果不能替代完整混编验收或实体手机接受。
+  - navigation:
+    - link "可玩美术样板":
+      - /url: /Game-ZCamp/?preview=threejs
+    - link "原版游戏":
+      - /url: /Game-ZCamp/
+  - button "开始测量" [disabled]
+  - button "停止" [disabled]
+  - button "响应检查"
+  - status: 响应 0 次
+  - status: 尚未测量
+  - region "固定游戏镜头"
+  - group "实验配置":
+    - generic: 实验配置
+    - text: 活动骷髅数量
+    - combobox "活动骷髅数量" [disabled]:
+      - option "100" [disabled] [selected]
+      - option "200" [disabled]
+      - option "300" [disabled]
+    - text: 画质
+    - combobox "画质" [disabled]:
+      - option "标准 · DPR上限2" [disabled] [selected]
+      - option "降低像素密度 · DPR上限1" [disabled]
+    - text: 测量时长
+    - combobox "测量时长" [disabled]:
+      - option "60秒 · 初期取证" [disabled] [selected]
+      - option "300秒 · 连续取证" [disabled]
+      - option "15秒 · 操作冒烟" [disabled]
+    - text: 设备类别
+    - combobox "设备类别" [disabled]:
+      - option "桌面电脑" [disabled] [selected]
+      - option "实体手机" [disabled]
+      - option "模拟器" [disabled]
+    - text: 设备型号
+    - textbox "设备型号" [disabled]:
+      - /placeholder: 请填写真实型号；模拟器请写名称
+    - text: 系统与版本
+    - textbox "系统与版本" [disabled]:
+      - /placeholder: 请填写实际系统和版本
+    - text: 网络、后台负载与备注
+    - textbox "网络、后台负载与备注" [disabled]:
+      - /placeholder: 缓存/网络、其他负载、操作观察
+  - status: 模型或材质资源不可用：arrow_tower_low.glb
+  - button "重试加载"
+  - paragraph
+  - paragraph: 所有单位持续轮换行走、攻墙、受击、死亡动作，不隐藏或删减；降低画质只限制像素密度，保留1024接地投影。
+  - paragraph: 开始后先预热5秒，再连续记录全部帧间隔。切后台、改变窗口或图形上下文丢失会保留中断结果。CPU/GPU独立计时未提供；rAF帧间隔包含浏览器调度和所有实际负载。
+  - region "公开测量结果":
+    - heading "测量结果" [level=2]
+    - paragraph: 尚无结果；设备信息未填写时记录会明确标记。
+    - button "重新测量" [disabled]
+    - button "导出JSON" [disabled]
+    - button "复制结果" [disabled]
+    - status
+    - text: 可复制公开JSON
+    - textbox "可复制公开JSON":
+      - /placeholder: 完成或中断后显示完整原始结果

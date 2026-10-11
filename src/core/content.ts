@@ -51,6 +51,8 @@ export interface ContentCatalog {
   /** Wave timelines per level id; the selected level drives spawn progress and victory. */
   levelWaves: Readonly<Partial<Record<LevelId, readonly WaveDefinition[]>>>;
   buildingGrowth: BuildingGrowthContent;
+  /** Explicit development fixture; never present in the formal player catalog. */
+  developmentPressure?: { kind: "mixed-battle-pressure"; activeUnits: 100 | 200 | 300 };
 }
 
 const enemies: EnemyDefinition[] = [
@@ -241,6 +243,19 @@ export function validateCatalog(catalog: ContentCatalog): void {
   const finalBosses = catalog.enemies.filter((enemy) => enemy.isFinalBoss);
   if (finalBosses.length !== 1) throw new Error("Content catalog must define exactly one final boss.");
   const finalBossId = finalBosses[0]!.id;
+
+  if (catalog.developmentPressure) {
+    const count = catalog.developmentPressure.activeUnits;
+    if (catalog.developmentPressure.kind !== "mixed-battle-pressure" || ![100, 200, 300].includes(count)) throw new Error("Invalid development pressure configuration.");
+    for (const level of starterHeroContent.levels) {
+      const waves = catalog.levelWaves[level.id];
+      const wave = waves?.[0];
+      if (waves?.length !== 1 || !wave || wave.wave !== 1 || wave.startSeconds !== 0 || wave.spawnEvents.length !== count) throw new Error("Pressure fixture must have exactly the requested active composition.");
+      const ids = wave.spawnEvents.map((event) => event.enemyId);
+      if (ids.filter((id) => id === "charger_boss").length !== 1 || ids.filter((id) => id === "overlord_boss").length !== 1 || [...expectedEnemyIds].some((id) => !ids.includes(id)) || ids.some((id) => !expectedEnemyIds.has(id)) || wave.spawnEvents.some((event) => event.atSeconds !== 0)) throw new Error("Pressure fixture must spawn all seven formal enemies, including both Bosses, together.");
+    }
+    return;
+  }
 
   for (const level of starterHeroContent.levels) {
     const waves = catalog.levelWaves[level.id];

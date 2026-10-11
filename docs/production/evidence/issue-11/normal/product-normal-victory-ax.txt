@@ -1,0 +1,12 @@
+Browser tab: 1, Title: "尸潮营地", URL: "http://127.0.0.1:5331/Game-ZCamp/".
+0 AXWebArea 尸潮营地, URL: 127.0.0.1:5331/Game-ZCamp/
+	1 container Description: 尸潮营地游戏画布, ID: app
+		2 container 防守成功
+			3 heading 防守成功, Value: 2, ID: growth-dialog-title
+				4 text 防守成功
+			5 text 第 10 波 · 击杀 894 · 金币 231
+			6 text 新解锁：连弩卫士、裂谷尸潮
+			7 button 再战
+			8 button 返回营地
+
+The focused UI element is 7 button 再战

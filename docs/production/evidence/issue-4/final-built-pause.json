@@ -1,0 +1,138 @@
+{
+  "before": {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "2284",
+      "commandHistory": "[{\"step\":2284,\"command\":{\"type\":\"pause\"},\"accepted\":true}]",
+      "openingCountdown": "0",
+      "phase": "TACTICAL_PAUSE",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": ""
+    },
+    "at": "2026-10-09T14:38:42.346Z",
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 159 · +0.6/秒金币 8.75\n      城墙 100 / 100护盾 48 / 100\n      波次 2 / 10 · 敌人 5下一波 49 秒\n    ",
+    "inert": [
+      {
+        "class": "preview-hud",
+        "inert": false
+      },
+      {
+        "class": "preview-field",
+        "inert": false
+      },
+      {
+        "class": "preview-controls",
+        "inert": false
+      }
+    ],
+    "presentation": {
+      "calls": 51,
+      "effects": 0,
+      "enemies": [
+        {
+          "clip": "hit",
+          "dying": false,
+          "id": "walker-34",
+          "time": 5.52052825142092
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-36",
+          "time": 5.122133065864252
+        },
+        {
+          "clip": "development",
+          "dying": false,
+          "id": "runner-37",
+          "time": 0
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-38",
+          "time": 2.323737880307591
+        },
+        {
+          "clip": "development",
+          "dying": false,
+          "id": "runner-39",
+          "time": 0
+        }
+      ],
+      "geometries": 31,
+      "models": true,
+      "textures": 18,
+      "triangles": 259218
+    }
+  },
+  "after": {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "2284",
+      "commandHistory": "[{\"step\":2284,\"command\":{\"type\":\"pause\"},\"accepted\":true}]",
+      "openingCountdown": "0",
+      "phase": "TACTICAL_PAUSE",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": ""
+    },
+    "at": "2026-10-09T14:39:35.041Z",
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 159 · +0.6/秒金币 8.75\n      城墙 100 / 100护盾 48 / 100\n      波次 2 / 10 · 敌人 5下一波 49 秒\n    ",
+    "inert": [
+      {
+        "class": "preview-hud",
+        "inert": false
+      },
+      {
+        "class": "preview-field",
+        "inert": false
+      },
+      {
+        "class": "preview-controls",
+        "inert": false
+      }
+    ],
+    "presentation": {
+      "calls": 51,
+      "effects": 0,
+      "enemies": [
+        {
+          "clip": "hit",
+          "dying": false,
+          "id": "walker-34",
+          "time": 5.52052825142092
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-36",
+          "time": 5.122133065864252
+        },
+        {
+          "clip": "development",
+          "dying": false,
+          "id": "runner-37",
+          "time": 0
+        },
+        {
+          "clip": "walk",
+          "dying": false,
+          "id": "walker-38",
+          "time": 2.323737880307591
+        },
+        {
+          "clip": "development",
+          "dying": false,
+          "id": "runner-39",
+          "time": 0
+        }
+      ],
+      "geometries": 31,
+      "models": true,
+      "textures": 18,
+      "triangles": 259218
+    }
+  }
+}

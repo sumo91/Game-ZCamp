@@ -1,0 +1,114 @@
+{
+  "fixedBase": "62f628ca80277c761c97e63a8f0a381c7b0aa5f5",
+  "fixedSource": "02e26aa4814b3424b3063a6c7e91e5a09d052ee2",
+  "mergeCommit": "69cc1ae46f15b6abaf675bcf46568e27fa3a7edf",
+  "finalRootNotificationReceived": true,
+  "privateRawResultsCopied": false,
+  "originalExternalFilesUnchanged": true,
+  "files": [
+    {
+      "originalFile": "phone-continuation-standards-review.md",
+      "repositoryFile": "standards-review.md",
+      "bytes": 2451,
+      "originalSha256": "02731977be22b9b2aa0f66f7883e971b26c04e3e9139a2a2d6f70bffb07c3387",
+      "workingCopySha256": "02731977be22b9b2aa0f66f7883e971b26c04e3e9139a2a2d6f70bffb07c3387",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-spec-review.md",
+      "repositoryFile": "spec-review.md",
+      "bytes": 2035,
+      "originalSha256": "bf65042e04e484270eb5ed797839057fb3f18135dcca45f83ce8dcdfe344e994",
+      "workingCopySha256": "bf65042e04e484270eb5ed797839057fb3f18135dcca45f83ce8dcdfe344e994",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-implementation-public.md",
+      "repositoryFile": "implementation-public.md",
+      "bytes": 5459,
+      "originalSha256": "0eae933c794925f68a3fd576ee9fc7e197b29c97dc39d8f154cd4a6146c7600e",
+      "workingCopySha256": "0eae933c794925f68a3fd576ee9fc7e197b29c97dc39d8f154cd4a6146c7600e",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-implementation-copy-audit.json",
+      "repositoryFile": "implementation-copy-audit.json",
+      "bytes": 954,
+      "originalSha256": "3049951cfd06a9bd8e61b3bfe9d88a407cf712d420692524e85f011eff6f4da0",
+      "workingCopySha256": "3049951cfd06a9bd8e61b3bfe9d88a407cf712d420692524e85f011eff6f4da0",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-root-review.md",
+      "repositoryFile": "root-review.md",
+      "bytes": 2812,
+      "originalSha256": "a6d0f6ccf65bab77af9a58e474322f979eb2053fbe674b603a1a26dd0f10db2b",
+      "workingCopySha256": "a6d0f6ccf65bab77af9a58e474322f979eb2053fbe674b603a1a26dd0f10db2b",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-root-qa/public-audit-summary.json",
+      "repositoryFile": "root-public-audit-summary.json",
+      "bytes": 5017,
+      "originalSha256": "08623e00c4cd17439a04b4434c5a1691eb654b2da04df55da359f42b32077468",
+      "workingCopySha256": "08623e00c4cd17439a04b4434c5a1691eb654b2da04df55da359f42b32077468",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-root-qa/screenshot-audit.json",
+      "repositoryFile": "root-screenshot-audit.json",
+      "bytes": 324,
+      "originalSha256": "cdefe91daa556bdb752447191444daa86ead0fb189eb1520ebec6521643ebc05",
+      "workingCopySha256": "cdefe91daa556bdb752447191444daa86ead0fb189eb1520ebec6521643ebc05",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-stopped.jpg",
+      "repositoryFile": "phone-continuation-stopped.jpg",
+      "bytes": 54515,
+      "originalSha256": "f1eea5b4b3f88b510860c84b1bf031343487ecdafced501387552b6a8b112290",
+      "workingCopySha256": "f1eea5b4b3f88b510860c84b1bf031343487ecdafced501387552b6a8b112290",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-done.jpg",
+      "repositoryFile": "phone-continuation-done.jpg",
+      "bytes": 56866,
+      "originalSha256": "0c289ae0558a3118a4c9b1b86758f8bb37ecf6f03fc53f5e1d019ef81b2558b8",
+      "workingCopySha256": "0c289ae0558a3118a4c9b1b86758f8bb37ecf6f03fc53f5e1d019ef81b2558b8",
+      "workingCopyByteIdentical": true
+    },
+    {
+      "originalFile": "phone-continuation-integration-build-audit.json",
+      "repositoryFile": "integration-build-audit.json",
+      "bytes": 4978,
+      "originalSha256": "ea28aec4ac3d074971c367886448542fb911d67cd5da1d0b999d30a47be70577",
+      "workingCopySha256": "ea28aec4ac3d074971c367886448542fb911d67cd5da1d0b999d30a47be70577",
+      "workingCopyByteIdentical": true
+    }
+  ],
+  "rawResultHashesRechecked": [
+    {
+      "round": 2,
+      "attempt": 1,
+      "bytes": 261256,
+      "sha256": "2d34d48a599c0e026c03e04d4f2c6a7e8b54cf3e7310c669fbd9f3e89f8ed980",
+      "identityAndStatisticsMatch": true
+    },
+    {
+      "round": 2,
+      "attempt": 2,
+      "bytes": 343710,
+      "sha256": "ad4feffbef92eaacc3a36996ad8d8716074dba42e68a32c24bc60cc925210ef8",
+      "identityAndStatisticsMatch": true
+    },
+    {
+      "round": 3,
+      "attempt": 1,
+      "bytes": 280163,
+      "sha256": "7f6aa433a40d7654a5edffa4b8da07a9ae45f7eef81a5affc4b76b37ece4dc4d",
+      "identityAndStatisticsMatch": true
+    }
+  ],
+  "sourcePublicPhoneEvidenceUnchanged": true
+}

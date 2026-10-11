@@ -1,0 +1,221 @@
+{
+  "viewport": {
+    "width": 360,
+    "height": 640
+  },
+  "cells": [
+    {
+      "cls": "preview-slot",
+      "name": "第1行第1列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 66.38542175292969,
+        "y": 325.44793701171875
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第1行第2列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 112.1875,
+        "y": 325.44793701171875
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第1行第3列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 158,
+        "y": 325.44793701171875
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第1行第4列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 203.80209350585935,
+        "y": 325.44793701171875
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第1行第5列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 249.6041717529297,
+        "y": 325.44793701171875
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第2行第1列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 66.38542175292969,
+        "y": 372.9166870117187
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第2行第2列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 112.1875,
+        "y": 372.9166870117187
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第2行第3列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 158,
+        "y": 372.9166870117187
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第2行第4列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 203.80209350585935,
+        "y": 372.9166870117187
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第2行第5列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 249.6041717529297,
+        "y": 372.9166870117187
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第3行第1列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 66.38542175292969,
+        "y": 420.3958435058594
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第3行第2列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 112.1875,
+        "y": 420.3958435058594
+      }
+    },
+    {
+      "cls": "preview-slot occupied",
+      "name": "第3行第3列，主城",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 158,
+        "y": 420.3958435058594
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第3行第4列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 203.80209350585935,
+        "y": 420.3958435058594
+      }
+    },
+    {
+      "cls": "preview-slot",
+      "name": "第3行第5列，空格",
+      "r": {
+        "height": 44,
+        "width": 44,
+        "x": 249.6041717529297,
+        "y": 420.3958435058594
+      }
+    }
+  ],
+  "selections": [
+    {
+      "name": "第1行第1列，空格",
+      "selected": "slot-r1-c1"
+    },
+    {
+      "name": "第1行第2列，空格",
+      "selected": "slot-r1-c2"
+    },
+    {
+      "name": "第1行第3列，空格",
+      "selected": "slot-r1-c3"
+    },
+    {
+      "name": "第1行第4列，空格",
+      "selected": "slot-r1-c4"
+    },
+    {
+      "name": "第1行第5列，空格",
+      "selected": "slot-r1-c5"
+    },
+    {
+      "name": "第2行第1列，空格",
+      "selected": "slot-r2-c1"
+    },
+    {
+      "name": "第2行第2列，空格",
+      "selected": "slot-r2-c2"
+    },
+    {
+      "name": "第2行第3列，空格",
+      "selected": "slot-r2-c3"
+    },
+    {
+      "name": "第2行第4列，空格",
+      "selected": "slot-r2-c4"
+    },
+    {
+      "name": "第2行第5列，空格",
+      "selected": "slot-r2-c5"
+    },
+    {
+      "name": "第3行第1列，空格",
+      "selected": "slot-r3-c1"
+    },
+    {
+      "name": "第3行第2列，空格",
+      "selected": "slot-r3-c2"
+    },
+    {
+      "name": "第3行第3列，主城",
+      "selected": "slot-r3-c3"
+    },
+    {
+      "name": "第3行第4列，空格",
+      "selected": "slot-r3-c4"
+    },
+    {
+      "name": "第3行第5列，空格",
+      "selected": "slot-r3-c5"
+    }
+  ],
+  "overlap": []
+}

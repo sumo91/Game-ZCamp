@@ -1,0 +1,52 @@
+[
+  {
+    "Path": "/Game-ZCamp/assets/GameScene-aIkZjGRE.js",
+    "Status": 200,
+    "ContentType": "text/javascript"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/growthUi-F_d7HC7M.js",
+    "Status": 200,
+    "ContentType": "text/javascript"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/index-B0X8h87E.js",
+    "Status": 200,
+    "ContentType": "text/javascript"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/index-C_5SfW8O.css",
+    "Status": 200,
+    "ContentType": "text/css"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/layout-8wfRVKjl.js",
+    "Status": 200,
+    "ContentType": "text/javascript"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/LobbyScene-CNl-SWqw.js",
+    "Status": 200,
+    "ContentType": "text/javascript"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/phaser.esm-BFUbuVck.js",
+    "Status": 200,
+    "ContentType": "text/javascript"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/progressionStore-9xsmr1yX.js",
+    "Status": 200,
+    "ContentType": "text/javascript"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/WhiteboxPreview-DGup_Yie.js",
+    "Status": 200,
+    "ContentType": "text/javascript"
+  },
+  {
+    "Path": "/Game-ZCamp/assets/WhiteboxPreview-DqxGubVo.css",
+    "Status": 200,
+    "ContentType": "text/css"
+  }
+]

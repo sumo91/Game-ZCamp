@@ -1,0 +1,168 @@
+{
+  "baseline": "ac4a6f8b5530baa91d995b8be71e6a475563bf52",
+  "source": "475e2e0536b78fb13daa6353712b46b773d0611a",
+  "merge": "6b43a713e22a6b0d213edff64ef5bf1ccad470d7",
+  "copies": [
+    {
+      "externalRelativePath": "product-effects-standards-review.md",
+      "repositoryPath": "docs/production/evidence/product-effects/standards-review.md",
+      "originalBytes": 1677,
+      "copyBytes": 1676,
+      "originalSha256": "10b48ef29a27b9620d731e59cb49d0204c6c07bf1560cb146d6778da68d81b7c",
+      "copySha256": "5f3d0530529e70f279f01bf433fa5f89e07d6642b38d564b714c0e83f37e2086",
+      "byteIdentical": false,
+      "normalization": "CRLF-to-LF only; text and findings unchanged"
+    },
+    {
+      "externalRelativePath": "product-effects-spec-review.md",
+      "repositoryPath": "docs/production/evidence/product-effects/spec-review.md",
+      "originalBytes": 2325,
+      "copyBytes": 2324,
+      "originalSha256": "46f5882cd697d84216d35450838f4730f6d2e8535e050a0fe95624bb7716e2c2",
+      "copySha256": "fb13a5cae5ba6a3fec701a7de643e99c9a3bb5e6fc4553c104b40a58ca0df19b",
+      "byteIdentical": false,
+      "normalization": "CRLF-to-LF only; text and findings unchanged"
+    },
+    {
+      "externalRelativePath": "product-effects-root-ui.md",
+      "repositoryPath": "docs/production/evidence/product-effects/root-review.md",
+      "originalBytes": 3035,
+      "copyBytes": 3035,
+      "originalSha256": "66784b12fea758823dee9f761beff778883d15d9680a53cef3950babd3fe8b0a",
+      "copySha256": "66784b12fea758823dee9f761beff778883d15d9680a53cef3950babd3fe8b0a",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fix-delivery.md",
+      "repositoryPath": "docs/production/evidence/product-effects/author-delivery.md",
+      "originalBytes": 5475,
+      "copyBytes": 5475,
+      "originalSha256": "b22b81745589ffed82e5c153c12bfd3415662394ec980d8963ef734b54939117",
+      "copySha256": "b22b81745589ffed82e5c153c12bfd3415662394ec980d8963ef734b54939117",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-final-mixed-effects.jpg",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-final-mixed-effects.jpg",
+      "originalBytes": 65059,
+      "copyBytes": 65059,
+      "originalSha256": "247b331a7e62789ec51ddfe3c215af80c6181d660586113b6729ad14224e93ed",
+      "copySha256": "247b331a7e62789ec51ddfe3c215af80c6181d660586113b6729ad14224e93ed",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-final-mixed-effects.json",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-final-mixed-effects.json",
+      "originalBytes": 11083,
+      "copyBytes": 11083,
+      "originalSha256": "97a683ac15e8d829168daf98a23689d72accb079becb97fda681a3ec8ae9740d",
+      "copySha256": "97a683ac15e8d829168daf98a23689d72accb079becb97fda681a3ec8ae9740d",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-standard.jpg",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-standard.jpg",
+      "originalBytes": 69840,
+      "copyBytes": 69840,
+      "originalSha256": "8a079b59c20319199870f619678c9b6be64cc8da9901c08cfc7eeadd5ebd4baf",
+      "copySha256": "8a079b59c20319199870f619678c9b6be64cc8da9901c08cfc7eeadd5ebd4baf",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-standard.json",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-standard.json",
+      "originalBytes": 9879,
+      "copyBytes": 9879,
+      "originalSha256": "62f14a692836a53dbc4ebe6602d212a4cad5b49b6b41a75044da209737295f68",
+      "copySha256": "62f14a692836a53dbc4ebe6602d212a4cad5b49b6b41a75044da209737295f68",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-low.jpg",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-low.jpg",
+      "originalBytes": 65713,
+      "copyBytes": 65713,
+      "originalSha256": "6d48697be6600aa839c18a19f3968944a1f0085beb32863980683c530dea3d19",
+      "copySha256": "6d48697be6600aa839c18a19f3968944a1f0085beb32863980683c530dea3d19",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-low.json",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-low.json",
+      "originalBytes": 9883,
+      "copyBytes": 9883,
+      "originalSha256": "d56abc3cd5eab2245dd78be3724701be37875c8b7dfdb6379e01b476c4306ceb",
+      "copySha256": "d56abc3cd5eab2245dd78be3724701be37875c8b7dfdb6379e01b476c4306ceb",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-normal.jpg",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-normal.jpg",
+      "originalBytes": 45130,
+      "copyBytes": 45130,
+      "originalSha256": "1008d3ba69ba3bdee4075f05a263ce087be6af5eebc20a858534a8fae362f7a9",
+      "copySha256": "1008d3ba69ba3bdee4075f05a263ce087be6af5eebc20a858534a8fae362f7a9",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-normal.json",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-normal.json",
+      "originalBytes": 568,
+      "copyBytes": 568,
+      "originalSha256": "e7849eed9da6632e65f3b949c52246e9da1773c270c49556433ec247a06f36b1",
+      "copySha256": "e7849eed9da6632e65f3b949c52246e9da1773c270c49556433ec247a06f36b1",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-active.jpg",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-active.jpg",
+      "originalBytes": 69653,
+      "copyBytes": 69653,
+      "originalSha256": "0f0a080b643694ff183c1c5dc62e3e3d98ce19c0c69f901525c251e4fc487748",
+      "copySha256": "0f0a080b643694ff183c1c5dc62e3e3d98ce19c0c69f901525c251e4fc487748",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-active.json",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-active.json",
+      "originalBytes": 9885,
+      "copyBytes": 9885,
+      "originalSha256": "a8b854cde9fbd9785e4669fd248afb2391b4b2ebd5575c1e5c05a7a532709eab",
+      "copySha256": "a8b854cde9fbd9785e4669fd248afb2391b4b2ebd5575c1e5c05a7a532709eab",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-chain.jpg",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-chain.jpg",
+      "originalBytes": 69866,
+      "copyBytes": 69866,
+      "originalSha256": "6dfbf32f647c5e9ec0754be3357a58ab7276bc57064bc379d4d38ec68ff028a0",
+      "copySha256": "6dfbf32f647c5e9ec0754be3357a58ab7276bc57064bc379d4d38ec68ff028a0",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-effects-fixed-chain.json",
+      "repositoryPath": "docs/production/evidence/product-effects/data/product-effects-fixed-chain.json",
+      "originalBytes": 9884,
+      "copyBytes": 9884,
+      "originalSha256": "a5bc099e0af864c06b20c3b216d2860e192a726c4ba24c7dc526a51363d32759",
+      "copySha256": "a5bc099e0af864c06b20c3b216d2860e192a726c4ba24c7dc526a51363d32759",
+      "byteIdentical": true,
+      "normalization": "none"
+    }
+  ],
+  "note": "14 exact byte copies; the two independent axis reports only normalize their final CRLF to LF. External originals and existing evidence are unchanged. No attributes or whitespace rules changed. Before and after records retain their actual visual scope; snapshot names and effect counts do not prove every transient visual."
+}

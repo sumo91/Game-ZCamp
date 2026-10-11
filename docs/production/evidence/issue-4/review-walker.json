@@ -1,0 +1,47 @@
+{
+  "dataset": {
+    "assetState": "ready",
+    "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "clockStep": "759",
+    "commandHistory": "[{\"step\":759,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":759,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":759,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":759,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c4\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c4\"}]",
+    "openingCountdown": "0",
+    "phase": "TACTICAL_PAUSE",
+    "renderPixelRatio": "1.5",
+    "selectedSlot": "slot-r1-c4"
+  },
+  "presentation": {
+    "calls": 44,
+    "effects": 0,
+    "enemies": [
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-10",
+        "time": 4.6342360414577
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-11",
+        "time": 4.235038448679367
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-12",
+        "time": 1.4358408559010378
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-13",
+        "time": 1.0366432631227014
+      }
+    ],
+    "geometries": 27,
+    "models": true,
+    "textures": 21,
+    "triangles": 348064
+  },
+  "text": "精修美术样板 · 部分覆盖\n原版入口\n木材 11 · +0.6/秒\n金币 2.5\n城墙 100 / 100\n护盾 100 / 100\n波次 1 / 10 · 敌人 4\n下一波 40 秒\n亡灵推进区 ↓\n英雄 / 特殊塔 / 其余敌人：开发占位\n1·1\n箭塔 Lv.1\n箭塔 Lv.1\n箭塔 Lv.1\n1·5\n2·1\n2·2\n2·3\n2·4\n2·5\n3·1\n3·2\n主城\n3·4\n3·5\n战术暂停 · 可成长\n继续\n箭塔 · Lv.1/5 · 精修 GLB\n\n基础单体防御\n\n当前：伤害 7 · 间隔 1秒 · 射程 0.6\n\n下级：伤害 8.4 · 间隔 0.91秒 · 射程 0.6 · 还差 39 木材\n\n尚无词条 · 升级后强制三选一\n\n升级至 Lv.2｜木材 50\n改造 · 金币 10\n拆除\n建筑已建造 · 木材扣费一次"
+}

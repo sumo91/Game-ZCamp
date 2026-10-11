@@ -1,0 +1,1401 @@
+{
+  "models": true,
+  "enemies": [
+    {
+      "id": "walker-980",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3010698762955553
+    },
+    {
+      "id": "walker-983",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3034770979605503
+    },
+    {
+      "id": "walker-986",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3058843196255454
+    },
+    {
+      "id": "walker-989",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.30829154129054
+    },
+    {
+      "id": "walker-992",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3275493146105
+    },
+    {
+      "id": "walker-995",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3299565362754953
+    },
+    {
+      "id": "walker-998",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.33236375794049
+    },
+    {
+      "id": "armored-1049",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 1.8388833166165186
+    },
+    {
+      "id": "armored-1228",
+      "definitionId": "armored",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.530558341691743
+    },
+    {
+      "id": "armored-1233",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5514209294550327
+    },
+    {
+      "id": "armored-1416",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.446305583416919
+    },
+    {
+      "id": "armored-1618",
+      "definitionId": "armored",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3901370779003694
+    },
+    {
+      "id": "walker-1693",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 1.8196255432965587
+    },
+    {
+      "id": "walker-1696",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 1.8220327649615538
+    },
+    {
+      "id": "walker-1699",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 1.8244399866265486
+    },
+    {
+      "id": "walker-1702",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3660648612504196
+    },
+    {
+      "id": "walker-1705",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3684720829154147
+    },
+    {
+      "id": "walker-1708",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3708793045804097
+    },
+    {
+      "id": "walker-1711",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3901370779003694
+    },
+    {
+      "id": "walker-1714",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3925442995653645
+    },
+    {
+      "id": "walker-1717",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3949515212303596
+    },
+    {
+      "id": "walker-1720",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4142092945503193
+    },
+    {
+      "id": "walker-1723",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4166165162153144
+    },
+    {
+      "id": "walker-1726",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.419023737880309
+    },
+    {
+      "id": "walker-1729",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.421430959545304
+    },
+    {
+      "id": "walker-1732",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4406887328652638
+    },
+    {
+      "id": "walker-1735",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.443095954530259
+    },
+    {
+      "id": "walker-1738",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.445503176195254
+    },
+    {
+      "id": "walker-1741",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4647609495152136
+    },
+    {
+      "id": "walker-1744",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4671681711802087
+    },
+    {
+      "id": "walker-1747",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4695753928452038
+    },
+    {
+      "id": "walker-1750",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4888331661651635
+    },
+    {
+      "id": "walker-1753",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4912403878301586
+    },
+    {
+      "id": "walker-1756",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4936476094951536
+    },
+    {
+      "id": "walker-1759",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4960548311601483
+    },
+    {
+      "id": "walker-1762",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5153126044801084
+    },
+    {
+      "id": "walker-1765",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.517719826145103
+    },
+    {
+      "id": "walker-1768",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.520127047810098
+    },
+    {
+      "id": "walker-1771",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.539384821130058
+    },
+    {
+      "id": "walker-1774",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.541792042795053
+    },
+    {
+      "id": "walker-1777",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.544199264460048
+    },
+    {
+      "id": "walker-1780",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5634570377800077
+    },
+    {
+      "id": "walker-1783",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5658642594450027
+    },
+    {
+      "id": "walker-1786",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 1.7682714811099989
+    },
+    {
+      "id": "walker-1789",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 1.770678702774994
+    },
+    {
+      "id": "walker-1792",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 1.7899364760949539
+    },
+    {
+      "id": "walker-1795",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 1.7923436977599487
+    },
+    {
+      "id": "walker-1798",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 1.7947509194249438
+    },
+    {
+      "id": "walker-1801",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.336375794048815
+    },
+    {
+      "id": "walker-1804",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.33878301571381
+    },
+    {
+      "id": "walker-1806",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3403878301571397
+    },
+    {
+      "id": "walker-1808",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3419926446004697
+    },
+    {
+      "id": "walker-1810",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.360448010698765
+    },
+    {
+      "id": "walker-1812",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.362052825142095
+    },
+    {
+      "id": "walker-1814",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.363657639585425
+    },
+    {
+      "id": "walker-1816",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3652624540287546
+    },
+    {
+      "id": "walker-1818",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3668672684720846
+    },
+    {
+      "id": "walker-1820",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3853226345703793
+    },
+    {
+      "id": "walker-1822",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3869274490137093
+    },
+    {
+      "id": "walker-1824",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3885322634570394
+    },
+    {
+      "id": "walker-1825",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3893346706787044
+    },
+    {
+      "id": "walker-1826",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3901370779003694
+    },
+    {
+      "id": "walker-1827",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3909394851220345
+    },
+    {
+      "id": "walker-1828",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3917418923436995
+    },
+    {
+      "id": "walker-1829",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3925442995653645
+    },
+    {
+      "id": "walker-1830",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.410197258441994
+    },
+    {
+      "id": "walker-1831",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.410999665663659
+    },
+    {
+      "id": "armored-1832",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3772985623537295
+    },
+    {
+      "id": "armored-1834",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3789033767970595
+    },
+    {
+      "id": "armored-1836",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3805081912403896
+    },
+    {
+      "id": "armored-1838",
+      "definitionId": "armored",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3821130056837196
+    },
+    {
+      "id": "armored-1840",
+      "definitionId": "armored",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.4005683717820143
+    },
+    {
+      "id": "armored-1842",
+      "definitionId": "armored",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.4021731862253444
+    },
+    {
+      "id": "armored-1844",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4037780006686744
+    },
+    {
+      "id": "armored-1845",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4045804078903394
+    },
+    {
+      "id": "walker-1846",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4398863256435988
+    },
+    {
+      "id": "walker-1849",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.442293547308594
+    },
+    {
+      "id": "walker-1852",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.461551320628554
+    },
+    {
+      "id": "walker-1855",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4639585422935486
+    },
+    {
+      "id": "walker-1858",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.4663657639585437
+    },
+    {
+      "id": "walker-1861",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4856235372785034
+    },
+    {
+      "id": "walker-1864",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4880307589434985
+    },
+    {
+      "id": "walker-1867",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4904379806084935
+    },
+    {
+      "id": "walker-1870",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5096957539284532
+    },
+    {
+      "id": "walker-1873",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.5121029755934483
+    },
+    {
+      "id": "walker-1876",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.5145101972584434
+    },
+    {
+      "id": "walker-1879",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5169174189234385
+    },
+    {
+      "id": "walker-1882",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.536175192243398
+    },
+    {
+      "id": "walker-1885",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5385824139083932
+    },
+    {
+      "id": "walker-1888",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.540989635573388
+    },
+    {
+      "id": "walker-1891",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.560247408893348
+    },
+    {
+      "id": "walker-1894",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.562654630558343
+    },
+    {
+      "id": "walker-1897",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5650618522233377
+    },
+    {
+      "id": "walker-1900",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.30668672684721
+    },
+    {
+      "id": "walker-1903",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.309093948512205
+    },
+    {
+      "id": "walker-1906",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3115011701772
+    },
+    {
+      "id": "walker-1909",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.313908391842195
+    },
+    {
+      "id": "walker-1912",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.333166165162155
+    },
+    {
+      "id": "walker-1915",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.33557338682715
+    },
+    {
+      "id": "walker-1918",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.337980608492145
+    },
+    {
+      "id": "walker-1921",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3572383818121048
+    },
+    {
+      "id": "walker-1924",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.3596456034771
+    },
+    {
+      "id": "walker-1927",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.362052825142095
+    },
+    {
+      "id": "walker-1930",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3813105984620546
+    },
+    {
+      "id": "walker-1933",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3837178201270497
+    },
+    {
+      "id": "walker-1936",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3861250417920443
+    },
+    {
+      "id": "walker-1939",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.3885322634570394
+    },
+    {
+      "id": "walker-1942",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.407790036776999
+    },
+    {
+      "id": "walker-1945",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.410197258441994
+    },
+    {
+      "id": "walker-1948",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4126044801069892
+    },
+    {
+      "id": "walker-1951",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.431862253426949
+    },
+    {
+      "id": "walker-1954",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.434269475091944
+    },
+    {
+      "id": "walker-1957",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.436676696756939
+    },
+    {
+      "id": "walker-1960",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.455934470076899
+    },
+    {
+      "id": "walker-1963",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.458341691741894
+    },
+    {
+      "id": "walker-1966",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.460748913406889
+    },
+    {
+      "id": "walker-1969",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4631561350718836
+    },
+    {
+      "id": "walker-1972",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4824139083918437
+    },
+    {
+      "id": "walker-1975",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4848211300568384
+    },
+    {
+      "id": "walker-1978",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.4872283517218334
+    },
+    {
+      "id": "walker-1981",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.506486125041793
+    },
+    {
+      "id": "tank-1983",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.186325643597461
+    },
+    {
+      "id": "walker-1984",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.508893346706788
+    },
+    {
+      "id": "tank-1986",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.1887328652624563
+    },
+    {
+      "id": "walker-1987",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5113005683717833
+    },
+    {
+      "id": "tank-1989",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.1911400869274513
+    },
+    {
+      "id": "walker-1990",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.530558341691743
+    },
+    {
+      "id": "tank-1992",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.210397860247411
+    },
+    {
+      "id": "walker-1993",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.532965563356738
+    },
+    {
+      "id": "tank-1995",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.212805081912406
+    },
+    {
+      "id": "walker-1996",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.535372785021733
+    },
+    {
+      "id": "tank-1998",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.215212303577401
+    },
+    {
+      "id": "walker-1999",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.537780006686728
+    },
+    {
+      "id": "tank-2001",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.150217318622537
+    },
+    {
+      "id": "walker-2002",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4727850217318634
+    },
+    {
+      "id": "tank-2004",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.152624540287532
+    },
+    {
+      "id": "walker-2005",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4751922433968585
+    },
+    {
+      "id": "tank-2007",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.1550317619525265
+    },
+    {
+      "id": "walker-2008",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4775994650618536
+    },
+    {
+      "id": "tank-2010",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.1742895352724863
+    },
+    {
+      "id": "walker-2011",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.4968572383818133
+    },
+    {
+      "id": "tank-2013",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.1766967569374813
+    },
+    {
+      "id": "walker-2014",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.4992644600468084
+    },
+    {
+      "id": "tank-2016",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.1791039786024764
+    },
+    {
+      "id": "walker-2017",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5016716817118034
+    },
+    {
+      "id": "tank-2019",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.1815112002674715
+    },
+    {
+      "id": "walker-2020",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.520929455031763
+    },
+    {
+      "id": "tank-2022",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.200768973587431
+    },
+    {
+      "id": "walker-2023",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.523336676696758
+    },
+    {
+      "id": "tank-2025",
+      "definitionId": "tank",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.2031761952524263
+    },
+    {
+      "id": "walker-2026",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.5257438983617533
+    },
+    {
+      "id": "walker-2028",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.5273487128050833
+    },
+    {
+      "id": "walker-2030",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.545804078903378
+    },
+    {
+      "id": "walker-2031",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.546606486125043
+    },
+    {
+      "id": "walker-2032",
+      "definitionId": "walker",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.547408893346708
+    },
+    {
+      "id": "walker-2033",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.548211300568373
+    },
+    {
+      "id": "walker-2034",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.549013707790038
+    },
+    {
+      "id": "walker-2035",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.549816115011703
+    },
+    {
+      "id": "brute-2037",
+      "definitionId": "brute",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.0932464058843223
+    },
+    {
+      "id": "brute-2039",
+      "definitionId": "brute",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.0948512203276524
+    },
+    {
+      "id": "armored-2040",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.536175192243398
+    },
+    {
+      "id": "brute-2041",
+      "definitionId": "brute",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.113306586425947
+    },
+    {
+      "id": "brute-2043",
+      "definitionId": "brute",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.114911400869277
+    },
+    {
+      "id": "armored-2044",
+      "definitionId": "armored",
+      "clip": "death",
+      "dying": true,
+      "time": 2.539384821130058
+    },
+    {
+      "id": "brute-2045",
+      "definitionId": "brute",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.116516215312607
+    },
+    {
+      "id": "armored-2046",
+      "definitionId": "armored",
+      "clip": "death",
+      "dying": true,
+      "time": 2.540989635573388
+    },
+    {
+      "id": "brute-2047",
+      "definitionId": "brute",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.118121029755937
+    },
+    {
+      "id": "armored-2048",
+      "definitionId": "armored",
+      "clip": "death",
+      "dying": true,
+      "time": 2.542594450016718
+    },
+    {
+      "id": "brute-2049",
+      "definitionId": "brute",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.1197258441992672
+    },
+    {
+      "id": "armored-2050",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 2.561049816115013
+    },
+    {
+      "id": "brute-2051",
+      "definitionId": "brute",
+      "clip": "walk",
+      "dying": false,
+      "time": 2.138181210297562
+    },
+    {
+      "id": "charger_boss-2052",
+      "definitionId": "charger_boss",
+      "clip": "charge",
+      "dying": false,
+      "time": 0.10912738214643931
+    },
+    {
+      "id": "overlord_boss-2053",
+      "definitionId": "overlord_boss",
+      "clip": "inspire",
+      "dying": false,
+      "time": 0.7285857572718155
+    }
+  ],
+  "bossWarnings": [
+    "charger_boss-2052"
+  ],
+  "inspired": [
+    "walker-980",
+    "walker-983",
+    "walker-986",
+    "walker-989",
+    "walker-992",
+    "walker-995",
+    "walker-998",
+    "armored-1049",
+    "armored-1228",
+    "armored-1233",
+    "armored-1416",
+    "armored-1618",
+    "walker-1693",
+    "walker-1696",
+    "walker-1699",
+    "walker-1702",
+    "walker-1705",
+    "walker-1708",
+    "walker-1711",
+    "walker-1714",
+    "walker-1717",
+    "walker-1720",
+    "walker-1723",
+    "walker-1726",
+    "walker-1729",
+    "walker-1732",
+    "walker-1735",
+    "walker-1738",
+    "walker-1741",
+    "walker-1744",
+    "walker-1747",
+    "walker-1750",
+    "walker-1753",
+    "walker-1756",
+    "walker-1759",
+    "walker-1762",
+    "walker-1765",
+    "walker-1768",
+    "walker-1771",
+    "walker-1774",
+    "walker-1777",
+    "walker-1780",
+    "walker-1783",
+    "walker-1786",
+    "walker-1789",
+    "walker-1792",
+    "walker-1795",
+    "walker-1798",
+    "walker-1801",
+    "walker-1804",
+    "walker-1806",
+    "walker-1808",
+    "walker-1810",
+    "walker-1812",
+    "walker-1814",
+    "walker-1816",
+    "walker-1818",
+    "walker-1820",
+    "walker-1822",
+    "walker-1824",
+    "walker-1825",
+    "walker-1826",
+    "walker-1827",
+    "walker-1828",
+    "walker-1829",
+    "walker-1830",
+    "walker-1831",
+    "armored-1832",
+    "armored-1834",
+    "armored-1836",
+    "armored-1838",
+    "armored-1840",
+    "armored-1842",
+    "armored-1844",
+    "armored-1845",
+    "walker-1846",
+    "walker-1849",
+    "walker-1852",
+    "walker-1855",
+    "walker-1858",
+    "walker-1861",
+    "walker-1864",
+    "walker-1867",
+    "walker-1870",
+    "walker-1873",
+    "walker-1876",
+    "walker-1879",
+    "walker-1882",
+    "walker-1885",
+    "walker-1888",
+    "walker-1891",
+    "walker-1894",
+    "walker-1897",
+    "walker-1900",
+    "walker-1903",
+    "walker-1906",
+    "walker-1909",
+    "walker-1912",
+    "walker-1915",
+    "walker-1918",
+    "walker-1921",
+    "walker-1924",
+    "walker-1927",
+    "walker-1930",
+    "walker-1933",
+    "walker-1936",
+    "walker-1939",
+    "walker-1942",
+    "walker-1945",
+    "walker-1948",
+    "walker-1951",
+    "walker-1954",
+    "walker-1957",
+    "walker-1960",
+    "walker-1963",
+    "walker-1966",
+    "walker-1969",
+    "walker-1972",
+    "walker-1975",
+    "walker-1978",
+    "walker-1981",
+    "tank-1983",
+    "walker-1984",
+    "tank-1986",
+    "walker-1987",
+    "tank-1989",
+    "walker-1990",
+    "tank-1992",
+    "walker-1993",
+    "tank-1995",
+    "walker-1996",
+    "tank-1998",
+    "walker-1999",
+    "tank-2001",
+    "walker-2002",
+    "tank-2004",
+    "walker-2005",
+    "tank-2007",
+    "walker-2008",
+    "tank-2010",
+    "walker-2011",
+    "tank-2013",
+    "walker-2014",
+    "tank-2016",
+    "walker-2017",
+    "tank-2019",
+    "walker-2020",
+    "tank-2022",
+    "walker-2023",
+    "tank-2025",
+    "walker-2026",
+    "walker-2028",
+    "walker-2030",
+    "walker-2031",
+    "walker-2032",
+    "walker-2033",
+    "walker-2034",
+    "walker-2035",
+    "brute-2037",
+    "brute-2039",
+    "armored-2040",
+    "brute-2041",
+    "brute-2043",
+    "brute-2045",
+    "brute-2047",
+    "brute-2049",
+    "armored-2050",
+    "brute-2051",
+    "charger_boss-2052"
+  ],
+  "inspireSource": "overlord_boss-2053",
+  "effects": 28,
+  "arcane": {
+    "slowedIds": [],
+    "chains": [],
+    "effects": 0
+  },
+  "calls": 581,
+  "triangles": 2640818,
+  "geometries": 230,
+  "textures": 200
+}

@@ -1,0 +1,32 @@
+
+> zcamp@0.1.0 build
+> tsc --noEmit && vite build --outDir C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 59 modules transformed.
+
+(!) outDir C:\Users\Admin\AppData\Local\Temp\zcamp-threejs-implementation\product-readable-game-dist is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/index.html                             0.56 kB │ gzip:   0.38 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/index-C_5SfW8O.css              0.40 kB │ gzip:   0.27 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/BattlePressure-CCaujOdh.css     0.87 kB │ gzip:   0.44 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/AssetPressure-DEuy7wmV.css      2.99 kB │ gzip:   1.06 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/ThreeGame-D2p2NXu2.css          4.90 kB │ gzip:   1.75 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/WhiteboxPreview-C4Lx9zFT.css    8.67 kB │ gzip:   2.58 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/index-DhYTMVin.js               3.77 kB │ gzip:   1.47 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/BattlePressure-ChKw93Tr.js      5.74 kB │ gzip:   3.32 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/SoundDirector-Cm3rxJjv.js       8.34 kB │ gzip:   2.40 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/ThreeGame-858avp4n.js          13.61 kB │ gzip:   5.17 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/AssetPressure-DoB0Next.js      29.51 kB │ gzip:  12.62 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/WhiteboxPreview-BnFKoHiF.js   100.12 kB │ gzip:  31.32 kB
+C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-readable-game-dist/assets/ModelLibrary-BD2vJiF9.js      676.84 kB │ gzip: 173.84 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.53s

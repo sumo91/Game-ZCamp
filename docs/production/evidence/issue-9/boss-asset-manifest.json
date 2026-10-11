@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "scope": "Issue #9 original Boss sources only; not device budget or artistic acceptance",
+  "assets": [
+    {
+      "asset": "charger_lord.glb",
+      "sha256": "ec35ace6182dc865548658e457b6a37f1e0f55378e27a521f9dd20d452c1fa74",
+      "bytes": 953128,
+      "source": "art/threejs/sources/charger_lord.blend",
+      "sourceSha256": "e8860185c2b9f2bef09d2038ecad96d541eaecb6c08262dd8ccd923b8d24056e",
+      "sourceBytes": 930498,
+      "triangles": 5928,
+      "materials": 1,
+      "joints": 14,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [
+        {
+          "name": "walk",
+          "seconds": 0.8
+        },
+        {
+          "name": "attack",
+          "seconds": 0.8
+        },
+        {
+          "name": "hit",
+          "seconds": 0.3
+        },
+        {
+          "name": "death",
+          "seconds": 0.9
+        },
+        {
+          "name": "warning",
+          "seconds": 2
+        },
+        {
+          "name": "charge",
+          "seconds": 0.8
+        }
+      ],
+      "boundsMin": [
+        -1.187999963760376,
+        0,
+        -0.4560000002384186
+      ],
+      "boundsMax": [
+        1.3249059915542603,
+        3.156815528869629,
+        0.5094720125198364
+      ],
+      "size": [
+        2.5129059553146362,
+        3.156815528869629,
+        0.965472012758255
+      ],
+      "textures": 2,
+      "validatorErrors": 0,
+      "validatorWarnings": 0
+    },
+    {
+      "asset": "undead_king.glb",
+      "sha256": "77b830dcc791131ce05f374a26decd9704efb9e019c90a15d763ecb1f64a9173",
+      "bytes": 908448,
+      "source": "art/threejs/sources/undead_king.blend",
+      "sourceSha256": "2e01b1260b17d94d3339e2502469e6f8aaf330480de00cd82b6efdc096805ff8",
+      "sourceBytes": 928901,
+      "triangles": 5372,
+      "materials": 1,
+      "joints": 14,
+      "anchors": [
+        "attack_anchor",
+        "hit_anchor",
+        "label_anchor"
+      ],
+      "clips": [
+        {
+          "name": "walk",
+          "seconds": 0.8
+        },
+        {
+          "name": "attack",
+          "seconds": 0.8
+        },
+        {
+          "name": "hit",
+          "seconds": 0.3
+        },
+        {
+          "name": "death",
+          "seconds": 0.9
+        },
+        {
+          "name": "inspire",
+          "seconds": 4
+        }
+      ],
+      "boundsMin": [
+        -0.8932799696922302,
+        0,
+        -0.6959999203681946
+      ],
+      "boundsMax": [
+        1.0838308334350586,
+        3.180000066757202,
+        0.5039999485015869
+      ],
+      "size": [
+        1.9771108031272888,
+        3.180000066757202,
+        1.1999998688697815
+      ],
+      "textures": 2,
+      "validatorErrors": 0,
+      "validatorWarnings": 0
+    }
+  ]
+}

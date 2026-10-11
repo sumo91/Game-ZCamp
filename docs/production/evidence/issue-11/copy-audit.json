@@ -1,0 +1,302 @@
+[
+  {
+    "externalArtifact": "product-issue-11-standards-review.md",
+    "repositoryArtifact": "docs/production/evidence/issue-11/standards-review.md",
+    "externalSha256": "575738a7e541deec97efc90a8b78c3b124808fd068ea0e111947f8bec4023179",
+    "repositorySha256": "575738a7e541deec97efc90a8b78c3b124808fd068ea0e111947f8bec4023179",
+    "externalBytes": 2575,
+    "repositoryBytes": 2575,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-spec-review.md",
+    "repositoryArtifact": "docs/production/evidence/issue-11/spec-review.md",
+    "externalSha256": "69dcb2148ee1b639cf41db02f2a7632d1f8ec337be2645f39ca80f7019db6b3c",
+    "repositorySha256": "58c601ea7467ec6ac9add64307ab51ff90a922d3a82d3ff34c6b3cdcfe91e8f3",
+    "externalBytes": 1990,
+    "repositoryBytes": 1989,
+    "identical": false,
+    "conversion": "CRLF to LF only; external original unchanged"
+  },
+  {
+    "externalArtifact": "product-issue-11-delivery.md",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/delivery.md",
+    "externalSha256": "be762ab6585bf1fbc5ed3fdc6dae9598d79342a673155e506d4e00b9c462dd3d",
+    "repositorySha256": "5800ca448e2243940f37a38e9a12377446e9a531579a90aa0f32f17604ea80e5",
+    "externalBytes": 9031,
+    "repositoryBytes": 9030,
+    "identical": false,
+    "conversion": "CRLF to LF only; external original unchanged"
+  },
+  {
+    "externalArtifact": "product-issue-11-root-ui.md",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/review.md",
+    "externalSha256": "5094d5c3e91c8c29994612153af213dcf06b5d68ef37b0ff9ff349a93229c15c",
+    "repositorySha256": "5094d5c3e91c8c29994612153af213dcf06b5d68ef37b0ff9ff349a93229c15c",
+    "externalBytes": 3210,
+    "repositoryBytes": 3210,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-campaign-root-ui.md",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/root-ui-review.md",
+    "externalSha256": "75ae4b8c8174a57d7866a4154387cecbcbc6aa27903a8138daabe1e52e0b3370",
+    "repositorySha256": "df78f3da5395ea164938a6781b6a7b1b99687727313eb01e4710c2f3cd6b26a5",
+    "externalBytes": 2118,
+    "repositoryBytes": 2117,
+    "identical": false,
+    "conversion": "Removed extra blank line at EOF for diff-check; external original unchanged"
+  },
+  {
+    "externalArtifact": "product-issue-11-size-qa.json",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-size-qa.json",
+    "externalSha256": "1a7d996099d0a93d0841bbb159166ebaa665d6ab2de8cb84e23850f0a25d16c1",
+    "repositorySha256": "1a7d996099d0a93d0841bbb159166ebaa665d6ab2de8cb84e23850f0a25d16c1",
+    "externalBytes": 12967,
+    "repositoryBytes": 12967,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-battle-360.png",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-battle-360.png",
+    "externalSha256": "b66593902382eaa6bdb4209375949a25d3de4bde5025c7fe6e7c68eec404ad40",
+    "repositorySha256": "b66593902382eaa6bdb4209375949a25d3de4bde5025c7fe6e7c68eec404ad40",
+    "externalBytes": 30595,
+    "repositoryBytes": 30595,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-trait-360.png",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-trait-360.png",
+    "externalSha256": "a200a7ed73a665fd50df9c8af3c2373eb10b8b70cb81e109983b7fbb8bcdb7f6",
+    "repositorySha256": "a200a7ed73a665fd50df9c8af3c2373eb10b8b70cb81e109983b7fbb8bcdb7f6",
+    "externalBytes": 25093,
+    "repositoryBytes": 25093,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-defeat-360.png",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-defeat-360.png",
+    "externalSha256": "0db586fc2d5d03cebafe6b2d8a3b4f550e271bf30c8515874adae4b044279e6d",
+    "repositorySha256": "0db586fc2d5d03cebafe6b2d8a3b4f550e271bf30c8515874adae4b044279e6d",
+    "externalBytes": 13407,
+    "repositoryBytes": 13407,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-victory-360.png",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-victory-360.png",
+    "externalSha256": "c33bf2420fc85ee476a69d279cc21d6812e5c9576b2de50eb5d9ed47795efeab",
+    "repositorySha256": "c33bf2420fc85ee476a69d279cc21d6812e5c9576b2de50eb5d9ed47795efeab",
+    "externalBytes": 14841,
+    "repositoryBytes": 14841,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-second-victory.png",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-second-victory.png",
+    "externalSha256": "a2b8f5c9aa09e2d24a3fb7db5958431a9a395a95c50e65d9d61eaaf37765b535",
+    "repositorySha256": "a2b8f5c9aa09e2d24a3fb7db5958431a9a395a95c50e65d9d61eaaf37765b535",
+    "externalBytes": 15011,
+    "repositoryBytes": 15011,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-third-victory.png",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-third-victory.png",
+    "externalSha256": "fb8efeebd7c5b4ffabb364e7deed1296cd7dbd0c9e71a20cd5962eca97971b97",
+    "repositorySha256": "fb8efeebd7c5b4ffabb364e7deed1296cd7dbd0c9e71a20cd5962eca97971b97",
+    "externalBytes": 13758,
+    "repositoryBytes": 13758,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-lobby-720.png",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-lobby-720.png",
+    "externalSha256": "305043d9f6875876fe4a670ed36387a4fe45d0cb2120c4f25cb63cf066ede666",
+    "repositorySha256": "305043d9f6875876fe4a670ed36387a4fe45d0cb2120c4f25cb63cf066ede666",
+    "externalBytes": 73923,
+    "repositoryBytes": 73923,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-reload-qa.json",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-reload-qa.json",
+    "externalSha256": "035a0c43d7c28fc395ef388b0e27f2be03d0e7334e3eedd93d88bd9aa958279f",
+    "repositorySha256": "035a0c43d7c28fc395ef388b0e27f2be03d0e7334e3eedd93d88bd9aa958279f",
+    "externalBytes": 1226,
+    "repositoryBytes": 1226,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-loading-error.png",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-loading-error.png",
+    "externalSha256": "16f5c2e925a5d34136a53721b8f1e7662b2b29f06f6f2e4b7b1017d5e66bc061",
+    "repositorySha256": "16f5c2e925a5d34136a53721b8f1e7662b2b29f06f6f2e4b7b1017d5e66bc061",
+    "externalBytes": 15434,
+    "repositoryBytes": 15434,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-issue-11-loading-retry.json",
+    "repositoryArtifact": "docs/production/evidence/issue-11/author/product-issue-11-loading-retry.json",
+    "externalSha256": "aea35a47bb9766b4666faea3ba9df77bf7d2aaa453df1506421131d4d68f5591",
+    "repositorySha256": "aea35a47bb9766b4666faea3ba9df77bf7d2aaa453df1506421131d4d68f5591",
+    "externalBytes": 103,
+    "repositoryBytes": 103,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-default-lobby-root-390.jpg",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/product-default-lobby-root-390.jpg",
+    "externalSha256": "cfba08092c7ea3d1d33a5cead7f0b212f9f3587c4c17f8afb6fa606ac5830d7f",
+    "repositorySha256": "cfba08092c7ea3d1d33a5cead7f0b212f9f3587c4c17f8afb6fa606ac5830d7f",
+    "externalBytes": 49148,
+    "repositoryBytes": 49148,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-default-battle-root-390.jpg",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/product-default-battle-root-390.jpg",
+    "externalSha256": "24074a695fd62e805c9f5a3c2b924499f7e9bfcf6c15d5ea5071fe4529a878d4",
+    "repositorySha256": "24074a695fd62e805c9f5a3c2b924499f7e9bfcf6c15d5ea5071fe4529a878d4",
+    "externalBytes": 35588,
+    "repositoryBytes": 35588,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-default-slots-root-390.json",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/product-default-slots-root-390.json",
+    "externalSha256": "cf2cc8cc1ef4d07631452591224a19d7d65ead5122b4c0f9dd0408df1cfe6144",
+    "repositorySha256": "cf2cc8cc1ef4d07631452591224a19d7d65ead5122b4c0f9dd0408df1cfe6144",
+    "externalBytes": 2025,
+    "repositoryBytes": 2025,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-default-replay-first-win-root.jpg",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/product-default-replay-first-win-root.jpg",
+    "externalSha256": "5e805dcdcd60806b17cf7ab34b9c1655f878f952c5cf30cd67dbf5ce7de15cb8",
+    "repositorySha256": "5e805dcdcd60806b17cf7ab34b9c1655f878f952c5cf30cd67dbf5ce7de15cb8",
+    "externalBytes": 17517,
+    "repositoryBytes": 17517,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-default-replay-second-win-root.jpg",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/product-default-replay-second-win-root.jpg",
+    "externalSha256": "cc07dc2fa8ea8c0f872b86ce9915fc373d5fd94017f7d41db5860bb5038b3af3",
+    "repositorySha256": "cc07dc2fa8ea8c0f872b86ce9915fc373d5fd94017f7d41db5860bb5038b3af3",
+    "externalBytes": 17709,
+    "repositoryBytes": 17709,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-default-replay-third-win-root.jpg",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/product-default-replay-third-win-root.jpg",
+    "externalSha256": "21f613db38d570dd98bef16c113d0d852ab8779b779bbb61325517692e2423d7",
+    "repositorySha256": "21f613db38d570dd98bef16c113d0d852ab8779b779bbb61325517692e2423d7",
+    "externalBytes": 16401,
+    "repositoryBytes": 16401,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-default-reloaded-cards-root.json",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/product-default-reloaded-cards-root.json",
+    "externalSha256": "7468c359847c19116588467fadaf56fc19127cdccf850066d5ae41f9c91172d1",
+    "repositorySha256": "7468c359847c19116588467fadaf56fc19127cdccf850066d5ae41f9c91172d1",
+    "externalBytes": 935,
+    "repositoryBytes": 935,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-default-reloaded-lobby-root.jpg",
+    "repositoryArtifact": "docs/production/evidence/issue-11/root/product-default-reloaded-lobby-root.jpg",
+    "externalSha256": "09f68af00ec452eeff22c0d8adb3b8ca351ef1b3d2072dd11d3de4abeb2b55fc",
+    "repositorySha256": "09f68af00ec452eeff22c0d8adb3b8ca351ef1b3d2072dd11d3de4abeb2b55fc",
+    "externalBytes": 47164,
+    "repositoryBytes": 47164,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-boss-final-root.jpg",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/product-boss-final-root.jpg",
+    "externalSha256": "6da858e1587d899e058d2ef21c010b0773e0ce3a9f2a147f1c915080b8fda61d",
+    "repositorySha256": "6da858e1587d899e058d2ef21c010b0773e0ce3a9f2a147f1c915080b8fda61d",
+    "externalBytes": 46038,
+    "repositoryBytes": 46038,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-boss-final-root.json",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/product-boss-final-root.json",
+    "externalSha256": "ba67cf2846ae45a7aa49bacb56374aa10436deda33e94947a721ffe39167a533",
+    "repositorySha256": "ba67cf2846ae45a7aa49bacb56374aa10436deda33e94947a721ffe39167a533",
+    "externalBytes": 30156,
+    "repositoryBytes": 30156,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-boss-charge-root.jpg",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/product-boss-charge-root.jpg",
+    "externalSha256": "b4f9b691cbe9e6202dbb36d3ff9e602ec0deace814112d53228f2c71a0959836",
+    "repositorySha256": "b4f9b691cbe9e6202dbb36d3ff9e602ec0deace814112d53228f2c71a0959836",
+    "externalBytes": 45070,
+    "repositoryBytes": 45070,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-boss-charge-root.json",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/product-boss-charge-root.json",
+    "externalSha256": "cae05f6df7ccd4139c68703fd863fe359e82be2cf08256b7e1855aff3e3c4624",
+    "repositorySha256": "cae05f6df7ccd4139c68703fd863fe359e82be2cf08256b7e1855aff3e3c4624",
+    "externalBytes": 29433,
+    "repositoryBytes": 29433,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-hero-battle-final-root.jpg",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/product-hero-battle-final-root.jpg",
+    "externalSha256": "3e7e7a2b978279e21bda118cfd2fb2a6fb90e54e9c1ede41fe1676da649fdda8",
+    "repositorySha256": "3e7e7a2b978279e21bda118cfd2fb2a6fb90e54e9c1ede41fe1676da649fdda8",
+    "externalBytes": 34235,
+    "repositoryBytes": 34235,
+    "identical": true,
+    "conversion": "none"
+  },
+  {
+    "externalArtifact": "product-hero-defeat-final-root.jpg",
+    "repositoryArtifact": "docs/production/evidence/campaign-batch/product-hero-defeat-final-root.jpg",
+    "externalSha256": "c50e67b4a6a3aed1e947c40edf14fae2b1157aff02f49faee362fe9db8e2153e",
+    "repositorySha256": "c50e67b4a6a3aed1e947c40edf14fae2b1157aff02f49faee362fe9db8e2153e",
+    "externalBytes": 16656,
+    "repositoryBytes": 16656,
+    "identical": true,
+    "conversion": "none"
+  }
+]

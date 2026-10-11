@@ -1,0 +1,28 @@
+{
+  "appTouchAction": "pan-y",
+  "canvasRect": {
+    "bottom": 1.354156494140625,
+    "height": 364,
+    "left": 12,
+    "right": 333,
+    "top": -362.6458435058594,
+    "width": 321,
+    "x": 12,
+    "y": -362.6458435058594
+  },
+  "canvasTouchAction": "pan-y",
+  "clientHeight": 640,
+  "configRect": {
+    "bottom": 619.6041679382324,
+    "height": 602.25,
+    "left": 12,
+    "right": 332.66668701171875,
+    "top": 17.354167938232422,
+    "width": 320.66668701171875,
+    "x": 12,
+    "y": 17.354167938232422
+  },
+  "overflowY": "auto",
+  "scrollHeight": 1903,
+  "scrollTop": 640
+}

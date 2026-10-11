@@ -1,0 +1,31 @@
+{
+  "rect": {
+    "height": 720,
+    "width": 405,
+    "x": 437.5,
+    "y": 0
+  },
+  "snapshot": "- main \"尸潮营地游戏画布\":\n  - strong: 第 2 波 / 10\n  - generic: 下一波 3 秒\n  - generic: 战术暂停\n  - generic: 亡灵 0\n  - button \"继续战斗\" [active]: 继续\n  - button \"切换画质\": 画质·标准\n  - button \"关闭声音\": 声音\n  - region \"人类堡垒与亡灵防线\":\n    - generic \"人类堡垒与亡灵战场\"\n    - generic \"城墙防线\":\n      - strong: 城墙 100/100\n      - generic: 护盾 100/100\n    - generic \"5×3 营地格位\":\n      - button \"第1行第1列，箭塔 Lv.1\": Lv.1\n      - button \"第1行第2列，空格\": +\n      - button \"第1行第3列，空格\": +\n      - button \"第1行第4列，空格\": +\n      - button \"第1行第5列，空格\": +\n      - button \"第2行第1列，空格\": +\n      - button \"第2行第2列，空格\": +\n      - button \"第2行第3列，空格\": +\n      - button \"第2行第4列，空格\": +\n      - button \"第2行第5列，空格\": +\n      - button \"第3行第1列，木材厂 Lv.1\" [pressed]: Lv.1\n      - button \"第3行第2列，空格\": +\n      - button \"第3行第3列，主城\": 主城\n      - button \"第3行第4列，空格\": +\n      - button \"第3行第5列，空格\": +\n  - generic \"木材 203，产量每秒 1.7\":\n    - strong: \"203\"\n    - generic: +1.7/秒\n  - generic \"金币 18\":\n    - generic: \"18\"\n  - generic \"所选建筑详情\":\n    - strong: 木材厂 · Lv.1/5\n    - paragraph: 持续生产木材\n    - paragraph: 当前：产木 1/秒\n    - paragraph: 下级：产木 1.6/秒 · 可升级\n    - paragraph: 升级后选择词条\n  - button \"升级至 Lv.2｜木材 70\"\n  - button \"拆除\"\n  - status",
+  "presentation": {
+    "activeModels": 0,
+    "animationMixers": 1,
+    "arcane": {
+      "chains": [],
+      "effects": 0,
+      "slowedIds": []
+    },
+    "bossWarnings": [],
+    "calls": 40,
+    "effects": 0,
+    "enemies": [],
+    "geometries": 36,
+    "inspireSource": null,
+    "inspired": [],
+    "models": true,
+    "quality": "standard",
+    "renderPixelRatio": 1.5,
+    "textures": 26,
+    "triangles": 316954
+  },
+  "logs": []
+}

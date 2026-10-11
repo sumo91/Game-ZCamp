@@ -1,0 +1,1217 @@
+{
+  "scope": "Read-only Blender source inspection; no save, export, or source regeneration",
+  "blender": "5.2.1 LTS",
+  "sources": [
+    {
+      "source": "arrow_tower_high.blend",
+      "editableModules": 120,
+      "runtimeMeshes": [
+        {
+          "name": "arrow_tower_high_surface",
+          "vertices": 6956,
+          "polygons": 6783,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "arrow_tower_high_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_high_base_color_atlas",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_high_base_color_atlas.001",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_high_base_color_atlas.002",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_high_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_high_roughness_metallic_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_high_roughness_metallic_atlas.002",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "bone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "cobalt_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "iron_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "recess_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "roof_highlight_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "wood_end_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "arrow_tower_low.blend",
+      "editableModules": 110,
+      "runtimeMeshes": [
+        {
+          "name": "arrow_tower_low_surface",
+          "vertices": 6488,
+          "polygons": 6337,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "arrow_tower_low_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_low_base_color_atlas",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_low_base_color_atlas.001",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_low_base_color_atlas.002",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_low_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_low_roughness_metallic_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_low_roughness_metallic_atlas.002",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "bone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "cobalt_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "iron_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "recess_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "roof_highlight_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "wood_end_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "arrow_tower_medium.blend",
+      "editableModules": 115,
+      "runtimeMeshes": [
+        {
+          "name": "arrow_tower_medium_surface",
+          "vertices": 6768,
+          "polygons": 6607,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "arrow_tower_medium_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_medium_base_color_atlas",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_medium_base_color_atlas.001",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_medium_base_color_atlas.002",
+          "packed": true,
+          "width": 1024,
+          "height": 1024
+        },
+        {
+          "name": "arrow_tower_medium_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_medium_roughness_metallic_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "arrow_tower_medium_roughness_metallic_atlas.002",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "bone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "cobalt_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "iron_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "recess_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "roof_highlight_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "wood_end_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "camp_plot.blend",
+      "editableModules": 15,
+      "runtimeMeshes": [
+        {
+          "name": "camp_plot_surface",
+          "vertices": 840,
+          "polygons": 810,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "camp_plot_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "camp_plot_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "camp_plot_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "plot_soil_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "lumberyard_high.blend",
+      "editableModules": 130,
+      "runtimeMeshes": [
+        {
+          "name": "lumberyard_high_surface",
+          "vertices": 7834,
+          "polygons": 7187,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "cobalt_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "iron_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "lumberyard_high_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "lumberyard_high_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "lumberyard_high_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "roof_highlight_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "wood_end_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "lumberyard_low.blend",
+      "editableModules": 82,
+      "runtimeMeshes": [
+        {
+          "name": "lumberyard_low_surface",
+          "vertices": 4536,
+          "polygons": 4189,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "cobalt_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "iron_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "lumberyard_low_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "lumberyard_low_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "lumberyard_low_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "roof_highlight_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "wood_end_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "lumberyard_medium.blend",
+      "editableModules": 107,
+      "runtimeMeshes": [
+        {
+          "name": "lumberyard_medium_surface",
+          "vertices": 6344,
+          "polygons": 5827,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "cobalt_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "iron_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "lumberyard_medium_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "lumberyard_medium_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "lumberyard_medium_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "roof_highlight_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "wood_end_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "main_city.blend",
+      "editableModules": 161,
+      "runtimeMeshes": [
+        {
+          "name": "main_city_surface",
+          "vertices": 9580,
+          "polygons": 9228,
+          "uvLayers": 2,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "cobalt_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "iron_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "main_city_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "main_city_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "main_city_base_color_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "main_city_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "main_city_roughness_metallic_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "recess_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "roof_highlight_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "pine_tree.blend",
+      "editableModules": 9,
+      "runtimeMeshes": [
+        {
+          "name": "pine_tree_surface",
+          "vertices": 809,
+          "polygons": 792,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "pine_dark_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "pine_mid_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "pine_tip_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "pine_tree_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "pine_tree_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "pine_tree_base_color_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "pine_tree_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "pine_tree_roughness_metallic_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "rock_cluster.blend",
+      "editableModules": 9,
+      "runtimeMeshes": [
+        {
+          "name": "rock_cluster_surface",
+          "vertices": 473,
+          "polygons": 431,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "recess_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "rock_cluster_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "rock_cluster_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "rock_cluster_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "rock_moss_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "skeleton_infantry.blend",
+      "editableModules": 65,
+      "runtimeMeshes": [
+        {
+          "name": "skeleton_infantry_surface",
+          "vertices": 3678,
+          "polygons": 3649,
+          "uvLayers": 1,
+          "vertexGroups": 13
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "bone_shadow_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "bone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "iron_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "recess_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "skeleton_infantry_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "skeleton_infantry_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "skeleton_infantry_base_color_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "skeleton_infantry_base_color_atlas.002",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "skeleton_infantry_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "skeleton_infantry_roughness_metallic_atlas.001",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "skeleton_infantry_roughness_metallic_atlas.002",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "spectral_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "timber_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "undead_cloth_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        }
+      ],
+      "actions": [
+        "attack",
+        "death",
+        "hit",
+        "walk"
+      ],
+      "armatures": [
+        {
+          "name": "skeleton_rig",
+          "bones": 14,
+          "nlaTracks": 4
+        }
+      ],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "source": "wall_segment.blend",
+      "editableModules": 87,
+      "runtimeMeshes": [
+        {
+          "name": "wall_segment_surface",
+          "vertices": 4834,
+          "polygons": 4656,
+          "uvLayers": 1,
+          "vertexGroups": 0
+        }
+      ],
+      "packedImages": [
+        {
+          "name": "bronze_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "cobalt_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "edge_stone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "limestone_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "recess_surface",
+          "packed": true,
+          "width": 128,
+          "height": 128
+        },
+        {
+          "name": "wall_segment_ao",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "wall_segment_base_color_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        },
+        {
+          "name": "wall_segment_roughness_metallic_atlas",
+          "packed": true,
+          "width": 512,
+          "height": 512
+        }
+      ],
+      "actions": [],
+      "armatures": [],
+      "root": {
+        "location": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scale": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      }
+    }
+  ]
+}

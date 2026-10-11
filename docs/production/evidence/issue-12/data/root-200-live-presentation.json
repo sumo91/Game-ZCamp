@@ -1,0 +1,1641 @@
+{
+  "models": true,
+  "enemies": [
+    {
+      "id": "walker-0",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.20658642594399
+    },
+    {
+      "id": "runner-1",
+      "definitionId": "runner",
+      "clip": "attack",
+      "dying": false,
+      "time": 53.76420327649567
+    },
+    {
+      "id": "tank-2",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.75543296556281
+    },
+    {
+      "id": "armored-3",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.50508191240335
+    },
+    {
+      "id": "brute-4",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.64389836175138
+    },
+    {
+      "id": "walker-5",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.21059846205231
+    },
+    {
+      "id": "runner-6",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.216215312603964
+    },
+    {
+      "id": "tank-7",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.75944500167114
+    },
+    {
+      "id": "armored-8",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.509093948511676
+    },
+    {
+      "id": "brute-9",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.64791039785971
+    },
+    {
+      "id": "walker-10",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.267569374790526
+    },
+    {
+      "id": "runner-11",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.41761952524187
+    },
+    {
+      "id": "tank-12",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.43366766967517
+    },
+    {
+      "id": "armored-13",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.648712805081374
+    },
+    {
+      "id": "brute-14",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.12795051822082
+    },
+    {
+      "id": "walker-15",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.27158141089885
+    },
+    {
+      "id": "runner-16",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.421631561350196
+    },
+    {
+      "id": "tank-17",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.437679705783495
+    },
+    {
+      "id": "armored-18",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.6527248411897
+    },
+    {
+      "id": "brute-19",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.13196255432915
+    },
+    {
+      "id": "walker-20",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.29244399866214
+    },
+    {
+      "id": "runner-21",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.44249414911348
+    },
+    {
+      "id": "tank-22",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.458542293546785
+    },
+    {
+      "id": "armored-23",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.673587428952985
+    },
+    {
+      "id": "brute-24",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.15282514209244
+    },
+    {
+      "id": "walker-25",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.296456034770465
+    },
+    {
+      "id": "runner-26",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.44650618522181
+    },
+    {
+      "id": "tank-27",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.462554329655106
+    },
+    {
+      "id": "armored-28",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.67759946506131
+    },
+    {
+      "id": "brute-29",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.15683717820076
+    },
+    {
+      "id": "walker-30",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.31731862253375
+    },
+    {
+      "id": "runner-31",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.4673687729851
+    },
+    {
+      "id": "tank-32",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.483416917418396
+    },
+    {
+      "id": "armored-33",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.6984620528246
+    },
+    {
+      "id": "brute-34",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.17769976596405
+    },
+    {
+      "id": "walker-35",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.321330658642076
+    },
+    {
+      "id": "runner-36",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.47138080909342
+    },
+    {
+      "id": "tank-37",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.48742895352672
+    },
+    {
+      "id": "armored-38",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.702474088932924
+    },
+    {
+      "id": "brute-39",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.18171180207237
+    },
+    {
+      "id": "walker-40",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.342193246405365
+    },
+    {
+      "id": "runner-41",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.49224339685671
+    },
+    {
+      "id": "tank-42",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.508291541290006
+    },
+    {
+      "id": "armored-43",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.72333667669621
+    },
+    {
+      "id": "brute-44",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.20257438983566
+    },
+    {
+      "id": "walker-45",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.34620528251369
+    },
+    {
+      "id": "runner-46",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.496255432965036
+    },
+    {
+      "id": "tank-47",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.512303577398335
+    },
+    {
+      "id": "armored-48",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.72734871280454
+    },
+    {
+      "id": "brute-49",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.20658642594399
+    },
+    {
+      "id": "walker-50",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.367067870276976
+    },
+    {
+      "id": "runner-51",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.517118020728326
+    },
+    {
+      "id": "tank-52",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.533166165161624
+    },
+    {
+      "id": "armored-53",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.74821130056783
+    },
+    {
+      "id": "brute-54",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.22744901370728
+    },
+    {
+      "id": "walker-55",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.371079906385305
+    },
+    {
+      "id": "runner-56",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.52113005683665
+    },
+    {
+      "id": "tank-57",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.537178201269946
+    },
+    {
+      "id": "armored-58",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.75222333667615
+    },
+    {
+      "id": "brute-59",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.2314610498156
+    },
+    {
+      "id": "walker-60",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.391942494148594
+    },
+    {
+      "id": "runner-61",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.54199264459994
+    },
+    {
+      "id": "tank-62",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.558040789033235
+    },
+    {
+      "id": "armored-63",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 53.97308592443949
+    },
+    {
+      "id": "brute-64",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.25232363757889
+    },
+    {
+      "id": "walker-65",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.395954530256915
+    },
+    {
+      "id": "runner-66",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.54600468070826
+    },
+    {
+      "id": "tank-67",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.56205282514156
+    },
+    {
+      "id": "armored-68",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 53.97709796054781
+    },
+    {
+      "id": "brute-69",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.25633567368722
+    },
+    {
+      "id": "walker-70",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.416817118020205
+    },
+    {
+      "id": "runner-71",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.56686726847155
+    },
+    {
+      "id": "tank-72",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.582915412904846
+    },
+    {
+      "id": "armored-73",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 53.9979605483111
+    },
+    {
+      "id": "brute-74",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.2771982614505
+    },
+    {
+      "id": "walker-75",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.420829154128526
+    },
+    {
+      "id": "runner-76",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.570879304579876
+    },
+    {
+      "id": "tank-77",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.586927449013174
+    },
+    {
+      "id": "armored-78",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.00197258441943
+    },
+    {
+      "id": "brute-79",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.28121029755883
+    },
+    {
+      "id": "walker-80",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.441691741891816
+    },
+    {
+      "id": "runner-81",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.591741892343165
+    },
+    {
+      "id": "tank-82",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.607790036776464
+    },
+    {
+      "id": "armored-83",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.02283517218272
+    },
+    {
+      "id": "brute-84",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.30207288532212
+    },
+    {
+      "id": "walker-85",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.445703778000144
+    },
+    {
+      "id": "runner-86",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.59575392845149
+    },
+    {
+      "id": "tank-87",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.611802072884785
+    },
+    {
+      "id": "armored-88",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.02684720829104
+    },
+    {
+      "id": "brute-89",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.30608492143044
+    },
+    {
+      "id": "walker-90",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.466566365763434
+    },
+    {
+      "id": "runner-91",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.616616516214776
+    },
+    {
+      "id": "tank-92",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.632664660648075
+    },
+    {
+      "id": "armored-93",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.04770979605433
+    },
+    {
+      "id": "brute-94",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.32694750919373
+    },
+    {
+      "id": "walker-95",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.470578401871755
+    },
+    {
+      "id": "runner-96",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.620628552323105
+    },
+    {
+      "id": "tank-97",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.6366766967564
+    },
+    {
+      "id": "armored-98",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.051721832162656
+    },
+    {
+      "id": "brute-99",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.33095954530206
+    },
+    {
+      "id": "walker-100",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.533166165161624
+    },
+    {
+      "id": "runner-101",
+      "definitionId": "runner",
+      "clip": "attack",
+      "dying": false,
+      "time": 53.880648612503684
+    },
+    {
+      "id": "tank-102",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.034068873286024
+    },
+    {
+      "id": "armored-103",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.27639585422884
+    },
+    {
+      "id": "brute-104",
+      "definitionId": "brute",
+      "clip": "hit",
+      "dying": false,
+      "time": 50.55669274490104
+    },
+    {
+      "id": "walker-105",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.537178201269946
+    },
+    {
+      "id": "runner-106",
+      "definitionId": "runner",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.076660648612
+    },
+    {
+      "id": "tank-107",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.038080909394345
+    },
+    {
+      "id": "armored-108",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.280407890337166
+    },
+    {
+      "id": "brute-109",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.112704781009185
+    },
+    {
+      "id": "walker-110",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.558040789033235
+    },
+    {
+      "id": "runner-111",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.38552323637527
+    },
+    {
+      "id": "tank-112",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.058943497157635
+    },
+    {
+      "id": "armored-113",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.30127047810045
+    },
+    {
+      "id": "brute-114",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.133567368772475
+    },
+    {
+      "id": "walker-115",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.56205282514156
+    },
+    {
+      "id": "runner-116",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.3895352724836
+    },
+    {
+      "id": "tank-117",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.06295553326596
+    },
+    {
+      "id": "armored-118",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.30528251420878
+    },
+    {
+      "id": "brute-119",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.1375794048808
+    },
+    {
+      "id": "walker-120",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.582915412904846
+    },
+    {
+      "id": "runner-121",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.41039786024688
+    },
+    {
+      "id": "tank-122",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.08381812102925
+    },
+    {
+      "id": "armored-123",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.32614510197207
+    },
+    {
+      "id": "brute-124",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.15844199264409
+    },
+    {
+      "id": "walker-125",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.586927449013174
+    },
+    {
+      "id": "runner-126",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.41440989635521
+    },
+    {
+      "id": "tank-127",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.087830157137574
+    },
+    {
+      "id": "armored-128",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.33015713808039
+    },
+    {
+      "id": "brute-129",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.162454028752414
+    },
+    {
+      "id": "walker-130",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.607790036776464
+    },
+    {
+      "id": "runner-131",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.4352724841185
+    },
+    {
+      "id": "tank-132",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.108692744900864
+    },
+    {
+      "id": "armored-133",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.35101972584368
+    },
+    {
+      "id": "brute-134",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.183316616515704
+    },
+    {
+      "id": "walker-135",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.611802072884785
+    },
+    {
+      "id": "runner-136",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.43928452022682
+    },
+    {
+      "id": "tank-137",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.112704781009185
+    },
+    {
+      "id": "armored-138",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.355031761952006
+    },
+    {
+      "id": "brute-139",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.18732865262403
+    },
+    {
+      "id": "walker-140",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.632664660648075
+    },
+    {
+      "id": "runner-141",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.46014710799011
+    },
+    {
+      "id": "tank-142",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.133567368772475
+    },
+    {
+      "id": "armored-143",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.37589434971529
+    },
+    {
+      "id": "brute-144",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.208191240387315
+    },
+    {
+      "id": "walker-145",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.6366766967564
+    },
+    {
+      "id": "runner-146",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.46415914409844
+    },
+    {
+      "id": "tank-147",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.1375794048808
+    },
+    {
+      "id": "armored-148",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.37990638582362
+    },
+    {
+      "id": "brute-149",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.21220327649564
+    },
+    {
+      "id": "walker-150",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.65753928451969
+    },
+    {
+      "id": "runner-151",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.48502173186173
+    },
+    {
+      "id": "tank-152",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.15844199264409
+    },
+    {
+      "id": "armored-153",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.400768973586906
+    },
+    {
+      "id": "brute-154",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.23306586425893
+    },
+    {
+      "id": "walker-155",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.661551320628014
+    },
+    {
+      "id": "runner-156",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.48903376797005
+    },
+    {
+      "id": "tank-157",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.162454028752414
+    },
+    {
+      "id": "armored-158",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.40478100969523
+    },
+    {
+      "id": "brute-159",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.237077900367254
+    },
+    {
+      "id": "walker-160",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.682413908391304
+    },
+    {
+      "id": "runner-161",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.50989635573334
+    },
+    {
+      "id": "tank-162",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.183316616515704
+    },
+    {
+      "id": "armored-163",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.42564359745852
+    },
+    {
+      "id": "brute-164",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.257940488130544
+    },
+    {
+      "id": "walker-165",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.686425944499625
+    },
+    {
+      "id": "runner-166",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.51390839184166
+    },
+    {
+      "id": "tank-167",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.18732865262403
+    },
+    {
+      "id": "armored-168",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.429655633566846
+    },
+    {
+      "id": "brute-169",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.26195252423887
+    },
+    {
+      "id": "walker-170",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.707288532262915
+    },
+    {
+      "id": "runner-171",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.53477097960495
+    },
+    {
+      "id": "tank-172",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.208191240387315
+    },
+    {
+      "id": "armored-173",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.450518221330135
+    },
+    {
+      "id": "brute-174",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.282815112002154
+    },
+    {
+      "id": "walker-175",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.71130056837124
+    },
+    {
+      "id": "runner-176",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.53878301571328
+    },
+    {
+      "id": "tank-177",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.21220327649564
+    },
+    {
+      "id": "armored-178",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.454530257438456
+    },
+    {
+      "id": "brute-179",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.28682714811048
+    },
+    {
+      "id": "walker-180",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.73216315613453
+    },
+    {
+      "id": "runner-181",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.55964560347657
+    },
+    {
+      "id": "tank-182",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.23306586425893
+    },
+    {
+      "id": "armored-183",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.475392845201746
+    },
+    {
+      "id": "brute-184",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.30768973587377
+    },
+    {
+      "id": "walker-185",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.736175192242854
+    },
+    {
+      "id": "runner-186",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.56365763958489
+    },
+    {
+      "id": "tank-187",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.237077900367254
+    },
+    {
+      "id": "armored-188",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.47940488131007
+    },
+    {
+      "id": "brute-189",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.311701771982094
+    },
+    {
+      "id": "walker-190",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.757037780006144
+    },
+    {
+      "id": "runner-191",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.58452022734818
+    },
+    {
+      "id": "tank-192",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.257940488130544
+    },
+    {
+      "id": "armored-193",
+      "definitionId": "armored",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.50026746907336
+    },
+    {
+      "id": "brute-194",
+      "definitionId": "brute",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.33256435974538
+    },
+    {
+      "id": "walker-195",
+      "definitionId": "walker",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.76104981611447
+    },
+    {
+      "id": "runner-196",
+      "definitionId": "runner",
+      "clip": "walk",
+      "dying": false,
+      "time": 54.58853226345651
+    },
+    {
+      "id": "tank-197",
+      "definitionId": "tank",
+      "clip": "attack",
+      "dying": false,
+      "time": 54.26195252423887
+    },
+    {
+      "id": "charger_boss-198",
+      "definitionId": "charger_boss",
+      "clip": "attack",
+      "dying": false,
+      "time": 51.84952056168468
+    },
+    {
+      "id": "overlord_boss-199",
+      "definitionId": "overlord_boss",
+      "clip": "inspire",
+      "dying": false,
+      "time": 27.141591440990144
+    }
+  ],
+  "bossWarnings": [],
+  "inspired": [
+    "walker-0",
+    "runner-1",
+    "tank-2",
+    "armored-3",
+    "brute-4",
+    "walker-5",
+    "runner-6",
+    "tank-7",
+    "armored-8",
+    "brute-9",
+    "walker-10",
+    "runner-11",
+    "tank-12",
+    "armored-13",
+    "brute-14",
+    "walker-15",
+    "runner-16",
+    "tank-17",
+    "armored-18",
+    "brute-19",
+    "walker-20",
+    "runner-21",
+    "tank-22",
+    "armored-23",
+    "brute-24",
+    "walker-25",
+    "runner-26",
+    "tank-27",
+    "armored-28",
+    "brute-29",
+    "walker-30",
+    "runner-31",
+    "tank-32",
+    "armored-33",
+    "brute-34",
+    "walker-35",
+    "runner-36",
+    "tank-37",
+    "armored-38",
+    "brute-39",
+    "walker-40",
+    "runner-41",
+    "tank-42",
+    "armored-43",
+    "brute-44",
+    "walker-45",
+    "runner-46",
+    "tank-47",
+    "armored-48",
+    "brute-49",
+    "walker-50",
+    "runner-51",
+    "tank-52",
+    "armored-53",
+    "brute-54",
+    "walker-55",
+    "runner-56",
+    "tank-57",
+    "armored-58",
+    "brute-59",
+    "walker-60",
+    "runner-61",
+    "tank-62",
+    "armored-63",
+    "brute-64",
+    "walker-65",
+    "runner-66",
+    "tank-67",
+    "armored-68",
+    "brute-69",
+    "walker-70",
+    "runner-71",
+    "tank-72",
+    "armored-73",
+    "brute-74",
+    "walker-75",
+    "runner-76",
+    "tank-77",
+    "armored-78",
+    "brute-79",
+    "walker-80",
+    "runner-81",
+    "tank-82",
+    "armored-83",
+    "brute-84",
+    "walker-85",
+    "runner-86",
+    "tank-87",
+    "armored-88",
+    "brute-89",
+    "walker-90",
+    "runner-91",
+    "tank-92",
+    "armored-93",
+    "brute-94",
+    "walker-95",
+    "runner-96",
+    "tank-97",
+    "armored-98",
+    "brute-99",
+    "walker-100",
+    "runner-101",
+    "tank-102",
+    "armored-103",
+    "brute-104",
+    "walker-105",
+    "runner-106",
+    "tank-107",
+    "armored-108",
+    "brute-109",
+    "walker-110",
+    "runner-111",
+    "tank-112",
+    "armored-113",
+    "brute-114",
+    "walker-115",
+    "runner-116",
+    "tank-117",
+    "armored-118",
+    "brute-119",
+    "walker-120",
+    "runner-121",
+    "tank-122",
+    "armored-123",
+    "brute-124",
+    "walker-125",
+    "runner-126",
+    "tank-127",
+    "armored-128",
+    "brute-129",
+    "walker-130",
+    "runner-131",
+    "tank-132",
+    "armored-133",
+    "brute-134",
+    "walker-135",
+    "runner-136",
+    "tank-137",
+    "armored-138",
+    "brute-139",
+    "walker-140",
+    "runner-141",
+    "tank-142",
+    "armored-143",
+    "brute-144",
+    "walker-145",
+    "runner-146",
+    "tank-147",
+    "armored-148",
+    "brute-149",
+    "walker-150",
+    "runner-151",
+    "tank-152",
+    "armored-153",
+    "brute-154",
+    "walker-155",
+    "runner-156",
+    "tank-157",
+    "armored-158",
+    "brute-159",
+    "walker-160",
+    "runner-161",
+    "tank-162",
+    "armored-163",
+    "brute-164",
+    "walker-165",
+    "runner-166",
+    "tank-167",
+    "armored-168",
+    "brute-169",
+    "walker-170",
+    "runner-171",
+    "tank-172",
+    "armored-173",
+    "brute-174",
+    "walker-175",
+    "runner-176",
+    "tank-177",
+    "armored-178",
+    "brute-179",
+    "walker-180",
+    "runner-181",
+    "tank-182",
+    "armored-183",
+    "brute-184",
+    "walker-185",
+    "runner-186",
+    "tank-187",
+    "armored-188",
+    "brute-189",
+    "walker-190",
+    "runner-191",
+    "tank-192",
+    "armored-193",
+    "brute-194",
+    "walker-195",
+    "runner-196",
+    "tank-197",
+    "charger_boss-198"
+  ],
+  "inspireSource": "overlord_boss-199",
+  "arcane": {
+    "slowedIds": [
+      "brute-104"
+    ],
+    "chains": [
+      {
+        "buildingId": "growth-slot-r1-c5",
+        "targetIds": [
+          "brute-104",
+          "brute-109",
+          "brute-114"
+        ]
+      },
+      {
+        "buildingId": "growth-slot-r2-c5",
+        "targetIds": [
+          "brute-104",
+          "brute-109",
+          "brute-114"
+        ]
+      }
+    ],
+    "effects": 6
+  },
+  "quality": "standard",
+  "renderPixelRatio": 1.5,
+  "calls": 729,
+  "triangles": 3064866,
+  "geometries": 296,
+  "textures": 240,
+  "activeModels": 200,
+  "animationMixers": 201,
+  "effects": 65
+}

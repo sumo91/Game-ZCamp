@@ -1,0 +1,118 @@
+{
+  "app": {
+    "assetState": "ready",
+    "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "clockStep": "4880",
+    "commandHistory": "[{\"step\":1133,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":1133,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":1133,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":1133,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":4880,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":4880,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":4880,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_upgrade_discount\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":4880,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":4880,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"}]",
+    "openingCountdown": "0",
+    "phase": "TACTICAL_PAUSE",
+    "renderPixelRatio": "1.0000000298023224",
+    "selectedSlot": "slot-r1-c2"
+  },
+  "presentation": {
+    "calls": 129,
+    "effects": 1,
+    "enemies": [
+      {
+        "clip": "attack",
+        "dying": false,
+        "id": "walker-96",
+        "time": 21.404714142427505
+      },
+      {
+        "clip": "attack",
+        "dying": false,
+        "id": "walker-98",
+        "time": 21.13965229020415
+      },
+      {
+        "clip": "death",
+        "dying": true,
+        "id": "walker-104",
+        "time": 15.869709127382102
+      },
+      {
+        "clip": "attack",
+        "dying": false,
+        "id": "walker-106",
+        "time": 15.604647275158763
+      },
+      {
+        "clip": "attack",
+        "dying": false,
+        "id": "walker-108",
+        "time": 13.072918756268772
+      },
+      {
+        "clip": "attack",
+        "dying": false,
+        "id": "walker-110",
+        "time": 12.8247074557004
+      },
+      {
+        "clip": "attack",
+        "dying": false,
+        "id": "walker-112",
+        "time": 10.292978936810403
+      },
+      {
+        "clip": "attack",
+        "dying": false,
+        "id": "walker-114",
+        "time": 10.02791708458707
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-116",
+        "time": 7.496188565697075
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-118",
+        "time": 7.231126713473739
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-120",
+        "time": 4.71624874623871
+      },
+      {
+        "clip": "development",
+        "dying": false,
+        "id": "runner-121",
+        "time": 0
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-122",
+        "time": 4.317853560682042
+      },
+      {
+        "clip": "development",
+        "dying": false,
+        "id": "runner-123",
+        "time": 0
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-124",
+        "time": 1.7194583751253782
+      },
+      {
+        "clip": "walk",
+        "dying": false,
+        "id": "walker-125",
+        "time": 1.5202607823470426
+      }
+    ],
+    "geometries": 37,
+    "models": true,
+    "textures": 35,
+    "triangles": 460952
+  }
+}

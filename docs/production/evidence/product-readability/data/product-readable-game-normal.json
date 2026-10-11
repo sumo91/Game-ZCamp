@@ -1,0 +1,18 @@
+{
+  "before": {
+    "presentation": "{\"models\":true,\"enemies\":[],\"bossWarnings\":[],\"inspired\":[],\"inspireSource\":null,\"arcane\":{\"slowedIds\":[],\"chains\":[],\"effects\":0},\"quality\":\"standard\",\"renderPixelRatio\":1.5,\"calls\":40,\"triangles\":322482,\"geometries\":34,\"textures\":22,\"activeModels\":0,\"animationMixers\":1,\"effects\":0}",
+    "text": "第 1 波 / 10\n下一波 14 秒\n击退 27\n亡灵 0\n暂停\n画质·标准\n声音\n城墙 100/100\n护盾 100/100\n+\nLv.1\n+\nLv.1\n+\n+\n+\n+\n+\n+\n+\n+\n主城\n+\n+\n65\n+0.6/秒\n6.75\n箭塔 · Lv.1/5\n\n基础单体防御\n\n当前：伤害 7 · 间隔 1秒 · 射程 0.6\n\n下级：伤害 8.4 · 间隔 0.91秒 · 射程 0.6 · 可升级\n\n升级后选择词条\n\n升级至 Lv.2｜木材 50\n改造 · 金币 10\n拆除",
+    "url": "http://127.0.0.1:5360/Game-ZCamp/"
+  },
+  "paused": {
+    "presentation": "{\"models\":true,\"enemies\":[],\"bossWarnings\":[],\"inspired\":[],\"inspireSource\":null,\"arcane\":{\"slowedIds\":[],\"chains\":[],\"effects\":0},\"quality\":\"standard\",\"renderPixelRatio\":1.5,\"calls\":40,\"triangles\":322482,\"geometries\":34,\"textures\":22,\"activeModels\":0,\"animationMixers\":1,\"effects\":0}",
+    "rect": {
+      "height": 720,
+      "width": 405,
+      "x": 437.5,
+      "y": 0
+    },
+    "text": "第 1 波 / 10\n下一波 14 秒\n战术暂停\n亡灵 0\n继续\n画质·标准\n声音\n城墙 100/100\n护盾 100/100\n+\nLv.1\n+\nLv.1\n+\n+\n+\n+\n+\n+\n+\n+\n主城\n+\n+\n65\n+0.6/秒\n6.75\n箭塔 · Lv.1/5\n\n基础单体防御\n\n当前：伤害 7 · 间隔 1秒 · 射程 0.6\n\n下级：伤害 8.4 · 间隔 0.91秒 · 射程 0.6 · 可升级\n\n升级后选择词条\n\n升级至 Lv.2｜木材 50\n改造 · 金币 10\n拆除",
+    "url": "http://127.0.0.1:5360/Game-ZCamp/"
+  }
+}

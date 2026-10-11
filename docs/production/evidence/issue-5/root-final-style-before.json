@@ -1,0 +1,12 @@
+{
+  "appTouchAction": "pan-y",
+  "canvasTouchAction": "pan-y",
+  "clientHeight": 640,
+  "overflowY": "auto",
+  "scrollHeight": 1903,
+  "scrollTop": 0,
+  "viewport": [
+    360,
+    640
+  ]
+}

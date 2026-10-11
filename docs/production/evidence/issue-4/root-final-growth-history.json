@@ -1,0 +1,272 @@
+[
+  {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "3527",
+      "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"resume\"},\"accepted\":true}]",
+      "openingCountdown": "0",
+      "phase": "RUNNING",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": "slot-r1-c3"
+    },
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 20 · +4.5/秒金币 18\n      城墙 100 / 100护盾 100 / 100\n      波次 2 / 10 · 敌人 0下一波 8 秒\n    ",
+    "slots": [
+      {
+        "label": "1·1",
+        "level": "",
+        "slot": "slot-r1-c1"
+      },
+      {
+        "label": "木材厂 Lv.3",
+        "level": "3",
+        "slot": "slot-r1-c2"
+      },
+      {
+        "label": "箭塔 Lv.2",
+        "level": "2",
+        "slot": "slot-r1-c3"
+      },
+      {
+        "label": "1·4",
+        "level": "",
+        "slot": "slot-r1-c4"
+      },
+      {
+        "label": "1·5",
+        "level": "",
+        "slot": "slot-r1-c5"
+      },
+      {
+        "label": "2·1",
+        "level": "",
+        "slot": "slot-r2-c1"
+      },
+      {
+        "label": "2·2",
+        "level": "",
+        "slot": "slot-r2-c2"
+      },
+      {
+        "label": "2·3",
+        "level": "",
+        "slot": "slot-r2-c3"
+      },
+      {
+        "label": "2·4",
+        "level": "",
+        "slot": "slot-r2-c4"
+      },
+      {
+        "label": "2·5",
+        "level": "",
+        "slot": "slot-r2-c5"
+      },
+      {
+        "label": "3·1",
+        "level": "",
+        "slot": "slot-r3-c1"
+      },
+      {
+        "label": "3·2",
+        "level": "",
+        "slot": "slot-r3-c2"
+      },
+      {
+        "label": "主城",
+        "level": "1",
+        "slot": "slot-r3-c3"
+      },
+      {
+        "label": "3·4",
+        "level": "",
+        "slot": "slot-r3-c4"
+      },
+      {
+        "label": "3·5",
+        "level": "",
+        "slot": "slot-r3-c5"
+      }
+    ]
+  },
+  {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "5340",
+      "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+      "openingCountdown": "0",
+      "phase": "TACTICAL_PAUSE",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": "slot-r1-c3"
+    },
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 223 · +4.5/秒金币 35\n      城墙 85 / 100护盾 0 / 100\n      波次 3 / 10 · 敌人 0下一波 8 秒\n    ",
+    "slots": [
+      {
+        "label": "1·1",
+        "level": "",
+        "slot": "slot-r1-c1"
+      },
+      {
+        "label": "木材厂 Lv.3",
+        "level": "3",
+        "slot": "slot-r1-c2"
+      },
+      {
+        "label": "箭塔 Lv.3",
+        "level": "3",
+        "slot": "slot-r1-c3"
+      },
+      {
+        "label": "1·4",
+        "level": "",
+        "slot": "slot-r1-c4"
+      },
+      {
+        "label": "1·5",
+        "level": "",
+        "slot": "slot-r1-c5"
+      },
+      {
+        "label": "2·1",
+        "level": "",
+        "slot": "slot-r2-c1"
+      },
+      {
+        "label": "2·2",
+        "level": "",
+        "slot": "slot-r2-c2"
+      },
+      {
+        "label": "2·3",
+        "level": "",
+        "slot": "slot-r2-c3"
+      },
+      {
+        "label": "2·4",
+        "level": "",
+        "slot": "slot-r2-c4"
+      },
+      {
+        "label": "2·5",
+        "level": "",
+        "slot": "slot-r2-c5"
+      },
+      {
+        "label": "3·1",
+        "level": "",
+        "slot": "slot-r3-c1"
+      },
+      {
+        "label": "3·2",
+        "level": "",
+        "slot": "slot-r3-c2"
+      },
+      {
+        "label": "主城",
+        "level": "1",
+        "slot": "slot-r3-c3"
+      },
+      {
+        "label": "3·4",
+        "level": "",
+        "slot": "slot-r3-c4"
+      },
+      {
+        "label": "3·5",
+        "level": "",
+        "slot": "slot-r3-c5"
+      }
+    ]
+  },
+  {
+    "app": {
+      "assetState": "ready",
+      "browserUserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+      "clockStep": "7246",
+      "commandHistory": "[{\"step\":711,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c2\",\"definitionId\":\"lumberyard\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":711,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c3\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":711,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2011,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":2020,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":2020,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":3519,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":3519,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":5340,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":5340,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_output\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":5340,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c4\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c4\"},{\"step\":5340,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":7246,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c2\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c2\",\"traitDefinitionId\":\"lumber_flat\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c2\"},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_damage\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"upgrade_building\",\"buildingId\":\"growth-slot-r1-c3\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"},{\"step\":7246,\"command\":{\"type\":\"choose_building_trait\",\"buildingId\":\"growth-slot-r1-c3\",\"traitDefinitionId\":\"tower_attack_speed\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c3\"}]",
+      "openingCountdown": "0",
+      "phase": "TACTICAL_PAUSE",
+      "renderPixelRatio": "1.5",
+      "selectedSlot": "slot-r1-c3"
+    },
+    "hud": "\n      精修美术样板 · 部分覆盖原版入口\n      木材 44 · +10.2/秒金币 59\n      城墙 85 / 100护盾 0 / 100\n      波次 4 / 10 · 敌人 0下一波 4 秒\n    ",
+    "slots": [
+      {
+        "label": "1·1",
+        "level": "",
+        "slot": "slot-r1-c1"
+      },
+      {
+        "label": "木材厂 Lv.5",
+        "level": "5",
+        "slot": "slot-r1-c2"
+      },
+      {
+        "label": "箭塔 Lv.5",
+        "level": "5",
+        "slot": "slot-r1-c3"
+      },
+      {
+        "label": "箭塔 Lv.1",
+        "level": "1",
+        "slot": "slot-r1-c4"
+      },
+      {
+        "label": "1·5",
+        "level": "",
+        "slot": "slot-r1-c5"
+      },
+      {
+        "label": "2·1",
+        "level": "",
+        "slot": "slot-r2-c1"
+      },
+      {
+        "label": "2·2",
+        "level": "",
+        "slot": "slot-r2-c2"
+      },
+      {
+        "label": "2·3",
+        "level": "",
+        "slot": "slot-r2-c3"
+      },
+      {
+        "label": "2·4",
+        "level": "",
+        "slot": "slot-r2-c4"
+      },
+      {
+        "label": "2·5",
+        "level": "",
+        "slot": "slot-r2-c5"
+      },
+      {
+        "label": "3·1",
+        "level": "",
+        "slot": "slot-r3-c1"
+      },
+      {
+        "label": "3·2",
+        "level": "",
+        "slot": "slot-r3-c2"
+      },
+      {
+        "label": "主城",
+        "level": "1",
+        "slot": "slot-r3-c3"
+      },
+      {
+        "label": "3·4",
+        "level": "",
+        "slot": "slot-r3-c4"
+      },
+      {
+        "label": "3·5",
+        "level": "",
+        "slot": "slot-r3-c5"
+      }
+    ]
+  }
+]

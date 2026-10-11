@@ -1,0 +1,250 @@
+[
+  {
+    "asset": "arrow_tower_low",
+    "before": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 1024,
+        "height": 1024,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ],
+    "after": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 1024,
+        "height": 1024,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ]
+  },
+  {
+    "asset": "arrow_tower_medium",
+    "before": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 1024,
+        "height": 1024,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ],
+    "after": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 1024,
+        "height": 1024,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ]
+  },
+  {
+    "asset": "arrow_tower_high",
+    "before": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 1024,
+        "height": 1024,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ],
+    "after": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 1024,
+        "height": 1024,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ]
+  },
+  {
+    "asset": "lumberyard_low",
+    "before": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ],
+    "after": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ]
+  },
+  {
+    "asset": "lumberyard_medium",
+    "before": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ],
+    "after": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ]
+  },
+  {
+    "asset": "lumberyard_high",
+    "before": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ],
+    "after": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ]
+  },
+  {
+    "asset": "main_city",
+    "before": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ],
+    "after": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ]
+  },
+  {
+    "asset": "skeleton_infantry",
+    "before": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ],
+    "after": [
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      },
+      {
+        "width": 512,
+        "height": 512,
+        "bitDepth": 8,
+        "colorType": 2
+      }
+    ]
+  }
+]

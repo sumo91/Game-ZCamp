@@ -1,0 +1,322 @@
+{
+  "baseline": "e7c8eede157a8639dc11cd113f028049b3a691e5",
+  "codeHead": "cc7b6fd460ad9df599da896bcf0ab7ba5340d483",
+  "sources": [
+    "06ebdb75ec0c45974a11692531753a97c8f39edf",
+    "3811111d6c7abc12f6856103b8dc97e6fbb296c0",
+    "215fbd9a1a04fdd0f85d7034ff2ec3ff9428f9b4"
+  ],
+  "copies": [
+    {
+      "externalRelativePath": "product-readability-standards-review.md",
+      "repositoryPath": "docs/production/evidence/product-readability/standards-review.md",
+      "originalBytes": 2096,
+      "copyBytes": 2096,
+      "originalSha256": "a3baa4aa13ddb2b37b9d17d2f1c3e50ffa62c57244b2d198171995cb97752b51",
+      "copySha256": "a3baa4aa13ddb2b37b9d17d2f1c3e50ffa62c57244b2d198171995cb97752b51",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readability-spec-review.md",
+      "repositoryPath": "docs/production/evidence/product-readability/spec-review.md",
+      "originalBytes": 3036,
+      "copyBytes": 3033,
+      "originalSha256": "9920a25dade582babfb43f824dbb45d3bfc2ceb10d027ff665a9b3faf7ac5b74",
+      "copySha256": "8df3d2e4116cd52f953d7b0ceefdcc5858ca649426140a230fa14756a5568a52",
+      "byteIdentical": false,
+      "normalization": "CRLF to LF; terminal extra blank line removed only, words/findings unchanged; original untouched"
+    },
+    {
+      "externalRelativePath": "product-readability-root-ui.md",
+      "repositoryPath": "docs/production/evidence/product-readability/root-review.md",
+      "originalBytes": 2934,
+      "copyBytes": 2934,
+      "originalSha256": "58ca34af5590c57c4db32634aa026d5189175d44437891cbf31ac4604309a0f3",
+      "copySha256": "58ca34af5590c57c4db32634aa026d5189175d44437891cbf31ac4604309a0f3",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-siege-readability-delivery.md",
+      "repositoryPath": "docs/production/evidence/product-readability/siege-author-delivery.md",
+      "originalBytes": 3954,
+      "copyBytes": 3954,
+      "originalSha256": "93c617944e52d5c42408279e0b1c6ad58dee4e1564a616e0be4c0621835d4527",
+      "copySha256": "93c617944e52d5c42408279e0b1c6ad58dee4e1564a616e0be4c0621835d4527",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-arcane-readability-delivery.md",
+      "repositoryPath": "docs/production/evidence/product-readability/arcane-author-delivery.md",
+      "originalBytes": 3851,
+      "copyBytes": 3851,
+      "originalSha256": "46db4267951530b190be1abbb80001055261aaef11382c8472f2d7cf661b61a3",
+      "copySha256": "46db4267951530b190be1abbb80001055261aaef11382c8472f2d7cf661b61a3",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-battle-scenery-delivery.md",
+      "repositoryPath": "docs/production/evidence/product-readability/scenery-author-delivery.md",
+      "originalBytes": 4730,
+      "copyBytes": 4730,
+      "originalSha256": "d17d8cca7fa120aa118c81690c5485698f56299129acf0e9a89520a9895f251b",
+      "copySha256": "d17d8cca7fa120aa118c81690c5485698f56299129acf0e9a89520a9895f251b",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readability-integration-check.log",
+      "repositoryPath": "docs/production/evidence/product-readability/integration-check.log",
+      "originalBytes": 2448,
+      "copyBytes": 2448,
+      "originalSha256": "e4288aadfcd3dfd7b771cbb06e77001698a4919a05bac8bbb8ad7bd843ab3442",
+      "copySha256": "e4288aadfcd3dfd7b771cbb06e77001698a4919a05bac8bbb8ad7bd843ab3442",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readability-integration-build.log",
+      "repositoryPath": "docs/production/evidence/product-readability/integration-build.log",
+      "originalBytes": 2905,
+      "copyBytes": 2905,
+      "originalSha256": "7baa294e86ae5a916677b7d1be18463aa2d9697f108146c2549ed459dc83e562",
+      "copySha256": "7baa294e86ae5a916677b7d1be18463aa2d9697f108146c2549ed459dc83e562",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readability-integration-verification.json",
+      "repositoryPath": "docs/production/evidence/product-readability/integration-verification.json",
+      "originalBytes": 291,
+      "copyBytes": 291,
+      "originalSha256": "fbaef32e8cfeeafa54b7eedc3833b307c558790fa1d0250324c0d8045b68abf1",
+      "copySha256": "fbaef32e8cfeeafa54b7eedc3833b307c558790fa1d0250324c0d8045b68abf1",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-frozen-dist-audit.json",
+      "repositoryPath": "docs/production/evidence/product-readability/frozen-dist-audit.json",
+      "originalBytes": 8608,
+      "copyBytes": 8608,
+      "originalSha256": "bbf17204aadc60ec7d1af0bab1961dd587ca00e65ec3322c3174d4f6ebca3396",
+      "copySha256": "bbf17204aadc60ec7d1af0bab1961dd587ca00e65ec3322c3174d4f6ebca3396",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-arcane-readable-standard.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-arcane-readable-standard.jpg",
+      "originalBytes": 48357,
+      "copyBytes": 48357,
+      "originalSha256": "43bdcbfee7089596de385abb4dc992a24ba18f660864e3b869b4ab149bba42c5",
+      "copySha256": "43bdcbfee7089596de385abb4dc992a24ba18f660864e3b869b4ab149bba42c5",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-arcane-readable-standard.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-arcane-readable-standard.json",
+      "originalBytes": 3406,
+      "copyBytes": 3406,
+      "originalSha256": "f01c718cd2c5f053049d58879745063c86a2a1f0e1b439bc04ef92e4696ef2e0",
+      "copySha256": "f01c718cd2c5f053049d58879745063c86a2a1f0e1b439bc04ef92e4696ef2e0",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-arcane-readable-low.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-arcane-readable-low.jpg",
+      "originalBytes": 45936,
+      "copyBytes": 45936,
+      "originalSha256": "1a5040ad0a1e3ed117ecf268713b4130d3ab9ca4a37f59c81b62a7ab134f5320",
+      "copySha256": "1a5040ad0a1e3ed117ecf268713b4130d3ab9ca4a37f59c81b62a7ab134f5320",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-arcane-readable-low.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-arcane-readable-low.json",
+      "originalBytes": 3318,
+      "copyBytes": 3318,
+      "originalSha256": "7d7aa93ec8eb3f72b0c10f82355e3cd00bb2b652af05a5fdb8fe88dba1aa46b2",
+      "copySha256": "7d7aa93ec8eb3f72b0c10f82355e3cd00bb2b652af05a5fdb8fe88dba1aa46b2",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-siege-readable-live-1.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-siege-readable-live-1.jpg",
+      "originalBytes": 62195,
+      "copyBytes": 62195,
+      "originalSha256": "3291adc62854c0cfbda3bf499f2753d360982ce65282dd2b0a85e12bab4c7089",
+      "copySha256": "3291adc62854c0cfbda3bf499f2753d360982ce65282dd2b0a85e12bab4c7089",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-siege-readable-live-3.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-siege-readable-live-3.jpg",
+      "originalBytes": 61927,
+      "copyBytes": 61927,
+      "originalSha256": "be88ef79fcc36805a35440036747850aa4ef056d0854f6d5315a7c068f3b83ac",
+      "copySha256": "be88ef79fcc36805a35440036747850aa4ef056d0854f6d5315a7c068f3b83ac",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-siege-readable-paused.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-siege-readable-paused.jpg",
+      "originalBytes": 64389,
+      "copyBytes": 64389,
+      "originalSha256": "1fdf63e6f93013d6d9cb0f8bc7cd496dbec5b2610a316f2ce40d1d1f4984c252",
+      "copySha256": "1fdf63e6f93013d6d9cb0f8bc7cd496dbec5b2610a316f2ce40d1d1f4984c252",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-siege-readable-current.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-siege-readable-current.json",
+      "originalBytes": 13844,
+      "copyBytes": 13844,
+      "originalSha256": "fcad35b0798d3fdc7fb7cd8eccc19600f90f34d0cf8c1a7da52aabeac7633f09",
+      "copySha256": "fcad35b0798d3fdc7fb7cd8eccc19600f90f34d0cf8c1a7da52aabeac7633f09",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-scenery-standard.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-scenery-standard.jpg",
+      "originalBytes": 46712,
+      "copyBytes": 46712,
+      "originalSha256": "22808003d08f52b6020d1582f4fcff6b53dd96c2c84c6535a262f3418fc875be",
+      "copySha256": "22808003d08f52b6020d1582f4fcff6b53dd96c2c84c6535a262f3418fc875be",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-scenery-low.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-scenery-low.jpg",
+      "originalBytes": 40530,
+      "copyBytes": 40530,
+      "originalSha256": "423f35a37c9126c39158c23e32505093366d7c01231d4e08205853ce961efd0a",
+      "copySha256": "423f35a37c9126c39158c23e32505093366d7c01231d4e08205853ce961efd0a",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-scenery-restored-standard.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-scenery-restored-standard.jpg",
+      "originalBytes": 46712,
+      "copyBytes": 46712,
+      "originalSha256": "22808003d08f52b6020d1582f4fcff6b53dd96c2c84c6535a262f3418fc875be",
+      "copySha256": "22808003d08f52b6020d1582f4fcff6b53dd96c2c84c6535a262f3418fc875be",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-normal.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-normal.jpg",
+      "originalBytes": 44235,
+      "copyBytes": 44235,
+      "originalSha256": "ce4390e85e003e9639e943378aba28f8bb7f9ef10a57f4361ffbcbad3d7552bb",
+      "copySha256": "ce4390e85e003e9639e943378aba28f8bb7f9ef10a57f4361ffbcbad3d7552bb",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-normal.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-normal.json",
+      "originalBytes": 1824,
+      "copyBytes": 1824,
+      "originalSha256": "fd433d44de1880be285547d7aa38bd70db25437a3e34429b463c030b7917d6dd",
+      "copySha256": "fd433d44de1880be285547d7aa38bd70db25437a3e34429b463c030b7917d6dd",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-arcane.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-arcane.jpg",
+      "originalBytes": 54738,
+      "copyBytes": 54738,
+      "originalSha256": "4e1e9ac596358f9ed9520a494a7643a51541c5292f6a7eab9af9c66c72e1d511",
+      "copySha256": "4e1e9ac596358f9ed9520a494a7643a51541c5292f6a7eab9af9c66c72e1d511",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-arcane.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-arcane.json",
+      "originalBytes": 4093,
+      "copyBytes": 4093,
+      "originalSha256": "9e6d4d94568452d0b3fe1e8d838e1463ff4f2d7648ccfcb0856f3204d86947c6",
+      "copySha256": "9e6d4d94568452d0b3fe1e8d838e1463ff4f2d7648ccfcb0856f3204d86947c6",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-arcane-low.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-arcane-low.jpg",
+      "originalBytes": 47761,
+      "copyBytes": 47761,
+      "originalSha256": "5711660007ca4019605b03bcceec761b7cc5ec4afdb6053b7ffee11cc3f3b57a",
+      "copySha256": "5711660007ca4019605b03bcceec761b7cc5ec4afdb6053b7ffee11cc3f3b57a",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-arcane-low.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-arcane-low.json",
+      "originalBytes": 4005,
+      "copyBytes": 4005,
+      "originalSha256": "d60be1ec8baf8a51e10f99d3c301ac163a76ea760c139337b9fb2bb7e9181c56",
+      "copySha256": "d60be1ec8baf8a51e10f99d3c301ac163a76ea760c139337b9fb2bb7e9181c56",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-root-ui.md",
+      "repositoryPath": "docs/production/evidence/product-readability/integration-root-review.md",
+      "originalBytes": 1394,
+      "copyBytes": 1394,
+      "originalSha256": "2a30970c6c89036cfb8b1aedca37fdc8007ab2502ba9c342d347da6f4f223d57",
+      "copySha256": "2a30970c6c89036cfb8b1aedca37fdc8007ab2502ba9c342d347da6f4f223d57",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-pause-audit.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-pause-audit.json",
+      "originalBytes": 158,
+      "copyBytes": 158,
+      "originalSha256": "58fc450d8628783cdbfc7f1a6bc0f31412f2839a1d46451e26e43a3622a32911",
+      "copySha256": "58fc450d8628783cdbfc7f1a6bc0f31412f2839a1d46451e26e43a3622a32911",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-normal-special.jpg",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-normal-special.jpg",
+      "originalBytes": 44958,
+      "copyBytes": 44958,
+      "originalSha256": "ec2ae695f826ff1050c8a1fc5e268bb1a131da1811f83a6fc40a22c8bca308ef",
+      "copySha256": "ec2ae695f826ff1050c8a1fc5e268bb1a131da1811f83a6fc40a22c8bca308ef",
+      "byteIdentical": true,
+      "normalization": "none"
+    },
+    {
+      "externalRelativePath": "product-readable-game-normal-special.json",
+      "repositoryPath": "docs/production/evidence/product-readability/data/product-readable-game-normal-special.json",
+      "originalBytes": 1637,
+      "copyBytes": 1637,
+      "originalSha256": "fbcbc5e7e68d19347265b75fe1d8673fd84bdc53d4c30f5574804a9e5ac80ca1",
+      "copySha256": "fbcbc5e7e68d19347265b75fe1d8673fd84bdc53d4c30f5574804a9e5ac80ca1",
+      "byteIdentical": true,
+      "normalization": "none"
+    }
+  ],
+  "note": "30 byte-exact worktree copies and one Spec terminal-whitespace-only exception authorized by coordinator; external originals unchanged. Existing Git line-ending configuration is not modified. The known live-2 empty-read image is intentionally excluded. Screenshot names and effects counts do not establish cannon arc/explosion visibility. Final four ordinary-campaign/pause records were supplied after the first evidence commit, with no code change."
+}

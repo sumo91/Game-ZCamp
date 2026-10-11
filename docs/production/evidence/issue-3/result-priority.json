@@ -1,0 +1,59 @@
+{
+  "inert": [
+    true,
+    true,
+    true
+  ],
+  "journal": [
+    {
+      "accepted": true,
+      "command": {
+        "type": "pause"
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "buildingId": "growth-slot-r1-c1",
+      "command": {
+        "definitionId": "arrow_tower",
+        "slotId": "slot-r1-c1",
+        "type": "build_building"
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "buildingId": "growth-slot-r1-c1",
+      "command": {
+        "buildingId": "growth-slot-r1-c1",
+        "type": "upgrade_building"
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "buildingId": "growth-slot-r1-c1",
+      "command": {
+        "buildingId": "growth-slot-r1-c1",
+        "traitDefinitionId": "tower_range",
+        "type": "choose_building_trait"
+      },
+      "step": 3
+    },
+    {
+      "accepted": true,
+      "command": {
+        "type": "resume"
+      },
+      "step": 3
+    }
+  ],
+  "pauseDisabled": true,
+  "phase": "DEFEAT",
+  "slotEnabled": 0,
+  "viewport": {
+    "height": 720,
+    "width": 1280
+  }
+}

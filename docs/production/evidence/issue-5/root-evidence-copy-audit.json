@@ -1,0 +1,244 @@
+{
+  "sourceCandidate": "d26b800a5b4a92200ecda0c613c97d98f716f896",
+  "boundary": "Original root download/screenshot/review/audit files copied byte-for-byte. Long measurements retain the original fixed candidate identity.",
+  "files": [
+    {
+      "file": "root-100-standard-60-no-in-run-response.json",
+      "bytes": 206555,
+      "sourceSha256": "1118DDBD8727ED83E14F9423A9111745214D938E320DD9850D3544B6582E553E",
+      "committedCopySha256": "1118DDBD8727ED83E14F9423A9111745214D938E320DD9850D3544B6582E553E",
+      "identical": true
+    },
+    {
+      "file": "root-100-standard-60.json",
+      "bytes": 207468,
+      "sourceSha256": "48B12F0AE953CBB21A8F837CDAA1A559EC6A96D73432DDA07A487701E7744D19",
+      "committedCopySha256": "48B12F0AE953CBB21A8F837CDAA1A559EC6A96D73432DDA07A487701E7744D19",
+      "identical": true
+    },
+    {
+      "file": "root-100-standard-complete.jpg",
+      "bytes": 98697,
+      "sourceSha256": "458527A282C81B66608C022513461FC9821FD072EAEF0632BE59C8A0A2FED752",
+      "committedCopySha256": "458527A282C81B66608C022513461FC9821FD072EAEF0632BE59C8A0A2FED752",
+      "identical": true
+    },
+    {
+      "file": "root-100-standard-response.jpg",
+      "bytes": 117739,
+      "sourceSha256": "EB2976659B4CA2DD102B4C5B61CC15A7AC3974987720B23E35364977C1D42E4F",
+      "committedCopySha256": "EB2976659B4CA2DD102B4C5B61CC15A7AC3974987720B23E35364977C1D42E4F",
+      "identical": true
+    },
+    {
+      "file": "root-100-standard-start.jpg",
+      "bytes": 98045,
+      "sourceSha256": "085AE8FFF14563E06ECDAC406663B1A54ECBC5A328DDD7F360DA54137B8917CD",
+      "committedCopySha256": "085AE8FFF14563E06ECDAC406663B1A54ECBC5A328DDD7F360DA54137B8917CD",
+      "identical": true
+    },
+    {
+      "file": "root-200-standard-300.json",
+      "bytes": 888918,
+      "sourceSha256": "AEBBF6CD3E47C32A0895145F6EEAC33B5F1AC43E6556B521D7144E2547D15B52",
+      "committedCopySha256": "AEBBF6CD3E47C32A0895145F6EEAC33B5F1AC43E6556B521D7144E2547D15B52",
+      "identical": true
+    },
+    {
+      "file": "root-200-standard-complete.jpg",
+      "bytes": 98948,
+      "sourceSha256": "6534D0FB6F47C67ABCC8505B07BA29790085B338A0F11A2A7213FDBE33A11FC6",
+      "committedCopySha256": "6534D0FB6F47C67ABCC8505B07BA29790085B338A0F11A2A7213FDBE33A11FC6",
+      "identical": true
+    },
+    {
+      "file": "root-200-standard-mid.json",
+      "bytes": 337,
+      "sourceSha256": "82D06D035354BEF9DAEAD714D33242F9ED37034CFBA732B651EC5FAAFD494B15",
+      "committedCopySha256": "82D06D035354BEF9DAEAD714D33242F9ED37034CFBA732B651EC5FAAFD494B15",
+      "identical": true
+    },
+    {
+      "file": "root-200-standard-response-early.jpg",
+      "bytes": 103564,
+      "sourceSha256": "03D477B78DD93E1F54DDBED530A1BC4AD6C1D0D15A2A14025A5128B1500BC998",
+      "committedCopySha256": "03D477B78DD93E1F54DDBED530A1BC4AD6C1D0D15A2A14025A5128B1500BC998",
+      "identical": true
+    },
+    {
+      "file": "root-200-standard-response-mid.jpg",
+      "bytes": 103507,
+      "sourceSha256": "53775385639FE5ADB0176AE673078C79367BED5BEC075D998B505683656B4FF6",
+      "committedCopySha256": "53775385639FE5ADB0176AE673078C79367BED5BEC075D998B505683656B4FF6",
+      "identical": true
+    },
+    {
+      "file": "root-200-standard-start.jpg",
+      "bytes": 119435,
+      "sourceSha256": "4A1FCCFCCDB537333576FCC99F9A72FC293C368D26EFC8A00C56E86C32D2E417",
+      "committedCopySha256": "4A1FCCFCCDB537333576FCC99F9A72FC293C368D26EFC8A00C56E86C32D2E417",
+      "identical": true
+    },
+    {
+      "file": "root-300-standard-60.json",
+      "bytes": 288125,
+      "sourceSha256": "F4B9CA25AEDE9370B7CE63E06080EAFCC40884705DB7AB415D1BBE90FF94ACAE",
+      "committedCopySha256": "F4B9CA25AEDE9370B7CE63E06080EAFCC40884705DB7AB415D1BBE90FF94ACAE",
+      "identical": true
+    },
+    {
+      "file": "root-300-standard-complete.jpg",
+      "bytes": 98739,
+      "sourceSha256": "AB5697C4C6F3CC2AB6247B328899524296E2F3C082FC7397347740618B437CC4",
+      "committedCopySha256": "AB5697C4C6F3CC2AB6247B328899524296E2F3C082FC7397347740618B437CC4",
+      "identical": true
+    },
+    {
+      "file": "root-300-standard-response.jpg",
+      "bytes": 104081,
+      "sourceSha256": "732005EB0AA234E22AA1E0B2B3AB0B88C2CB7E40308377E0BDB387D96704B09F",
+      "committedCopySha256": "732005EB0AA234E22AA1E0B2B3AB0B88C2CB7E40308377E0BDB387D96704B09F",
+      "identical": true
+    },
+    {
+      "file": "root-300-standard-start.jpg",
+      "bytes": 122289,
+      "sourceSha256": "3F1453867F798251D34FC12A2CA503ECDACE2BA48DC71996E5D9201C67BF0407",
+      "committedCopySha256": "3F1453867F798251D34FC12A2CA503ECDACE2BA48DC71996E5D9201C67BF0407",
+      "identical": true
+    },
+    {
+      "file": "root-360-reduced-layout.jpg",
+      "bytes": 36369,
+      "sourceSha256": "CCC8C524771D956CC989FFF8CBECC68F3929AC897FF64FECC3F5B3152ACB8B5D",
+      "committedCopySha256": "CCC8C524771D956CC989FFF8CBECC68F3929AC897FF64FECC3F5B3152ACB8B5D",
+      "identical": true
+    },
+    {
+      "file": "root-360-reduced-layout.json",
+      "bytes": 38967,
+      "sourceSha256": "5E1952E973845A2C4A4A3620F06899DCF0E8EF2317139A2B5D442C62D847C581",
+      "committedCopySha256": "5E1952E973845A2C4A4A3620F06899DCF0E8EF2317139A2B5D442C62D847C581",
+      "identical": true
+    },
+    {
+      "file": "root-360-reduced-manual-stop.json",
+      "bytes": 117773,
+      "sourceSha256": "31097472ACC22FADE27B822CD26C18E1F8376A3C9E41FB6EAC00E0520C32FF85",
+      "committedCopySha256": "31097472ACC22FADE27B822CD26C18E1F8376A3C9E41FB6EAC00E0520C32FF85",
+      "identical": true
+    },
+    {
+      "file": "root-390-resize-interrupted.json",
+      "bytes": 90762,
+      "sourceSha256": "45CC66B1BD6A49DE377C94469FCE4F5E2D253BAB1A15E472E586724D99F72723",
+      "committedCopySha256": "45CC66B1BD6A49DE377C94469FCE4F5E2D253BAB1A15E472E586724D99F72723",
+      "identical": true
+    },
+    {
+      "file": "root-390-retry-layout.jpg",
+      "bytes": 62711,
+      "sourceSha256": "1EA137FF518A6800F23A4DA02E6ACE8F40B46BFB644F917C7D08C800310F00F5",
+      "committedCopySha256": "1EA137FF518A6800F23A4DA02E6ACE8F40B46BFB644F917C7D08C800310F00F5",
+      "identical": true
+    },
+    {
+      "file": "root-390-retry-layout.json",
+      "bytes": 22133,
+      "sourceSha256": "FA27CDA09A4AE186BC2045A3E7B34AFB575AA1BDC9780DF634624D878D6B710A",
+      "committedCopySha256": "FA27CDA09A4AE186BC2045A3E7B34AFB575AA1BDC9780DF634624D878D6B710A",
+      "identical": true
+    },
+    {
+      "file": "root-720-layout.jpg",
+      "bytes": 113735,
+      "sourceSha256": "554527E23AD00A146280CD8034A42FCCE8A796A423E11B4060B04AFBE6CD14D7",
+      "committedCopySha256": "554527E23AD00A146280CD8034A42FCCE8A796A423E11B4060B04AFBE6CD14D7",
+      "identical": true
+    },
+    {
+      "file": "root-720-layout.json",
+      "bytes": 40940,
+      "sourceSha256": "FE56BDB72D99D11AC6CA632F2EDBBE349F5600C690C4CB26C7ACB89D82158D78",
+      "committedCopySha256": "FE56BDB72D99D11AC6CA632F2EDBBE349F5600C690C4CB26C7ACB89D82158D78",
+      "identical": true
+    },
+    {
+      "file": "root-background-probe-manual-stop.json",
+      "bytes": 170445,
+      "sourceSha256": "2F35030959DB6D78AD8667CFB72B5E34A393CC955F11459CF20CDA49CAA018BB",
+      "committedCopySha256": "2F35030959DB6D78AD8667CFB72B5E34A393CC955F11459CF20CDA49CAA018BB",
+      "identical": true
+    },
+    {
+      "file": "root-background-probe.json",
+      "bytes": 104,
+      "sourceSha256": "DB997EA69935F454BE1150D743A76D4A55054D735705493F88F833209982573D",
+      "committedCopySha256": "DB997EA69935F454BE1150D743A76D4A55054D735705493F88F833209982573D",
+      "identical": true
+    },
+    {
+      "file": "root-copy-result.json",
+      "bytes": 119,
+      "sourceSha256": "A71F22792138DA91F8D64AB27FBF386DC8EBA40954DF87DF66318CDA63609CBB",
+      "committedCopySha256": "A71F22792138DA91F8D64AB27FBF386DC8EBA40954DF87DF66318CDA63609CBB",
+      "identical": true
+    },
+    {
+      "file": "root-independent-review.md",
+      "bytes": 5069,
+      "sourceSha256": "463034464691219ECFDBEC81ECD5CC2D516A26D2DD570EF69794208ADFBF7A0C",
+      "committedCopySha256": "463034464691219ECFDBEC81ECD5CC2D516A26D2DD570EF69794208ADFBF7A0C",
+      "identical": true
+    },
+    {
+      "file": "root-loading-failed.jpg",
+      "bytes": 21533,
+      "sourceSha256": "D863F269650257E605ECC6CE3844ACE276DCBC0956AA1182127FC6B55D18C854",
+      "committedCopySha256": "D863F269650257E605ECC6CE3844ACE276DCBC0956AA1182127FC6B55D18C854",
+      "identical": true
+    },
+    {
+      "file": "root-loading-failed.json",
+      "bytes": 170,
+      "sourceSha256": "76F650E8ACECC42F2B6CFA39A2809B704F8BB4BC0161675819DC172316929E51",
+      "committedCopySha256": "76F650E8ACECC42F2B6CFA39A2809B704F8BB4BC0161675819DC172316929E51",
+      "identical": true
+    },
+    {
+      "file": "root-negative-asset-before.json",
+      "bytes": 228,
+      "sourceSha256": "D6153DEF3DA8C16A1D1E1A2A6A87C5553E1E0285C6A55E87062676C3FEF63CF8",
+      "committedCopySha256": "D6153DEF3DA8C16A1D1E1A2A6A87C5553E1E0285C6A55E87062676C3FEF63CF8",
+      "identical": true
+    },
+    {
+      "file": "root-negative-asset-restored.json",
+      "bytes": 228,
+      "sourceSha256": "D6153DEF3DA8C16A1D1E1A2A6A87C5553E1E0285C6A55E87062676C3FEF63CF8",
+      "committedCopySha256": "D6153DEF3DA8C16A1D1E1A2A6A87C5553E1E0285C6A55E87062676C3FEF63CF8",
+      "identical": true
+    },
+    {
+      "file": "root-normal-console.json",
+      "bytes": 2,
+      "sourceSha256": "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945",
+      "committedCopySha256": "4F53CDA18C2BAA0C0354BB5F9A3ECBE5ED12AB4D8E11BA873C2F11161202B945",
+      "identical": true
+    },
+    {
+      "file": "root-statistics-audit.json",
+      "bytes": 3243,
+      "sourceSha256": "369A3D3ACD22CFE537068118BD3E78541AADE165C85E39C06F265DE204E4CFC6",
+      "committedCopySha256": "369A3D3ACD22CFE537068118BD3E78541AADE165C85E39C06F265DE204E4CFC6",
+      "identical": true
+    },
+    {
+      "file": "verify-public-pressure-result.py",
+      "bytes": 2853,
+      "sourceSha256": "9857C92B35F87F8482F7326BC802DEED805250BAFD79650DC6B0BC26E83C7A41",
+      "committedCopySha256": "9857C92B35F87F8482F7326BC802DEED805250BAFD79650DC6B0BC26E83C7A41",
+      "identical": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "originalFile": "phone-continuation-implementation.md",
+  "originalBytes": 5609,
+  "originalSha256": "aa9d3fc4cbcafda69a97260e14c359e7f0402beddfff4ef02061cdde2293b441",
+  "publicFile": "implementation-public.md",
+  "publicBytes": 5459,
+  "publicSha256": "0eae933c794925f68a3fd576ee9fc7e197b29c97dc39d8f154cd4a6146c7600e",
+  "boundary": "Original prose, source identity, results and historical pending status retained; absolute user paths, concrete loopback URL and execution-process/session details replaced with public placeholders. Original external file unchanged.",
+  "substitutions": [
+    {
+      "replacement": "<候选工作树>",
+      "occurrences": 1
+    },
+    {
+      "replacement": "<仓库外工作目录>",
+      "occurrences": 3
+    },
+    {
+      "replacement": "<loopback QA入口>",
+      "occurrences": 1
+    },
+    {
+      "replacement": "运行进程与执行会话详情只留在仓库外",
+      "occurrences": 1
+    }
+  ]
+}

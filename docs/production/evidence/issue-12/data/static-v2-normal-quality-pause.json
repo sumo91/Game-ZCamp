@@ -1,0 +1,130 @@
+{
+  "source": "b7465c3af6e2725a133317ba06bbe14fa0b2feb3",
+  "boundary": "Normal full game URL without developer parameters. Real quality button and legal arrow build. Public DOM evidence only; tactical pause continues presentation but freezes simulation.",
+  "openingLow": {
+    "buttons": [
+      {
+        "aria": "继续战斗",
+        "text": "继续"
+      },
+      {
+        "aria": "切换画质",
+        "text": "画质·流畅"
+      },
+      {
+        "aria": "关闭声音",
+        "text": "声音"
+      },
+      {
+        "aria": "第1行第1列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第1行第2列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第1行第3列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第1行第4列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第1行第5列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第2行第1列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第2行第2列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第2行第3列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第2行第4列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第2行第5列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第3行第1列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第3行第2列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第3行第3列，主城",
+        "text": "主城"
+      },
+      {
+        "aria": "第3行第4列，空格",
+        "text": "+"
+      },
+      {
+        "aria": "第3行第5列，空格",
+        "text": "+"
+      },
+      {
+        "aria": null,
+        "text": "重试加载"
+      }
+    ],
+    "phase": "TACTICAL_PAUSE",
+    "pixelRatio": "1",
+    "presentation": "{\"models\":true,\"enemies\":[],\"bossWarnings\":[],\"inspired\":[],\"inspireSource\":null,\"arcane\":{\"slowedIds\":[],\"chains\":[],\"effects\":0},\"quality\":\"low\",\"renderPixelRatio\":1,\"calls\":21,\"triangles\":103925,\"geometries\":26,\"textures\":20,\"activeModels\":0,\"animationMixers\":1,\"effects\":0}",
+    "quality": "low",
+    "step": "17",
+    "threat": "亡灵 0",
+    "url": "http://127.0.0.1:5343/Game-ZCamp/",
+    "wave": "第 0 波 / 10",
+    "wood": "120+0.6/秒"
+  },
+  "openingStandardPaused": {
+    "phase": "TACTICAL_PAUSE",
+    "pixelRatio": "1.5",
+    "presentation": "{\"models\":true,\"enemies\":[],\"bossWarnings\":[],\"inspired\":[],\"inspireSource\":null,\"arcane\":{\"slowedIds\":[],\"chains\":[],\"effects\":0},\"quality\":\"standard\",\"renderPixelRatio\":1.5,\"calls\":31,\"triangles\":227516,\"geometries\":26,\"textures\":20,\"activeModels\":0,\"animationMixers\":1,\"effects\":0}",
+    "quality": "standard",
+    "step": "17",
+    "threat": "亡灵 0",
+    "wave": "第 0 波 / 10",
+    "wood": "120+0.6/秒"
+  },
+  "resume": {
+    "phase": "OPENING_COUNTDOWN",
+    "quality": "low",
+    "step": "25"
+  },
+  "activeLow": {
+    "commands": "[{\"step\":17,\"command\":{\"type\":\"pause\"},\"accepted\":true},{\"step\":17,\"command\":{\"type\":\"resume\"},\"accepted\":true},{\"step\":34,\"command\":{\"type\":\"build_building\",\"slotId\":\"slot-r1-c1\",\"definitionId\":\"arrow_tower\"},\"accepted\":true,\"buildingId\":\"growth-slot-r1-c1\"},{\"step\":995,\"command\":{\"type\":\"pause\"},\"accepted\":true}]",
+    "phase": "TACTICAL_PAUSE",
+    "pixelRatio": "1",
+    "presentation": "{\"models\":true,\"enemies\":[],\"bossWarnings\":[],\"inspired\":[],\"inspireSource\":null,\"arcane\":{\"slowedIds\":[],\"chains\":[],\"effects\":0},\"quality\":\"low\",\"renderPixelRatio\":1,\"calls\":23,\"triangles\":116439,\"geometries\":28,\"textures\":22,\"activeModels\":0,\"animationMixers\":1,\"effects\":0}",
+    "quality": "low",
+    "step": "995",
+    "threat": "亡灵 0",
+    "wave": "第 1 波 / 10",
+    "wood": "95+0.6/秒"
+  },
+  "activeStandard": {
+    "phase": "TACTICAL_PAUSE",
+    "pixelRatio": "1.5",
+    "presentation": "{\"models\":true,\"enemies\":[],\"bossWarnings\":[],\"inspired\":[],\"inspireSource\":null,\"arcane\":{\"slowedIds\":[],\"chains\":[],\"effects\":0},\"quality\":\"standard\",\"renderPixelRatio\":1.5,\"calls\":34,\"triangles\":252542,\"geometries\":28,\"textures\":22,\"activeModels\":0,\"animationMixers\":1,\"effects\":0}",
+    "quality": "standard",
+    "step": "995",
+    "threat": "亡灵 0",
+    "wave": "第 1 波 / 10",
+    "wood": "95+0.6/秒"
+  },
+  "logs": []
+}

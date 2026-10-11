@@ -1,0 +1,7 @@
+{
+  "source": "b7465c3af6e2725a133317ba06bbe14fa0b2feb3",
+  "entry": "http://127.0.0.1:5343/Game-ZCamp/?dev=pressure&count=300&quality=standard&seconds=60",
+  "quality": "low",
+  "enemyCount": 300,
+  "pausedEnemyPresentationEqual": true
+}

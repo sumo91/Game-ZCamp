@@ -1,0 +1,36 @@
+- main "尸潮营地游戏画布":
+  - strong: 精修美术样板 · 部分覆盖
+  - link "原版入口":
+    - /url: /Game-ZCamp/
+  - generic: 木材 121 · +0.6/秒
+  - generic: 金币 0.25
+  - generic: 城墙 100 / 100
+  - generic: 护盾 100 / 100
+  - generic: 波次 1 / 10 · 敌人 1
+  - generic: 下一波 58 秒
+  - region "人类堡垒与亡灵防线":
+    - generic "3D 精修美术样板战场"
+    - text: 亡灵推进区 ↓
+    - generic: 英雄 / 特殊塔 / 其余敌人：开发占位
+    - generic "5×3 营地格位":
+      - button "第1行第1列，空格": 1·1
+      - button "第1行第2列，空格": 1·2
+      - button "第1行第3列，空格": 1·3
+      - button "第1行第4列，空格": 1·4
+      - button "第1行第5列，空格": 1·5
+      - button "第2行第1列，空格": 2·1
+      - button "第2行第2列，空格": 2·2
+      - button "第2行第3列，空格": 2·3
+      - button "第2行第4列，空格": 2·4
+      - button "第2行第5列，空格": 2·5
+      - button "第3行第1列，空格": 3·1
+      - button "第3行第2列，空格": 3·2
+      - button "第3行第3列，主城": 主城
+      - button "第3行第4列，空格": 3·4
+      - button "第3行第5列，空格": 3·5
+  - generic: 战斗 2 秒 · 击杀 1
+  - button "暂停"
+  - generic "所选建筑详情":
+    - strong: 点击营地格位
+    - paragraph: 选择空格建造，或查看已有建筑。
+  - status

@@ -103,13 +103,14 @@ export interface GameState {
 
 export type GameEvent =
   | { type: "tower_attack"; buildingId: string; towerDefinitionId: string; targetId: string; targetPosition: number }
-  | { type: "tower_special"; buildingId: string; effect: string; targetId: string }
+  | { type: "tower_special"; buildingId: string; effect: string; targetId: string; targetPosition?: number }
+  | { type: "enemy_wall_attack"; enemyId: string; definitionId: string; position: number; damage: number; intervalSeconds: number }
   | { type: "enemy_hit"; enemyId: string; position: number; damage: number; remainingHp: number }
   | { type: "enemy_defeated"; enemyId: string; position: number }
   | { type: "wave_started"; wave: number }
   | { type: "enemy_spawned"; enemyId: string; definitionId: string; wave: number }
-  | { type: "enemy_charge_warning"; enemyId: string; position: number; durationSeconds: number }
-  | { type: "enemy_charge_started"; enemyId: string; position: number; targetPosition: number }
+  | { type: "enemy_charge_warning"; enemyId: string; position: number; durationSeconds: number; targetPosition: number }
+  | { type: "enemy_charge_started"; enemyId: string; position: number; targetPosition: number; durationSeconds: number }
   | { type: "enemy_charge_impact"; enemyId: string; position: number }
   | { type: "enemy_burned"; enemyId: string; position: number; damagePerSecond: number; durationSeconds: number; areaRadius: number; sourceBuildingId?: string }
   | { type: "overlord_inspire"; enemyId: string; targetIds: string[]; durationSeconds: number; multiplier: number }

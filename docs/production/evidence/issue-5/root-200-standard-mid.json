@@ -1,0 +1,17 @@
+{
+  "active": 200,
+  "allActive": true,
+  "animationTime": 154.93140000004814,
+  "calls": 439,
+  "centers": 200,
+  "fieldVisible": true,
+  "mixers": 200,
+  "response": "响应 5 次 · 12:50:26",
+  "run": "测量 · 149.5/300秒 · 样本 21505",
+  "triangles": 3351410,
+  "viewport": [
+    1366,
+    768
+  ],
+  "visibility": "visible"
+}

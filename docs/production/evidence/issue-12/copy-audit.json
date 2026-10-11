@@ -1,0 +1,382 @@
+{
+  "source": "b7465c3af6e2725a133317ba06bbe14fa0b2feb3",
+  "integrationBase": "1a1ef5327b56def91816544f529ad788316a484a",
+  "merge": "c7581573da7bf943870b55bfc3de66e961a02040",
+  "normalGameQaSource": "40685ce386f1e8ef31aefd7eb47e0e287443363b",
+  "copies": [
+    {
+      "externalRelativePath": "product-issue-12-standards-review.md",
+      "repositoryPath": "docs/production/evidence/issue-12/standards-review.md",
+      "bytes": 1075,
+      "originalSha256": "2685ada325f58c602ddc18574c9bad2508e43d159481e74cc7b7a8204333c24b",
+      "copySha256": "a4c9e3dbe02503a155e4a7f77c624583af06afddc193ebce574fcb80af31a858",
+      "byteIdentical": false,
+      "normalization": "CRLF-to-LF only; original report text and findings unchanged",
+      "copyBytes": 1074
+    },
+    {
+      "externalRelativePath": "product-issue-12-spec-review.md",
+      "repositoryPath": "docs/production/evidence/issue-12/spec-review.md",
+      "bytes": 2345,
+      "originalSha256": "8e60343df2f204db6f16d5fe311e32d468d5a25f188f2f1ee18b708274d5c94a",
+      "copySha256": "f2ed98544e0eeb23985f31ccec0f5381ec0816d9de7efdec78c6d53d73795835",
+      "byteIdentical": false,
+      "normalization": "CRLF-to-LF only; original report text and findings unchanged",
+      "copyBytes": 2344
+    },
+    {
+      "externalRelativePath": "product-issue-12-delivery.md",
+      "repositoryPath": "docs/production/evidence/issue-12/author-delivery.md",
+      "bytes": 9709,
+      "originalSha256": "9785a829bac05825e72324aef9bd206ee68cee0a39f569aa113a748cc2b4e8d1",
+      "copySha256": "9785a829bac05825e72324aef9bd206ee68cee0a39f569aa113a748cc2b4e8d1",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 9709
+    },
+    {
+      "externalRelativePath": "product-issue-12-root-ui.md",
+      "repositoryPath": "docs/production/evidence/issue-12/root-review.md",
+      "bytes": 3361,
+      "originalSha256": "4263fdc857b9b7c5647376f661d7f03484623e4d64dd7ad92ec1014312b7f3f9",
+      "copySha256": "4263fdc857b9b7c5647376f661d7f03484623e4d64dd7ad92ec1014312b7f3f9",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 3361
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/formal-campaign-peaks.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/formal-campaign-peaks.json",
+      "bytes": 101121,
+      "originalSha256": "aecfa83102eaa1184ac46ee6475f3620a4da5c4781f5a9e7a19369de4fed8284",
+      "copySha256": "aecfa83102eaa1184ac46ee6475f3620a4da5c4781f5a9e7a19369de4fed8284",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 101121
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/measure-campaign-peaks.ts",
+      "repositoryPath": "docs/production/evidence/issue-12/data/measure-campaign-peaks.ts",
+      "bytes": 2503,
+      "originalSha256": "12f024fd8b63aef73efa30bd770a18d8c76fc21c08877e9fe1fded38c8f7e66d",
+      "copySha256": "12f024fd8b63aef73efa30bd770a18d8c76fc21c08877e9fe1fded38c8f7e66d",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 2503
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/normal-quality-layout.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/normal-quality-layout.json",
+      "bytes": 6096,
+      "originalSha256": "f23d5cdf6960fcd4462e9be18cbc56304c0ce542ccc41d60d246afdcaf6e6fe5",
+      "copySha256": "f23d5cdf6960fcd4462e9be18cbc56304c0ce542ccc41d60d246afdcaf6e6fe5",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 6096
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-200-complete.jpg",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-200-complete.jpg",
+      "bytes": 60796,
+      "originalSha256": "877f4c1e00306ff8da15b3dd4e996fbcf7ce776d68258560888521bf9acb485e",
+      "copySha256": "877f4c1e00306ff8da15b3dd4e996fbcf7ce776d68258560888521bf9acb485e",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 60796
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-200-live-presentation.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-200-live-presentation.json",
+      "bytes": 33692,
+      "originalSha256": "0d3f55d7bcac2acdf32a99141cefbcef466b28454a10d359e29f4d4e3f0efded",
+      "copySha256": "0d3f55d7bcac2acdf32a99141cefbcef466b28454a10d359e29f4d4e3f0efded",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 33692
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-200-live.jpg",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-200-live.jpg",
+      "bytes": 60444,
+      "originalSha256": "a19645fc6e2bb3f9b374af223c4e7bc62b55cc0bf53bef9e998ee69bc667981d",
+      "copySha256": "a19645fc6e2bb3f9b374af223c4e7bc62b55cc0bf53bef9e998ee69bc667981d",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 60444
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-200-standard-300s.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-200-standard-300s.json",
+      "bytes": 276970,
+      "originalSha256": "c2d73fa6f75d02584f6adb123fca9444bda456b80abaa4683dc37539da10e0fe",
+      "copySha256": "c2d73fa6f75d02584f6adb123fca9444bda456b80abaa4683dc37539da10e0fe",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 276970
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-300-low-pause-freeze.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-300-low-pause-freeze.json",
+      "bytes": 238,
+      "originalSha256": "df0b378020f0dc7dd232eb739ed8d9275381a6140cc2d9328dd3b367a756afb5",
+      "copySha256": "df0b378020f0dc7dd232eb739ed8d9275381a6140cc2d9328dd3b367a756afb5",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 238
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-300-low-paused-presentation.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-300-low-paused-presentation.json",
+      "bytes": 45296,
+      "originalSha256": "9084d0f6ba2b868e3ce5ab51b9342504c8efb2da61a5ffb71bfdd97a897bacff",
+      "copySha256": "9084d0f6ba2b868e3ce5ab51b9342504c8efb2da61a5ffb71bfdd97a897bacff",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 45296
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-300-low-paused.jpg",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-300-low-paused.jpg",
+      "bytes": 59564,
+      "originalSha256": "c710f1aee050bb8c569451f9595a44821dfdd7b9845341c28e40909793499aa3",
+      "copySha256": "c710f1aee050bb8c569451f9595a44821dfdd7b9845341c28e40909793499aa3",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 59564
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-300-selected.jpg",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-300-selected.jpg",
+      "bytes": 62825,
+      "originalSha256": "89efb181f674004e99eb91c3b48fd292a08e775d40b644046ab786931c14bbf0",
+      "copySha256": "89efb181f674004e99eb91c3b48fd292a08e775d40b644046ab786931c14bbf0",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 62825
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-300-standard-60s.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-300-standard-60s.json",
+      "bytes": 166695,
+      "originalSha256": "2183714f034c1eb61a697460e4d241d3b5f0871f7b93527d68265c2a4c40d7ec",
+      "copySha256": "2183714f034c1eb61a697460e4d241d3b5f0871f7b93527d68265c2a4c40d7ec",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 166695
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-desktop-registration.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-desktop-registration.json",
+      "bytes": 375,
+      "originalSha256": "440f0490b0c99e0466f458fa08dc1637a6b12a875212289fd1d114ad75345a1e",
+      "copySha256": "440f0490b0c99e0466f458fa08dc1637a6b12a875212289fd1d114ad75345a1e",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 375
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-normal-360-quality.jpg",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-normal-360-quality.jpg",
+      "bytes": 28568,
+      "originalSha256": "dafe603005adf30055f2ee9ec256eb23c9f8a7dabbb2e9a130dee3ea1445034a",
+      "copySha256": "dafe603005adf30055f2ee9ec256eb23c9f8a7dabbb2e9a130dee3ea1445034a",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 28568
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/root-normal-390-quality.jpg",
+      "repositoryPath": "docs/production/evidence/issue-12/data/root-normal-390-quality.jpg",
+      "bytes": 30221,
+      "originalSha256": "a4a699cbbf0fe1adfa89bea5c6bb1c4470c90e8b4237c5923cf76365c4e4f4c6",
+      "copySha256": "a4a699cbbf0fe1adfa89bea5c6bb1c4470c90e8b4237c5923cf76365c4e4f4c6",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 30221
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/static-v2-100-standard-60s.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/static-v2-100-standard-60s.json",
+      "bytes": 193990,
+      "originalSha256": "f85d8b74aac1221fafaceecfca9c82abadc651008ed4fecde13398e3800d231d",
+      "copySha256": "f85d8b74aac1221fafaceecfca9c82abadc651008ed4fecde13398e3800d231d",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 193990
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/static-v2-normal-low-live.png",
+      "repositoryPath": "docs/production/evidence/issue-12/data/static-v2-normal-low-live.png",
+      "bytes": 41353,
+      "originalSha256": "36196c8c044c4fb126a6c763d2e7e4ffe9a0d403ca08bdad2de6c8a2cb723a58",
+      "copySha256": "36196c8c044c4fb126a6c763d2e7e4ffe9a0d403ca08bdad2de6c8a2cb723a58",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 41353
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/static-v2-normal-low-paused.png",
+      "repositoryPath": "docs/production/evidence/issue-12/data/static-v2-normal-low-paused.png",
+      "bytes": 35782,
+      "originalSha256": "d793f42a0c07a133376729fcf4b76b4d8e214a307ed1bb52ee065a23ee74ba3e",
+      "copySha256": "d793f42a0c07a133376729fcf4b76b4d8e214a307ed1bb52ee065a23ee74ba3e",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 35782
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/static-v2-normal-quality-pause.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/static-v2-normal-quality-pause.json",
+      "bytes": 4521,
+      "originalSha256": "019a1488d5f8d760c28d7b23ec1c22c58cbd2ef182547c9fffd27b737700ac54",
+      "copySha256": "019a1488d5f8d760c28d7b23ec1c22c58cbd2ef182547c9fffd27b737700ac54",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 4521
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/static-v2-pressure100.png",
+      "repositoryPath": "docs/production/evidence/issue-12/data/static-v2-pressure100.png",
+      "bytes": 63371,
+      "originalSha256": "e3ebd02565f3f282bbac79973d8b12b716009d58c5017562acfa5759b9b1abd1",
+      "copySha256": "e3ebd02565f3f282bbac79973d8b12b716009d58c5017562acfa5759b9b1abd1",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 63371
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/static-v2-ten-cycles-lobby.png",
+      "repositoryPath": "docs/production/evidence/issue-12/data/static-v2-ten-cycles-lobby.png",
+      "bytes": 49412,
+      "originalSha256": "51258a0b4377621fd2cb2fe51fd516f962645bf4c8971db7970d77365686a6ef",
+      "copySha256": "51258a0b4377621fd2cb2fe51fd516f962645bf4c8971db7970d77365686a6ef",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 49412
+    },
+    {
+      "externalRelativePath": "issue-12-evidence/static-v2-ten-lifecycle-cycles.json",
+      "repositoryPath": "docs/production/evidence/issue-12/data/static-v2-ten-lifecycle-cycles.json",
+      "bytes": 9504,
+      "originalSha256": "f6dac0be5670f468c95e312c4a17e39fa9502c5c21340cb66cdac9f9f3d5db5f",
+      "copySha256": "f6dac0be5670f468c95e312c4a17e39fa9502c5c21340cb66cdac9f9f3d5db5f",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 9504
+    },
+    {
+      "externalRelativePath": "product-normal-game-qa.md",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-game-qa.md",
+      "bytes": 4646,
+      "originalSha256": "c8870734cc9794fd7e72c1250afedc4048f632948c9f66f9fc3622a8eb350834",
+      "copySha256": "c8870734cc9794fd7e72c1250afedc4048f632948c9f66f9fc3622a8eb350834",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 4646
+    },
+    {
+      "externalRelativePath": "product-normal-victory.jpg",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-victory.jpg",
+      "bytes": 22746,
+      "originalSha256": "3ae5f5f1f372fd8cc10751091c8d17414f6f4c1b346ddeae6d72fad42e1af37f",
+      "copySha256": "3ae5f5f1f372fd8cc10751091c8d17414f6f4c1b346ddeae6d72fad42e1af37f",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 22746
+    },
+    {
+      "externalRelativePath": "product-normal-victory-ax.txt",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-victory-ax.txt",
+      "bytes": 496,
+      "originalSha256": "47ba11884a2effd1335c80690ba8e5d6a10f2482afb5504c5206eec0f8944e47",
+      "copySha256": "47ba11884a2effd1335c80690ba8e5d6a10f2482afb5504c5206eec0f8944e47",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 496
+    },
+    {
+      "externalRelativePath": "product-normal-unlock-return.jpg",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-unlock-return.jpg",
+      "bytes": 49480,
+      "originalSha256": "ba3bf2886e0ee4b01f39657c2aa2abdace733f9cb5f7bf7ea9c7d3ce1bcfd99a",
+      "copySha256": "ba3bf2886e0ee4b01f39657c2aa2abdace733f9cb5f7bf7ea9c7d3ce1bcfd99a",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 49480
+    },
+    {
+      "externalRelativePath": "product-normal-unlock-refreshed.jpg",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-unlock-refreshed.jpg",
+      "bytes": 49508,
+      "originalSha256": "f90005be3803a88ee3ea717b1f085e5c4669382c0d24277b43c9379a71196de3",
+      "copySha256": "f90005be3803a88ee3ea717b1f085e5c4669382c0d24277b43c9379a71196de3",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 49508
+    },
+    {
+      "externalRelativePath": "product-normal-unlock-refreshed-ax.txt",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-unlock-refreshed-ax.txt",
+      "bytes": 2433,
+      "originalSha256": "c910bac9a20f46c853edd96281d1ecf5f723b5ed24a82b2f3ca20686c4724aa3",
+      "copySha256": "c910bac9a20f46c853edd96281d1ecf5f723b5ed24a82b2f3ca20686c4724aa3",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 2433
+    },
+    {
+      "externalRelativePath": "product-normal-public-dom.json",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-public-dom.json",
+      "bytes": 935,
+      "originalSha256": "19ec41ed89a3b40d804f8b303077f3dfc854c04f642159f8318eff4b2e1794c3",
+      "copySha256": "19ec41ed89a3b40d804f8b303077f3dfc854c04f642159f8318eff4b2e1794c3",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 935
+    },
+    {
+      "externalRelativePath": "product-normal-wave3.jpg",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-wave3.jpg",
+      "bytes": 43862,
+      "originalSha256": "8ac392e7da0cc26c44f9efaa24c7003a2bb62e7a5a79d2e1dd1dbfc7c11bed5a",
+      "copySha256": "8ac392e7da0cc26c44f9efaa24c7003a2bb62e7a5a79d2e1dd1dbfc7c11bed5a",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 43862
+    },
+    {
+      "externalRelativePath": "product-normal-cannon-lv3-burn.jpg",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-cannon-lv3-burn.jpg",
+      "bytes": 46490,
+      "originalSha256": "00c6b49b8e782e74700eda50665259833010b32e734c833abb045fbc7e89282d",
+      "copySha256": "00c6b49b8e782e74700eda50665259833010b32e734c833abb045fbc7e89282d",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 46490
+    },
+    {
+      "externalRelativePath": "product-normal-cannon-lv5-wave5.jpg",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-cannon-lv5-wave5.jpg",
+      "bytes": 51282,
+      "originalSha256": "ffdc268d18b6bf6da18643c78e5fd9be55da267ebfb0108e038424953b880f5a",
+      "copySha256": "ffdc268d18b6bf6da18643c78e5fd9be55da267ebfb0108e038424953b880f5a",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 51282
+    },
+    {
+      "externalRelativePath": "product-normal-ten-lv5.jpg",
+      "repositoryPath": "docs/production/evidence/issue-11/normal/product-normal-ten-lv5.jpg",
+      "bytes": 53389,
+      "originalSha256": "e1889da02cff41ef609b01014a401926de003cd47c568d852b09d7ea01139e43",
+      "copySha256": "e1889da02cff41ef609b01014a401926de003cd47c568d852b09d7ea01139e43",
+      "byteIdentical": true,
+      "normalization": "none",
+      "copyBytes": 53389
+    }
+  ],
+  "omittedHistoricalEvidence": [
+    "issue-12-evidence/development-200-smoke.json"
+  ],
+  "note": "35 copied reports/screenshots/raw JSON/reproduction script retain exact original bytes. The two axis reports preserve all text and findings separately; only final CRLF was normalized to LF, as authorized. No attributes or whitespace rules changed. Historical development smoke is not used as v2 production evidence."
+}

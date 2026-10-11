@@ -1,0 +1,241 @@
+{
+  "baseline": "c3310f8c085edb21078cc03c7af51ed43636c319",
+  "codeHead": "6d5dcf87fce4a5e0efe2afeeaa4259e511e29a23",
+  "cannonSource": "d2fcc75d1c39fc8460884ea60baa8c6ae14f7ed8",
+  "modelSource": "191273cff438e54461fa0e7b491a0df0aaa1056a",
+  "modelTechnicalSource": "77616d125728191f73418dc309f72b301efe155b",
+  "directory": "C:/Users/Admin/AppData/Local/Temp/zcamp-threejs-implementation/product-polished-game-dist",
+  "fileCount": 46,
+  "files": [
+    {
+      "relativePath": "assets/AssetPressure-CnNgwQyn.js",
+      "bytes": 29564,
+      "sha256": "8398875ed132191b56c8095d839a1f0009239387ca1bbacb7339e50392f25730"
+    },
+    {
+      "relativePath": "assets/AssetPressure-DEuy7wmV.css",
+      "bytes": 2986,
+      "sha256": "75d4d1667e82ba1e462bde4c54a7f4e920ef580af4df3fea71f403e45d3bbc03"
+    },
+    {
+      "relativePath": "assets/BattlePressure-CCaujOdh.css",
+      "bytes": 869,
+      "sha256": "e1110d53cfe1595feda6b33a3d1e7905dcae72f9ae8cc42997175d7e0fbba3e8"
+    },
+    {
+      "relativePath": "assets/BattlePressure-DEAeRhyM.js",
+      "bytes": 5737,
+      "sha256": "e9fb2e208fbbe490c013df313398401e16551bce9040d6983e62ce8ee6cbc9a6"
+    },
+    {
+      "relativePath": "assets/index-Bu-sue8Q.js",
+      "bytes": 3773,
+      "sha256": "208b64537171ef77ad71165a6a02b4a8886109c86f1942f2380c067d31f51516"
+    },
+    {
+      "relativePath": "assets/index-C_5SfW8O.css",
+      "bytes": 395,
+      "sha256": "e7dadb9ce92058f042e513c7327c30262a6cbd353be90f74b434f05c3cbf8702"
+    },
+    {
+      "relativePath": "assets/ModelLibrary-BD2vJiF9.js",
+      "bytes": 676841,
+      "sha256": "732172c1e4720666795257375ebeec53294b846f86581a7899d67506d620ff31"
+    },
+    {
+      "relativePath": "assets/SoundDirector-Cm3rxJjv.js",
+      "bytes": 8337,
+      "sha256": "d48178bc5a33f952490c30140774e671f0d33c4854ec420442d05c62fe2dec93"
+    },
+    {
+      "relativePath": "assets/ThreeGame-D2p2NXu2.css",
+      "bytes": 4903,
+      "sha256": "0f6f333e525f5ba1f49d956e0a65189592f128b4cef1e8a41d036af80be13406"
+    },
+    {
+      "relativePath": "assets/ThreeGame-D3g03ysg.js",
+      "bytes": 13605,
+      "sha256": "80c51b6d79c87a3e1819a99428b4422d533dee118223d2d61044db6fa242f106"
+    },
+    {
+      "relativePath": "assets/threejs/arrow_tower_high.glb",
+      "bytes": 1416848,
+      "sha256": "cd3a906caa502dfe76cf25db7a1a393c51e7dc3bb542cb019c8e0b83fc304854"
+    },
+    {
+      "relativePath": "assets/threejs/arrow_tower_low.glb",
+      "bytes": 1333528,
+      "sha256": "41a136a637198d9b2dd7f02026338e2a9641f24dff3fe807ad5842bc17d6654d"
+    },
+    {
+      "relativePath": "assets/threejs/arrow_tower_medium.glb",
+      "bytes": 1369360,
+      "sha256": "6cc9afefb60f5cc4b1c6271a92c2f6806f5da228cce136021394b7541185aa6e"
+    },
+    {
+      "relativePath": "assets/threejs/ballista_tower_high.glb",
+      "bytes": 875160,
+      "sha256": "5f541a154eb3b4e5703fd83ccbce648c9db1be080ae994b15ab702b9b583e1e4"
+    },
+    {
+      "relativePath": "assets/threejs/ballista_tower_low.glb",
+      "bytes": 775972,
+      "sha256": "4d584adad657689bfab4fafedd4e7d4b7bbbac4cb0f943917be80c64a8ee22a2"
+    },
+    {
+      "relativePath": "assets/threejs/ballista_tower_medium.glb",
+      "bytes": 824404,
+      "sha256": "a7b54e4d73151129fe9a9b17f289bc686e7c1ef1cfe6a43b0ff21025e613e566"
+    },
+    {
+      "relativePath": "assets/threejs/camp_plot.glb",
+      "bytes": 317424,
+      "sha256": "4096bfc6bc09577341f3f46eab11a78e79719e7b282f21a6a204b7ae005fe10a"
+    },
+    {
+      "relativePath": "assets/threejs/cannon_tower_high.glb",
+      "bytes": 854868,
+      "sha256": "133845f871a3d3254bf778780ebe322650c5ac45e7c250141a4d4349e1e735a5"
+    },
+    {
+      "relativePath": "assets/threejs/cannon_tower_low.glb",
+      "bytes": 744992,
+      "sha256": "4a6f337c91e85b36e504e11b58fb04da097ce578c586c8fdfbffe774e4c181f0"
+    },
+    {
+      "relativePath": "assets/threejs/cannon_tower_medium.glb",
+      "bytes": 810076,
+      "sha256": "48bb5a3384e0a1d57891c128cff4f813e6c29cde4c89946825587fe0bed4a5f8"
+    },
+    {
+      "relativePath": "assets/threejs/charger_lord.glb",
+      "bytes": 953128,
+      "sha256": "ec35ace6182dc865548658e457b6a37f1e0f55378e27a521f9dd20d452c1fa74"
+    },
+    {
+      "relativePath": "assets/threejs/electric_tower_high.glb",
+      "bytes": 830428,
+      "sha256": "c3aa7007b45fa2e40634da7d2def5a7571cb9354ddf6add12e9618db73a8688c"
+    },
+    {
+      "relativePath": "assets/threejs/electric_tower_low.glb",
+      "bytes": 690612,
+      "sha256": "f83dbe1e210e640ea8f4d83d977c40765a0bf0f74bdbc35487c62cddb670bf76"
+    },
+    {
+      "relativePath": "assets/threejs/electric_tower_medium.glb",
+      "bytes": 753400,
+      "sha256": "fdab43e82a0bd81972e17f1073d613f3079001e471c5669bb10e65bcd71202a5"
+    },
+    {
+      "relativePath": "assets/threejs/frost_tower_high.glb",
+      "bytes": 866528,
+      "sha256": "f3d8339d94dd62a984072360526f3bc57ed371211cc285ffebd3c49c590c909d"
+    },
+    {
+      "relativePath": "assets/threejs/frost_tower_low.glb",
+      "bytes": 677280,
+      "sha256": "5a97aad26da9a0ae0494d7d408f87572ba8ed2de740019df272f048cd29ee501"
+    },
+    {
+      "relativePath": "assets/threejs/frost_tower_medium.glb",
+      "bytes": 764240,
+      "sha256": "4b257ae6adf868e73d86fb5e00b0180aba02d8933727ed22e273a53ffde78a48"
+    },
+    {
+      "relativePath": "assets/threejs/hero_camp_warden.glb",
+      "bytes": 827344,
+      "sha256": "5940f81ed8589142dfccb18f3a92eb37d34dd27d8867c47b187b0fd928b5f6a7"
+    },
+    {
+      "relativePath": "assets/threejs/hero_lumber_baron.glb",
+      "bytes": 933760,
+      "sha256": "6cc91ff7d667b3cf0274b4e882365726ef910fa2bb87302e3d8484d4ea41c377"
+    },
+    {
+      "relativePath": "assets/threejs/hero_vanguard_gunner.glb",
+      "bytes": 846240,
+      "sha256": "58b38ebd69eac7ce53dcbf2c1c316be654b5d3a27eee0b935f9a60e4734ab310"
+    },
+    {
+      "relativePath": "assets/threejs/lumberyard_high.glb",
+      "bytes": 1378332,
+      "sha256": "460593660a0bac02209e991e3d70b7233944f07264eda4b230499ea1155e5ff8"
+    },
+    {
+      "relativePath": "assets/threejs/lumberyard_low.glb",
+      "bytes": 981420,
+      "sha256": "6439b72c87b91f69197c8824ec203fbb69e020779bfd996b3bfc7e43db314963"
+    },
+    {
+      "relativePath": "assets/threejs/lumberyard_medium.glb",
+      "bytes": 1205952,
+      "sha256": "7d7fb376098e1d4e41b78fa408e5a4ce8aec9244a199a133e078441504f615b3"
+    },
+    {
+      "relativePath": "assets/threejs/main_city.glb",
+      "bytes": 1872624,
+      "sha256": "5e511f7a7534bfecfe986641cf5ed79fb8dded2d2444aae8a266b30fb9fe81e9"
+    },
+    {
+      "relativePath": "assets/threejs/pine_tree.glb",
+      "bytes": 320432,
+      "sha256": "18081c36910c9b014fc02c4b253a4eb8156b3d4ebb66b799ba02cd0232f9e591"
+    },
+    {
+      "relativePath": "assets/threejs/rock_cluster.glb",
+      "bytes": 290636,
+      "sha256": "4b2ddcc9cf82d449f580b62ee0f756dc840069b4d4bd0f9cba5cf9239bf5168c"
+    },
+    {
+      "relativePath": "assets/threejs/skeleton_infantry.glb",
+      "bytes": 1151112,
+      "sha256": "ae07d7f02d88b8bd4eb2712cc08875ec0b81119fe77f0d5ab3f149b48d4a2934"
+    },
+    {
+      "relativePath": "assets/threejs/undead_armored.glb",
+      "bytes": 991540,
+      "sha256": "80c2a3a0846d1b2f9135c20b14cf3368dbc9e412fddf91dac78d0729a1abf31a"
+    },
+    {
+      "relativePath": "assets/threejs/undead_brute.glb",
+      "bytes": 957044,
+      "sha256": "102539476c66c08b8d27cbd14ea2e48309ebc2803afe55d04b8e0f265a6ef92e"
+    },
+    {
+      "relativePath": "assets/threejs/undead_king.glb",
+      "bytes": 908448,
+      "sha256": "77b830dcc791131ce05f374a26decd9704efb9e019c90a15d763ecb1f64a9173"
+    },
+    {
+      "relativePath": "assets/threejs/undead_runner.glb",
+      "bytes": 931564,
+      "sha256": "db51105203f2a28e7659466667479b1f087de3e85fe79bdd2f948267d662d70d"
+    },
+    {
+      "relativePath": "assets/threejs/undead_tank.glb",
+      "bytes": 860564,
+      "sha256": "0a710c6ef407e7af1c7ddfafcf060554f7f59e561770559ba1d983a6f3b6c18f"
+    },
+    {
+      "relativePath": "assets/threejs/wall_segment.glb",
+      "bytes": 898288,
+      "sha256": "54ea6e5f9f902c124f5df9e95afe505b50b736e24d91a7d1a2d96c6eed383834"
+    },
+    {
+      "relativePath": "assets/WhiteboxPreview-C4Lx9zFT.css",
+      "bytes": 8673,
+      "sha256": "234eb82d2957de90cc21e4345ddbc77daafd68163e2c35fa11a5465f13d68f86"
+    },
+    {
+      "relativePath": "assets/WhiteboxPreview-D0RzzAJ0.js",
+      "bytes": 100768,
+      "sha256": "c8777cee0dd8fd64d61cd5d22b015cd567afe61497cd44bb158327b3cc824c5c"
+    },
+    {
+      "relativePath": "index.html",
+      "bytes": 560,
+      "sha256": "de62620bc9865ee418552dedf6331f06e09346a7fd45d8c0f098ae18c28f14a6"
+    }
+  ]
+}
