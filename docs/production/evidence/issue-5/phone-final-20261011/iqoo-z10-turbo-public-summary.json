@@ -171,5 +171,18 @@
     "本摘要公开统计与原始文件哈希，不包含局域网地址、会话令牌或收件会话 ID。",
     "压力入口测量的是正式 GLB 样板、活动单位、动画和触控响应；完整战役玩法与美术接受由浏览器回归及项目所有者此前的 10 波通关记录覆盖。",
     "设备型号来自项目所有者声明；浏览器 UA 观察到 Android 16，但不据此推断 OriginOS 版本。"
-  ]
+  ],
+  "formalGameSmoke": {
+    "completed": true,
+    "campaign": "first_defense",
+    "wavesCompleted": 10,
+    "actions": [
+      "pause",
+      "resume",
+      "return_to_lobby"
+    ],
+    "ownerReport": "无白屏、文字裁切、点击错位或流程异常",
+    "device": "iQOO Z10 Turbo",
+    "scope": "实体正式游戏界面与生命周期短流程；与压力入口数据共同覆盖Issue #13"
+  }
 }
