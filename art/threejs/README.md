@@ -2,7 +2,7 @@
 
 Issue #9 新增 `create_boss_sources.py`：只创建缺失的 `charger_lord` 与 `undead_king` 来源，拒绝覆盖保存来源。保留同一 14 关节与锚点协议、512 PBR 图集；新增独立剪影与 warning/charge/inspire Actions。正式导出仍只读取保存来源。双 Boss 的资产清单和接入边界见 `docs/production/THREEJS_ISSUE_9_EVIDENCE.md`。
 
-此目录保存 Three.js 原创来源，包含 Issue #4 基础样板及 #6–#9 塔、亡灵与双 Boss 的扩充。人物、结构、纹理、分段骨架与动作在 Blender 5.2.1 制作；没有导入 Warcraft、第三方游戏模型或付费素材。参考图用于色彩、比例、材质与镜头对照。英雄由后续任务制作，当前运行明确标记其开发占位。
+此目录保存 Three.js 原创来源，包含 Issue #4 基础样板、#6–#9 塔/亡灵/Boss 扩充及 #10 三名正式英雄。人物、结构、纹理、分段骨架与动作在 Blender 5.2.1 制作；没有导入 Warcraft、第三方游戏模型或付费素材。参考图用于色彩、比例、材质与镜头对照。`hero_camp_warden.glb`、`hero_vanguard_gunner.glb` 与 `hero_lumber_baron.glb` 及其同名 `.blend` 来源属于正式运行资产；开发预览若存在，必须在页面和截图中明确标记，不能替代正式资产。
 
 ## 可编辑来源与运行产物
 

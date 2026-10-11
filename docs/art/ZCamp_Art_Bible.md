@@ -1,11 +1,11 @@
 # ZCamp Art Bible
 
-> 2026-10-09 Three.js 改造适用说明：当前视觉方向以 [Three.js 规格](../specs/ZCamp-Threejs-3D-lowpoly-spec.md) 及其 [参考图](../specs/assets/zcamp-threejs-reference.png) 为准。采用原创蓝金人类堡垒、紫灰亡灵区、绿色营地、风格化低模与受控 PBR 高光；建筑须有石缝、倒角、木梁和材质层次，单位须有可读装备、大头短肢与稳定接地阴影。下文 Phaser、矢量母版和旧主题制作条款作为历史基线保留，不能覆盖本次方向；可读性、输入、冻结和材质质量要求继续适用。可编辑 Blender 来源、导出约定和样板证据见 [原创资产说明](../../art/threejs/README.md)。#4 的静态三角数、材质和运行调用数是实测记录，性能预算与人工接受由 #5/#13 后续门确定。
+> 2026-10-11 Three.js 交付适用说明：当前视觉方向以 [Three.js 规格](../specs/ZCamp-Threejs-3D-lowpoly-spec.md)、[最终反馈游戏证据](../production/THREEJS_FINAL_FEEDBACK_GAME_EVIDENCE.md) 及其 [参考图](../specs/assets/zcamp-threejs-reference.png) 为准。采用原创蓝金人类堡垒、紫灰亡灵区、绿色营地、风格化低模与受控 PBR 高光；建筑须有石缝、倒角、木梁和材质层次，单位须有可读装备、大头短肢与稳定接地阴影。下文 Phaser、矢量母版和旧主题制作条款作为历史基线保留，不能覆盖本次方向；可读性、输入、冻结和材质质量要求继续适用。可编辑 Blender 来源、导出约定和样板证据见 [原创资产说明](../../art/threejs/README.md)。#4 的静态三角数、材质和运行调用数是实测记录，浏览器回归已登记；最终实体设备接受由 #5/#13 登记。
 
 > 项目：《尸潮营地》（ZCamp，暂定名）  
-> 文档版本：v0.10 工作稿  
-> 更新日期：2026-08-11  
-> 当前目标：Phaser 4、720×1280 竖屏、移动端/小程序 MVP  
+> 文档版本：v0.11 / Three.js delivery candidate
+> 更新日期：2026-10-11
+> 当前目标：Three.js WebGL + DOM/CSS、720×1280 竖屏基准、桌面与移动浏览器 MVP
 > 当前视觉样板：[D3 主战场 UI 矢量母版](../ui/visuals/zcamp-battle-ui-d3-vector.svg)【已确认】  
 > 配套研究：[ZCamp 休闲塔防美术竞品调研](../research/2026-08-10-zcamp-casual-td-art-benchmark.md) · [《永远的蔚蓝星球》实机战场 UI 调研](../research/2026-08-11-blue-planet-battle-ui.md) · [《皇室战争》实机战场 UI 与视觉基准调研](../research/2026-08-11-clash-royale-battle-ui-visual-benchmark.md)  
 > UI 执行规范：[ZCamp UI Bible](../ui/ZCamp_UI_Bible.md)
@@ -427,13 +427,13 @@ HUD 直接叠加在尸潮战区顶部，不为它切出独立横条。5×3 格�
 | Boss 入场 | 900～1400ms | 环境压暗、血条、冲击波 |
 | 资源飞向 HUD | 350～550ms | 曲线移动、终点吸附和数值跳动 |
 
-推荐 Phaser 缓动：
+推荐运行时缓动：
 
-- UI：`Sine.easeOut`、`Back.easeOut`；
-- 建造与升级：`Back.easeOut`；
-- 弹道：`Cubic.easeOut` 或线性；
-- 受击与震动：快速 `Quad.easeOut`；
-- 资源吸附：`Cubic.easeIn`。
+- UI：`easeOutSine`、`easeOutBack`；
+- 建造与升级：`easeOutBack`；
+- 弹道：`easeOutCubic` 或线性；
+- 受击与震动：快速 `easeOutQuad`；
+- 资源吸附：`easeInCubic`。
 
 ### 9.3 屏幕震动【工作标准】
 
@@ -618,7 +618,7 @@ HUD 直接叠加在尸潮战区顶部，不为它切出独立横条。5×3 格�
 - 主战场 UI 以已确认 D3 SVG 为矢量母版；布局、色彩和组件比例从母版派生，不在代码中凭感觉重画；
 - UI、建筑和静态对象优先使用分层矢量源文件，运行时按目标尺寸导出 PNG/WebP 或图集；
 - 可用简单 3D 模型辅助统一视角，但最终必须收敛为 D3 的粗轮廓、大块面和两档明暗；
-- 小型循环动画优先使用分层部件 + Phaser Tween；
+- 小型循环动画优先使用 GLB Actions、Three.js 动画适配器或 DOM/CSS transition；
 - 只有招牌事件才使用逐帧序列；
 - 背景使用 WebP；需要透明度的精灵、UI 和 VFX 使用 PNG/WebP Alpha；
 - 多帧单位和 VFX 使用 Texture Atlas。
@@ -627,7 +627,7 @@ HUD 直接叠加在尸潮战区顶部，不为它切出独立横条。5×3 格�
 
 - 逻辑画布：720×1280；
 - 美术源文件建议按 2×，即 1440×2560 对照制作；
-- 导入后在 Phaser 中按逻辑尺寸显示；
+- 导入后在 Three.js 正交镜头或 DOM/CSS 逻辑尺寸中显示；
 - 关键单位在最终显示尺寸下检查，不以放大图判断细节；
 - 同类资产使用相同的画布、地面接触点和阴影范围。
 
@@ -797,7 +797,7 @@ ui_card_upgrade_damage.png
 - `npm run build` 通过；
 - 浏览器控制台无新增资源加载错误；
 - 对玩家可见的布局和动画改动提供可复现截图或视觉检查记录；
-- 核心模拟不依赖 Phaser、DOM 或美术资源状态。
+- 核心模拟不依赖 Three.js、DOM 或美术资源状态。
 
 ---
 

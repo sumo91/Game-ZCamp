@@ -1,11 +1,11 @@
 # ZCamp UI Bible
 
-> 2026-10-09 Three.js 改造适用说明：当前方向以 [Three.js 规格](../specs/ZCamp-Threejs-3D-lowpoly-spec.md) 和 [交付计划](../production/THREEJS_DELIVERY_PLAN.md) 为准。下文的 Phaser FIT、图元母版、固定像素区块和旧主题描述是保留的候选基线；Three.js 样板使用固定正交镜头、DOM/CSS 中文界面和模型锚点投影。保留十五格可点、真实内容派生、输入优先级、模态隔离与冻结语义。移动浏览器主要热区至少 44 CSS px；样板允许明确标记开发占位，完整迁移不得遗留未标记占位。#4 的运行记录属于样板实施证据，最终布局与实体设备接受在 #5/#13 登记。
+> 2026-10-11 Three.js 交付适用说明：当前实现以 [Three.js 规格](../specs/ZCamp-Threejs-3D-lowpoly-spec.md)、[交付计划](../production/THREEJS_DELIVERY_PLAN.md) 和 [最终反馈游戏证据](../production/THREEJS_FINAL_FEEDBACK_GAME_EVIDENCE.md) 为准。下文保留的 Phaser FIT、图元母版和旧主题描述只作为历史基线；当前运行版使用固定正交镜头、Three.js WebGL 战场、DOM/CSS 中文界面和模型锚点投影。保留十五格可点、真实内容派生、输入优先级、模态隔离与冻结语义。移动浏览器主要热区至少 44 CSS px；正式交付路径不得遗留未标记占位。#4 的运行记录属于样板实施证据，浏览器回归已记录在最终反馈证据中，实体设备接受仍由 #5/#13 登记。
 
 > 项目：《尸潮营地》（ZCamp）
-> 文档版本：v0.8 / Phase D candidate
-> 更新日期：2026-08-13
-> 目标平台：Phaser 4、移动端 / 小程序、720×1280 竖屏
+> 文档版本：v0.9 / Three.js delivery candidate
+> 更新日期：2026-10-11
+> 目标平台：Three.js WebGL + DOM/CSS、桌面与移动浏览器、720×1280 竖屏基准
 > 布局基线：[D3 主战场 UI 矢量母版](./visuals/zcamp-battle-ui-d3-vector.svg)
 > 视觉上位规范：[ZCamp Art Bible](../art/ZCamp_Art_Bible.md)
 
@@ -15,7 +15,7 @@
 
 - 建造与升级支付木材；改造支付金币；数值与核心命令不在本文件中重写。
 - 所有名称、角色、资源归属、费用、等级上限和词条说明来自 typed content 与纯 view model。
-- Phaser 只读取核心状态、派生显示和输入优先级；`src/core` 不依赖 Phaser、DOM、Tween 或墙钟。
+- Three.js 战场与 DOM/CSS 界面只读取核心状态、派生显示和输入优先级；`src/core` 不依赖 Three.js、DOM、Tween 或墙钟。
 - 旧版动态手牌、补给、弃置、永久发展和战术动作不是当前候选版界面或运行时入口。
 - 本文件中的“历史”只指旧版本记录，不构成当前实现要求。
 
@@ -35,7 +35,7 @@
 
 ## 2. 逻辑画布与空间骨架
 
-设计分辨率为 720×1280，Phaser 使用 FIT 等比缩放，左右安全边距 24px，底部安全边距 24px，画布不滚动。
+设计基准为 720×1280，Three.js 使用固定正交镜头呈现战场，DOM/CSS 层负责响应式 HUD 与操作区；左右安全边距 24px，底部安全边距 24px，页面不滚动。
 
 | 区域 | 坐标 | 语义 |
 |---|---|---|
@@ -47,7 +47,7 @@
 
 格位使用稳定 `slot-r{row}-c{column}` 标识。每格约 128×94px，行距与列距保持一致；建筑锚点、底座和阴影不得跨格。
 
-360px 宽通过 FIT 缩放完整显示上述逻辑画布，不隐藏格位，不减少动作。主要热区实际高度至少 56px，相邻高风险动作至少间隔 8px。
+360px 宽通过响应式容器与正交镜头完整显示上述逻辑画布，不隐藏格位，不减少动作。主要热区实际高度至少 56px，相邻高风险动作至少间隔 8px。
 
 ## 3. 顶部 HUD、城墙与资源
 
@@ -133,11 +133,11 @@ OPENING_COUNTDOWN → RUNNING ↔ TACTICAL_PAUSE
 
 倒计时、暂停、词条选择、系统暂停和重开均由 core 状态驱动。胜负后不再接受建造、升级、改造或拆除；重开只通过终局入口执行。
 
-## 10. Phaser 边界
+## 10. Three.js 与 DOM/CSS 边界
 
 `src/core` 负责固定格位、波次、敌人、城墙、资源、成长建筑、攻击、词条、改造、暂停、终局和拒绝原因。
 
-`src/phaser` 负责布局、绘制、点击坐标、模态层级、动画和反馈。GameScene 不复制费用、等级上限、产速、词条累计或战斗公式；所有可见派生来自 typed content/selector。
+`src/three` 负责战场布局、GLB 绘制、镜头、世界坐标命中与战斗动画；`src/ui` 负责 DOM/CSS HUD、模态层级和可访问操作。Three.js 适配层不复制费用、等级上限、产速、词条累计或战斗公式；所有可见派生来自 typed content/selector。`src/core` 继续负责固定格位、波次、敌人、城墙、资源、成长建筑、攻击、词条、改造、暂停、终局和拒绝原因。
 
 ## 11. 候选版验收
 
